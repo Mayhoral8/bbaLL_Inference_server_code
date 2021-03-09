@@ -1,0 +1,1 @@
+export const doesStatInclude = (arr, stat) => arr.includes(stat);
