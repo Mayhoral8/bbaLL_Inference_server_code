@@ -43,15 +43,15 @@ const ComparisonPage = () => {
   // const [yearOne, setYearOne] = useState("2019-20");
   // const [yearTwo, setYearTwo] = useState("2019-20");
 
-  // const [valueOne, setValueOne] = useState("Luka_Doncic");
-  // const [valueTwo, setValueTwo] = useState("Giannis_Antetokounmpo");
-  // const [yearOne, setYearOne] = useState("2019-20");
-  // const [yearTwo, setYearTwo] = useState("2019-20");
+  const [valueOne, setValueOne] = useState("Luka_Doncic");
+  const [valueTwo, setValueTwo] = useState("Giannis_Antetokounmpo");
+  const [yearOne, setYearOne] = useState("2019-20");
+  const [yearTwo, setYearTwo] = useState("2019-20");
 
-  const [valueOne, setValueOne] = useState("");
-  const [valueTwo, setValueTwo] = useState("");
-  const [yearOne, setYearOne] = useState("");
-  const [yearTwo, setYearTwo] = useState("");
+  // const [valueOne, setValueOne] = useState("");
+  // const [valueTwo, setValueTwo] = useState("");
+  // const [yearOne, setYearOne] = useState("");
+  // const [yearTwo, setYearTwo] = useState("");
   const [tempValueOne, setTempValueOne] = useState("");
   const [tempValueTwo, setTempValueTwo] = useState("");
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
@@ -78,7 +78,7 @@ const ComparisonPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(changeIsTeam({ isTeam: false }));
+     dispatch(changeIsTeam({ isTeam: false }));
     Chart.plugins.unregister(ChartDataLabels);
     if (tempValueOne && tempValueTwo) {
       setValueOne(tempValueOne);
@@ -266,6 +266,7 @@ const ComparisonPage = () => {
   const getPlayerTeamColour = (data) => {
     const objectKeyName = isTeam ? "name" : "team";
     const team = data && data[objectKeyName].replace(/\s/g, "").toUpperCase();
+
     return teamColours[team];
   };
 
@@ -275,13 +276,13 @@ const ComparisonPage = () => {
       : getPlayerTeamColour(dataOne);
     const colourOneHover = isTeam
       ? rgba(getTeamColour(valueOne, valueTwo, "colourOne"), 0.2)
-      : "rgba(179,181,198,0.2)";
+      : getPlayerTeamColour(dataOne) && rgba(getPlayerTeamColour(dataOne), 0.2);
     const colourTwo = isTeam
       ? getTeamColour(valueOne, valueTwo, "colourTwo")
       : getPlayerTeamColour(dataTwo);
     const colourTwoHover = isTeam
       ? rgba(getTeamColour(valueOne, valueTwo, "colourTwo"), 0.2)
-      : "rgba(179,181,198,0.2)";
+      : getPlayerTeamColour(dataTwo) && rgba(getPlayerTeamColour(dataTwo), 0.2);;
     const minPoss =
       dataOne && dataTwo && Math.min(dataOne["POSS"].avg, dataTwo["POSS"].avg);
 
