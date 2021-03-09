@@ -1,0 +1,12 @@
+{
+  "Stats": {
+    "SP_PTS": "Points per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_REB": "Rebound per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_AST": "Assist per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_BLK": "Blocks per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_STL": "Steals per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_TOV": "Turnover per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_FG3": "Three points per game and the inconsistency is shown in the figure. The teams that are closer TOP LEFT area are the best and the teams that are closer to BOTTOM RIGHT area are the worst.",
+    "SP_POSS_TSPCT": "The average possession and the true shooting percentage is shown in the figure. The teams that are at the top area are the best in terms of true shooting percentage"
+  }
+}
