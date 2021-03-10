@@ -9,7 +9,7 @@ const initialState = {
   stat: "Summary",
   indivStat: "Overall",
   statCategory: "Basic",
-  isTeam: true,
+  isTeam: false,
 };
 export default (state = initialState, action) => {
   switch (action.type) {

@@ -43,15 +43,15 @@ const ComparisonPage = () => {
   // const [yearOne, setYearOne] = useState("2019-20");
   // const [yearTwo, setYearTwo] = useState("2019-20");
 
-  const [valueOne, setValueOne] = useState("Luka_Doncic");
-  const [valueTwo, setValueTwo] = useState("Giannis_Antetokounmpo");
-  const [yearOne, setYearOne] = useState("2019-20");
-  const [yearTwo, setYearTwo] = useState("2019-20");
+  // const [valueOne, setValueOne] = useState("Luka_Doncic");
+  // const [valueTwo, setValueTwo] = useState("Giannis_Antetokounmpo");
+  // const [yearOne, setYearOne] = useState("2019-20");
+  // const [yearTwo, setYearTwo] = useState("2019-20");
 
-  // const [valueOne, setValueOne] = useState("");
-  // const [valueTwo, setValueTwo] = useState("");
-  // const [yearOne, setYearOne] = useState("");
-  // const [yearTwo, setYearTwo] = useState("");
+  const [valueOne, setValueOne] = useState("");
+  const [valueTwo, setValueTwo] = useState("");
+  const [yearOne, setYearOne] = useState("");
+  const [yearTwo, setYearTwo] = useState("");
   const [tempValueOne, setTempValueOne] = useState("");
   const [tempValueTwo, setTempValueTwo] = useState("");
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
@@ -78,8 +78,10 @@ const ComparisonPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-     dispatch(changeIsTeam({ isTeam: false }));
+    // dispatch(changeIsTeam({ isTeam: false }));
     Chart.plugins.unregister(ChartDataLabels);
+
+
     if (tempValueOne && tempValueTwo) {
       setValueOne(tempValueOne);
       setValueTwo(tempValueTwo);
@@ -503,11 +505,11 @@ const ComparisonPage = () => {
         <StyledComparisonOptions>
           <StyledOptionsTeams>
             <p>Compare between: </p>
-            <li onClick={() => handleCompareBetween(true)} title="teams">
-              <span className={isTeam ? "active" : null}>Teams</span>
-            </li>
             <li onClick={() => handleCompareBetween(false)} title="players">
               <span className={!isTeam ? "active" : null}>Players</span>
+            </li>
+            <li onClick={() => handleCompareBetween(true)} title="teams">
+              <span className={isTeam ? "active" : null}>Teams</span>
             </li>
           </StyledOptionsTeams>
           <StyledOptionsTeams>
