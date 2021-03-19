@@ -25,6 +25,8 @@ const BarChart = ({
   const pointsData = [];
   const svgRef = useRef();
   const [gameIndex, setGameIndex] = useState(0);
+  const [play, setPlay] = useState(false);
+  const [timerID, setTimerID] = useState(null);
 
   let maxlength = 0;
   // finds highest number of games
@@ -54,20 +56,40 @@ const BarChart = ({
     }
   }
   console.log(pointsData);
-  console.log(text);
-  console.log(y);
+  // console.log(text);
+  // console.log(y);
+
   useEffect(() => {
+    if (play) {
+      setTimerID(
+        setInterval(() => {
+          setGameIndex((gameIndex) => gameIndex + 1);
+          console.log("incremented");
+        }, 1000)
+      );
+    } else if (!play) {
+      clearInterval(timerID);
+      setGameIndex((gameIndex) => 0);
+    }
+  }, [play]);
+
+  useEffect(() => {
+    if (gameIndex + 1 > pointsData.length - 1) {
+      clearInterval(timerID);
+    }
+
     const svg = select(svgRef.current);
     pointsData[gameIndex].sort((a, b) => b.value - a.value);
+
     const yScale = scaleBand()
-      .paddingInner(0.3)
+      .paddingInner(0.1)
       .domain(pointsData[gameIndex].map((value, index) => index))
       .range([0, 400]);
-    console.log(max(pointsData[gameIndex]));
+    //console.log(max(pointsData[gameIndex], (entry) => entry.value));
     const xScale = scaleLinear()
       .domain([0, max(pointsData[gameIndex], (entry) => entry.value)])
       .range([0, 900]);
-
+    //console.log(gameIndex);
     svg
 
       .selectAll(".bar")
@@ -85,22 +107,22 @@ const BarChart = ({
       .selectAll(".label")
       .data(pointsData[gameIndex], (entry) => entry.name)
       .join("text")
-      .attr("fill", "#aaaaaa")
-      .text((entry) => `${entry.name} Points ${entry.value}`)
+      .attr("fill", "#EEEEEE")
+      .text((entry) => `${entry.name} ${Math.round(entry.value * 100) / 100}`)
       .attr("class", "label")
       .attr("x", 10)
-      .attr("y", (entry, index) => yScale(index) + yScale.bandwidth());
+      .attr("y", (entry, index) => yScale(index) + yScale.bandwidth() / 2 + 5);
   });
 
   return (
     <div>
-      <svg width="100%" height="450" ref={svgRef}></svg>
-      <button
-        style={{ color: "red" }}
-        onClick={() => setGameIndex(gameIndex + 1)}
-      >
-        Increment
+      <button style={{ color: "black" }} onClick={() => setPlay(!play)}>
+        {play ? "Reset" : "Start"}
       </button>
+      <svg width="100%" height="450" ref={svgRef}></svg>
+      <div style={{ textAlign: "end" }}>
+        <b>{gameIndex + 1}</b>
+      </div>
     </div>
   );
 };
