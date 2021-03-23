@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Radar } from "react-chartjs-2";
 import { rgba } from "polished";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -31,23 +31,13 @@ import { fbFirestore } from "../App/config";
 import { calcPValue } from "../Shared/Functions/calcPValue";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 import { Argsort } from "../Shared/Functions/Argsort";
-import { playerAttributes, abbrPlayerAttributes, ABB2TEAM } from "../constants";
+import { playerAttributes, abbrPlayerAttributes } from "../constants";
 import * as teamColours from "Constants/teamColours";
 
 const teamAttributes = playerAttributes.slice(0, 7);
 const abbrTeamAttributes = abbrPlayerAttributes.slice(0, 7);
 
 const ComparisonPage = () => {
-  // const [valueOne, setValueOne] = useState("Toronto_Raptors");
-  // const [valueTwo, setValueTwo] = useState("Washington_Wizards");
-  // const [yearOne, setYearOne] = useState("2019-20");
-  // const [yearTwo, setYearTwo] = useState("2019-20");
-
-  // const [valueOne, setValueOne] = useState("Luka_Doncic");
-  // const [valueTwo, setValueTwo] = useState("Giannis_Antetokounmpo");
-  // const [yearOne, setYearOne] = useState("2019-20");
-  // const [yearTwo, setYearTwo] = useState("2019-20");
-
   const [valueOne, setValueOne] = useState("");
   const [valueTwo, setValueTwo] = useState("");
   const [yearOne, setYearOne] = useState("");
@@ -76,12 +66,42 @@ const ComparisonPage = () => {
   const abbreviatedAttr = isTeam ? abbrTeamAttributes : abbrPlayerAttributes;
 
   const dispatch = useDispatch();
+  const history = useHistory();
+  const pathname = history.location.pathname.split('/');
+  const search = history.location.search;
+  const splitedSearch = history.location.search.split('&');
+  const teamsOrPlayersPath = pathname[2];
+  const dataTypePath = pathname[3];
+  const parsedQueryParams = splitedSearch.map(term=> term.split('=')[1]);
+  const nameone = parsedQueryParams[0];
+  const yearone = parsedQueryParams[1];
+  const nametwo = parsedQueryParams[2];
+  const yeartwo = parsedQueryParams[3];
 
   useEffect(() => {
-    // dispatch(changeIsTeam({ isTeam: false }));
     Chart.plugins.unregister(ChartDataLabels);
 
+    if(teamsOrPlayersPath && dataTypePath && search) {
+      if(teamsOrPlayersPath === 'players') {
+        dispatch(changeIsTeam({ isTeam: false }));
+      } else {
+        dispatch(changeIsTeam({ isTeam: true }));
+      }
 
+      if(dataTypePath === 'per-game') {
+        setDataType('perGame');
+      } else {
+        setDataType('perPoss');
+      }
+
+      setValueOne(nameone);
+      setValueTwo(nametwo);
+      setYearOne(yearone);
+      setYearTwo(yeartwo);
+      setRefOne(nameone);
+      setRefTwo(nametwo);
+    }
+  
     if (tempValueOne && tempValueTwo) {
       setValueOne(tempValueOne);
       setValueTwo(tempValueTwo);
@@ -107,6 +127,16 @@ const ComparisonPage = () => {
         "optionTwo",
         dataType === "perPoss" ? "perPoss" : "perGame"
       );
+
+      // Routing
+      const navpath = history.location.pathname.split('/')[1];
+      const teampath = isTeam? 'teams': 'players';
+      const typepath = dataType === 'perGame'? 'per-game': 'per-possession';
+
+      const comparisonPath = `/${navpath}/${teampath}/${typepath}?nameOne=${valueOne}&yearOne=${yearOne}&nameTwo=${valueTwo}&yearTwo=${yearTwo}`;
+    
+      history.push(comparisonPath);
+
     } else {
       setIsTwoValuesSelected(false);
     }
@@ -117,8 +147,7 @@ const ComparisonPage = () => {
     valueTwo,
     yearOne,
     yearTwo,
-    isTeam,
-    dataType,
+    isTeam
   ]);
 
   const clearValue = (ref) => {
@@ -506,22 +535,22 @@ const ComparisonPage = () => {
           <StyledOptionsTeams>
             <p>Compare between: </p>
             <li onClick={() => handleCompareBetween(false)} title="players">
-              <span className={!isTeam ? "active" : null}>Players</span>
+              <span className={!isTeam ? "active" : null}><Link to='/comparison'>Players</Link></span>
             </li>
             <li onClick={() => handleCompareBetween(true)} title="teams">
-              <span className={isTeam ? "active" : null}>Teams</span>
+              <span className={isTeam ? "active" : null}><Link to='/comparison'>Teams</Link></span>
             </li>
           </StyledOptionsTeams>
           <StyledOptionsTeams>
             <p>View stats: </p>
             <li onClick={() => setDataType("perGame")} title="perGame">
               <span className={dataType === "perGame" ? "active" : null}>
-                Per Game
+                <Link to={`/comparison/${isTeam? 'teams':'players'}/per-game${search}`}>Per Game</Link>
               </span>
             </li>
             <li onClick={() => setDataType("perPoss")} title="perPoss">
               <span className={dataType === "perPoss" ? "active" : null}>
-                Per Possession
+              <Link to={`/comparison/${isTeam? 'teams':'players'}/per-possession${search}`}>Per Possession</Link>
               </span>
             </li>
           </StyledOptionsTeams>
