@@ -5,6 +5,7 @@ import { ButtonStyle, ColorSVG } from "./barchartrace-style";
 import styled from "styled-components";
 import Slider from "react-slick";
 import { GameSlider } from "./barchartrace-style";
+import { padding } from "polished";
 
 const BarChart = ({
   x,
@@ -28,7 +29,7 @@ const BarChart = ({
   const svgRef = useRef();
   const widthDivRef = useRef();
   const [gameIndex, setGameIndex] = useState(0);
-  const [play, setPlay] = useState(true);
+  const [play, setPlay] = useState(false);
   const [timerID, setTimerID] = useState(null);
   const l = 50;
   const [incr, setIncr] = useState(l - 1);
@@ -55,14 +56,15 @@ const BarChart = ({
       } else {
         let obj = {
           name: text[i],
-          value: 0,
+          value: pointsData[j - 1][pointsData[j].length].value,
           color: teamColours[i],
         };
+
         pointsData[j].push(obj);
       }
     }
   }
-  console.log(pointsData);
+  // console.log(pointsData);
   // console.log(text);
   // console.log(y);
 
@@ -86,6 +88,7 @@ const BarChart = ({
       team.value = newValues;
     }
   }
+  console.log(pointsData);
   // console.log("Gameindex = " + gameIndex);
   // console.log("Incr = " + incr);
   useEffect(() => {
@@ -133,7 +136,7 @@ const BarChart = ({
         .attr("x", 0)
         .attr("fill-opacity", 0.7)
         .transition()
-        .duration(100)
+        .duration(200)
         .on("end", function () {
           if (play) {
             if (incr < l - 2) {
@@ -160,7 +163,7 @@ const BarChart = ({
             `${entry.name} ${Math.round(entry.value[incr] * 100) / 100}`
         )
         .transition()
-        .duration(100)
+        .duration(200)
         .attr("class", "label")
         .attr("x", 10)
         .attr(
@@ -199,24 +202,35 @@ const BarChart = ({
               {play ? "Pause" : "Start"}
             </button>
           </ButtonStyle>
-          <input
-            className="slider"
-            style={{ width: "100%" }}
-            type="range"
-            min={1}
-            value={gameIndex + 1}
-            max={pointsData.length}
-            onChange={handleOnChange}
-          />
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              fontFamily: "Roboto Condensed",
+              width: "100%",
+            }}
+          >
+            <input
+              className="slider"
+              style={{ width: "100%", marginTop: "0.75rem" }}
+              type="range"
+              min={1}
+              value={gameIndex + 1}
+              max={pointsData.length}
+              onChange={handleOnChange}
+            />
+            <div style={{ margin: "0.5rem" }}>
+              <b>{gameIndex + 1}</b>{" "}
+              {gameIndex + 1 == 1 ? "Total Game" : "Total Games"}
+            </div>
+          </div>
         </GameSlider>
       </div>
 
       <br />
       {/* () => setPlay(!play) */}
-
-      <div style={{ textAlign: "center" }}>
-        <b>{gameIndex + 1}</b> Total Games
-      </div>
     </div>
   );
 };

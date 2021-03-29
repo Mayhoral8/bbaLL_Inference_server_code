@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 export const GameSlider = styled.div`
   display: flex;
+  align-items: center;
+
   .slider {
     -webkit-appearance: none;
     width: 100%;
