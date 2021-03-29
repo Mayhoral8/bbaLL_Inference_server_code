@@ -1,7 +1,10 @@
 import { select, scaleBand, scaleLinear, max, easeLinear, min } from "d3";
 import { PlotContainerDiv, PlotDiv } from "./scatterline-style";
 import React, { useRef, useEffect, useState } from "react";
-import { ColorSVG } from "./barchartrace-style";
+import { ButtonStyle, ColorSVG } from "./barchartrace-style";
+import styled from "styled-components";
+import Slider from "react-slick";
+import { GameSlider } from "./barchartrace-style";
 
 const BarChart = ({
   x,
@@ -21,13 +24,14 @@ const BarChart = ({
   best_name,
   graphInfo,
 }) => {
-  const data = [1, 2];
   const pointsData = [];
   const svgRef = useRef();
+  const widthDivRef = useRef();
   const [gameIndex, setGameIndex] = useState(0);
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(true);
   const [timerID, setTimerID] = useState(null);
-  const [incr, setIncr] = useState(0);
+  const l = 50;
+  const [incr, setIncr] = useState(l - 1);
 
   let maxlength = 0;
   // finds highest number of games
@@ -61,7 +65,7 @@ const BarChart = ({
   console.log(pointsData);
   // console.log(text);
   // console.log(y);
-  const l = 50;
+
   //console.log(pointsData[0]);
   for (let i = 0; i < pointsData.length; i++) {
     for (let j = 0; j < pointsData[i].length; j++) {
@@ -82,21 +86,25 @@ const BarChart = ({
       team.value = newValues;
     }
   }
-  console.log(pointsData);
-
+  // console.log("Gameindex = " + gameIndex);
+  // console.log("Incr = " + incr);
   useEffect(() => {
-    if (play) {
-      setTimerID(
-        setInterval(() => {
-          setGameIndex((gameIndex) => gameIndex + 1);
-          console.log("incremented");
-        }, 1000)
-      );
-    } else if (!play) {
-      clearInterval(timerID);
-      setGameIndex((gameIndex) => 0);
-    }
-  }, [play]);
+    setGameIndex(0);
+    setIncr(l - 1);
+  }, [y]);
+  // useEffect(() => {
+  //   if (play) {
+  //     setTimerID(
+  //       setInterval(() => {
+  //         setGameIndex((gameIndex) => gameIndex + 1);
+  //         //console.log("incremented");
+  //       }, 1000)
+  //     );
+  //   } else if (!play) {
+  //     clearInterval(timerID);
+  //     setGameIndex((gameIndex) => 0);
+  //   }
+  // }, [play]);
 
   useEffect(() => {
     if (gameIndex + 1 > pointsData.length - 1) {
@@ -104,96 +112,110 @@ const BarChart = ({
     }
 
     const svg = select(svgRef.current);
-    pointsData[gameIndex].sort((a, b) => b.value[incr] - a.value[incr]);
+    if (gameIndex < pointsData.length) {
+      pointsData[gameIndex].sort((a, b) => b.value[incr] - a.value[incr]);
 
-    const yScale = scaleBand()
-      .paddingInner(0.1)
-      .domain(pointsData[gameIndex].map((value, index) => index))
-      .range([0, 400]);
-    //console.log(max(pointsData[gameIndex], (entry) => entry.value));
-    const xScale = scaleLinear()
-      .domain([0, max(pointsData[gameIndex], (entry) => entry.value[incr])])
-      .range([0, 900]);
-    console.log(
-      //   max(pointsData[gameIndex], (entry) => entry.value[entry.value.length - 1])
-      xScale(120)
-    );
+      const yScale = scaleBand()
+        .paddingInner(0.1)
+        .domain(pointsData[gameIndex].map((value, index) => index))
+        .range([0, 400]);
+      //console.log(max(pointsData[gameIndex], (entry) => entry.value));
+      const xScale = scaleLinear()
+        .domain([0, max(pointsData[gameIndex], (entry) => entry.value[incr])])
+        .range([0, select(widthDivRef).node().current.clientWidth]);
+      console.log();
+      svg
+        .selectAll(".bar")
+        .data(pointsData[gameIndex], (entry) => entry.name)
+        .join("rect")
+        .attr("fill", (entry) => entry.color)
+        .attr("class", "bar")
+        .attr("x", 0)
+        .attr("fill-opacity", 0.7)
+        .transition()
+        .duration(100)
+        .on("end", function () {
+          if (play) {
+            if (incr < l - 2) {
+              setIncr((incr) => incr + 1);
+            } else if (gameIndex < pointsData.length - 1) {
+              setIncr(0);
+              setGameIndex(gameIndex + 1);
+            }
+          }
+        })
+        .ease(easeLinear)
+        .attr("width", (entry, index) => xScale(entry.value[incr]))
+        .attr("y", (entry, index) => yScale(index))
+        .attr("height", yScale.bandwidth());
+      // console.log(teamColours);
 
-    svg
-      .selectAll(".bar")
-      .data(pointsData[gameIndex], (entry) => entry.name)
-      .join("rect")
-      .attr("fill", (entry) => entry.color)
-      .attr("class", "bar")
-      .attr("x", 0)
-      .transition()
-      .duration(500)
-      .on("end", function () {
-        if (incr < 48) {
-          setIncr((incr) => incr + 1);
-        } else {
-          setIncr(0);
-          setGameIndex(gameIndex + 1);
-        }
-      })
-      .ease(easeLinear)
-      .attr("width", (entry, index) => xScale(entry.value[incr]))
-      .attr("y", (entry, index) => yScale(index))
-      .attr("height", yScale.bandwidth());
-    console.log(teamColours);
-
-    svg
-      .selectAll(".label")
-      .data(pointsData[gameIndex], (entry) => entry.name)
-      .join("text")
-      .attr("fill", "#EEEEEE")
-      .text(
-        (entry) => `${entry.name} ${Math.round(entry.value[incr] * 100) / 100}`
-      )
-      .transition()
-      .duration(500)
-      .attr("class", "label")
-      .attr("x", 10)
-      .attr("y", (entry, index) => yScale(index) + yScale.bandwidth() / 2 + 5);
-    //console.log("doing stuf");
+      svg
+        .selectAll(".label")
+        .data(pointsData[gameIndex], (entry) => entry.name)
+        .join("text")
+        .attr("fill", "#EEEEEE")
+        .text(
+          (entry) =>
+            `${entry.name} ${Math.round(entry.value[incr] * 100) / 100}`
+        )
+        .transition()
+        .duration(100)
+        .attr("class", "label")
+        .attr("x", 10)
+        .attr(
+          "y",
+          (entry, index) => yScale(index) + yScale.bandwidth() / 2 + 5
+        );
+      //console.log("doing stuf");s
+    }
   });
-
+  console.log(isTotal);
   const handleOnChange = (e) => {
     setGameIndex(e.target.value - 1);
-    setIncr(0);
+    setIncr(l - 1);
   };
 
   return (
-    <div>
+    <div ref={widthDivRef}>
+      <div></div>
+
+      <svg
+        fontFamily="Roboto Condensed"
+        width="100%"
+        height="450"
+        ref={svgRef}
+      ></svg>
+
       <div>
-        <input
-          style={{ width: "100%" }}
-          type="range"
-          min={1}
-          value={gameIndex + 1}
-          max={pointsData.length}
-          onChange={handleOnChange}
-        />
+        <GameSlider>
+          <ButtonStyle>
+            <button
+              className="PauseButton"
+              onClick={() => {
+                setPlay(!play);
+              }}
+            >
+              {play ? "Pause" : "Start"}
+            </button>
+          </ButtonStyle>
+          <input
+            className="slider"
+            style={{ width: "100%" }}
+            type="range"
+            min={1}
+            value={gameIndex + 1}
+            max={pointsData.length}
+            onChange={handleOnChange}
+          />
+        </GameSlider>
       </div>
 
       <br />
       {/* () => setPlay(!play) */}
-      <button
-        style={{ color: "black" }}
-        onClick={() => {
-          if (incr < 48) {
-            setIncr((incr) => incr + 1);
-          } else {
-            setIncr(0);
-            setGameIndex(gameIndex + 1);
-          }
-        }}
-      >
-        {play ? "Reset" : "Start"}
-      </button>
-      <svg width="100%" height="450" ref={svgRef}></svg>
-      <div style={{ textAlign: "end" }}>
-        <b>{gameIndex + 1}</b>
+
+      <div style={{ textAlign: "center" }}>
+        <b>{gameIndex + 1}</b> Total Games
       </div>
     </div>
   );
