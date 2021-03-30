@@ -16,3 +16,10 @@ export const GET_IMAGE = "GET_IMAGE";
 
 // games
 export const CHANGE_TAB = "CHANGE_TAB"
+
+//Authentication
+
+export const LOGIN="LOGIN"
+
+
+export const GET_FUTURE_GAMES_INFO='GET_FUTURE_GAMES_INFO'

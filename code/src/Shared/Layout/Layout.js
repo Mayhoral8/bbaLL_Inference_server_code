@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 const Layout = ({ children, location }) => {
   const windowSize = useWindowSize();
   const breakpoint = 500;
+
   
   return (
     <>
@@ -17,9 +18,10 @@ const Layout = ({ children, location }) => {
         location.pathname.split("/")[1]
       ) ? (
         ""
-      ) : (
+      ) :location.pathname!='/betting'? (
         <Sidebar />
-      )}
+      ):null
+      }
       <MobileNavbar />
       {children}
     </>
