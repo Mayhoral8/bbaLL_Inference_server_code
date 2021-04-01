@@ -139,17 +139,19 @@ const Overview = ({
                 setSelectedPlotBtn(btn);
                 setSelectedPlotIndex(i);
                 setSelectedPlotProgress([
-                  progressArr[i].Home[progressArr[i].Home.length - 1],
-                  progressArr[i].Away[progressArr[i].Away.length - 1],
+                progressArr[i].Home[progressArr[i].Home.length - 1],
+                progressArr[i].Away[progressArr[i].Away.length - 1],
                 ]);
                 setDisplayPlot(plotArr[i]);
-              }}
+              }
+            }
             >
               <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>{btn}</Link>
             </BadgeButton>
           );
         })}
       </PlotButtons>
+      
       <OverviewWrapper>
         <div>
           <div className="axis-description mobile-hide">
@@ -258,7 +260,13 @@ const PlotButtons = styled.div`
   margin: 1rem auto;
   text-align: center;
   display: flex;
-  justify-content: center;
+  width: 20%;
+  justtify-content:center;
+  padding-left: 19px;
+  margin-left: 22%;
+  border: 1px solid #080A1E;
+  background: #FFFEFA;
+  box-shadow: 0 4px 2px 0px gray;
 `;
 
 const OverviewWrapper = styled.div`

@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
+import './fonts.css';
 
 // global styles
 export const GlobalStyle = createGlobalStyle`
@@ -96,30 +97,38 @@ export const ContainerCard = styled.div`
 
 export const BadgeButton = styled.button`
   padding: ${({ plot }) => plot ? '5px 10px' : 0};
-  background: #f2f2f2;
-  color: #333;
-  border: 1px solid #c8c8c8;
+  background: white;
+  font-family: Popins;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 15px
+  color: #080A1E;
+  border: no;
   display: flex;
   &:disabled, &:disabled:hover {
     cursor: not-allowed;
-  }
-  &:first-child {
-    border-radius: 5rem 0 0 5rem;
-  }
-  &:last-child {
-    border-radius: 0 5rem 5rem 0;
   }
   &:hover {
     cursor: pointer;
   }
   ${(props) => {
-    let buttonColour;
+    let underLine;
     if (props.isActive) {
-      buttonColour = `
-      background: #c8c8c8;
+      underLine = `
+      border-bottom: 7px solid #F8DF5E;
       `;
     }
-    return buttonColour;
+    return underLine
+  }}
+
+  ${(props) => {
+    let size;
+    if (props.isActive) {
+      size = `
+        font-weight: bold;
+      `;
+    }
+    return size
   }}
 
   a, span {
