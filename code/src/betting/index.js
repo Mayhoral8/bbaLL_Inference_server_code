@@ -16,7 +16,7 @@ import {
     CommonChild,
     BetSubmitFormC
 } from './styles'
-import BetPointsOverview from './Shared/betPointsOverviewBox'
+import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
 import ContentHeader from './Shared/contentHeader'
 import UserProfileContainer from '../UserProfile/index'
 import {connect} from 'react-redux'
@@ -27,7 +27,7 @@ const Betting=(props)=>{
     const [loader,setLoader]=useState(false)
     const [gameInfo,setGameInfo]=useState([])
     const [currentDate,setCurrentDate]=useState(null)
-    const [points,setPoints]=useState('')
+    const [moneyLine,setMoneyLine]=useState('')
     const [handicap,setHandicap]=useState('')
     const [overUnder,setOverUnder]=useState('')
 
@@ -42,14 +42,18 @@ const Betting=(props)=>{
     useEffect(()=>{
         if(props.futureGamesInfo[0]){
             let targetArray=structureData(props.futureGamesInfo)
+
+            targetArray.moneyLineItemsArray=[...data.moneyLineItemsArray]
+            targetArray.handicapItemsArray=[...data.handicapItemsArray]
+            targetArray.overUnderItemsArray=[...data.overUnderItemsArray]
             setGameInfo(targetArray)
         }
         const currentDate=new Date()
         setCurrentDate(currentDate)
     },[props.futureGamesInfo])
 
-    const onPointBoxClick=(params)=>{
-        if(params==='points'){
+    const onPointBoxClick=(e,params,index)=>{
+        if(params==='moneyLine'){
 
         } else if(params==='handicap'){
 
@@ -58,7 +62,7 @@ const Betting=(props)=>{
         }
     }
 
-    // console.log("STATE: ",gameInfo)
+    console.log("STATE: ",gameInfo)
     return(
         <>
             {loader?<Spinner/>:
@@ -72,16 +76,16 @@ const Betting=(props)=>{
                                     <RowC key={index*12}>
                                         <Section1>
                                             <TeamNameC>
-                                                {element.points['Home Team']}
+                                                {element.moneyLine['Home Team']}
                                             </TeamNameC>
                                             <TeamNameC>
-                                                {element.points['Away Team']}
+                                                {element.moneyLine['Away Team']}
                                             </TeamNameC>
                                             <DateC>
                                                 {
-                                                    moment(currentDate).format('DD/MM/YYYY') === moment(element.points['Game Date']).format('DD/MM/YYYY') ? 'Today at ' + element.points['Game Start Time']
+                                                    moment(currentDate).format('DD/MM/YYYY') === moment(element.moneyLine['Game Date']).format('DD/MM/YYYY') ? 'Today at ' + element.moneyLine['Game Start Time']
                                                     :
-                                                    moment(element.points['Game Date']).format('MM/DD/YYYY')
+                                                    moment(element.moneyLine['Game Date']).format('MM/DD/YYYY')
                                                 }
                                             </DateC>
                                         </Section1>
@@ -90,35 +94,49 @@ const Betting=(props)=>{
                                             <Col>
                                                 <PointsBox onClick={()=>{
                                                     if(props.userDetails){
-                                                        
+                                                        if(element.moneyLine.bettingOdds.homeTeamBettingOdds){
+
+                                                        }else{
+
+                                                        }
                                                     } else{
                                                         props.history.push('/login')
                                                     }
                                                 }}>
-                                                    {element.points.teams.homeTeam}
+                                                    {element.moneyLine.bettingOdds.homeTeamBettingOdds}
                                                 </PointsBox>
-                                                <PointsBox>
-                                                    {element.points.teams.awayTeam}
+                                                <PointsBox onClick={()=>{
+                                                    if(props.userDetails){
+                                                        if(element.moneyLine.bettingOdds.awayTeamBettingOdds){
+
+                                                        }else{
+                                                            
+                                                        }
+                                                    } else{
+                                                        props.history.push('/login')
+                                                    }
+                                                }}>
+                                                    {element.moneyLine.bettingOdds.awayTeamBettingOdds}
                                                 </PointsBox>
                                             </Col>
                                             <Col>
                                                 <PointsBox>
-                                                    <CommonChild>{element.handicap.value1}</CommonChild>
-                                                    <PointBoxChild>{element.handicap.point1}</PointBoxChild>
+                                                    <CommonChild>{element.handicap.handicapHomeTeamOdds}</CommonChild>
+                                                    <PointBoxChild>{element.handicap.handicapHomeTeamPoints}</PointBoxChild>
                                                 </PointsBox>
                                                 <PointsBox>
-                                                    <CommonChild>{element.handicap.value2}</CommonChild>
-                                                    <PointBoxChild>{element.handicap.point2}</PointBoxChild>
+                                                    <CommonChild>{element.handicap.handicapAwayTeamOdds}</CommonChild>
+                                                    <PointBoxChild>{element.handicap.handicapAwayTeamPoints}</PointBoxChild>
                                                 </PointsBox>
                                             </Col>
                                             <Col>
                                                 <PointsBox>
-                                                    <CommonChild>{element.overUnder.over}</CommonChild>
-                                                    <PointBoxChild>{element.overUnder.overPoint}</PointBoxChild>
+                                                    <CommonChild>{element.overUnder.overTotalScore}</CommonChild>
+                                                    <PointBoxChild>{element.overUnder.overBettingOdds}</PointBoxChild>
                                                 </PointsBox>
                                                 <PointsBox>
-                                                    <CommonChild>{element.overUnder.under}</CommonChild>
-                                                    <PointBoxChild>{element.overUnder.underPoint}</PointBoxChild>
+                                                    <CommonChild>{element.overUnder.underTotalScore}</CommonChild>
+                                                    <PointBoxChild>{element.overUnder.underBettingOdds}</PointBoxChild>
                                                 </PointsBox>
                                             </Col>
                                         </Section2>
@@ -128,9 +146,9 @@ const Betting=(props)=>{
                             }
                         </BetInfo>
                         <BetSubmitFormC>
-                            {data.overviewBoxArray.map((element,index)=>{
+                            {data.overviewBoxesArray.map((element,index)=>{
                                 return(
-                                    <BetPointsOverview label={element.label} key={index} figures={element.label==='Points'?points:element.label==='Handicap'?handicap:overUnder}/>
+                                    <BetPointsOverviewBox label={element.label} key={index} figures={element.label==='Money Line'?moneyLine:element.label==='Handicap'?handicap:overUnder}/>
                                 )
                             })}
                         </BetSubmitFormC>

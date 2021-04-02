@@ -5,7 +5,7 @@ const contentHeader=()=>{
         <ContentHeader>
             <HeaderSection1>Teams</HeaderSection1>
             <HeaderSection2>
-                <HeaderChildSection>Points</HeaderChildSection>
+                <HeaderChildSection>Money Line</HeaderChildSection>
                 <HeaderChildSection>Handicap</HeaderChildSection>
                 <HeaderChildSection>Over & Under</HeaderChildSection>
             </HeaderSection2>
