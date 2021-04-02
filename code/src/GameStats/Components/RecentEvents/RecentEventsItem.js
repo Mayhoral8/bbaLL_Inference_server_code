@@ -1,35 +1,58 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import GetPlayerImage from '../../../Individual/Components/GetPlayerImage';
-import { breakTeamName } from '../../../Shared/Functions/breakTeamName';
+import React from "react";
+import styled from "styled-components";
+import GetPlayerImage from "../../../Individual/Components/GetPlayerImage";
+import { breakTeamName } from "../../../Shared/Functions/breakTeamName";
 
-const RecentEventsItem = ({ homeTeam, awayTeam, gameSummary, homeScore, awayScore, index, selectedGameIndex }) => {
-  const isTeam = useSelector(state => state.sidebarReducer.isTeam);
+const RecentEventsItem = ({
+  homeTeam,
+  awayTeam,
+  gameSummary,
+  homeScore,
+  awayScore,
+  index,
+  selectedGameIndex,
+}) => {
 
   return (
     <RecentEventsItemWrapper gameSummary={gameSummary}>
-      <div className={`${selectedGameIndex === index ? 'active' : 'inactive'} team-container`}>
-        <div className='team away'>
-          <div className='image-container'>
-            <GetPlayerImage playerName={awayTeam.replace(/\s/g, "_")} isTeam={isTeam} />
+      <div
+        className={`${
+          selectedGameIndex === index ? "active" : "inactive"
+        } team-container`}
+      >
+        <div className="team away">
+          <div className="image-container">
+            <GetPlayerImage
+              playerName={awayTeam.replace(/\s/g, "_")}
+              isTeam={true}
+            />
           </div>
-          <p className='team-name'>{breakTeamName(awayTeam).firstName}<br />{breakTeamName(awayTeam).lastName}</p>
-          <p className='team-score'>{awayScore}</p>
+          <p className="team-name">
+            {breakTeamName(awayTeam).firstName}
+            <br />
+            {breakTeamName(awayTeam).lastName}
+          </p>
+          <p className="team-score">{awayScore}</p>
         </div>
 
-        <div className='team home'>
-          <div className='image-container'>
-            <GetPlayerImage playerName={homeTeam.replace(/\s/g, "_")} isTeam={isTeam} />
+        <div className="team home">
+          <div className="image-container">
+            <GetPlayerImage
+              playerName={homeTeam.replace(/\s/g, "_")}
+              isTeam={true}
+            />
           </div>
-          <p className='team-name'>{breakTeamName(homeTeam).firstName}<br />{breakTeamName(homeTeam).lastName}</p>
-          <p className='team-score'>{homeScore}</p>
+          <p className="team-name">
+            {breakTeamName(homeTeam).firstName}
+            <br />
+            {breakTeamName(homeTeam).lastName}
+          </p>
+          <p className="team-score">{homeScore}</p>
         </div>
       </div>
-
     </RecentEventsItemWrapper>
-  )
-}
+  );
+};
 
 const RecentEventsItemWrapper = styled.div`
   display: flex;
@@ -40,7 +63,7 @@ const RecentEventsItemWrapper = styled.div`
     height: 30px;
     margin-right: 0.5rem;
     img {
-      width:100%;
+      width: 100%;
       height: 100%;
     }
   }
@@ -61,6 +84,6 @@ const RecentEventsItemWrapper = styled.div`
   .team-score {
     margin-left: auto;
   }
-`
+`;
 
 export default RecentEventsItem;
