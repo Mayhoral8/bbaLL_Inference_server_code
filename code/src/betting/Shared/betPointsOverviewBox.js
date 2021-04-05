@@ -1,11 +1,28 @@
 import React from 'react'
-import {OverviewBoxC,Input,Label} from './betPointsOverviewBoxStyles'
+import {OverviewBoxC,HeaderC,TeamNameC,PointsC,Points,CloseIcon} from './betPointsOverviewBoxStyles'
+import closeIcon from '../../assets/images/closeIcon.svg'
 const overviewBox=(props)=>{
-    const {figures,label}=props
+    const {selectedValues,index}=props
+    console.log(selectedValues[index].handicap)
     return(
         <OverviewBoxC>
-            <Label>{label}</Label>
-            <Input disabled={true} value={figures}/>
+            <HeaderC>
+                <TeamNameC>{selectedValues[index].gameDetails['Home Team']}</TeamNameC>
+                <TeamNameC>{selectedValues[index].gameDetails['Away Team']}</TeamNameC>
+            </HeaderC>
+            <PointsC>
+                <Points><span>Money Line:</span> <span>{selectedValues[index].moneyLine.moneyLineOddsValue} <CloseIcon src={closeIcon} alt=''/></span></Points>
+                {
+                    selectedValues[index].handicap.handicapOddsValue?
+                    <Points><span>Handicap:</span> <span>{selectedValues[index].handicap.handicapOddsValue} <CloseIcon src={closeIcon} alt=''/></span></Points>
+                    :null
+                }
+                {
+                    selectedValues[index].over.overOdds ? <Points><span>Over: </span> <span>{selectedValues[index].over.overOdds} <CloseIcon src={closeIcon} alt=''/></span></Points> 
+                    : 
+                    selectedValues[index].under.underOdds ? <Points><span>Under: </span> <span>{selectedValues[index].under.underOdds} <CloseIcon src={closeIcon} alt=''/></span></Points>:null
+                }
+            </PointsC>
         </OverviewBoxC>
     )
 }

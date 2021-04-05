@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as _ from 'lodash';
 
 export const BettingPageContainer=styled.div`
     width:100%;
@@ -51,7 +52,7 @@ export const TeamNameC=styled.div`
 `
 
 export const PointsBox=styled.div`
-    border:1px solid #bebebe;
+    border:${props => props.selected ? '1px solid pink' : '1px solid black'};
     padding:10px 0px;
     font-size: 13px;
     font-weight: 900;
@@ -102,4 +103,10 @@ export const BetSubmitFormC=styled.div`
     display:flex;
     flex-direction:column;
     padding:10px;
+    background: #EFEFEF;
+    overflow-y:auto;
+`
+
+export const OverviewHeader=styled.h3`
+    padding:20px;
 `
