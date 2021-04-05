@@ -1,4 +1,12 @@
-import { select, scaleBand, scaleLinear, max, easeLinear, min } from "d3";
+import {
+  select,
+  scaleBand,
+  scaleLinear,
+  max,
+  easeLinear,
+  min,
+  axisTop,
+} from "d3";
 import { PlotContainerDiv, PlotDiv } from "./scatterline-style";
 import React, { useRef, useEffect, useState } from "react";
 import { ButtonStyle, ColorSVG } from "./barchartrace-style";
@@ -28,11 +36,12 @@ const BarChart = ({
   const pointsData = [];
   const svgRef = useRef();
   const widthDivRef = useRef();
-  const [gameIndex, setGameIndex] = useState(0);
+  //const [gameIndex, setGameIndex] = useState(0);
   const [play, setPlay] = useState(false);
   const [timerID, setTimerID] = useState(null);
-  const l = 50;
-  const [incr, setIncr] = useState(0);
+  const l = 25;
+  //const [incr, setIncr] = useState(0);
+  const [frameState, setFrameState] = useState({ incr: 1, gameIndex: 0 });
   let currentTeamFrame = 0;
   let numOfTeams = y.length;
   let maxlength = 0;
@@ -65,23 +74,36 @@ const BarChart = ({
       }
     }
   }
+  for (let i = 0; i < pointsData.length; i++) {
+    let best_curve_obj = {
+      name: "BEST: " + best_name.split(/[()]+/)[1],
+      value: best_curve[i],
+      color: "#000000",
+    };
+    pointsData[i].push(best_curve_obj);
+  }
+  console.log(best_curve);
+  console.log(best_name);
   // console.log(pointsData);
   // console.log(text);
   // console.log(y);
   //console.log(pointsData);
   //console.log(pointsData[0]);
-  let maxVal = 0;
+  let biggestVal = 0;
+  let maxFrameDiff = 0;
   for (let i = 0; i < pointsData.length; i++) {
     let maxcurrent = max(pointsData[i], (entry) => entry.value);
     let mincurrent = min(pointsData[i], (entry) => entry.value);
-    if (maxcurrent - mincurrent > maxVal) {
-      maxVal = maxcurrent - mincurrent;
+    if (maxcurrent - mincurrent > maxFrameDiff) {
+      maxFrameDiff = maxcurrent - mincurrent;
       //console.log(i);
     }
+    if (maxcurrent > biggestVal) {
+      biggestVal = maxcurrent;
+    }
   }
-
-  let lastFrameDiff = maxVal;
-  // let lastFrameDiff =
+  console.log(biggestVal);
+  // let maxFrameDiff =
   //   min(pointsData[pointsData.length - 1], (entry) => entry.value) -
   //   max(pointsData[pointsData.length - 1], (entry) => entry.value);
 
@@ -100,140 +122,155 @@ const BarChart = ({
         prevValue = prevTeam.value[prevTeam.value.length - 1];
       }
       const increment =
-        (nextValue - prevValue) / (l * (currentFrameDiff / lastFrameDiff));
+        (nextValue - prevValue) / (l * (currentFrameDiff / maxFrameDiff));
       const newValues = [];
       newValues.push(prevValue);
-      for (let k = 0; k < (l * currentFrameDiff) / lastFrameDiff - 2; k++) {
+      for (let k = 0; k < (l * currentFrameDiff) / maxFrameDiff - 2; k++) {
         newValues.push(increment * (k + 1) + prevValue);
       }
       newValues.push(nextValue);
       team.value = newValues;
     }
   }
+  // setFrameState({
+  //   incr: pointsData[frameState.gameIndex][0].value.length - 1,
+  // });
+  console.log(frameState.gameIndex);
 
-  console.log(pointsData);
-  // console.log("Gameindex = " + gameIndex);
-  // console.log("Incr = " + incr);
   useEffect(() => {
-    setGameIndex(0);
-    //setIncr(pointsData[gameIndex][0].value.length - 1);
+    setFrameState({
+      ...frameState,
+      gameIndex: 0,
+      incr: pointsData[0][0].value.length - 1,
+    });
   }, [y]);
-  // useEffect(() => {
-  //   if (play) {
-  //     setTimerID(
-  //       setInterval(() => {
-  //         setGameIndex((gameIndex) => gameIndex + 1);
-  //         //console.log("incremented");
-  //       }, 1000)
-  //     );
-  //   } else if (!play) {
-  //     clearInterval(timerID);
-  //     setGameIndex((gameIndex) => 0);
-  //   }
-  // }, [play]);
 
   useEffect(() => {
-    //console.log("update");
-    if (gameIndex + 1 > pointsData.length - 1) {
-      clearInterval(timerID);
-    }
-
+    const frameDuration = 200;
     const svg = select(svgRef.current);
-    if (gameIndex < pointsData.length) {
-      pointsData[gameIndex].sort((a, b) => b.value[incr] - a.value[incr]);
+    if (frameState.gameIndex < pointsData.length) {
+      pointsData[frameState.gameIndex].sort(
+        (a, b) => b.value[frameState.incr] - a.value[frameState.incr]
+      );
 
       const yScale = scaleBand()
         .paddingInner(0.1)
-        .domain(pointsData[gameIndex].map((value, index) => index))
+        .domain(pointsData[frameState.gameIndex].map((value, index) => index))
         .range([0, 400]);
-      //console.log(max(pointsData[gameIndex], (entry) => entry.value));
+      const yOffset = 20;
+
       const xScale = scaleLinear()
-        .domain([0, max(pointsData[gameIndex], (entry) => entry.value[incr])])
+        .domain([0, biggestVal])
         .range([0, select(widthDivRef).node().current.clientWidth]);
 
       svg
         .selectAll(".bar")
-        .data(pointsData[gameIndex], (entry) => entry.name)
+        .data(pointsData[frameState.gameIndex], (entry) => entry.name)
         .join("rect")
         .attr("fill", (entry) => entry.color)
         .attr("class", "bar")
         .attr("x", 0)
         .attr("fill-opacity", 0.7)
         .transition()
-        .duration(300)
+        .duration(frameDuration)
         .on("end", function () {
           if (play) {
             currentTeamFrame += 1;
 
             if (
-              incr < pointsData[gameIndex][0].value.length - 1 &&
+              frameState.incr <
+                pointsData[frameState.gameIndex][0].value.length - 1 &&
               currentTeamFrame >= numOfTeams
             ) {
-              console.log("Frame " + incr);
-              console.log("GameIndex: " + gameIndex);
-              console.log("Length: " + pointsData[gameIndex][0].value.length);
+              console.log("Frame " + frameState.incr);
+              console.log("GameIndex: " + frameState.gameIndex);
+              console.log(
+                "Length: " + pointsData[frameState.gameIndex][0].value.length
+              );
               currentTeamFrame = 0;
-              setIncr((incr) => incr + 1);
+              setFrameState({ ...frameState, incr: frameState.incr + 1 });
             } else if (
-              gameIndex < pointsData.length - 1 &&
+              frameState.gameIndex < pointsData.length - 1 &&
               currentTeamFrame >= numOfTeams
             ) {
-              setIncr(0);
-              setGameIndex(gameIndex + 1);
-              currentTeamFrame = 0;
+              setFrameState({
+                ...frameState,
+                incr: 0,
+                gameIndex: frameState.gameIndex + 1,
+              });
 
-              // console.log(gameIndex);
-              // console.log(incr);
+              currentTeamFrame = 0;
             }
           }
         })
         .ease(easeLinear)
         .attr("width", function (entry, index) {
-          console.log("------Game index: " + gameIndex);
-          console.log("------Frame: " + incr);
-          console.log("------Length: " + pointsData[gameIndex][0].value.length);
-          return xScale(entry.value[incr]);
+          console.log("------Game index: " + frameState.gameIndex);
+          console.log("------Frame: " + frameState.incr);
+          console.log(
+            "------Length: " + pointsData[frameState.gameIndex][0].value.length
+          );
+
+          return xScale(entry.value[frameState.incr]);
         })
-        .attr("y", (entry, index) => yScale(index))
+        .attr("y", (entry, index) => yScale(index) + yOffset)
         .attr("height", yScale.bandwidth());
       //console.log(teamColours);
 
       svg
         .selectAll(".label")
-        .data(pointsData[gameIndex], (entry) => entry.name)
+        .data(pointsData[frameState.gameIndex], (entry) => entry.name)
         .join("text")
-        .attr("fill", "#EEEEEE")
+        .attr("fill", "#f7ce4f")
         .text(
           (entry) =>
-            `${entry.name} ${Math.round(entry.value[incr] * 100) / 100}`
+            `${entry.name} ${
+              Math.round(entry.value[frameState.incr] * 100) / 100
+            }`
         )
         .transition()
-        .duration(300)
+        .duration(frameDuration)
         .attr("class", "label")
         .attr("x", 10)
         .attr(
           "y",
-          (entry, index) => yScale(index) + yScale.bandwidth() / 2 + 5
+          (entry, index) => yScale(index) + yScale.bandwidth() / 2 + 5 + yOffset
         );
-      //console.log("doing stuf");s
+
+      const chartWidth = select(widthDivRef).node().current.clientWidth;
+      const n = pointsData[0].length;
+      const barSize = yScale(1);
+
+      var x_axis = axisTop(xScale)
+        .ticks(chartWidth / 160)
+        .tickSizeOuter(50)
+        .tickSizeInner(-barSize * (n + yScale.padding()));
+
+      svg.selectAll("g").remove();
+      const g = svg.append("g");
+      g.call(x_axis);
+      g.attr("transform", "translate(0,16)");
+      g.select(".tick:first-of-type text").remove();
+      g.selectAll(".tick:not(:first-of-type) line")
+        .attr("stroke", "white")
+        .attr();
+      g.select(".domain").remove();
     }
   });
   //console.log(incr);
   const handleOnChange = (e) => {
-    setGameIndex(e.target.value - 1);
-    //console.log(gameIndex);
-    let currentIndex = (gameIndex) => gameIndex;
-    setIncr(pointsData[gameIndex][0].value.length - 3);
+    setFrameState({
+      ...frameState,
+      gameIndex: e.target.value - 1,
+      incr: pointsData[e.target.value - 1][0].value.length - 1,
+    });
+
     currentTeamFrame = 0;
-    // console.log(gameIndex);
-    // console.log(pointsData[gameIndex][0].value.length - 1);
-    console.log(incr);
+    console.log(frameState.incr);
   };
 
   return (
     <div ref={widthDivRef}>
-      <div></div>
-
       <svg
         fontFamily="Roboto Condensed"
         width="100%"
@@ -268,20 +305,19 @@ const BarChart = ({
               style={{ width: "100%", marginTop: "0.75rem" }}
               type="range"
               min={1}
-              value={gameIndex + 1}
+              value={frameState.gameIndex + 1}
               max={pointsData.length}
               onChange={handleOnChange}
             />
             <div style={{ margin: "0.5rem" }}>
-              <b>{gameIndex + 1}</b>{" "}
-              {gameIndex + 1 == 1 ? "Total Game" : "Total Games"}
+              <b>{frameState.gameIndex + 1}</b>{" "}
+              {frameState.gameIndex + 1 == 1 ? "Total Game" : "Total Games"}
             </div>
           </div>
         </GameSlider>
       </div>
 
       <br />
-      {/* () => setPlay(!play) */}
     </div>
   );
 };

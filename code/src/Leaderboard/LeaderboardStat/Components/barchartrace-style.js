@@ -52,7 +52,7 @@ export const ButtonStyle = styled.div`
     margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
-    margin: 1rem;
+    margin-right: 1rem;
   }
 
   .PauseButton:hover {
