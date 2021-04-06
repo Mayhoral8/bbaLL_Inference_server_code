@@ -116,31 +116,33 @@ const Summary = ({
 
   return (
     <> 
-      <div style={header}>
-        <PlotButtons>
-          {plotButtons.map((btn, i) => {
-            return (
-              <BadgeButton
-                key={i}
-                isActive={btn === selectedPlotBtn}
-                onClick={() => {
-                  setSelectedPlotBtn(btn);
-                  setSelectedPlotIndex(i);
-                  setSelectedPlotProgress([
-                  progressArr[i].Home[progressArr[i].Home.length - 1],
-                  progressArr[i].Away[progressArr[i].Away.length - 1],
-                  ]);
-                  setDisplayPlot(plotArr[i]);
+      <TapsWrapper>
+        <PlotButtonsContiner>
+          <PlotButtons>
+            {plotButtons.map((btn, i) => {
+              return (
+                <BadgeButton
+                  key={i}
+                  isActive={btn === selectedPlotBtn}
+                  onClick={() => {
+                    setSelectedPlotBtn(btn);
+                    setSelectedPlotIndex(i);
+                    setSelectedPlotProgress([
+                    progressArr[i].Home[progressArr[i].Home.length - 1],
+                    progressArr[i].Away[progressArr[i].Away.length - 1],
+                    ]);
+                    setDisplayPlot(plotArr[i]);
+                  }
                 }
-              }
-              >
-                <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>{btn}</Link>
-              </BadgeButton>
-            );
-          })}
-          
-        </PlotButtons>
-      </div>
+                >
+                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>{btn}</Link>
+                </BadgeButton>
+              );
+            })}
+            
+          </PlotButtons>
+        </PlotButtonsContiner>
+      </TapsWrapper>
       
       <OverviewWrapper>
         <div>
@@ -186,23 +188,26 @@ const Summary = ({
         </div>
 
         <div>
-          <PlotButtons>
-              {["scores", selectedPlotBtn].map((btn, i) => {
-                return (
-                  <BadgeButton
-                    key={i}
-                    onClick={() => {
-                      setToggled(btn === "scores" ? false : true);
-                    }}
-                  >
-                    <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
-                      {btn}
-                    </Link>
-                  </BadgeButton>
-                );
-              })}
-            </PlotButtons>
-
+          <PlotButtonsContinerRightSide>
+            <PlotButtons>
+                {["scores", selectedPlotBtn].map((btn, i) => {
+                  return (
+                    <BadgeButton
+                      key={i}
+                      onClick={() => {
+                        setToggled(btn === "scores" ? false : true);
+                      }}
+                      isActive={ btn === "scores"}
+                    >
+                      <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
+                        {btn}
+                      </Link>
+                    </BadgeButton>
+                  );
+                })}
+              </PlotButtons>
+          </PlotButtonsContinerRightSide>
+          
           <ProgressBar
             toggled={toggled}
             scoresProgress={scoresProgress}
@@ -210,6 +215,7 @@ const Summary = ({
             homeColour={colours.colourOne}
             awayColour={colours.colourTwo}
           />
+
           <div className="desktop-hide">
             <p className="axis-description">
               <strong>Positive:</strong>{" "}
@@ -257,22 +263,54 @@ const Summary = ({
   );
 };
 
-const header = {
-  width: "100%",
-  
-  backgroudColor: "red",
-}
+const TapsWrapper = styled.div`
+  display:grid;
+  grid-template-columns: 1fr;
+  @media (min-width: 996px) {
+    grid-template-columns: 2fr 1fr;
+  }
+`
+
+const PlotButtonsContiner = styled.div`
+  width: 50%;
+  position: relative;
+  margin:-13px auto 0 auto;
+  justify-content: center;
+  @media (min-width: 996px) {
+    width: 40%;
+  }
+
+  @media (min-width: 768px) and (max-width:996px) {
+    width: 40%;
+  }
+
+  @media (min-width: 280px) and (max-width:330px) {
+    width: 60%;
+  }
+`;
+
+const PlotButtonsContinerRightSide = styled.div`
+  width: 30%;
+  justify-content: center;
+  position: relative;
+  margin:-13px auto 0 auto;
+  @media (min-width: 996px) {
+    width: 50%;
+  }
+
+  @media (min-width: 280px) and (max-width:330px) {
+    width: 40%;
+  }
+`;
 
 const PlotButtons = styled.div`
   margin: 1rem auto;
   text-align: center;
   display: flex;
-  padding-left: 3px;
   width: 100%;
-  justtify-content:center;
+  justify-content:center;
   border: 1px solid #080A1E;
-  background: red;
-  box-shadow: 0 4px 2px 0px gray; 
+  box-shadow: 0 4px 2px 0px gray;
 `;
 
 const OverviewWrapper = styled.div`
