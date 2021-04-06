@@ -115,7 +115,8 @@ const Summary = ({
   });
 
   return (
-    <>
+    <> 
+      <div style={header}>
         <PlotButtons>
           {plotButtons.map((btn, i) => {
             return (
@@ -137,7 +138,9 @@ const Summary = ({
               </BadgeButton>
             );
           })}
+          
         </PlotButtons>
+      </div>
       
       <OverviewWrapper>
         <div>
@@ -254,16 +257,21 @@ const Summary = ({
   );
 };
 
+const header = {
+  width: "100%",
+  
+  backgroudColor: "red",
+}
+
 const PlotButtons = styled.div`
   margin: 1rem auto;
   text-align: center;
   display: flex;
+  padding-left: 3px;
+  width: 100%;
   justtify-content:center;
-  width: 50%;
-  padding-left: 19px;
-  margin-left: 22%;
   border: 1px solid #080A1E;
-  background: #FFFEFA;
+  background: red;
   box-shadow: 0 4px 2px 0px gray; 
 `;
 

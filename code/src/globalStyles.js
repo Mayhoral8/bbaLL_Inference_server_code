@@ -97,11 +97,13 @@ export const ContainerCard = styled.div`
 
 export const BadgeButton = styled.button`
   padding: ${({ plot }) => plot ? '5px 10px' : 0};
-  background: white;
+  background: green;
   font-family: Popins;
   font-style: normal;
   font-weight: 300;
   font-size: 15px
+  justtify-content:space-between;
+  text-align: center;
   color: #080A1E;
   border: no;
   display: flex;
