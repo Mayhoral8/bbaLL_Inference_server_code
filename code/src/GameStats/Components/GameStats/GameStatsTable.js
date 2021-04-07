@@ -34,7 +34,10 @@ const GameStatsTable = ({ info }) => {
 }
 
 const GameSummaryTableWrapper = styled.div`
-  list-style: none; 
+  list-style: none;
+  border-bottom: 1px solid silver;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
   .bar-graph-container {
     display: grid;
     grid-template-columns: 1fr 250px 1fr;

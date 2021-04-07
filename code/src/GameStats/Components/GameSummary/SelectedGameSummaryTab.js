@@ -4,6 +4,7 @@ import BoxScoreContainer from "../Boxscore/BoxScoreContainer";
 import GameStatsTable from "../GameStats/GameStatsTable";
 import MatchFacts from "../MatchFacts/MatchFacts";
 import Overview from "../Overview/Overview";
+import Summary from "../Overview/Summary";
 
 const SelectedGameSummaryTab = ({
   info,
@@ -19,35 +20,65 @@ const SelectedGameSummaryTab = ({
   let { tab } = useParams();
 
   if (tab === "stats") {
-    return <GameStatsTable info={info} />;
-  } else if (tab === "boxscore") {
     return (
-      <BoxScoreContainer
-        selectedGameIndex={selectedGameIndex}
-        info={info}
-        gamePlayers={gamePlayers}
-      />
-    );
-  } else if (tab === "overview" || !tab) {
-    return (
-      <Overview
+      <>
+        <GameStatsTable info={info} />
+        <Summary 
         selectedGameIndex={selectedGameIndex}
         homeTeam={info.Home.Team}
         awayTeam={info.Away.Team}
         gamePbp={gamePbp}
-        highlights={info.Highlights.Text}
-      />
+        />
+      </>
+    );
+  } else if (tab === "boxscore") {
+    return (
+      <>
+        <BoxScoreContainer
+          selectedGameIndex={selectedGameIndex}
+          info={info}
+          gamePlayers={gamePlayers}
+        />
+        <Summary 
+        selectedGameIndex={selectedGameIndex}
+        homeTeam={info.Home.Team}
+        awayTeam={info.Away.Team}
+        gamePbp={gamePbp}
+        />
+      </>
+    );
+  } else if (tab === "overview" || !tab) {
+    return (
+      <>
+        <Overview
+          highlights={info.Highlights.Text}
+        />
+        <Summary 
+          selectedGameIndex={selectedGameIndex}
+          homeTeam={info.Home.Team}
+          awayTeam={info.Away.Team}
+          gamePbp={gamePbp}
+        />
+      </>
     );
   } else {
     return (
-      <MatchFacts
-        leads={leads}
-        ties={ties}
-        fantasy={fantasy}
-        info={info}
-        abbreviatedHomeTeam={abbreviatedHomeTeam}
-        abbreviatedAwayTeam={abbreviatedAwayTeam}
-      />
+      <>
+        <MatchFacts
+          leads={leads}
+          ties={ties}
+          fantasy={fantasy}
+          info={info}
+          abbreviatedHomeTeam={abbreviatedHomeTeam}
+          abbreviatedAwayTeam={abbreviatedAwayTeam}
+        />
+          <Summary 
+          selectedGameIndex={selectedGameIndex}
+          homeTeam={info.Home.Team}
+          awayTeam={info.Away.Team}
+          gamePbp={gamePbp}
+        />
+      </>
     );
   }
 };
