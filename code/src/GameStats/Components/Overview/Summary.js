@@ -69,7 +69,7 @@ const Summary = ({
   const [textToDisplay, setTextToDisplay] = useState(initialRawText);
   const [displayPlot, setDisplayPlot] = useState(plotArr[0]);
   const [selectedPlotBtn, setSelectedPlotBtn] = useState(plotButtons[0]);
-  const [selectedToggleBtn, setSelectedToggleBtn] = useState(plotButtons[0]);
+  const [selectedToggleBtn, setSelectedToggleBtn] = useState(plotButtons[4]);
 
   const [selectedPlotIndex, setSelectedPlotIndex] = useState(0);
   const [selectedPlotProgress, setSelectedPlotProgress] = useState([
@@ -122,28 +122,48 @@ const Summary = ({
         <PlotButtonsContiner>
           <PlotButtons>
             {plotButtons.map((btn, i) => {
-              return (
-                <BadgeButton
-                  key={i}
-                  isActive={btn === selectedPlotBtn}
-                  onClick={() => {
-                    setSelectedPlotBtn(btn);
-                    setSelectedPlotIndex(i);
-                    setSelectedPlotProgress([
-                    progressArr[i].Home[progressArr[i].Home.length - 1],
-                    progressArr[i].Away[progressArr[i].Away.length - 1],
-                    ]);
-                    setDisplayPlot(plotArr[i]);
+                return (
+                  <BadgeButton
+                    key={i}
+                    isActive={btn === selectedPlotBtn}
+                    onClick={() => {
+                      setSelectedPlotBtn(btn);
+                      setSelectedPlotIndex(i);
+                      setSelectedPlotProgress([
+                      progressArr[i].Home[progressArr[i].Home.length - 1],
+                      progressArr[i].Away[progressArr[i].Away.length - 1],
+                      ]);
+                      setDisplayPlot(plotArr[i]);
+                    }
                   }
-                }
-                >
-                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>{btn}</Link>
-                </BadgeButton>
-              );
+                  >
+                    <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>{btn}</Link>
+                  </BadgeButton>
+                );
             })}
             
           </PlotButtons>
         </PlotButtonsContiner>
+        <PlotButtonsContiner>
+            <PlotButtons>
+                {["Scores", selectedPlotBtn].map((btn, i) => {
+                  return (
+                    <BadgeButton
+                      key={i}
+                      onClick={() => {
+                        setToggled(btn === "Scores" ? false : true);
+                        setSelectedToggleBtn(btn);
+                      }}
+                      isActive={ btn === selectedToggleBtn}
+                    >
+                      <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
+                        {btn}
+                      </Link>
+                    </BadgeButton>
+                  );
+                })}
+              </PlotButtons>
+          </PlotButtonsContiner>
       </TapsWrapper>
       
       <OverviewWrapper>
@@ -189,28 +209,7 @@ const Summary = ({
           />
         </div>
 
-        <div>
-          <PlotButtonsContinerRightSide>
-            <PlotButtons>
-                {["Scores", selectedPlotBtn].map((btn, i) => {
-                  return (
-                    <BadgeButton
-                      key={i}
-                      onClick={() => {
-                        setToggled(btn === "Scores" ? false : true);
-                        setSelectedToggleBtn(btn);
-                      }}
-                      isActive={ btn === selectedToggleBtn}
-                    >
-                      <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
-                        {btn}
-                      </Link>
-                    </BadgeButton>
-                  );
-                })}
-              </PlotButtons>
-          </PlotButtonsContinerRightSide>
-          
+        <div>      
           <ProgressBar
             toggled={toggled}
             scoresProgress={scoresProgress}
@@ -267,15 +266,13 @@ const Summary = ({
 };
 
 const TapsWrapper = styled.div`
+  background-color: red;
   display:grid;
-  grid-template-columns: 1fr;
-  @media (min-width: 996px) {
-    grid-template-columns: 2fr 1fr;
-  }
+  grid-template-columns: 2fr 1fr;
 `
 
 const PlotButtonsContiner = styled.div`
-  width: 50%;
+  width: 80%;
   position: relative;
   margin:-13px auto 0 auto;
   justify-content: center;
@@ -287,25 +284,7 @@ const PlotButtonsContiner = styled.div`
   }
 
   @media (min-width: 280px) and (max-width:330px) {
-    width: 60%;
-  }
-`;
-
-const PlotButtonsContinerRightSide = styled.div`
-  width: 30%;
-  justify-content: center;
-  position: relative;
-  margin:-13px auto 0 auto;
-  @media (min-width: 996px) {
-    width: 60%;
-  }
-
-  @media (min-width: 768px) and (max-width:996px) {
-    width: 15%;
-  }
-
-  @media (min-width: 280px) and (max-width:330px) {
-    width: 40%;
+    width: 70%;
   }
 `;
 
@@ -348,7 +327,7 @@ const OverviewWrapper = styled.div`
       display: none;
     }
     .axis-description {
-      margin-top: 2rem;
+      margin-top: 0rem;
     }
   }
 `;
