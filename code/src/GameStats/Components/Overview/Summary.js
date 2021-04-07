@@ -69,6 +69,8 @@ const Summary = ({
   const [textToDisplay, setTextToDisplay] = useState(initialRawText);
   const [displayPlot, setDisplayPlot] = useState(plotArr[0]);
   const [selectedPlotBtn, setSelectedPlotBtn] = useState(plotButtons[0]);
+  const [selectedToggleBtn, setSelectedToggleBtn] = useState(plotButtons[0]);
+
   const [selectedPlotIndex, setSelectedPlotIndex] = useState(0);
   const [selectedPlotProgress, setSelectedPlotProgress] = useState([
     progressArr[selectedPlotIndex].Home[
@@ -190,14 +192,15 @@ const Summary = ({
         <div>
           <PlotButtonsContinerRightSide>
             <PlotButtons>
-                {["scores", selectedPlotBtn].map((btn, i) => {
+                {["Scores", selectedPlotBtn].map((btn, i) => {
                   return (
                     <BadgeButton
                       key={i}
                       onClick={() => {
-                        setToggled(btn === "scores" ? false : true);
+                        setToggled(btn === "Scores" ? false : true);
+                        setSelectedToggleBtn(btn);
                       }}
-                      isActive={ btn === "scores"}
+                      isActive={ btn === selectedToggleBtn}
                     >
                       <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
                         {btn}
@@ -279,9 +282,8 @@ const PlotButtonsContiner = styled.div`
   @media (min-width: 996px) {
     width: 40%;
   }
-
   @media (min-width: 768px) and (max-width:996px) {
-    width: 40%;
+    width: 30%;
   }
 
   @media (min-width: 280px) and (max-width:330px) {
@@ -295,7 +297,11 @@ const PlotButtonsContinerRightSide = styled.div`
   position: relative;
   margin:-13px auto 0 auto;
   @media (min-width: 996px) {
-    width: 50%;
+    width: 60%;
+  }
+
+  @media (min-width: 768px) and (max-width:996px) {
+    width: 15%;
   }
 
   @media (min-width: 280px) and (max-width:330px) {

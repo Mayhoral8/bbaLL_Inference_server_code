@@ -143,7 +143,7 @@ export const BadgeButton = styled.button`
       padding: 10px 15px;
     }
 
-    font-size: 1vw;
+    font-size: 15px;
   }
 `
 
