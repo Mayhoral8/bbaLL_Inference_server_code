@@ -6,14 +6,12 @@ import {
   easeLinear,
   min,
   axisTop,
+  svg,
 } from "d3";
-import { PlotContainerDiv, PlotDiv } from "./scatterline-style";
 import React, { useRef, useEffect, useState } from "react";
 import { ButtonStyle, ColorSVG } from "./barchartrace-style";
-import styled from "styled-components";
-import Slider from "react-slick";
+
 import { GameSlider } from "./barchartrace-style";
-import { padding } from "polished";
 
 const BarChart = ({
   x,
@@ -36,21 +34,20 @@ const BarChart = ({
   const pointsData = [];
   const svgRef = useRef();
   const widthDivRef = useRef();
-  //const [gameIndex, setGameIndex] = useState(0);
   const [play, setPlay] = useState(false);
-  const [timerID, setTimerID] = useState(null);
-  const l = 25;
-  //const [incr, setIncr] = useState(0);
-  const [frameState, setFrameState] = useState({ incr: 1, gameIndex: 0 });
-  let currentTeamFrame = 0;
+  const maxFrames = 25;
+  const [frameState, setFrameState] = useState({
+    currentFrame: 1,
+    gameIndex: 0,
+  });
+  let animationsPlayed = 0;
   let numOfTeams = y.length;
   let maxlength = 0;
+
   // finds highest number of games
-  y.forEach((element) => {
-    if (element.length > maxlength) {
-      maxlength = element.length;
-    }
-  });
+  maxlength = max(y, (entry) => entry.length);
+
+  // constructs 2d array of Games x Teams
   for (let i = 0; i < maxlength; i++) {
     pointsData.push([]);
   }
@@ -74,6 +71,8 @@ const BarChart = ({
       }
     }
   }
+
+  // adds the Best bar (as a team) to each game
   for (let i = 0; i < pointsData.length; i++) {
     let best_curve_obj = {
       name: "BEST: " + best_name.split(/[()]+/)[1],
@@ -82,32 +81,28 @@ const BarChart = ({
     };
     pointsData[i].push(best_curve_obj);
   }
-  console.log(best_curve);
-  console.log(best_name);
-  // console.log(pointsData);
-  // console.log(text);
-  // console.log(y);
-  //console.log(pointsData);
-  //console.log(pointsData[0]);
+  numOfTeams += 1;
+
   let biggestVal = 0;
   let maxFrameDiff = 0;
   for (let i = 0; i < pointsData.length; i++) {
     let maxcurrent = max(pointsData[i], (entry) => entry.value);
     let mincurrent = min(pointsData[i], (entry) => entry.value);
+    // finds the biggest difference in max - min from all the games
     if (maxcurrent - mincurrent > maxFrameDiff) {
       maxFrameDiff = maxcurrent - mincurrent;
-      //console.log(i);
     }
+    // biggest value found from all the games
     if (maxcurrent > biggestVal) {
       biggestVal = maxcurrent;
     }
   }
-  console.log(biggestVal);
-  // let maxFrameDiff =
-  //   min(pointsData[pointsData.length - 1], (entry) => entry.value) -
-  //   max(pointsData[pointsData.length - 1], (entry) => entry.value);
 
-  //console.log("difference = " + maxVal);
+  // replaces the value for each team with an array of values
+  // example: previous game value [5]
+  //          current game value [15]
+  //          [5, 7.5, 10, 12.5, 15]
+  // Creating more values make the animation smoother
   for (let i = 0; i < pointsData.length; i++) {
     let currentFrameDiff =
       max(pointsData[i], (entry) => entry.value) -
@@ -117,40 +112,48 @@ const BarChart = ({
       let prevValue = 0;
       let nextValue = team.value;
 
+      // finds the value of the previous game
       if (i > 0) {
         let prevTeam = pointsData[i - 1][j];
         prevValue = prevTeam.value[prevTeam.value.length - 1];
       }
+
+      // increments for the array
       const increment =
-        (nextValue - prevValue) / (l * (currentFrameDiff / maxFrameDiff));
+        (nextValue - prevValue) /
+        (maxFrames * (currentFrameDiff / maxFrameDiff));
       const newValues = [];
       newValues.push(prevValue);
-      for (let k = 0; k < (l * currentFrameDiff) / maxFrameDiff - 2; k++) {
+      for (
+        let k = 0;
+        k < (maxFrames * currentFrameDiff) / maxFrameDiff - 2;
+        k++
+      ) {
         newValues.push(increment * (k + 1) + prevValue);
       }
       newValues.push(nextValue);
       team.value = newValues;
     }
   }
-  // setFrameState({
-  //   incr: pointsData[frameState.gameIndex][0].value.length - 1,
-  // });
-  console.log(frameState.gameIndex);
 
+  // resets values when the year changes
   useEffect(() => {
     setFrameState({
       ...frameState,
       gameIndex: 0,
-      incr: pointsData[0][0].value.length - 1,
+      currentFrame: pointsData[0][0].value.length - 1,
     });
   }, [y]);
 
   useEffect(() => {
     const frameDuration = 200;
     const svg = select(svgRef.current);
+
     if (frameState.gameIndex < pointsData.length) {
+      // sorts the teams by the values in the currentFrame
       pointsData[frameState.gameIndex].sort(
-        (a, b) => b.value[frameState.incr] - a.value[frameState.incr]
+        (a, b) =>
+          b.value[frameState.currentFrame] - a.value[frameState.currentFrame]
       );
 
       const yScale = scaleBand()
@@ -159,10 +162,14 @@ const BarChart = ({
         .range([0, 400]);
       const yOffset = 20;
 
+      // scales the x-axis to the width of parent div of the svg
       const xScale = scaleLinear()
         .domain([0, biggestVal])
         .range([0, select(widthDivRef).node().current.clientWidth]);
 
+      const barOpacity = 0.7;
+
+      // draws the bars
       svg
         .selectAll(".bar")
         .data(pointsData[frameState.gameIndex], (entry) => entry.name)
@@ -170,62 +177,60 @@ const BarChart = ({
         .attr("fill", (entry) => entry.color)
         .attr("class", "bar")
         .attr("x", 0)
-        .attr("fill-opacity", 0.7)
+        .attr("fill-opacity", barOpacity)
         .transition()
         .duration(frameDuration)
         .on("end", function () {
           if (play) {
-            currentTeamFrame += 1;
+            animationsPlayed += 1;
 
             if (
-              frameState.incr <
+              frameState.currentFrame <
                 pointsData[frameState.gameIndex][0].value.length - 1 &&
-              currentTeamFrame >= numOfTeams
+              animationsPlayed >= numOfTeams
             ) {
-              console.log("Frame " + frameState.incr);
-              console.log("GameIndex: " + frameState.gameIndex);
-              console.log(
-                "Length: " + pointsData[frameState.gameIndex][0].value.length
-              );
-              currentTeamFrame = 0;
-              setFrameState({ ...frameState, incr: frameState.incr + 1 });
+              animationsPlayed = 0;
+              setFrameState({
+                ...frameState,
+                currentFrame: frameState.currentFrame + 1,
+              });
             } else if (
               frameState.gameIndex < pointsData.length - 1 &&
-              currentTeamFrame >= numOfTeams
+              animationsPlayed >= numOfTeams
             ) {
               setFrameState({
                 ...frameState,
-                incr: 0,
+                currentFrame: 0,
                 gameIndex: frameState.gameIndex + 1,
               });
 
-              currentTeamFrame = 0;
+              animationsPlayed = 0;
             }
           }
         })
         .ease(easeLinear)
         .attr("width", function (entry, index) {
-          console.log("------Game index: " + frameState.gameIndex);
-          console.log("------Frame: " + frameState.incr);
-          console.log(
-            "------Length: " + pointsData[frameState.gameIndex][0].value.length
-          );
+          // console.log("------Game index: " + frameState.gameIndex);
+          // console.log("------Frame: " + frameState.currentFrame);
+          // console.log(
+          //   "------Length: " + pointsData[frameState.gameIndex][0].value.length
+          // );
 
-          return xScale(entry.value[frameState.incr]);
+          return xScale(entry.value[frameState.currentFrame]);
         })
         .attr("y", (entry, index) => yScale(index) + yOffset)
         .attr("height", yScale.bandwidth());
-      //console.log(teamColours);
 
+      // draws the labels
       svg
         .selectAll(".label")
         .data(pointsData[frameState.gameIndex], (entry) => entry.name)
         .join("text")
-        .attr("fill", "#f7ce4f")
+        .attr("fill", "#EEEEEE")
         .text(
           (entry) =>
             `${entry.name} ${
-              Math.round(entry.value[frameState.incr] * 100) / 100
+              Math.round(entry.value[frameState.currentFrame] * 100) / 100
             }`
         )
         .transition()
@@ -238,17 +243,18 @@ const BarChart = ({
         );
 
       const chartWidth = select(widthDivRef).node().current.clientWidth;
-      const n = pointsData[0].length;
       const barSize = yScale(1);
 
-      var x_axis = axisTop(xScale)
+      // axis for the ticks
+      var xAxis = axisTop(xScale)
         .ticks(chartWidth / 160)
         .tickSizeOuter(50)
-        .tickSizeInner(-barSize * (n + yScale.padding()));
+        .tickSizeInner(-barSize * (numOfTeams + yScale.padding()));
 
+      // draws the ticks axis
       svg.selectAll("g").remove();
       const g = svg.append("g");
-      g.call(x_axis);
+      g.call(xAxis);
       g.attr("transform", "translate(0,16)");
       g.select(".tick:first-of-type text").remove();
       g.selectAll(".tick:not(:first-of-type) line")
@@ -257,27 +263,27 @@ const BarChart = ({
       g.select(".domain").remove();
     }
   });
-  //console.log(incr);
+
   const handleOnChange = (e) => {
     setFrameState({
       ...frameState,
       gameIndex: e.target.value - 1,
-      incr: pointsData[e.target.value - 1][0].value.length - 1,
+      currentFrame: pointsData[e.target.value - 1][0].value.length - 1,
     });
 
-    currentTeamFrame = 0;
-    console.log(frameState.incr);
+    animationsPlayed = 0;
   };
 
   return (
     <div ref={widthDivRef}>
-      <svg
-        fontFamily="Roboto Condensed"
-        width="100%"
-        height="450"
-        ref={svgRef}
-      ></svg>
-
+      <b>
+        <svg
+          fontFamily="Roboto Condensed"
+          width="100%"
+          height="450"
+          ref={svgRef}
+        ></svg>
+      </b>
       <div>
         <GameSlider>
           <ButtonStyle>
