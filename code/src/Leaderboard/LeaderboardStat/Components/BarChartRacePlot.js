@@ -6,31 +6,13 @@ import {
   easeLinear,
   min,
   axisTop,
-  svg,
 } from "d3";
 import React, { useRef, useEffect, useState } from "react";
-import { ButtonStyle, ColorSVG } from "./barchartrace-style";
+import { ButtonStyle } from "./barchartrace-style";
 
-import { GameSlider } from "./barchartrace-style";
+import { UserInputContainer } from "./barchartrace-style";
 
-const BarChart = ({
-  x,
-  y,
-  text,
-  xaxis,
-  yaxis,
-  isTotal,
-  stat,
-  isTeam,
-  teamColours,
-  zoom_scale,
-  yearId,
-  avg_curve,
-  avg_name,
-  best_curve,
-  best_name,
-  graphInfo,
-}) => {
+const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   const pointsData = [];
   const svgRef = useRef();
   const widthDivRef = useRef();
@@ -264,6 +246,7 @@ const BarChart = ({
     }
   });
 
+  // handles setting values when slider
   const handleOnChange = (e) => {
     setFrameState({
       ...frameState,
@@ -285,7 +268,7 @@ const BarChart = ({
         ></svg>
       </b>
       <div>
-        <GameSlider>
+        <UserInputContainer>
           <ButtonStyle>
             <button
               className="PauseButton"
@@ -320,7 +303,7 @@ const BarChart = ({
               {frameState.gameIndex + 1 == 1 ? "Total Game" : "Total Games"}
             </div>
           </div>
-        </GameSlider>
+        </UserInputContainer>
       </div>
 
       <br />
