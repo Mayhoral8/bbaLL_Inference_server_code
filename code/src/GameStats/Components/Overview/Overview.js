@@ -13,7 +13,7 @@ const Overview = ({
   return (
     <>
       <OverviewWrapper>
-        <div>
+        <VideoResonsiveWrapper>
           <iframe 
             width='853'
             height='440'
@@ -23,7 +23,7 @@ const Overview = ({
             allowFullScreen
             title="Embedded youtube"
           />
-        </div>
+        </VideoResonsiveWrapper>
 
           {highlightsText.length > 0 ? (
             <StyledHighlightWrapper>
@@ -40,14 +40,29 @@ const Overview = ({
   );
 };
 
+const VideoResonsiveWrapper = styled.div`
+  overflow:hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+  box-shadow: 0 4px 2px 0px gray;
+  iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+`
+
 
 const OverviewWrapper = styled.div`
   display:grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
   margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  padding-right: 1rem;
+  padding: auto 1.5rem 1rem;
   border-bottom: 1px solid silver;
+  grid-gap: 1rem;
 `
 
 const StyledHighlightWrapper = styled.div`
