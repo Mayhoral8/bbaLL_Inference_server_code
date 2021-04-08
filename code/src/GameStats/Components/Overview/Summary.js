@@ -4,6 +4,7 @@ import OverviewPlot from "./OverviewPlot";
 import PlayByPlay from "./PlayByPlay";
 import ProgressBar from "./ProgressBar";
 import { BadgeButton } from "../../../globalStyles";
+import "../../../fonts.css";
 import { avoidColourSets } from "../../../Shared/Functions/gameStatsFunctions";
 import { createScatterPlot } from "../../../Shared/Functions/scatterPlotFunctions";
 import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
@@ -266,7 +267,6 @@ const Summary = ({
 };
 
 const TapsWrapper = styled.div`
-  background-color: red;
   display:grid;
   grid-template-columns: 2fr 1fr;
 `
