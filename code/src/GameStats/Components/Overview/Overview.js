@@ -3,13 +3,12 @@ import styled from "styled-components";
 import getYouTubeID from 'get-youtube-id'; 
 
 
-var id = getYouTubeID('https://www.youtube.com/watch?v=w7ejDZ8SWv8&t=1952s')
-
 const Overview = ({
   highlights,
+  YoutubeHighlight,
 }) => {
   const highlightsText = highlights;
-
+  const id = getYouTubeID(YoutubeHighlight);
   return (
     <>
       <OverviewWrapper>
@@ -25,16 +24,16 @@ const Overview = ({
           />
         </VideoResonsiveWrapper>
 
-          {highlightsText.length > 0 ? (
-            <StyledHighlightWrapper>
-              <h3>TOP HIGHLIGHTS</h3>
-              <ul>
-                {highlightsText.map((text, i) => (
-                  <li key={i}>{text}</li>
-                ))}
-              </ul>
-            </StyledHighlightWrapper>
-          ) : null}
+        {highlightsText.length > 0 ? (
+          <StyledHighlightWrapper>
+            <h3>TOP HIGHLIGHTS</h3>
+            <ul>
+              {highlightsText.map((text, i) => (
+                <li key={i}>{text}</li>
+              ))}
+            </ul>
+          </StyledHighlightWrapper>
+        ) : null}
       </OverviewWrapper>
     </>
   );
@@ -58,18 +57,26 @@ const VideoResonsiveWrapper = styled.div`
 
 const OverviewWrapper = styled.div`
   display:grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1fr;
   margin-bottom: 2rem;
-  padding: auto 1.5rem 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 2rem;
   border-bottom: 1px solid silver;
   grid-gap: 1rem;
+  @media (min-width: 996px) {
+    grid-template-columns: 1.5fr 1fr;
+  }
 `
 
 const StyledHighlightWrapper = styled.div`
-  border:1px solid #080A1E;
+  border:0.5px solid #080A1E;
   box-shadow: 0 4px 2px 0px gray;
+  padding-top: 1.5rem;
   h3 {
-    padding-left: 40px;
+    border-bottom:0.5px solid #080A1E;
+    margin-left: 2rem;
+    margin-right: 2rem;
     color: var(--lighter-black);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -84,12 +91,21 @@ const StyledHighlightWrapper = styled.div`
     }
   }
   ul {
-    padding-left: 4rem;
     list-style-type: square;
-    margin-left: 1.5rem;
+    margin-left: 2.5rem;
+    margin-right: 2rem;
     margin-top: 0.5rem;
     padding-bottom: 1rem;
+    list-style-type: none;
 
+  }
+  ul > li {
+    text-indent: -5px;
+  }
+
+  ul > li: before {
+    content: "-           ";
+    text-indent: -5px;
   }
   li {
     padding: 3px 0;
