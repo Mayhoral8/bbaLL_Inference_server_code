@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const GameSlider = styled.div`
+export const UserInputContainer = styled.div`
   display: flex;
   align-items: center;
 
