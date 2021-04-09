@@ -17,7 +17,8 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   const svgRef = useRef();
   const widthDivRef = useRef();
   const [play, setPlay] = useState(false);
-  const maxFrames = 25;
+  const MAXFRAMES = 25; // This is tuneable. The max amount of frames for each game
+  const FRAMEDURATION = 200; // This is tuneable. The animation speed for each frame in milliseconds
   const [frameState, setFrameState] = useState({
     currentFrame: 1,
     gameIndex: 0,
@@ -103,12 +104,12 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
       // increments for the array
       const increment =
         (nextValue - prevValue) /
-        (maxFrames * (currentFrameDiff / maxFrameDiff));
+        (MAXFRAMES * (currentFrameDiff / maxFrameDiff));
       const newValues = [];
       newValues.push(prevValue);
       for (
         let k = 0;
-        k < (maxFrames * currentFrameDiff) / maxFrameDiff - 2;
+        k < (MAXFRAMES * currentFrameDiff) / maxFrameDiff - 2;
         k++
       ) {
         newValues.push(increment * (k + 1) + prevValue);
@@ -128,7 +129,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   }, [y]);
 
   useEffect(() => {
-    const frameDuration = 200;
     const svg = select(svgRef.current);
 
     if (frameState.gameIndex < pointsData.length) {
@@ -161,7 +161,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .attr("x", 0)
         .attr("fill-opacity", barOpacity)
         .transition()
-        .duration(frameDuration)
+        .duration(FRAMEDURATION)
         .on("end", function () {
           if (play) {
             animationsPlayed += 1;
@@ -216,7 +216,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
             }`
         )
         .transition()
-        .duration(frameDuration)
+        .duration(FRAMEDURATION)
         .attr("class", "label")
         .attr("x", 10)
         .attr(
