@@ -134,7 +134,7 @@ export const BadgeButton = styled.button`
 
   a, span {
     width: 100%;
-    padding: 7spx;
+    padding: 7px;
   }
 
   @media(min-width: 280px) and (max-width: 340px) {
