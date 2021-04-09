@@ -52,6 +52,7 @@ const SelectedGameSummaryTab = ({
       <>
         <Overview
           highlights={info.Highlights.Text}
+          YoutubeHighlight={info.Common.YoutubeHighlight}
         />
         <Summary 
           selectedGameIndex={selectedGameIndex}

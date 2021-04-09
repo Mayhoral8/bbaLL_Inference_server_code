@@ -1,55 +1,41 @@
 import React from "react";
-import styled from "styled-components";
+import getYouTubeID from 'get-youtube-id'; 
+import {OverviewWrapper, StyledHighlightWrapper, VideoResonsiveWrapper} from "./Overview-style"
 
 const Overview = ({
   highlights,
+  YoutubeHighlight,
 }) => {
   const highlightsText = highlights;
-
+  const id = getYouTubeID(YoutubeHighlight);
   return (
     <>
-      {highlightsText.length > 0 ? (
-        <StyledHighlightWrapper>
-          <h3>Highlights</h3>
-          <ul>
-            {highlightsText.map((text, i) => (
-              <li key={i}>{text}</li>
-            ))}
-          </ul>
-        </StyledHighlightWrapper>
-      ) : null}
+      <OverviewWrapper>
+        <VideoResonsiveWrapper>
+          <iframe 
+            width='853'
+            height='440'
+            src={`https://www.youtube.com/embed/${id}`}
+            frameBorder='0'
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="Embedded youtube"
+          />
+        </VideoResonsiveWrapper>
+
+        {highlightsText.length > 0 ? (
+          <StyledHighlightWrapper>
+            <h3>TOP HIGHLIGHTS</h3>
+            <ul>
+              {highlightsText.map((text, i) => (
+                <li key={i}>{text}</li>
+              ))}
+            </ul>
+          </StyledHighlightWrapper>
+        ) : null}
+      </OverviewWrapper>
     </>
   );
 };
-
-const StyledHighlightWrapper = styled.div`
-  border-bottom: 1px solid silver;
-  margin-bottom: 2rem;
-  h3 {
-    color: var(--lighter-black);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    img {
-      width: 30px;
-      margin-right: 0.5rem;
-    }
-  }
-  ul {
-    list-style-type: square;
-    margin-left: 1.5rem;
-    margin-top: 0.5rem;
-    padding-bottom: 1rem;
-  }
-  li {
-    padding: 3px 0;
-  }
-  @media (max-width: 568px) {
-    ul {
-      margin-left: 2.5rem;
-    }
-  }
-`;
 
 export default Overview;

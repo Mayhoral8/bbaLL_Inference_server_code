@@ -96,13 +96,12 @@ export const ContainerCard = styled.div`
 `
 
 export const BadgeButton = styled.button`
-  padding: ${({ plot }) => plot ? '5px 10px' : 0};
   background: white;
   font-family: Popins;
   font-style: normal;
   font-weight: 300;
   font-size: 0.5vw;
-  justtify-content:space-between;
+  justtify-content:center;
   text-align: center;
   color: #080A1E;
   border: no;
@@ -138,9 +137,16 @@ export const BadgeButton = styled.button`
     padding: 7px;
   }
 
+  @media(min-width: 280px) and (max-width: 340px) {
+    a, span {
+      width: 100%;
+      padding: 3px;
+    }
+  }
+
   @media(min-width: 996px) {
     a, span {
-      padding: 10px 15px;
+      padding: 10px 10px;
     }
 
     font-size: 15px;
