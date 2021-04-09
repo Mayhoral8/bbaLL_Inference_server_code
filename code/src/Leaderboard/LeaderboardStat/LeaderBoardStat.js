@@ -2,19 +2,18 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ContainerCard } from "../../globalStyles";
 import GraphInfo from "Shared/GraphInfo/GraphInfo";
-import ScatterLinePlot from "./Components/ScatterLinePlot";
 import HomeAwayPlot from "./Components/HomeAwayPlot";
 import * as teamColours from "Constants/teamColours";
 import BarChart from "./Components/BarChartRacePlot";
 
-const scatterLinePlotKeyExtractionMap = {
+const PlotKeyExtractionMap = {
   total: { isTotalProp: "Total", statSuffix: "_Total" },
   total_poss: { isTotalProp: "Total_Per_Poss", statSuffix: "_TPP" },
   efficiency: { isTotalProp: "Efficiency", statSuffix: "_Eff" },
   average: { isTotalProp: "Average", statSuffix: "_Avg" },
 };
 
-const extractDataForScatterLinePlot = (data, totalProp, statKey) => {
+const extractDataForPlot = (data, totalProp, statKey) => {
   return {
     isTotalProp: totalProp,
     stats: data.ScatterLinePlot.Regular_Stats[statKey],
@@ -31,14 +30,14 @@ const LeaderBoardStat = ({ json, statName }) => {
     const isTotal = useSelector((state) => state.sharedReducer.isTotal);
 
     let data = json;
-    let leaderTableStats, bestScatterStats, avgScatterStats, stats, isTotalProp;
+    let leaderTableStats, bestStats, avgStats, stats, isTotalProp;
     let stat = statName === "Plus_Minus" ? "PLUS_MINUS" : statName;
 
     // TODO: REPETITION needs a futhur cleanup
     switch (plotType) {
       case "BarChartRacePlot":
-        const lookUpData = scatterLinePlotKeyExtractionMap[isTotal];
-        const plotData = extractDataForScatterLinePlot(
+        const lookUpData = PlotKeyExtractionMap[isTotal];
+        const plotData = extractDataForPlot(
           data,
           lookUpData.isTotalProp,
           stat + lookUpData.statSuffix
@@ -46,15 +45,14 @@ const LeaderBoardStat = ({ json, statName }) => {
         isTotalProp = plotData.isTotalProp;
         stats = plotData.stats;
         leaderTableStats = plotData.leaderTableStats;
-        bestScatterStats = plotData.bestScatterStats;
-        avgScatterStats = plotData.avgScatterStats;
+        bestStats = plotData.bestScatterStats;
+        avgStats = plotData.avgScatterStats;
         break;
       case "HomeAwayPlot":
         stats = data.HomeAwayPlot.Regular_Stats[stat + "_Avg"];
         leaderTableStats = data.LeaderTable.Regular_Stats[stat + "_Avg"];
-        bestScatterStats =
-          data.BestScatterLinePlot.Regular_Stats[stat + "_Avg"];
-        avgScatterStats = data.AvgScatterLinePlot.Regular_Stats[stat + "_Avg"];
+        bestStats = data.BestScatterLinePlot.Regular_Stats[stat + "_Avg"];
+        avgStats = data.AvgScatterLinePlot.Regular_Stats[stat + "_Avg"];
       default:
         break;
     }
@@ -73,6 +71,19 @@ const LeaderBoardStat = ({ json, statName }) => {
 
     if (plotType === "BarChartRacePlot") {
       let statsAttr = isTotalProp;
+      switch (isTotalProp) {
+        case "Average":
+          statsAttr = "Rolling_Avg";
+          break;
+        case "Total_Per_Poss":
+          statsAttr = "Total_Per_Poss";
+          break;
+        case "Efficiency":
+          statsAttr = "Efficiency";
+          break;
+        default:
+          statsAttr = "Total";
+      }
 
       return (
         <ContainerCard graph style={{ margin: "1rem 0" }}>
@@ -80,10 +91,8 @@ const LeaderBoardStat = ({ json, statName }) => {
             y={stats[statsAttr]}
             text={stats.Name}
             teamColours={teamColourArray}
-            best_curve={bestScatterStats[statsAttr]}
-            best_name={
-              "Best since 2012-13 <br> (" + bestScatterStats["Name"] + ")"
-            }
+            best_curve={bestStats[statsAttr]}
+            best_name={"Best since 2012-13 <br> (" + bestStats["Name"] + ")"}
           />
         </ContainerCard>
       );
