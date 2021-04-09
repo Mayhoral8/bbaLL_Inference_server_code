@@ -7,13 +7,19 @@ export const BettingPageContainer=styled.div`
     max-height:auto;
     padding:0px 3px;
     margin-top:64px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
 `
 
 export const Content=styled.div`
     width:100%;
-    height:900px;
+    min-height:620px;
+    max-height:900px;
     display:flex;
     padding:100px 0px;
+    max-width:1281px;
 `
 
 export const BetInfo=styled.div`

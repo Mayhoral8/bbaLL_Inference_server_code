@@ -1,6 +1,7 @@
-import React,{useState,useEffect} from 'react'
-import {structureData} from './functions'
+import React, { useState, useEffect } from 'react'
+import { structureData, pointBoxClickHandler } from './functions'
 import data from './data.json'
+
 import {
     BettingPageContainer,
     Content,
@@ -17,6 +18,7 @@ import {
     BetSubmitFormC,
     OverviewHeader
 } from './styles'
+
 import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
 import ContentHeader from './Shared/contentHeader'
 import UserProfileContainer from '../UserProfile/index'
@@ -24,14 +26,16 @@ import {connect} from 'react-redux'
 import {getFutureGamesInfo} from '../redux/actions/betsActions'
 import Spinner from '../Shared/Spinner/Spinner'
 import moment from 'moment'
+
 const Betting=(props)=>{
+
     const [loader,setLoader]=useState(false)
     const [gameInfo,setGameInfo]=useState([])
     const [currentDate,setCurrentDate]=useState(null)
     const [selectedValues,setSelectedValues]=useState({})
     const [overviewKeysArray,setOverviewKeysArray]=useState([])
 
-    useEffect(()=>{
+    useEffect(() => {
         props.getFutureGamesInfo()
         window.setInterval(()=>{
             props.getFutureGamesInfo()
@@ -39,59 +43,38 @@ const Betting=(props)=>{
         },300000)
     },[])
 
-    useEffect(()=>{
+    useEffect(() => {
         if(props.futureGamesInfo[0]){
-            let targetArray=structureData(props.futureGamesInfo)
+            let targetArray = structureData(props.futureGamesInfo)
             setGameInfo(targetArray)
         }
-        const currentDate=new Date()
+        const currentDate = new Date()
         setCurrentDate(currentDate)
     },[props.futureGamesInfo])
 
-    const onPointBoxClick=(e,params,index,keyName,selectedKey,oddsValue,pointsValue,scoreValue)=>{
-        let gameInfoUpdated = [...gameInfo]
-        gameInfoUpdated[index][keyName] = selectedKey
-        let targetObj={...selectedValues}
-        targetObj[index]={...data.selectedValues}
-        if(props.userDetails){
-            if(params==='moneyLine'){
-                targetObj[index][params].moneyLineOddsValue=oddsValue
-            } else if(params==='handicap'){
-                targetObj[index][params].handicapOddsValue=oddsValue
-                targetObj[index][params].handicapPointsValue=pointsValue
-            } else{
-                if(params.includes('over')){
-                    targetObj[index][params].overOdds=oddsValue
-                    targetObj[index][params].overTotalScoreValue=scoreValue
-                    targetObj[index]['under'].underOdds=null
-                    targetObj[index]['under'].underTotalScoreValue=null
-                } else{
-                    targetObj[index][params].underOdds=oddsValue
-                    targetObj[index][params].underTotalScoreValue=scoreValue
-                    targetObj[index]['over'].overOdds=null
-                    targetObj[index]['over'].overTotalScoreValue=null
-                }
-            }
-            targetObj[index].gameDetails=gameInfoUpdated[index].gameDetails
-            let newOverviewKeysArray=Object.keys(targetObj)
-            setGameInfo(gameInfoUpdated)
-            setSelectedValues({...targetObj})
-            setOverviewKeysArray([...newOverviewKeysArray])
-        } else{
-            props.history.push('/login')    
-        }
+    const onPointBoxClick = ( e, params, index, keyName, abc, oddsValue, pointsValue, scoreValue ) => {
+        const returnedObj = pointBoxClickHandler( e, params, index, keyName, abc, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo);
+        setGameInfo( returnedObj.gameInfoUpdated );
+        setSelectedValues( returnedObj.targetObj );
+        setOverviewKeysArray( returnedObj.newOverviewKeysArray );
     }
 
-    console.log("STATE UPDATED: ",gameInfo)
-    console.log("STATE UPDATED: ",selectedValues)
+    const onRemovePoints = ( e, params, index ) => {
+
+    }
+
+    // console.log("STATE UPDATED: ",gameInfo)
+    // console.log("STATE UPDATED: ",selectedValues)
     return(
         <>
-            {loader?<Spinner/>:
+            {loader ? <Spinner/>
+            :
                 <BettingPageContainer className='bettingPageContainer'>
                     <UserProfileContainer/>
                     <Content>
                         <BetInfo>
                             <ContentHeader/>
+
                             {gameInfo.map((element,index)=>{
                                 return(
                                     <RowC key={index*12}>
@@ -110,10 +93,8 @@ const Betting=(props)=>{
                                                 }
                                             </DateC>
                                         </Section1>
-
                                         <Section2>
                                             <Col>
-                                            
                                                 <PointsBox 
                                                  selected={gameInfo[index].moneyLineSelected === 0} 
                                                  onClick={(e)=>{
@@ -143,6 +124,7 @@ const Betting=(props)=>{
                                                     <CommonChild>{element.handicap.handicapHomeTeamPoints}</CommonChild>
                                                     <PointBoxChild>{element.handicap.handicapHomeTeamOdds}</PointBoxChild>
                                                 </PointsBox>
+
                                                 <PointsBox 
                                                  selected={gameInfo[index].handicapSelected === 1} 
                                                  onClick={(e)=>{
@@ -153,6 +135,7 @@ const Betting=(props)=>{
                                                     <PointBoxChild>{element.handicap.handicapAwayTeamOdds}</PointBoxChild>
                                                 </PointsBox>
                                             </Col>
+
                                             <Col>
                                                 <PointsBox 
                                                  selected={gameInfo[index].overUnderSelected === 0} 
@@ -163,6 +146,7 @@ const Betting=(props)=>{
                                                     <CommonChild>{element.overUnder.overTotalScore}</CommonChild>
                                                     <PointBoxChild>{element.overUnder.overOdds}</PointBoxChild>
                                                 </PointsBox>
+
                                                 <PointsBox
                                                  selected={gameInfo[index].overUnderSelected === 1} 
                                                  onClick={(e)=>{
@@ -178,12 +162,18 @@ const Betting=(props)=>{
                                 )
                             })
                             }
+
                         </BetInfo>
                         <BetSubmitFormC>
                             <OverviewHeader>Summary</OverviewHeader>
+
                             {overviewKeysArray.map((element,index)=>{
                                 return(
-                                    <BetPointsOverviewBox selectedValues={selectedValues} index={element}/>
+                                    <BetPointsOverviewBox selectedValues={selectedValues} 
+                                     index={element} 
+                                     key={index}
+                                     onRemovePoints={onRemovePoints}
+                                    />
                                 )
                             })}
                         </BetSubmitFormC>

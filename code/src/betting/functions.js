@@ -1,3 +1,5 @@
+import data from './data.json'
+
 //Data restructuring that comes from the firebase api.
 export const structureData=(futureGamesInfo)=>{
     let targetArray=[]
@@ -76,4 +78,51 @@ export const structureData=(futureGamesInfo)=>{
         })
     })
     return targetArray
+}
+
+export const pointBoxClickHandler=( e, params, index, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo )=>{
+    if(props.userDetails){
+        let gameInfoUpdated = gameInfo;
+        gameInfoUpdated[ index ][ keyName ] = selectedKey;
+        let targetObj={}
+        if(selectedValues[index]){
+            targetObj=selectedValues
+        } else{
+            let newObj = { 
+                moneyLine: { ...data.selectedValues.moneyLine },
+                handicap: { ...data.selectedValues.handicap },
+                over: { ...data.selectedValues.over },
+                under: { ...data.selectedValues.under }
+            }
+            selectedValues[index]=newObj
+            targetObj=selectedValues
+        }
+
+        if(params==='moneyLine'){
+            targetObj[index][params].moneyLineOddsValue=oddsValue;
+        } else if(params==='handicap'){
+            targetObj[index][params].handicapOddsValue=oddsValue;
+            targetObj[index][params].handicapPointsValue=pointsValue;
+        } else{
+            if(params.includes('over')){
+                targetObj[index][params].overOdds=oddsValue;
+                targetObj[index][params].overTotalScoreValue=scoreValue;
+                targetObj[index]['under'].underOdds=null;
+                targetObj[index]['under'].underTotalScoreValue=null;
+            } else{
+                targetObj[index][params].underOdds=oddsValue;
+                targetObj[index][params].underTotalScoreValue=scoreValue;
+                targetObj[index]['over'].overOdds=null;
+                targetObj[index]['over'].overTotalScoreValue=null;
+            }
+        }
+        targetObj[index].gameDetails=gameInfoUpdated[index].gameDetails;
+        let newOverviewKeysArray=Object.keys(targetObj);
+        return {
+            gameInfoUpdated,targetObj,newOverviewKeysArray
+        }
+
+    } else{
+        props.history.push('/login')
+    }
 }

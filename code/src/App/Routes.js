@@ -1,6 +1,6 @@
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 import {RoutesContainer} from './app-style'
-import { MainContainerDiv, BodyDiv } from "./app-style";
+import { MainContainerDiv } from "./app-style";
 import { GlobalStyle } from "../globalStyles";
 import { Switch, Route, Redirect,withRouter } from "react-router-dom";
 import PageNotFound from "../Shared/PageNotFound/PageNotFound";
@@ -13,7 +13,6 @@ import Loadable from "react-loadable";
 import Spinner from "../Shared/Spinner/Spinner";
 import {connect} from 'react-redux'
 import {compose} from 'redux'
-import firebase from "firebase/app"
 import 'firebase/auth';
 import {firebaseInstanceSpigamebet} from './spigamebetFirebase'
 import {LoginAction} from '../redux/actions/authActions'
