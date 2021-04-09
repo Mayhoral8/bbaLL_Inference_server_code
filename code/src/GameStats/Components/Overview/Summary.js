@@ -9,6 +9,9 @@ import { avoidColourSets } from "../../../Shared/Functions/gameStatsFunctions";
 import { createScatterPlot } from "../../../Shared/Functions/scatterPlotFunctions";
 import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../Shared/Functions/capitalizeFirstLetter";
+// CONSTANT
+const CS = 0;
+const SCORES = 4;
 
 const Summary = ({
   selectedGameIndex,
@@ -63,14 +66,16 @@ const Summary = ({
 
   // states
   const plotButtons = ["CS", "EFG", "Fantasy", "Play"];
+  const plotSideButtons= ["CS", "EFG", "Fantasy", "Play", "Scores"];
+
   const plotArr = [csData, efgData, fantasyData, playData];
   const progressArr = [cs, efg, fantasy, playScore];
   const YValuesArr = [csYValues, efgYValues, fantasyYValues, playYValues];
   const [toggled, setToggled] = useState(false);
   const [textToDisplay, setTextToDisplay] = useState(initialRawText);
-  const [displayPlot, setDisplayPlot] = useState(plotArr[0]);
-  const [selectedPlotBtn, setSelectedPlotBtn] = useState(plotButtons[0]);
-  const [selectedToggleBtn, setSelectedToggleBtn] = useState(plotButtons[4]);
+  const [displayPlot, setDisplayPlot] = useState(plotArr[CS]);
+  const [selectedPlotBtn, setSelectedPlotBtn] = useState(plotButtons[CS]);
+  const [selectedToggleBtn, setSelectedToggleBtn] = useState(plotSideButtons[SCORES]);
 
   const [selectedPlotIndex, setSelectedPlotIndex] = useState(0);
   const [selectedPlotProgress, setSelectedPlotProgress] = useState([
