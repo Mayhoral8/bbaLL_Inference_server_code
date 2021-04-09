@@ -16,7 +16,8 @@ import {
     DateC,
     CommonChild,
     BetSubmitFormC,
-    OverviewHeader
+    OverviewHeader,
+    SubmitPointsBtn
 } from './styles'
 
 import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
@@ -34,6 +35,7 @@ const Betting=(props)=>{
     const [currentDate,setCurrentDate]=useState(null)
     const [selectedValues,setSelectedValues]=useState({})
     const [overviewKeysArray,setOverviewKeysArray]=useState([])
+    const [isIndexSelected, setIsIndexSelected]=useState(false)
 
     useEffect(() => {
         props.getFutureGamesInfo()
@@ -57,18 +59,20 @@ const Betting=(props)=>{
         setGameInfo( returnedObj.gameInfoUpdated );
         setSelectedValues( returnedObj.targetObj );
         setOverviewKeysArray( returnedObj.newOverviewKeysArray );
+        setIsIndexSelected(true);
     }
 
     const onRemovePoints = (e, params, index) => {
         let targetObj = selectedValues
-        
         let selectedKey = params === 'moneyLine' ? 'moneyLineSelected' : params === 'handicap' ? 'handicapSelected' : 'overUnderSelected'
-        let targetGameInfoObj = gameInfo 
+        let targetGameInfoObj = gameInfo
 
         targetObj[index][params] = {}
         if(!targetObj[index]['moneyLine'].moneyLineOddsValue && !targetObj[index]['handicap'].handicapOddsValue && !targetObj[index]['over'].overOdds && !targetObj[index]['under'].underOdds){
             targetObj[index].gameDetails = {}
             delete targetObj[index]
+            let targetObjKeys = Object.keys(targetObj)
+            targetObjKeys.length === 0 ? setIsIndexSelected(false) : null
         }
         targetGameInfoObj[index][selectedKey] = ''
         let updatedKeysArray = Object.keys(targetObj)
@@ -191,6 +195,11 @@ const Betting=(props)=>{
                                     />
                                 )
                             })}
+                            {
+                                isIndexSelected ?
+                                <SubmitPointsBtn><span>Submit</span></SubmitPointsBtn>
+                                :null
+                            }
                         </BetSubmitFormC>
                     </Content>
                 </BettingPageContainer>

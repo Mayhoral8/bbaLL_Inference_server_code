@@ -116,3 +116,15 @@ export const BetSubmitFormC=styled.div`
 export const OverviewHeader=styled.h3`
     padding:20px;
 `
+
+export const SubmitPointsBtn=styled.div`
+    background:#C4C4C4;
+    cursor: pointer;
+    border-radius:10px;
+    width:100%;
+    height:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:30px;
+`
