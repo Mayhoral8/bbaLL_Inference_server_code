@@ -272,7 +272,7 @@ const TapsWrapper = styled.div`
 `
 
 const PlotButtonsContiner = styled.div`
-  width: 80%;
+  width: 95%;
   position: relative;
   margin:-13px auto 0 auto;
   justify-content: center;
@@ -280,11 +280,16 @@ const PlotButtonsContiner = styled.div`
     width: 40%;
   }
   @media (min-width: 768px) and (max-width:996px) {
-    width: 30%;
+    width: 40%;
   }
-
+  @media (min-width: 330px) and (max-width:450px) {
+    width: 75%;
+  }
+  @media (min-width: 450px) and (max-width:768px) {
+    width: 55%;
+  }
   @media (min-width: 280px) and (max-width:330px) {
-    width: 70%;
+    width: 75%;
   }
 `;
 
