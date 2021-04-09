@@ -13,7 +13,7 @@ export const Input=styled.input`
 `
  
 export const PointsC=styled.div`
-    min-height:127px;
+    min-height:137px;
     padding:10px 20px;
 `
 

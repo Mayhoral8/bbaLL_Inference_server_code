@@ -1,9 +1,15 @@
 import React from 'react'
-import {OverviewBoxC,HeaderC,TeamNameC,PointsC,Points,CloseIcon} from './betPointsOverviewBoxStyles'
+import { 
+    OverviewBoxC,
+    HeaderC,
+    TeamNameC,
+    PointsC,
+    Points,
+    CloseIcon
+} from './betPointsOverviewBoxStyles'
 import closeIcon from '../../assets/images/closeIcon.svg'
 const overviewBox = ( props ) => {
     const { selectedValues, index, onRemovePoints }=props
-    // console.log(selectedValues[index].moneyLine)
     return(
         <OverviewBoxC>
             <HeaderC>
@@ -23,7 +29,9 @@ const overviewBox = ( props ) => {
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
-                             onClick={onRemovePoints}
+                             onClick={( e )=>{
+                                onRemovePoints( e, 'moneyLine' ,index )
+                             }}
                             />
                         </span>
                     </Points>
@@ -37,7 +45,9 @@ const overviewBox = ( props ) => {
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
-                             onClick={onRemovePoints}
+                             onClick={( e )=>{
+                                onRemovePoints( e, 'handicap', index )
+                             }}
                             />
                         </span>
                     </Points>
@@ -51,7 +61,9 @@ const overviewBox = ( props ) => {
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
-                             onClick={onRemovePoints}
+                             onClick={( e )=>{
+                                onRemovePoints( e, 'over', index )
+                             }}
                             />
                         </span>
                     </Points> 
@@ -62,7 +74,9 @@ const overviewBox = ( props ) => {
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
-                             onClick={onRemovePoints}
+                             onClick={( e )=>{
+                                onRemovePoints( e, 'under', index )
+                             }}
                             />
                         </span>
                     </Points>:null

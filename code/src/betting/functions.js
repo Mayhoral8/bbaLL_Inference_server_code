@@ -80,10 +80,10 @@ export const structureData=(futureGamesInfo)=>{
     return targetArray
 }
 
-export const pointBoxClickHandler=( e, params, index, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo )=>{
+export const pointBoxClickHandler=(e, params, index, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
     if(props.userDetails){
         let gameInfoUpdated = gameInfo;
-        gameInfoUpdated[ index ][ keyName ] = selectedKey;
+        gameInfoUpdated[index][keyName] = selectedKey;
         let targetObj={}
         if(selectedValues[index]){
             targetObj=selectedValues
@@ -118,6 +118,7 @@ export const pointBoxClickHandler=( e, params, index, keyName, selectedKey, odds
         }
         targetObj[index].gameDetails=gameInfoUpdated[index].gameDetails;
         let newOverviewKeysArray=Object.keys(targetObj);
+        console.log(targetObj)
         return {
             gameInfoUpdated,targetObj,newOverviewKeysArray
         }

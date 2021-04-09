@@ -52,19 +52,33 @@ const Betting=(props)=>{
         setCurrentDate(currentDate)
     },[props.futureGamesInfo])
 
-    const onPointBoxClick = ( e, params, index, keyName, abc, oddsValue, pointsValue, scoreValue ) => {
-        const returnedObj = pointBoxClickHandler( e, params, index, keyName, abc, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo);
+    const onPointBoxClick = ( e, params, index, keyName, selectedKey, oddsValue, pointsValue, scoreValue ) => {
+        const returnedObj = pointBoxClickHandler( e, params, index, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo);
         setGameInfo( returnedObj.gameInfoUpdated );
         setSelectedValues( returnedObj.targetObj );
         setOverviewKeysArray( returnedObj.newOverviewKeysArray );
     }
 
-    const onRemovePoints = ( e, params, index ) => {
+    const onRemovePoints = (e, params, index) => {
+        let targetObj = selectedValues
+        
+        let selectedKey = params === 'moneyLine' ? 'moneyLineSelected' : params === 'handicap' ? 'handicapSelected' : 'overUnderSelected'
+        let targetGameInfoObj = gameInfo 
 
+        targetObj[index][params] = {}
+        if(!targetObj[index]['moneyLine'].moneyLineOddsValue && !targetObj[index]['handicap'].handicapOddsValue && !targetObj[index]['over'].overOdds && !targetObj[index]['under'].underOdds){
+            targetObj[index].gameDetails = {}
+            delete targetObj[index]
+        }
+        targetGameInfoObj[index][selectedKey] = ''
+        let updatedKeysArray = Object.keys(targetObj)
+        setOverviewKeysArray(updatedKeysArray)
+        setGameInfo(targetGameInfoObj)
+        setSelectedValues(targetObj)
     }
 
     // console.log("STATE UPDATED: ",gameInfo)
-    // console.log("STATE UPDATED: ",selectedValues)
+    console.log("STATE UPDATED: ",selectedValues)
     return(
         <>
             {loader ? <Spinner/>
@@ -169,7 +183,8 @@ const Betting=(props)=>{
 
                             {overviewKeysArray.map((element,index)=>{
                                 return(
-                                    <BetPointsOverviewBox selectedValues={selectedValues} 
+                                    <BetPointsOverviewBox 
+                                     selectedValues={selectedValues} 
                                      index={element} 
                                      key={index}
                                      onRemovePoints={onRemovePoints}
