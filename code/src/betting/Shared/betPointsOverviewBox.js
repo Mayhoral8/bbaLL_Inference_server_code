@@ -14,10 +14,10 @@ const overviewBox = ( props ) => {
         <OverviewBoxC>
             <HeaderC>
                 <TeamNameC>
-                    {selectedValues[index].gameDetails['Home Team']}
+                    {selectedValues[index].gameDetails.homeTeam}
                 </TeamNameC>
                 <TeamNameC>
-                    {selectedValues[index].gameDetails['Away Team']}
+                    {selectedValues[index].gameDetails.awayTeam}
                 </TeamNameC>
             </HeaderC>
             <PointsC>
@@ -54,10 +54,10 @@ const overviewBox = ( props ) => {
                     :null
                 }
                 {
-                    selectedValues[index].over.overOdds ? 
+                    selectedValues[index].over.overOddsValue ? 
                     <Points>
                         <span>Over:</span> 
-                        <span>{selectedValues[index].over.overOdds}
+                        <span>{selectedValues[index].over.overOddsValue}
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
@@ -68,9 +68,9 @@ const overviewBox = ( props ) => {
                         </span>
                     </Points> 
                     : 
-                    selectedValues[index].under.underOdds ? 
+                    selectedValues[index].under.underOddsValue ? 
                     <Points><span>Under: </span> 
-                        <span>{selectedValues[index].under.underOdds} 
+                        <span>{selectedValues[index].under.underOddsValue} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''

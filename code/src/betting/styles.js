@@ -3,8 +3,6 @@ import * as _ from 'lodash';
 
 export const BettingPageContainer=styled.div`
     width:100%;
-    min-height:100vh;
-    max-height:auto;
     padding:0px 3px;
     margin-top:64px;
     display:flex;
@@ -13,19 +11,25 @@ export const BettingPageContainer=styled.div`
     flex-direction:column;
 `
 
-export const Content=styled.div`
+export const ContentC=styled.div`
     width:100%;
-    min-height:620px;
-    max-height:900px;
     display:flex;
+    justify-content:center;
+    align-items:center;
     padding:100px 0px;
+`
+
+export const ContentW=styled.div`
+    height:100%;
     max-width:1281px;
+    display:flex;
 `
 
 export const BetInfo=styled.div`
     width:100%;
-    height:100%;
+    max-height:620px;
     overflow-y:auto;
+    border: 1px solid #e6e6e6;
 `
 
 export const RowC=styled.div`
@@ -37,8 +41,7 @@ export const RowC=styled.div`
 `
 
 export const Section1=styled.div`
-    max-width:15%;
-    min-width:193px;
+    width:15%;
     display:flex;
     flex-direction:column;
     color:#757575;
@@ -111,6 +114,7 @@ export const BetSubmitFormC=styled.div`
     padding:10px;
     background: #EFEFEF;
     overflow-y:auto;
+    max-height:620px;
 `
 
 export const OverviewHeader=styled.h3`
@@ -122,9 +126,14 @@ export const SubmitPointsBtn=styled.div`
     cursor: pointer;
     border-radius:10px;
     width:100%;
-    height:50px;
+    min-height:50px;
     display:flex;
     justify-content:center;
     align-items:center;
     margin-top:30px;
+    transition:0.3s;
+    &:hover{
+        transition:0.3s;
+        background:#dbdbdb;
+    }
 `

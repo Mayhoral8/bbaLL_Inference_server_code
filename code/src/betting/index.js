@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { structureData, pointBoxClickHandler } from './functions'
-import data from './data.json'
 
+//Functions
+import { structureData, pointBoxClickHandler } from './functions'
+
+//Actions
+import { getFutureGamesInfo, submitBetPoints } from '../redux/actions/betsActions'
+
+//Components
+import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
+import ContentHeader from './Shared/contentHeader'
+import UserProfileContainer from '../UserProfile/index'
+import Spinner from '../Shared/Spinner/Spinner'
+
+//Libraries and Functions
+import moment from 'moment'
+import {connect} from 'react-redux'
+
+//Styled Components
 import {
     BettingPageContainer,
-    Content,
+    ContentC,
+    ContentW,
     BetInfo,
     RowC,
     TeamNameC,
@@ -20,14 +36,6 @@ import {
     SubmitPointsBtn
 } from './styles'
 
-import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
-import ContentHeader from './Shared/contentHeader'
-import UserProfileContainer from '../UserProfile/index'
-import {connect} from 'react-redux'
-import {getFutureGamesInfo} from '../redux/actions/betsActions'
-import Spinner from '../Shared/Spinner/Spinner'
-import moment from 'moment'
-
 const Betting=(props)=>{
 
     const [loader,setLoader]=useState(false)
@@ -36,6 +44,7 @@ const Betting=(props)=>{
     const [selectedValues,setSelectedValues]=useState({})
     const [overviewKeysArray,setOverviewKeysArray]=useState([])
     const [isIndexSelected, setIsIndexSelected]=useState(false)
+    const [error, setError]=useState({status:'',message:'',isError:false})
 
     useEffect(() => {
         props.getFutureGamesInfo()
@@ -68,7 +77,7 @@ const Betting=(props)=>{
         let targetGameInfoObj = gameInfo
 
         targetObj[index][params] = {}
-        if(!targetObj[index]['moneyLine'].moneyLineOddsValue && !targetObj[index]['handicap'].handicapOddsValue && !targetObj[index]['over'].overOdds && !targetObj[index]['under'].underOdds){
+        if(!targetObj[index]['moneyLine'].moneyLineOddsValue && !targetObj[index]['handicap'].handicapOddsValue && !targetObj[index]['over'].overOddsValue && !targetObj[index]['under'].underOddsValue){
             targetObj[index].gameDetails = {}
             delete targetObj[index]
             let targetObjKeys = Object.keys(targetObj)
@@ -81,15 +90,26 @@ const Betting=(props)=>{
         setSelectedValues(targetObj)
     }
 
-    // console.log("STATE UPDATED: ",gameInfo)
-    console.log("STATE UPDATED: ",selectedValues)
+    const onSubmit = async() => {
+        props.submitBetPoints(selectedValues, props.userDetails.uid)
+        .then(()=>{
+
+        })
+        .catch((e)=>{
+            setError({message: e.message, isError:true, status: e.status})
+        })
+    }
+
+    console.log("STATE UPDATED: ",error)
+    // console.log("STATE UPDATED: ",selectedValues)
     return(
         <>
             {loader ? <Spinner/>
             :
                 <BettingPageContainer className='bettingPageContainer'>
                     <UserProfileContainer/>
-                    <Content>
+                    <ContentC>
+                        <ContentW>
                         <BetInfo>
                             <ContentHeader/>
 
@@ -98,16 +118,16 @@ const Betting=(props)=>{
                                     <RowC key={index*12}>
                                         <Section1>
                                             <TeamNameC>
-                                                {element.gameDetails['Home Team']}
+                                                {element.gameDetails.homeTeam}
                                             </TeamNameC>
                                             <TeamNameC>
-                                                {element.gameDetails['Away Team']}
+                                                {element.gameDetails.awayTeam}
                                             </TeamNameC>
                                             <DateC>
                                                 {
-                                                    moment(currentDate).format('DD/MM/YYYY') === moment(element.gameDetails['Game Date']).format('DD/MM/YYYY') ? 'Today at ' + element.gameDetails['Game Start Time']
+                                                    moment(currentDate).format('DD/MM/YYYY') === moment(element.gameDetails.gameDate).format('DD/MM/YYYY') ? 'Today at ' + element.gameDetails.gameStartTime
                                                     :
-                                                    moment(element.gameDetails['Game Date']).format('MM/DD/YYYY')
+                                                    moment(element.gameDetails.gameDate).format('MM/DD/YYYY')
                                                 }
                                             </DateC>
                                         </Section1>
@@ -158,21 +178,21 @@ const Betting=(props)=>{
                                                 <PointsBox 
                                                  selected={gameInfo[index].overUnderSelected === 0} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'over',index,'overUnderSelected',0,gameInfo[index].overUnder.overOdds,null,gameInfo[index].overUnder.overTotalScore)
+                                                    onPointBoxClick(e,'over',index,'overUnderSelected',0,gameInfo[index].overUnder.overOddsValue,null,gameInfo[index].overUnder.overTotalScore)
                                                  }}
                                                 >
                                                     <CommonChild>{element.overUnder.overTotalScore}</CommonChild>
-                                                    <PointBoxChild>{element.overUnder.overOdds}</PointBoxChild>
+                                                    <PointBoxChild>{element.overUnder.overOddsValue}</PointBoxChild>
                                                 </PointsBox>
 
                                                 <PointsBox
                                                  selected={gameInfo[index].overUnderSelected === 1} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'under',index,'overUnderSelected',1,gameInfo[index].overUnder.underOdds,null,gameInfo[index].overUnder.underTotalScore)
+                                                    onPointBoxClick(e,'under',index,'overUnderSelected',1,gameInfo[index].overUnder.underOddsValue,null,gameInfo[index].overUnder.underTotalScore)
                                                  }}
                                                 >
                                                     <CommonChild>{element.overUnder.underTotalScore}</CommonChild>
-                                                    <PointBoxChild>{element.overUnder.underOdds}</PointBoxChild>
+                                                    <PointBoxChild>{element.overUnder.underOddsValue}</PointBoxChild>
                                                 </PointsBox>
                                             </Col>
                                         </Section2>
@@ -197,11 +217,18 @@ const Betting=(props)=>{
                             })}
                             {
                                 isIndexSelected ?
-                                <SubmitPointsBtn><span>Submit</span></SubmitPointsBtn>
+                                <SubmitPointsBtn
+                                 onClick={()=>{
+                                     onSubmit()
+                                 }}
+                                >
+                                    <span>Submit</span>
+                                </SubmitPointsBtn>
                                 :null
                             }
                         </BetSubmitFormC>
-                    </Content>
+                        </ContentW>
+                    </ContentC>
                 </BettingPageContainer>
             }
         </>     
@@ -213,4 +240,4 @@ const mapStateToProps=(state)=>{
         userDetails: state.authReducer.userDetails
     }
 }
-export default connect(mapStateToProps,{getFutureGamesInfo})(Betting)
+export default connect(mapStateToProps,{getFutureGamesInfo, submitBetPoints})(Betting)

@@ -61,7 +61,7 @@ const Routes=(props)=>{
             const userDetails={displayName,email,uid}
             await props.LoginAction(userDetails)
           }else{
-
+            
           }
       })
     },[])

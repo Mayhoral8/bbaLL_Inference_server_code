@@ -14,7 +14,7 @@ const firesbaseConfig = {
   measurementId:process.env.REACT_APP_FIREBASE_MEASUREMENT_ID1
 };
 
-export const firebaseInstanceSpigamebet=firebase.initializeApp(firesbaseConfig,'other');
+export const firebaseInstanceSpigamebet=firebase.initializeApp(firesbaseConfig,'secondary');
 
 const db = firebase.database()
 // if (location.hostname === "localhost") {
@@ -22,9 +22,9 @@ const db = firebase.database()
 //   db.useEmulator("localhost", 9000);
 // }
 
-export const fbFirestore = firebase.firestore();
+export const fbFirestoreSpigameBet = firebaseInstanceSpigamebet.firestore();
 
 // fix to occasional firestore error - "Could not reach firestore backend"
-fbFirestore.settings({ experimentalForceLongPolling: true });
+// fbFirestoreSpigameBet.settings({ experimentalForceLongPolling: true });
 export const fbStorage = firebase.storage();
 export const fbRealtimeDB = db;
