@@ -80,6 +80,8 @@ const ComparisonPage = () => {
   useEffect(() => {
     // dispatch(changeIsTeam({ isTeam: false }));
     Chart.plugins.unregister(ChartDataLabels);
+
+
     if (tempValueOne && tempValueTwo) {
       setValueOne(tempValueOne);
       setValueTwo(tempValueTwo);
@@ -266,6 +268,7 @@ const ComparisonPage = () => {
   const getPlayerTeamColour = (data) => {
     const objectKeyName = isTeam ? "name" : "team";
     const team = data && data[objectKeyName].replace(/\s/g, "").toUpperCase();
+
     return teamColours[team];
   };
 
@@ -275,13 +278,13 @@ const ComparisonPage = () => {
       : getPlayerTeamColour(dataOne);
     const colourOneHover = isTeam
       ? rgba(getTeamColour(valueOne, valueTwo, "colourOne"), 0.2)
-      : "rgba(179,181,198,0.2)";
+      : getPlayerTeamColour(dataOne) && rgba(getPlayerTeamColour(dataOne), 0.2);
     const colourTwo = isTeam
       ? getTeamColour(valueOne, valueTwo, "colourTwo")
       : getPlayerTeamColour(dataTwo);
     const colourTwoHover = isTeam
       ? rgba(getTeamColour(valueOne, valueTwo, "colourTwo"), 0.2)
-      : "rgba(179,181,198,0.2)";
+      : getPlayerTeamColour(dataTwo) && rgba(getPlayerTeamColour(dataTwo), 0.2);;
     const minPoss =
       dataOne && dataTwo && Math.min(dataOne["POSS"].avg, dataTwo["POSS"].avg);
 
@@ -502,11 +505,11 @@ const ComparisonPage = () => {
         <StyledComparisonOptions>
           <StyledOptionsTeams>
             <p>Compare between: </p>
-            <li onClick={() => handleCompareBetween(true)} title="teams">
-              <span className={isTeam ? "active" : null}>Teams</span>
-            </li>
             <li onClick={() => handleCompareBetween(false)} title="players">
               <span className={!isTeam ? "active" : null}>Players</span>
+            </li>
+            <li onClick={() => handleCompareBetween(true)} title="teams">
+              <span className={isTeam ? "active" : null}>Teams</span>
             </li>
           </StyledOptionsTeams>
           <StyledOptionsTeams>

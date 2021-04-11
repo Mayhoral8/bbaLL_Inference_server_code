@@ -69,6 +69,9 @@ const StyledPlots = styled.div`
   grid-template-columns: 1fr;
   margin-top: 4rem;
   border-top: 1px solid #eee;
+  border-bottom: 1px solid silver;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
   position: relative;
   .f-row {
     display: flex;

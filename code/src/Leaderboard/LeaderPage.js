@@ -51,7 +51,7 @@ const LeaderPage = () => {
   ];
 
   useEffect(() => {
-    if (pathname.split("/")[2] === "teams" || !pathname.split("/")[2]) {
+    if (pathname.split("/")[2] === "teams") {
       dispatch(changeIsTeam({ isTeam: true }));
     } else {
       dispatch(changeIsTeam({ isTeam: false }));
