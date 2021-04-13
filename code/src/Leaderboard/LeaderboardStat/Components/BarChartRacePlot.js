@@ -8,7 +8,7 @@ import {
   axisTop,
 } from "d3";
 import React, { useRef, useEffect, useState } from "react";
-import { ButtonStyle } from "./barchartrace-style";
+import { ButtonStyle, SliderContainer } from "./barchartrace-style";
 
 import { UserInputContainer } from "./barchartrace-style";
 
@@ -17,7 +17,9 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   const svgRef = useRef();
   const widthDivRef = useRef();
   const [play, setPlay] = useState(false);
-  const maxFrames = 25;
+  const [displayLastFrame, setDisplayLastFrame] = useState(true);
+  const MAXFRAMES = 25; // This is tuneable. The max amount of frames for each game
+  const FRAMEDURATION = 200; // This is tuneable. The animation speed for each frame in milliseconds
   const [frameState, setFrameState] = useState({
     currentFrame: 1,
     gameIndex: 0,
@@ -103,12 +105,12 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
       // increments for the array
       const increment =
         (nextValue - prevValue) /
-        (maxFrames * (currentFrameDiff / maxFrameDiff));
+        (MAXFRAMES * (currentFrameDiff / maxFrameDiff));
       const newValues = [];
       newValues.push(prevValue);
       for (
         let k = 0;
-        k < (maxFrames * currentFrameDiff) / maxFrameDiff - 2;
+        k < (MAXFRAMES * currentFrameDiff) / maxFrameDiff - 2;
         k++
       ) {
         newValues.push(increment * (k + 1) + prevValue);
@@ -122,13 +124,15 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   useEffect(() => {
     setFrameState({
       ...frameState,
-      gameIndex: 0,
-      currentFrame: pointsData[0][0].value.length - 1,
+      gameIndex: pointsData.length - 1,
+      currentFrame: pointsData[pointsData.length - 1][0].value.length - 1,
     });
+    setPlay(false);
+    setDisplayLastFrame(true);
+    console.log("hi");
   }, [y]);
 
   useEffect(() => {
-    const frameDuration = 200;
     const svg = select(svgRef.current);
 
     if (frameState.gameIndex < pointsData.length) {
@@ -161,7 +165,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .attr("x", 0)
         .attr("fill-opacity", barOpacity)
         .transition()
-        .duration(frameDuration)
+        .duration(FRAMEDURATION)
         .on("end", function () {
           if (play) {
             animationsPlayed += 1;
@@ -216,7 +220,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
             }`
         )
         .transition()
-        .duration(frameDuration)
+        .duration(FRAMEDURATION)
         .attr("class", "label")
         .attr("x", 10)
         .attr(
@@ -247,14 +251,26 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   });
 
   // handles setting values when slider
-  const handleOnChange = (e) => {
+  const sliderHandleOnChange = (e) => {
     setFrameState({
       ...frameState,
       gameIndex: e.target.value - 1,
       currentFrame: pointsData[e.target.value - 1][0].value.length - 1,
     });
-
+    setDisplayLastFrame(false);
     animationsPlayed = 0;
+  };
+
+  const buttonHandleOnClick = () => {
+    if (displayLastFrame == true) {
+      setFrameState({
+        ...frameState,
+        gameIndex: 0,
+        currentFrame: pointsData[0][0].value.length - 1,
+      });
+      setDisplayLastFrame(false);
+    }
+    setPlay(!play);
   };
 
   return (
@@ -270,25 +286,12 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
       <div>
         <UserInputContainer>
           <ButtonStyle>
-            <button
-              className="PauseButton"
-              onClick={() => {
-                setPlay(!play);
-              }}
-            >
+            <button className="PauseButton" onClick={buttonHandleOnClick}>
               {play ? "Pause" : "Start"}
             </button>
           </ButtonStyle>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              fontFamily: "Roboto Condensed",
-              width: "100%",
-            }}
-          >
+          <SliderContainer>
             <input
               className="slider"
               style={{ width: "100%", marginTop: "0.75rem" }}
@@ -296,13 +299,13 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
               min={1}
               value={frameState.gameIndex + 1}
               max={pointsData.length}
-              onChange={handleOnChange}
+              onChange={sliderHandleOnChange}
             />
-            <div style={{ margin: "0.5rem" }}>
+            <div className="slider-text">
               <b>{frameState.gameIndex + 1}</b>{" "}
               {frameState.gameIndex + 1 == 1 ? "Total Game" : "Total Games"}
             </div>
-          </div>
+          </SliderContainer>
         </UserInputContainer>
       </div>
 
