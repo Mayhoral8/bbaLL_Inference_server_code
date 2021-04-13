@@ -37,7 +37,7 @@ module.exports = merge(common, {
       },
     }),
     new Dotenv({
-      path: '.env.test',
+      path: '.env.production',
       systemvars: true
     }),
     new CopyPlugin({
