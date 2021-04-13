@@ -33,6 +33,18 @@ export const UserInputContainer = styled.div`
     background: #4caf50;
     cursor: pointer;
   }
+
+  .slider-text {
+    margin: 0.5rem;
+  }
+`;
+
+export const SliderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Roboto Condensed;
+  width: 100%;
 `;
 
 export const ButtonStyle = styled.div`
