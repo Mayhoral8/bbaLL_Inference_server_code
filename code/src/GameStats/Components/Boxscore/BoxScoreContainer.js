@@ -1,7 +1,7 @@
 import React from 'react';
 import BoxScore from './BoxScore';
 import TeamTitle from '../GameSummary/TeamTitle';
-import styled from 'styled-components';
+import { BoxScoreContainerWrapper } from "./BoxScore-style";
 
 const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info }) => {
 
@@ -26,11 +26,5 @@ const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info }) => {
     </>
   )
 }
-
-const BoxScoreContainerWrapper = styled.div`
-  border-bottom: 1px solid silver;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-`
 
 export default BoxScoreContainer;

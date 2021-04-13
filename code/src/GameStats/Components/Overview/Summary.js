@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import OverviewPlot from "./OverviewPlot";
 import PlayByPlay from "./PlayByPlay";
 import ProgressBar from "./ProgressBar";
@@ -9,6 +8,7 @@ import { avoidColourSets } from "../../../Shared/Functions/gameStatsFunctions";
 import { createScatterPlot } from "../../../Shared/Functions/scatterPlotFunctions";
 import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../Shared/Functions/capitalizeFirstLetter";
+import { TapsWrapper, PlotButtonsContiner, PlotButtons, SummaryOverviewWrapper} from "./Overview-styles"
 // CONSTANT
 const CS = 0;
 const SCORES = 4;
@@ -172,7 +172,7 @@ const Summary = ({
           </PlotButtonsContiner>
       </TapsWrapper>
       
-      <OverviewWrapper>
+      <SummaryOverviewWrapper>
         <div>
           <div className="axis-description mobile-hide">
             <p>
@@ -266,83 +266,9 @@ const Summary = ({
             currentText={currentText}
           />
         </div>
-      </OverviewWrapper>
+      </SummaryOverviewWrapper>
     </>
   );
 };
-
-const TapsWrapper = styled.div`
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  @media(min-width: 996px){
-    grid-template-columns: 2fr 1fr;
-  }
-`
-
-const PlotButtonsContiner = styled.div`
-  width: 95%;
-  position: relative;
-  margin:-13px auto 0 auto;
-  justify-content: center;
-  @media (min-width: 996px) {
-    width:50%;
-  }
-  @media (min-width: 768px) and (max-width:996px) {
-    width: 40%;
-  }
-  @media (min-width: 330px) and (max-width:450px) {
-    width: 95%;
-  }
-  @media (min-width: 450px) and (max-width:768px) {
-    width: 70%;
-  }
-  @media (min-width: 280px) and (max-width:330px) {
-    width: 100%;
-  }
-`;
-
-const PlotButtons = styled.div`
-  margin: 1rem auto;
-  text-align: center;
-  display: flex;
-  width: 100%;
-  justify-content:center;
-  border: 1px solid #080A1E;
-  box-shadow: 0 4px 2px 0px gray;
-`;
-
-const OverviewWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 1rem;
-  .mobile-hide {
-    display: none;
-  }
-  .axis-description {
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--lighter-black);
-
-    background: rgba(0, 0, 0, 0.05);
-    padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
-    .vertical-divider {
-      margin: 0 0.5rem;
-    }
-  }
-  @media (min-width: 996px) {
-    grid-template-columns: 2fr 1fr;
-    .mobile-hide {
-      display: flex;
-      justify-content: center;
-    }
-    .desktop-hide {
-      display: none;
-    }
-    .axis-description {
-      margin-top: 0rem;
-    }
-  }
-`;
 
 export default Summary;

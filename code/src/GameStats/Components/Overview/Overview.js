@@ -1,8 +1,6 @@
 import React from "react";
 import getYouTubeID from 'get-youtube-id'; 
-import {OverviewWrapper, StyledHighlightWrapper,Message, VideoResonsiveWrapper, VideoNotFoundContiner} from "./Overview-style"
-import { ErrorImage, ErrorMessage} from "../../../Shared/PageNotFound/pagenotfound-style";
-import player from "../../../assets/images/right-box-player.svg";
+import {OverviewWrapper, StyledHighlightWrapper,Message, VideoResonsiveWrapper, VideoNotFoundContiner} from "./Overview-styles"
 
 const Overview = ({
   highlights,
