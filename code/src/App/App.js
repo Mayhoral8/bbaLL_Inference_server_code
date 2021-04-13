@@ -34,6 +34,12 @@ const rrfProps = {
   createFirestoreInstance,
 };
 
+const Home = Loadable({
+  loader: () => import("../Main/mainPage"),
+  loading() {
+    return <Spinner />;
+  },
+});
 const Games = Loadable({
   loader: () => import("../GameStats/GamePageContainer"),
   loading() {
@@ -85,6 +91,7 @@ const App = () => {
                     render={() => <Redirect to="/games" />}
                   />
                   <Route path="/games" component={Games} />
+                  <Route path="/home" component={Home} />
                   <Route path="/leaderboard" component={Leaderboard} />
                   <Route path="/stats" component={Stats} />
                   <Route path="/player/:player" component={Indiv} />
