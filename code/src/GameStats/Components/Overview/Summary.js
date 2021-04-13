@@ -273,7 +273,10 @@ const Summary = ({
 
 const TapsWrapper = styled.div`
   display:grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  @media(min-width: 996px){
+    grid-template-columns: 2fr 1fr;
+  }
 `
 
 const PlotButtonsContiner = styled.div`
@@ -282,19 +285,19 @@ const PlotButtonsContiner = styled.div`
   margin:-13px auto 0 auto;
   justify-content: center;
   @media (min-width: 996px) {
-    width: 40%;
+    width:50%;
   }
   @media (min-width: 768px) and (max-width:996px) {
     width: 40%;
   }
   @media (min-width: 330px) and (max-width:450px) {
-    width: 75%;
+    width: 95%;
   }
   @media (min-width: 450px) and (max-width:768px) {
-    width: 55%;
+    width: 70%;
   }
   @media (min-width: 280px) and (max-width:330px) {
-    width: 75%;
+    width: 100%;
   }
 `;
 

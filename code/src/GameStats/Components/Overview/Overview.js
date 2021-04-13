@@ -1,16 +1,28 @@
 import React from "react";
 import getYouTubeID from 'get-youtube-id'; 
-import {OverviewWrapper, StyledHighlightWrapper, VideoResonsiveWrapper} from "./Overview-style"
+import {OverviewWrapper, StyledHighlightWrapper,Message, VideoResonsiveWrapper, VideoNotFoundContiner} from "./Overview-style"
+import { ErrorImage, ErrorMessage} from "../../../Shared/PageNotFound/pagenotfound-style";
+import player from "../../../assets/images/right-box-player.svg";
 
 const Overview = ({
   highlights,
   YoutubeHighlight,
 }) => {
   const highlightsText = highlights;
-  const id = getYouTubeID(YoutubeHighlight);
+  var id = getYouTubeID(YoutubeHighlight);
   return (
     <>
       <OverviewWrapper>
+        {id === undefined ?
+        <StyledHighlightWrapper>
+          <VideoNotFoundContiner>
+            <Message>
+              <h1>OOPS!</h1>
+              <h2>Sorry,<br/> We can't find highlights for this game</h2>
+            </Message>
+          </VideoNotFoundContiner>
+        </StyledHighlightWrapper>
+        :
         <VideoResonsiveWrapper>
           <iframe 
             width='853'
@@ -22,6 +34,7 @@ const Overview = ({
             title="Embedded youtube"
           />
         </VideoResonsiveWrapper>
+        }
 
         {highlightsText.length > 0 ? (
           <StyledHighlightWrapper>
