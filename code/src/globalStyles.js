@@ -100,7 +100,7 @@ export const BadgeButton = styled.button`
   font-family: Popins;
   font-style: normal;
   font-weight: 300;
-  font-size: 0.5vw;
+  font-size: 1vw;
   justtify-content:center;
   text-align: center;
   color: #080A1E;

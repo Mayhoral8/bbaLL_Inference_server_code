@@ -101,13 +101,20 @@ export const Message = styled.div`
 
   h1 {
     font-size: 6vw;
-    text-shadow: 4px 3px 0px #7A7A7A;
+    text-shadow: 2px 1px 0px #7A7A7A;
     color: #353058;
   }
   h2 {
     font-size: 4vw;
     color: #333;
     margin-bottom: 2rem;
+  }
+  @media(min-width: 768px) {
+    h1 {
+      font-size: 6vw;
+      text-shadow: 4px 3px 0px #7A7A7A;
+      color: #353058;
+    }
   }
 `
 
