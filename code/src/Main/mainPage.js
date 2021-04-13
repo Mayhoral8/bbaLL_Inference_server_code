@@ -85,8 +85,10 @@ const GamePageContainer = () => {
                 justifyContent: "space-around",
               }}
             >
-              <div style={{ paddingTop: "10rem", paddingBottom: "10rem" }}>
-                Top Players
+              <div style={{}}>
+                <div>Player 1</div>
+                <div>Player 2</div>
+                <div>Player 3</div>
               </div>
               <div style={{ paddingTop: "10rem", paddingBottom: "10rem" }}>
                 Meme
@@ -114,7 +116,7 @@ const GamePageContainer = () => {
               marginTop: "3rem",
               marginRight: "3rem",
               height: "100%",
-              width: "40%",
+              width: "25%",
               display: "flex",
               justifyContent: "center",
               paddingTop: "40rem",
