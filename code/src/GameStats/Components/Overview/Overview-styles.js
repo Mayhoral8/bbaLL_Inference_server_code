@@ -14,7 +14,7 @@ export const OverviewWrapper = styled.div`
   @media (min-width: 996px) {
     grid-template-columns: 1.5fr 1fr;
   }
-`
+`;
 
 // Used in Overview.js
 export const StyledHighlightWrapper = styled.div`
@@ -105,7 +105,7 @@ export const Message = styled.div`
     color: #353058;
   }
   h2 {
-    font-size: 4vw;
+    font-size: 2vw;
     color: #333;
     margin-bottom: 2rem;
   }
@@ -165,7 +165,7 @@ export const TapsWrapper = styled.div`
   display:grid;
   grid-template-columns: 1fr 1fr;
   @media(min-width: 996px){
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2.5fr 1fr;
   }
 `
 //Used in Summary.js
@@ -175,7 +175,7 @@ export const PlotButtonsContiner = styled.div`
   margin:-13px auto 0 auto;
   justify-content: center;
   @media (min-width: 996px) {
-    width:50%;
+    width:30%;
   }
   @media (min-width: 768px) and (max-width:996px) {
     width: 40%;
@@ -183,12 +183,34 @@ export const PlotButtonsContiner = styled.div`
   @media (min-width: 330px) and (max-width:450px) {
     width: 95%;
   }
-  @media (min-width: 450px) and (max-width:768px) {
-    width: 70%;
+  @media (min-width: 450px) and (max-width:769px) {
+    width: 40%;
   }
   @media (min-width: 280px) and (max-width:330px) {
     width: 100%;
   }
+`;
+
+export const PlotButtonsContinerLeft = styled.div`
+width: 95%;
+position: relative;
+margin:-13px auto 0 auto;
+justify-content: center;
+@media (min-width: 996px) {
+  width:40%;
+}
+@media (min-width: 768px) and (max-width:996px) {
+  width: 40%;
+}
+@media (min-width: 330px) and (max-width:450px) {
+  width: 95%;
+}
+@media (min-width: 450px) and (max-width:768px) {
+  width: 70%;
+}
+@media (min-width: 280px) and (max-width:330px) {
+  width: 100%;
+}
 `;
 
 //Used in Summary.js

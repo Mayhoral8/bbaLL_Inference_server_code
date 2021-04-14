@@ -8,7 +8,7 @@ import { avoidColourSets } from "../../../Shared/Functions/gameStatsFunctions";
 import { createScatterPlot } from "../../../Shared/Functions/scatterPlotFunctions";
 import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../Shared/Functions/capitalizeFirstLetter";
-import { TapsWrapper, PlotButtonsContiner, PlotButtons, SummaryOverviewWrapper} from "./Overview-styles"
+import { TapsWrapper, PlotButtonsContiner, PlotButtons, SummaryOverviewWrapper, PlotButtonsContinerLeft} from "./Overview-styles"
 // CONSTANT
 const CS = 0;
 const SCORES = 4;
@@ -125,7 +125,7 @@ const Summary = ({
   return (
     <> 
       <TapsWrapper>
-        <PlotButtonsContiner>
+        <PlotButtonsContinerLeft>
           <PlotButtons>
             {plotButtons.map((btn, i) => {
                 return (
@@ -149,7 +149,7 @@ const Summary = ({
             })}
             
           </PlotButtons>
-        </PlotButtonsContiner>
+        </PlotButtonsContinerLeft>
         <PlotButtonsContiner>
             <PlotButtons>
                 {["Scores", selectedPlotBtn].map((btn, i) => {

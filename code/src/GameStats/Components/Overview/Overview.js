@@ -17,7 +17,7 @@ const Overview = ({
           <VideoNotFoundContiner>
             <Message>
               <h1>OOPS!</h1>
-              <h2>Sorry,<br/> We can't find highlights for this game</h2>
+              <h2>Sorry, we can't find highlights for this game</h2>
             </Message>
           </VideoNotFoundContiner>
         </StyledHighlightWrapper>
