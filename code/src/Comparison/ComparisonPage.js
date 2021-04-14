@@ -44,6 +44,9 @@ const ComparisonPage = () => {
   const [yearTwo, setYearTwo] = useState("");
   const [tempValueOne, setTempValueOne] = useState("");
   const [tempValueTwo, setTempValueTwo] = useState("");
+  const [tempYearOne, setTempYearOne] = useState("");
+  const [tempYearTwo, setTempYearTwo] = useState("");
+  
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
   const [dataOne, setDataOne] = useState(null);
   const [dataTwo, setDataTwo] = useState(null);
@@ -77,11 +80,12 @@ const ComparisonPage = () => {
   const yearone = parsedQueryParams[1];
   const nametwo = parsedQueryParams[2];
   const yeartwo = parsedQueryParams[3];
+  console.log(parsedQueryParams + " " + nameone + " " + yearone + " " + yeartwo + " " + nametwo);
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
 
-    if(teamsOrPlayersPath && dataTypePath && search) {
+    if(teamsOrPlayersPath && dataTypePath && search) {                                 
       if(teamsOrPlayersPath === 'players') {
         dispatch(changeIsTeam({ isTeam: false }));
       } else {
@@ -94,17 +98,31 @@ const ComparisonPage = () => {
         setDataType('perPoss');
       }
 
+      // set selected names into player one and two
       setValueOne(nameone);
       setValueTwo(nametwo);
+
+      // set selected years into player one and two
       setYearOne(yearone);
       setYearTwo(yeartwo);
+
+      // set names reference for future clear
       setRefOne(nameone);
       setRefTwo(nametwo);
+
+      // set years reference for future clear
+      setRefYearOne(yearone);
+      setRefYearTwo(yeartwo);
     }
   
     if (tempValueOne && tempValueTwo) {
       setValueOne(tempValueOne);
       setValueTwo(tempValueTwo);
+    }
+
+    if (tempYearOne && tempYearTwo) {
+      setYearOne(tempYearOne);
+      setYearTwo(tempYearTwo);
     }
 
     if (valueOne && valueTwo && yearOne && yearTwo) {
@@ -141,6 +159,8 @@ const ComparisonPage = () => {
       setIsTwoValuesSelected(false);
     }
   }, [
+    tempYearOne,
+    tempYearTwo,
     tempValueOne,
     tempValueTwo,
     valueOne,
@@ -161,11 +181,16 @@ const ComparisonPage = () => {
     setYearTwo(null);
     setTempValueOne(null);
     setTempValueTwo(null);
+    setTempYearOne(null);
+    setTempYearTwo(null);
+
     setDataOne(null);
     setDataTwo(null);
+
     setMaxYearlyOne(null);
     setMaxYearlyTwo(null);
     setIsTwoValuesSelected(false);
+    
     clearValue(refOne);
     clearValue(refTwo);
     clearValue(refYearOne);
@@ -571,7 +596,7 @@ const ComparisonPage = () => {
                 <label>Year : </label>
                 <ComparisonYearSelection
                   isTeam={isTeam}
-                  onChange={(val) => setYearOne(val)}
+                  onChange={(val) => setTempYearOne(val)}
                   prompt="Select season"
                   name={tempValueOne}
                   setRef={setRefYearOne}
@@ -595,7 +620,7 @@ const ComparisonPage = () => {
                 <label>Year : </label>
                 <ComparisonYearSelection
                   isTeam={isTeam}
-                  onChange={(val) => setYearTwo(val)}
+                  onChange={(val) => setTempYearTwo(val)}
                   prompt="Select season"
                   name={tempValueTwo}
                   setRef={setRefYearTwo}
