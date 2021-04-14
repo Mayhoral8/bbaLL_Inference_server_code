@@ -7,8 +7,7 @@ const Overview = ({
   YoutubeHighlight,
 }) => {
   const highlightsText = highlights;
-  var id = getYouTubeID(YoutubeHighlight);
-  id = undefined;
+  const id = getYouTubeID(YoutubeHighlight);
   return (
     <>
       <OverviewWrapper>

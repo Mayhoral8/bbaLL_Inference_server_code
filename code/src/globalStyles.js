@@ -157,6 +157,10 @@ export const BadgeButton = styled.button`
     font-size: 2.5vw;
   }
 
+  @media(min-width: 551px) and (max-width: 700px) {
+    font-size: 2.7vw;
+  }
+
   @media(min-width: 341px) and (max-width: 449px) {
     font-size: 3vw;
   }
