@@ -1,6 +1,6 @@
 import React from "react";
 import getYouTubeID from 'get-youtube-id'; 
-import {OverviewWrapper, StyledHighlightWrapper, VideoResonsiveWrapper} from "./Overview-style"
+import {OverviewWrapper, StyledHighlightWrapper,Message, VideoResonsiveWrapper, VideoNotFoundContiner} from "./Overview-styles"
 
 const Overview = ({
   highlights,
@@ -11,6 +11,16 @@ const Overview = ({
   return (
     <>
       <OverviewWrapper>
+        {id === undefined ?
+        <StyledHighlightWrapper>
+          <VideoNotFoundContiner>
+            <Message>
+              <h1>OOPS!</h1>
+              <h2>Sorry, we can't find highlights for this game</h2>
+            </Message>
+          </VideoNotFoundContiner>
+        </StyledHighlightWrapper>
+        :
         <VideoResonsiveWrapper>
           <iframe 
             width='853'
@@ -22,6 +32,7 @@ const Overview = ({
             title="Embedded youtube"
           />
         </VideoResonsiveWrapper>
+        }
 
         {highlightsText.length > 0 ? (
           <StyledHighlightWrapper>

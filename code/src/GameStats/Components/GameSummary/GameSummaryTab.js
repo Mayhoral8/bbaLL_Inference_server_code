@@ -7,8 +7,8 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router-dom";
-import styled from "styled-components";
 import { changeGamesTab } from "../../../redux/actions/gamesActions";
+import { GameSummaryTabWrapper} from "./GameSummary-Styles";
 
 // TODO: move it to constants? or somewhere else
 const tabs = ["overview", "stats", "match facts", "boxscore"];
@@ -53,39 +53,5 @@ const GameSummaryTab = ({ url, gameCode }) => {
     </GameSummaryTabWrapper>
   );
 };
-
-const GameSummaryTabWrapper = styled.ul`
-  display: flex;
-  list-style: none;
-  width: 100%;
-  li {
-    text-transform: uppercase;
-    cursor: pointer;
-    font-weight: 800;
-    display: flex;
-    width: calc(100% / 4);
-    justify-content: center;
-    border: 1px solid silver;
-    align-items: center;
-    text-align: center;
-  }
-  li:not(:last-child) {
-    border-right: 0;
-  }
-  .isActive {
-    color: var(--main-purple);
-    border-bottom: 3px solid var(--main-purple);
-  }
-  a {
-    width: 100%;
-    height: 100%;
-    padding: 0.7rem;
-  }
-  @media (max-width: 600px) {
-    li {
-      font-size: 0.6rem;
-    }
-  }
-`;
 
 export default GameSummaryTab;
