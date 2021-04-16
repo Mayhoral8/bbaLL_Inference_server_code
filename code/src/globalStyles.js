@@ -100,7 +100,7 @@ export const BadgeButton = styled.button`
   font-family: Popins;
   font-style: normal;
   font-weight: 300;
-  font-size: 2vw;
+  font-size: 15px;
   justtify-content:center;
   text-align: center;
   color: #080A1E;
@@ -137,32 +137,10 @@ export const BadgeButton = styled.button`
     padding: 7px;
   }
 
-  @media (max-width: 340px) {
-    a, span {
-      width: 100%;
-      padding: 3px;
-    }
-    font-size: 4vw;
-  }
-
   @media(min-width: 996px) {
     a, span {
       padding: 10px 10px;
     }
-
-    font-size: 1.5vw;
-  }
-
-  @media(min-width: 450px) and (max-width: 550px) {
-    font-size: 2.5vw;
-  }
-
-  @media(min-width: 551px) and (max-width: 700px) {
-    font-size: 2.7vw;
-  }
-
-  @media(min-width: 341px) and (max-width: 449px) {
-    font-size: 3vw;
   }
 `
 
