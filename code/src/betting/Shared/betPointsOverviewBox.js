@@ -9,28 +9,28 @@ import {
 } from './betPointsOverviewBoxStyles'
 import closeIcon from '../../assets/images/closeIcon.svg'
 const overviewBox = ( props ) => {
-    const { selectedValues, index, onRemovePoints }=props
+    const { selectedValues, gameId, onRemovePoints }=props
     return(
         <OverviewBoxC>
             <HeaderC>
                 <TeamNameC>
-                    {selectedValues[index].gameDetails.homeTeam}
+                    {selectedValues[gameId].gameDetails.homeTeam}
                 </TeamNameC>
                 <TeamNameC>
-                    {selectedValues[index].gameDetails.awayTeam}
+                    {selectedValues[gameId].gameDetails.awayTeam}
                 </TeamNameC>
             </HeaderC>
             <PointsC>
                 {
-                    selectedValues[index].moneyLine.moneyLineOddsValue ?
+                    selectedValues[gameId].moneyLine.moneyLineOddsValue ?
                     <Points>
                         <span>Money Line:</span> 
-                        <span>{selectedValues[index].moneyLine.moneyLineOddsValue} 
+                        <span>{selectedValues[gameId].moneyLine.moneyLineOddsValue} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
                              onClick={( e )=>{
-                                onRemovePoints( e, 'moneyLine' ,index )
+                                onRemovePoints( e, 'moneyLine' ,gameId )
                              }}
                             />
                         </span>
@@ -38,15 +38,15 @@ const overviewBox = ( props ) => {
                     :null
                 }
                 {
-                    selectedValues[index].handicap.handicapOddsValue ?
+                    selectedValues[gameId].handicap.handicapOddsValue ?
                     <Points>
                         <span>Handicap:</span> 
-                        <span>{selectedValues[index].handicap.handicapOddsValue} 
+                        <span>{selectedValues[gameId].handicap.handicapOddsValue} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
                              onClick={( e )=>{
-                                onRemovePoints( e, 'handicap', index )
+                                onRemovePoints( e, 'handicap', gameId )
                              }}
                             />
                         </span>
@@ -54,28 +54,28 @@ const overviewBox = ( props ) => {
                     :null
                 }
                 {
-                    selectedValues[index].over.overOddsValue ? 
+                    selectedValues[gameId].over.overOddsValue ? 
                     <Points>
                         <span>Over:</span> 
-                        <span>{selectedValues[index].over.overOddsValue}
+                        <span>{selectedValues[gameId].over.overOddsValue}
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
                              onClick={( e )=>{
-                                onRemovePoints( e, 'over', index )
+                                onRemovePoints( e, 'over', gameId )
                              }}
                             />
                         </span>
                     </Points> 
                     : 
-                    selectedValues[index].under.underOddsValue ? 
+                    selectedValues[gameId].under.underOddsValue ? 
                     <Points><span>Under: </span> 
-                        <span>{selectedValues[index].under.underOddsValue} 
+                        <span>{selectedValues[gameId].under.underOddsValue} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
                              onClick={( e )=>{
-                                onRemovePoints( e, 'under', index )
+                                onRemovePoints( e, 'under', gameId )
                              }}
                             />
                         </span>

@@ -6,7 +6,8 @@ import sharedReducer from "./sharedReducer";
 import storageReducer from './storageReducer';
 import gamesReducer from "./gamesReducer";
 import authReducer from './authReducer';
-import betsReducer from './betsReducer'
+import betsReducer from './betsReducer';
+import recordReducer from './recordReducer'
 
 export default combineReducers({
   authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   firestoreReducer,
   storageReducer,
   gamesReducer,
-  betsReducer
+  betsReducer,
+  recordReducer
 });

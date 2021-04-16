@@ -7,9 +7,11 @@ export const LoginAction = (userDetails) => {
       .then(async(doc)=>{
         if(!doc.data()){
           fbFirestoreSpigameBet.collection('userRecords').doc(userDetails.uid).set({
-            totalPoints:'',
-            winPercentage:'',
-            rank:''
+            totalPoints:0,
+            winPercentage:0,
+            rank:'',
+            displayName: userDetails.displayName,
+            emailAddress: userDetails.email
           })
         }
         dispatch({

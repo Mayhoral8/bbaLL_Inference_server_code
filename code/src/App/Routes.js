@@ -57,6 +57,7 @@ const Routes=(props)=>{
     useEffect(()=>{
       firebaseInstanceSpigamebet.auth().onAuthStateChanged(async(user)=>{
           if(user){
+            console.log(user)
             const {displayName,email,uid}=user
             const userDetails={displayName,email,uid}
             await props.LoginAction(userDetails)

@@ -86,12 +86,23 @@ export const structureData=(futureGamesInfo)=>{
     return targetArray
 }
 
-export const pointBoxClickHandler=(e, params, index, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
+export const compareData = () => {
+
+}
+
+export const pointBoxClickHandler=(e, params, index, gameId ,  keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
     if(props.userDetails){
         let gameInfoUpdated = gameInfo;
         gameInfoUpdated[index][keyName] = selectedKey;
         let targetObj={}
-        if(selectedValues[index]){
+        let gameDetailsObj
+        for(let i = 0; i < gameInfoUpdated.length; i++){
+            if(gameInfoUpdated[i].gameId === gameId){
+                gameDetailsObj = gameInfoUpdated[i].gameDetails
+            }
+        }
+
+        if(selectedValues[gameId]){
             targetObj=selectedValues
         } else{
             let newObj = { 
@@ -100,30 +111,30 @@ export const pointBoxClickHandler=(e, params, index, keyName, selectedKey, oddsV
                 over: { ...data.selectedValues.over },
                 under: { ...data.selectedValues.under }
             }
-            selectedValues[index]=newObj
+            selectedValues[gameId]=newObj
             targetObj=selectedValues
         }
 
         if(params==='moneyLine'){
-            targetObj[index][params].moneyLineOddsValue=oddsValue;
+            targetObj[gameId][params].moneyLineOddsValue=oddsValue;
         } else if(params==='handicap'){
-            targetObj[index][params].handicapOddsValue=oddsValue;
-            targetObj[index][params].handicapPointsValue=pointsValue;
+            targetObj[gameId][params].handicapOddsValue=oddsValue;
+            targetObj[gameId][params].handicapPointsValue=pointsValue;
         } else{
             if(params.includes('over')){
-                targetObj[index][params].overOddsValue=oddsValue;
-                targetObj[index][params].overTotalScoreValue=scoreValue;
-                targetObj[index]['under'].underOddsValue=null;
-                targetObj[index]['under'].underTotalScoreValue=null;
+                targetObj[gameId][params].overOddsValue=oddsValue;
+                targetObj[gameId][params].overTotalScoreValue=scoreValue;
+                targetObj[gameId]['under'].underOddsValue=null;
+                targetObj[gameId]['under'].underTotalScoreValue=null;
             } else{
-                targetObj[index][params].underOddsValue=oddsValue;
-                targetObj[index][params].underTotalScoreValue=scoreValue;
-                targetObj[index]['over'].overOddsValue=null;
-                targetObj[index]['over'].overTotalScoreValue=null;
+                targetObj[gameId][params].underOddsValue=oddsValue;
+                targetObj[gameId][params].underTotalScoreValue=scoreValue;
+                targetObj[gameId]['over'].overOddsValue=null;
+                targetObj[gameId]['over'].overTotalScoreValue=null;
             }
         }
-        targetObj[index].gameDetails = gameInfoUpdated[index].gameDetails;
-        targetObj[index].gameId = gameInfoUpdated[index].gameId 
+        targetObj[gameId].gameDetails = gameDetailsObj;
+        targetObj[gameId].gameDate = targetObj[gameId].gameDetails.gameDate
         let newOverviewKeysArray=Object.keys(targetObj);
         return {
             gameInfoUpdated,targetObj,newOverviewKeysArray

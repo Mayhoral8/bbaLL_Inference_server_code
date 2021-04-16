@@ -23,3 +23,7 @@ export const LOGIN="LOGIN"
 
 
 export const GET_FUTURE_GAMES_INFO='GET_FUTURE_GAMES_INFO'
+
+export const GETUSERRECORD = 'GetUserRecord'
+
+export const GETUSERBETS = 'GetUserBets'
