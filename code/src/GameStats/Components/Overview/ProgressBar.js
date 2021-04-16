@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { ProgressBarWrapper } from "./Overview-styles";;
 
 const ProgressBar = ({ toggled, scoresProgress, selectedPlotProgress, awayColour, homeColour }) => {
   // render progress value
@@ -37,43 +37,5 @@ const ProgressBar = ({ toggled, scoresProgress, selectedPlotProgress, awayColour
 
   )
 }
-
-const ProgressBarWrapper = styled.div`
-  width: 100%;
-  height: 2.5rem;
-  background: grey;
-  display: flex;
-  /* margin-bottom: 1rem; */
-  .bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 2.5rem;
-    color: var(--white);
-  }
-
-  .home-bar {
-    width: ${({ progressbar }) => {
-    if (progressbar && (progressbar[0] === 0 && progressbar[1] === 0)) {
-      return 50;
-    } else if (progressbar) {
-      return (progressbar[0] / (progressbar[0] + progressbar[1])) * 100;
-    }
-  }}%;
-    background: ${({ homecolour }) => homecolour && homecolour};
-  }
-
-  .away-bar {
-    width: ${({ progressbar }) => {
-    if (progressbar && (progressbar[0] === 0 && progressbar[1] === 0)) {
-      return 50;
-    } else if (progressbar) {
-      return (progressbar[1] / (progressbar[0] + progressbar[1])) * 100;
-    }
-  }}%;
-    height: 2.5rem;
-    background: ${({ awaycolour }) => awaycolour && awaycolour};
-  }
-`
 
 export default ProgressBar;

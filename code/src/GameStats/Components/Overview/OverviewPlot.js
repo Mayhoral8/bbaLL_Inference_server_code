@@ -4,10 +4,10 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { rgba } from "polished";
 import { ABB2TEAM, GREEN_ACCENT_COLOR, MOBILE_SM_BREAKPOINT } from "../../../constants";
 import { getKeyByValue } from "../../../Shared/Functions/GetKeyByValue";
-import styled from "styled-components";
 import GraphInfo from "../../../Shared/GraphInfo/GraphInfo";
 import "chartjs-plugin-watermark";
 import logo from "Assets/images/new-logo-square.png";
+import { ChartContainer } from "./Overview-styles"
 
 const OverviewPlot = (props) => {
   const {
@@ -353,26 +353,4 @@ const OverviewPlot = (props) => {
     </ChartContainer>
   );
 };
-
-const ChartContainer = styled.div`
-  position: relative;
-  display: ${({ hide }) => (hide ? "none" : "block")};
-  width: 95vw;
-  margin: 0 auto;
-  max-width: 1000px;
-  height: 50vh;
-  max-height: 270px;
-
-  @media (min-width: 768px) {
-    width: 91vw;
-    max-height: 45vh;
-    min-height: 350px;
-  }
-
-  @media (min-width: 996px) {
-    display: ${({ hide }) => (hide ? "block" : "none")};
-    width: 57vw;
-    height: 50vh;
-  }
-`;
 export default OverviewPlot;
