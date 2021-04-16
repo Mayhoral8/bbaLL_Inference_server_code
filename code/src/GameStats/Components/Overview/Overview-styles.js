@@ -179,14 +179,30 @@ export const PlotButtonsContiner = styled.div`
   }
   
   @media (min-width: 768px) and (max-width:996px) {
+    width: 30%;
+  }
+
+  @media (min-width: 592px) and (max-width:769px) {
     width: 40%;
   }
-  @media (min-width: 330px) and (max-width:450px) {
-    width: 95%;
+
+  @media (min-width: 486px) and (max-width:591px) {
+    width: 50%;
   }
-  @media (min-width: 450px) and (max-width:769px) {
-    width: 40%;
+
+  @media (min-width: 450px) and (max-width:485px) {
+    width: 60%;
   }
+
+
+  @media (min-width: 366px) and (max-width:449px) {
+    width: 60%;
+  }
+
+  @media (min-width: 330px) and (max-width:365px) {
+    width: 80%;
+  }
+
   @media (min-width: 280px) and (max-width:330px) {
     width: 100%;
   }
@@ -198,20 +214,29 @@ position: relative;
 margin:-13px auto 0 auto;
 justify-content: center;
 
-@media (min-width: 996px){
+@media (min-width: 1194px) {
+  width:30%;
+}
+@media (min-width: 996px) and (max-width:1194px) {
   width:40%;
 }
-@media (min-width: 768px) and (max-width:995px) {
+@media (min-width: 901px) and (max-width:995px) {
+  width: 50%;
+}
+@media (min-width: 768px) and (max-width:900px) {
   width: 60%;
 }
 @media (min-width: 330px) and (max-width:450px) {
-  width: 95%;
+  width: 100%;
 }
-@media (min-width: 471px) and (max-width:768px) {
+@media (min-width: 570px) and (max-width:768px) {
   width: 70%;
 }
-@media (min-width: 450px) and (max-width:470px) {
+@media (min-width: 471px) and (max-width:570px) {
   width: 80%;
+}
+@media (min-width: 450px) and (max-width:470px) {
+  width: 90%;
 }
 @media (min-width: 280px) and (max-width:330px) {
   width: 100%;
