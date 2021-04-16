@@ -217,7 +217,6 @@ justify-content: center;
 @media (min-width: 1194px) {
   width:30%;
 }
-
 @media (min-width: 996px) and (max-width:1194px) {
   width:40%;
 }
