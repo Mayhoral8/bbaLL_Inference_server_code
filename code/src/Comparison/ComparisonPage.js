@@ -42,6 +42,7 @@ const ComparisonPage = () => {
   const [valueTwo, setValueTwo] = useState("");
   const [yearOne, setYearOne] = useState("");
   const [yearTwo, setYearTwo] = useState("");
+  
   const [tempValueOne, setTempValueOne] = useState("");
   const [tempValueTwo, setTempValueTwo] = useState("");
   const [tempYearOne, setTempYearOne] = useState("");
@@ -80,7 +81,7 @@ const ComparisonPage = () => {
   const yearone = parsedQueryParams[1];
   const nametwo = parsedQueryParams[2];
   const yeartwo = parsedQueryParams[3];
-  console.log(parsedQueryParams + " " + nameone + " " + yearone + " " + yeartwo + " " + nametwo);
+  console.log(parsedQueryParams.length + " " + nameone + " " + yearone + " " + yeartwo + " " + nametwo);
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
@@ -543,6 +544,17 @@ const ComparisonPage = () => {
     return { sortedPValueListOne, sortedPValueListTwo, sortedPValueListThree };
   };
 
+  const setPromoteString = (nums) => {
+
+    console.log(nums);
+    if (parsedQueryParams.length == 1) {
+      return isTeam ? "Enter team name" : "Enter player name";
+    } else {
+      return parsedQueryParams[nums];
+    }
+
+  }
+
   return (
     <>
       <SEO
@@ -587,7 +599,7 @@ const ComparisonPage = () => {
                   options={names}
                   isTeam={isTeam}
                   onChange={(val) => setTempValueOne(val)}
-                  prompt={isTeam ? "Enter team name" : "Enter player name"}
+                  prompt={setPromoteString(0)}
                   length="longer"
                   setRef={setRefOne}
                 />
@@ -611,7 +623,7 @@ const ComparisonPage = () => {
                   options={names}
                   isTeam={isTeam}
                   onChange={(val) => setTempValueTwo(val)}
-                  prompt={isTeam ? "Enter team name" : "Enter player name"}
+                  prompt={setPromoteString(2)}
                   length="longer"
                   setRef={setRefTwo}
                 />
