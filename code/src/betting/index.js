@@ -10,9 +10,10 @@ import { getUserRecord } from '../redux/actions/userRecordActions'
 //Components
 import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
 import ContentHeader from './Shared/contentHeader'
-import UserProfileContainer from '../UserProfile/index'
+import UserStatsContainer from './Shared/userStatsContainer'
 import Spinner from '../Shared/Spinner/Spinner'
 import WarningPopup from '../Shared/Popups/submitBetWarningPopup'
+import UserRankContainer from './Shared/usersRankContainer'
 
 //Libraries and Functions
 import moment from 'moment'
@@ -25,19 +26,24 @@ import {
     ContentW,
     BetInfo,
     RowC,
-    TeamNameC,
-    PointsBox,
+    TeamNameContainer,
+    TeamName,
+    TimeContainer,
+    VS,
+    PointsContainer,
     Col,
     Section1,
     Section2,
-    PointBoxChild,
-    DateC,
+    PointsValueContainer,
+    OddsValueContainer,
+    TotalScoreValueContainer,
     CommonChild,
     BetSubmitFormC,
     OverviewHeader,
     SubmitPointsBtn,
     WarningPopupContainer,
-    WarningPopupWrapper
+    WarningPopupWrapper,
+    UserStatsRankWrapper
 } from './styles'
 
 const Betting=(props)=>{
@@ -64,6 +70,7 @@ const Betting=(props)=>{
 
     useEffect(() => {
         if(props.futureGamesInfo[0] && props.userDetails){
+            console.log("REQUEST MADE")
             props.getUserBets(props.userDetails.uid)
             .then(()=>{
                 let targetArray = structureData(props.futureGamesInfo);
@@ -163,9 +170,13 @@ const Betting=(props)=>{
                         </WarningPopupContainer>
                         :null
                     }
-                    <UserProfileContainer/>
+                    
                     <ContentC>
                         <ContentW>
+                        <UserStatsRankWrapper>
+                            <UserStatsContainer/>
+                            <UserRankContainer/>
+                        </UserStatsRankWrapper>
                         <BetInfo>
                             <ContentHeader/>
 
@@ -173,83 +184,83 @@ const Betting=(props)=>{
                                 return(
                                     <RowC key={index*12}>
                                         <Section1>
-                                            <TeamNameC>
-                                                {element.gameDetails.homeTeam}
-                                            </TeamNameC>
-                                            <TeamNameC>
-                                                {element.gameDetails.awayTeam}
-                                            </TeamNameC>
-                                            <DateC>
-                                                {
-                                                    moment(currentDate).format('DD/MM/YYYY') === moment(element.gameDetails.gameDate).format('DD/MM/YYYY') ? 'Today at ' + element.gameDetails.gameStartTime
-                                                    :
-                                                    moment(element.gameDetails.gameDate).format('MM/DD/YYYY')
-                                                }
-                                            </DateC>
+                                            <TimeContainer>
+                                                {element.gameDetails.gameStartTime.split(' PM')}
+                                            </TimeContainer>
+                                            <TeamNameContainer>
+                                                <TeamName>
+                                                    {element.gameDetails.homeTeam}
+                                                </TeamName>
+                                                <VS>VS</VS>
+                                                <TeamName>
+                                                    {element.gameDetails.awayTeam}
+                                                </TeamName>
+                                            </TeamNameContainer>
                                         </Section1>
+
                                         <Section2>
                                             <Col>
-                                                <PointsBox 
+                                                <PointsContainer 
+                                                 selected={gameInfo[index].handicapSelected === 0} 
+                                                 onClick={(e)=>{
+                                                    onPointBoxClick(e,'handicap',index,gameInfo[index].gameId,'handicapSelected',0,gameInfo[index].handicap.handicapHomeTeamOdds,gameInfo[index].handicap.handicapHomeTeamPoints)
+                                                 }}
+                                                >
+                                                    <PointsValueContainer>{element.handicap.handicapHomeTeamPoints}</PointsValueContainer>
+                                                    <OddsValueContainer>{element.handicap.handicapHomeTeamOdds}</OddsValueContainer>
+                                                </PointsContainer>
+
+                                                <PointsContainer 
+                                                 selected={gameInfo[index].handicapSelected === 1} 
+                                                 onClick={(e)=>{
+                                                    onPointBoxClick(e,'handicap',index,gameInfo[index].gameId,'handicapSelected',1,gameInfo[index].handicap.handicapAwayTeamOdds,gameInfo[index].handicap.handicapAwayTeamPoints)
+                                                 }}
+                                                >
+                                                    <PointsValueContainer>{element.handicap.handicapAwayTeamPoints}</PointsValueContainer>
+                                                    <OddsValueContainer>{element.handicap.handicapAwayTeamOdds}</OddsValueContainer>
+                                                </PointsContainer>
+                                            </Col>
+
+                                            <Col>
+                                                <PointsContainer 
                                                  selected={gameInfo[index].moneyLineSelected === 0} 
                                                  onClick={(e)=>{
                                                     onPointBoxClick(e,'moneyLine',index,gameInfo[index].gameId,'moneyLineSelected',0,gameInfo[index].moneyLine.homeTeamOdds)
                                                  }}
                                                 >
                                                     {element.moneyLine.homeTeamOdds}
-                                                </PointsBox>
+                                                </PointsContainer>
 
-                                                <PointsBox 
+                                                <PointsContainer 
                                                  selected={gameInfo[index].moneyLineSelected === 1} 
                                                  onClick={(e)=>{
                                                     onPointBoxClick(e,'moneyLine',index,gameInfo[index].gameId,'moneyLineSelected',1,gameInfo[index].moneyLine.awayTeamOdds)
                                                  }}
                                                 >
                                                     {element.moneyLine.awayTeamOdds}
-                                                </PointsBox>
+                                                </PointsContainer>
                                             </Col>
 
                                             <Col>
-                                                <PointsBox 
-                                                 selected={gameInfo[index].handicapSelected === 0} 
-                                                 onClick={(e)=>{
-                                                    onPointBoxClick(e,'handicap',index,gameInfo[index].gameId,'handicapSelected',0,gameInfo[index].handicap.handicapHomeTeamOdds,gameInfo[index].handicap.handicapHomeTeamPoints)
-                                                 }}
-                                                >
-                                                    <CommonChild>{element.handicap.handicapHomeTeamPoints}</CommonChild>
-                                                    <PointBoxChild>{element.handicap.handicapHomeTeamOdds}</PointBoxChild>
-                                                </PointsBox>
-
-                                                <PointsBox 
-                                                 selected={gameInfo[index].handicapSelected === 1} 
-                                                 onClick={(e)=>{
-                                                    onPointBoxClick(e,'handicap',index,gameInfo[index].gameId,'handicapSelected',1,gameInfo[index].handicap.handicapAwayTeamOdds,gameInfo[index].handicap.handicapAwayTeamPoints)
-                                                 }}
-                                                >
-                                                    <CommonChild>{element.handicap.handicapAwayTeamPoints}</CommonChild>
-                                                    <PointBoxChild>{element.handicap.handicapAwayTeamOdds}</PointBoxChild>
-                                                </PointsBox>
-                                            </Col>
-
-                                            <Col>
-                                                <PointsBox 
+                                                <PointsContainer 
                                                  selected={gameInfo[index].overUnderSelected === 0} 
                                                  onClick={(e)=>{
                                                     onPointBoxClick(e,'over',index,gameInfo[index].gameId,'overUnderSelected',0,gameInfo[index].overUnder.overOddsValue,null,gameInfo[index].overUnder.overTotalScore)
                                                  }}
                                                 >
-                                                    <CommonChild>{element.overUnder.overTotalScore}</CommonChild>
-                                                    <PointBoxChild>{element.overUnder.overOddsValue}</PointBoxChild>
-                                                </PointsBox>
+                                                    <TotalScoreValueContainer>{element.overUnder.overTotalScore}</TotalScoreValueContainer>
+                                                    <OddsValueContainer>{element.overUnder.overOddsValue}</OddsValueContainer>
+                                                </PointsContainer>
 
-                                                <PointsBox
+                                                <PointsContainer
                                                  selected={gameInfo[index].overUnderSelected === 1} 
                                                  onClick={(e)=>{
                                                     onPointBoxClick(e,'under',index,gameInfo[index].gameId,'overUnderSelected',1,gameInfo[index].overUnder.underOddsValue,null,gameInfo[index].overUnder.underTotalScore)
                                                  }}
                                                 >
-                                                    <CommonChild>{element.overUnder.underTotalScore}</CommonChild>
-                                                    <PointBoxChild>{element.overUnder.underOddsValue}</PointBoxChild>
-                                                </PointsBox>
+                                                    <TotalScoreValueContainer>{element.overUnder.underTotalScore}</TotalScoreValueContainer>
+                                                    <OddsValueContainer>{element.overUnder.underOddsValue}</OddsValueContainer>
+                                                </PointsContainer>
                                             </Col>
                                         </Section2>
                                     </RowC>

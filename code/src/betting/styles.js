@@ -21,12 +21,12 @@ export const ContentC = styled.div`
 
 export const ContentW = styled.div`
     height:100%;
-    max-width:1281px;
+    width:100%;
     display:flex;
 `
 
 export const BetInfo = styled.div`
-    width:100%;
+    width:60%;
     max-height:620px;
     overflow-y:auto;
     border: 1px solid #e6e6e6;
@@ -36,14 +36,14 @@ export const RowC = styled.div`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:5px 0px;
+    padding: 10px;
     border-bottom:1px solid #bfbfbf;
 `
 
 export const Section1 = styled.div`
     width:15%;
     display:flex;
-    flex-direction:column;
+    align-items: center;
     color:#757575;
 `
 
@@ -54,30 +54,67 @@ export const Section2 = styled.div`
     align-items:center;
 `
 
-export const TeamNameC = styled.div`
-    font-weight:600;
-    margin-bottom:5px;
-    color:#333333;
+export const TeamNameContainer = styled.div`
+    
 `
 
-export const PointsBox = styled.div`
-    border:${props => props.selected ? '1px solid pink' : '1px solid black'};
-    padding:10px 0px;
-    font-size: 13px;
-    font-weight: 900;
-    border-radius:7px;
-    height:50px;
-    width:80px;
+export const TeamName = styled.div`
+    font-weight:600;
+    color:#333333;
+    text-align: center;
+    margin: 7px 0px;
+`
+
+export const VS = styled.div`
+    text-align: center;
+`
+
+export const TimeContainer = styled.div`
+    border-radius: 8px;
+    text-align: center;
+    width: 120px;
+    background: #C4C4C4;
+    color: black;
+    height: 20px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+`
+
+export const PointsContainer = styled.div`
+    height:99px;
+    width:126px;
+    /* border:${props => props.selected ? '1px solid pink' : '1px solid black'}; */
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    
     cursor: pointer;
-    color:#477eff;
-    margin:0px 10px;
+    margin:0px 5px;
     display:flex;
     flex-direction:column;
-    justify-content:center;
-    align-items:center;
     &:hover{
         border:1px solid red;
     }
+`
+
+export const OddsValueContainer = styled.div`
+    
+`
+
+export const PointsValueContainer = styled.div`
+    width: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.08);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+`
+
+export const TotalScoreValueContainer = styled.div`
+    width: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 `
 
 export const PointBoxChild = styled.li`
@@ -106,7 +143,7 @@ export const CommonChild = styled.li`
 
 
 export const BetSubmitFormC = styled.div`
-    width:500px;
+    width: 20%;
     border:1px solid #e6e6e6;
     margin-left:10px;
     display:flex;
@@ -153,4 +190,10 @@ export const WarningPopupContainer = styled.div`
 export const WarningPopupWrapper = styled.div`
     width:500px;
     background: #ffff;
+`
+
+export const UserStatsRankWrapper = styled.div`
+    width: 20%;
+    max-width:278px;
+    margin-right: 10px;
 `

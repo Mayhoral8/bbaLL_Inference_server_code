@@ -46,31 +46,42 @@ export const structureData=(futureGamesInfo)=>{
         if(overUnderKeysArray.length===0){
             overUnderTargetObj={overTotalScore:'',underTotalScore:'',overBettingOdds:'',underBettingOdds:''}
         } else{
-            overUnderKeysArray.sort()
-            let underTotalScore
-            let overTotalScore
-            let overUnderLastIndex=overUnderKeysArray.length-1
-            let overUnderTargetKey=overUnderKeysArray[overUnderLastIndex]
-            let childOverUnderTargetKeys=Object.keys(docData['Game Odds'].Over_and_under[overUnderTargetKey])
-
-            if(childOverUnderTargetKeys[0].includes('Under')){
-                underTotalScore=childOverUnderTargetKeys[0]
-            }else{
-                overTotalScore=childOverUnderTargetKeys[0]
+            let newKeysArray = []
+            for(let i = 0; i < overUnderKeysArray.length; i++){
+                let element = overUnderKeysArray[i]
+                if(!docData['Game Odds'].Over_and_under[element].Unavailable){
+                    newKeysArray.push(element)
+                }
             }
-            if(childOverUnderTargetKeys[1].includes('Over')){
-                overTotalScore=childOverUnderTargetKeys[1]
-            }else{
-                underTotalScore=childOverUnderTargetKeys[1]
+            newKeysArray.sort()
+            if(newKeysArray[0]){
+                let underTotalScore
+                let overTotalScore
+                let overUnderLastIndex = newKeysArray.length-1
+                let overUnderTargetKey=newKeysArray[overUnderLastIndex]
+                let childOverUnderTargetKeys=Object.keys(docData['Game Odds'].Over_and_under[overUnderTargetKey])
+
+                if(childOverUnderTargetKeys[0].includes('Under')){
+                    underTotalScore=childOverUnderTargetKeys[0]
+                }else{
+                    overTotalScore=childOverUnderTargetKeys[0]
+                }
+                if(childOverUnderTargetKeys[1].includes('Over')){
+                    overTotalScore=childOverUnderTargetKeys[1]
+                }else{
+                    underTotalScore=childOverUnderTargetKeys[1]
+                }
+
+                let overOddsValue=docData['Game Odds'].Over_and_under[overUnderTargetKey][overTotalScore]
+                let underOddsValue=docData['Game Odds'].Over_and_under[overUnderTargetKey][underTotalScore]
+
+                underTotalScore=childOverUnderTargetKeys[0].split(' ')[1]
+                overTotalScore=childOverUnderTargetKeys[0].split(' ')[1]
+
+                overUnderTargetObj={overTotalScore,underTotalScore,overOddsValue,underOddsValue}
+            } else {
+                overUnderTargetObj={overTotalScore:'',underTotalScore:'',overBettingOdds:'',underBettingOdds:''}
             }
-
-            let overOddsValue=docData['Game Odds'].Over_and_under[overUnderTargetKey][overTotalScore]
-            let underOddsValue=docData['Game Odds'].Over_and_under[overUnderTargetKey][underTotalScore]
-
-            underTotalScore=childOverUnderTargetKeys[0].split(' ')[1]
-            overTotalScore=childOverUnderTargetKeys[0].split(' ')[1]
-
-            overUnderTargetObj={overTotalScore,underTotalScore,overOddsValue,underOddsValue}
         }
         targetArray.push({
             overUnder:{...overUnderTargetObj},
@@ -83,6 +94,7 @@ export const structureData=(futureGamesInfo)=>{
             moneyLineSelected:null
         })
     })
+    console.log(targetArray)
     return targetArray
 }
 

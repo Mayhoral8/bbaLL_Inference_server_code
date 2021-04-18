@@ -29,6 +29,7 @@
     "firebase": "^8.0.2",
     "js-stats": "^1.0.5",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "plotly.js": "^1.57.1",
     "polished": "^4.0.5",
     "react": "^16.13.1",
