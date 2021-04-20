@@ -29,8 +29,6 @@ const StatsTable = ({
     return (
       <div className="table-row" key={i}>
         {tableHeadings.map((attr) => {
-          console.log(attr, detail[attr].avg);
-          console.log(detail["name"]);
           return (
             <div
               key={attr}
