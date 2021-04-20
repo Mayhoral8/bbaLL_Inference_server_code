@@ -3,7 +3,7 @@ import Select from "react-select";
 import { fbFirestore } from "../App/config";
 import { StyledDropdown } from "./comparison-style";
 
-const ComparisonYearSelection = ({ isTeam, name, onChange, setRef }) => {
+const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt}) => {
   const [years, setYears] = useState([]);
 
   useEffect(() => {
@@ -45,6 +45,7 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef }) => {
         closeMenuOnSelect={true}
         options={years}
         onChange={handleChange}
+        placeholder={prompt}
       />
     </StyledDropdown>
   );

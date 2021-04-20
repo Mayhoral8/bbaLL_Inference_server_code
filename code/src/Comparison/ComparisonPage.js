@@ -81,11 +81,11 @@ const ComparisonPage = () => {
   const yearone = parsedQueryParams[1];
   const nametwo = parsedQueryParams[2];
   const yeartwo = parsedQueryParams[3];
-  console.log(parsedQueryParams.length + " " + nameone + " " + yearone + " " + yeartwo + " " + nametwo);
+
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
-
+    //console.log("Use Effect")
     if(teamsOrPlayersPath && dataTypePath && search) {                                 
       if(teamsOrPlayersPath === 'players') {
         dispatch(changeIsTeam({ isTeam: false }));
@@ -117,11 +117,13 @@ const ComparisonPage = () => {
     }
   
     if (tempValueOne && tempValueTwo) {
+      //console.log("TempValueOne: " + tempValueOne + " " + "TempValueTwo: " + tempValueTwo);
       setValueOne(tempValueOne);
       setValueTwo(tempValueTwo);
     }
 
     if (tempYearOne && tempYearTwo) {
+      //console.log("tempYearOne: " + tempYearOne + " " + "tempYearTwo: " + tempYearTwo);
       setYearOne(tempYearOne);
       setYearTwo(tempYearTwo);
     }
@@ -544,16 +546,24 @@ const ComparisonPage = () => {
     return { sortedPValueListOne, sortedPValueListTwo, sortedPValueListThree };
   };
 
+  // return the promot string on the player and year section
   const setPromoteString = (nums) => {
-
-    console.log(nums);
     if (parsedQueryParams.length == 1) {
-      return isTeam ? "Enter team name" : "Enter player name";
+      if (nums == 0 || nums == 2) {
+        return isTeam ? "Enter team name" : "Enter player name";
+      } else {
+        return "Select season";
+      }
     } else {
       return parsedQueryParams[nums];
     }
-
   }
+
+  const nameChangeEvent = (tempName, teamID) => {
+    (teamID == 1) ? setTempValueOne(tempName) : setTempValueTwo(tempName);
+    (teamID == 1) ? setTempYearOne(null) : setTempYearTwo(null);
+  }
+
 
   return (
     <>
@@ -609,7 +619,7 @@ const ComparisonPage = () => {
                 <ComparisonYearSelection
                   isTeam={isTeam}
                   onChange={(val) => setTempYearOne(val)}
-                  prompt="Select season"
+                  prompt={setPromoteString(1)}
                   name={tempValueOne}
                   setRef={setRefYearOne}
                 />
@@ -633,7 +643,7 @@ const ComparisonPage = () => {
                 <ComparisonYearSelection
                   isTeam={isTeam}
                   onChange={(val) => setTempYearTwo(val)}
-                  prompt="Select season"
+                  prompt={setPromoteString(3)}
                   name={tempValueTwo}
                   setRef={setRefYearTwo}
                 />
