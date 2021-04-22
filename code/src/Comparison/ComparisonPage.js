@@ -42,6 +42,8 @@ const ComparisonPage = () => {
   const [playerNameTwo, setPlayerNameTwo] = useState("");
   const [yearOne, setYearOne] = useState("");
   const [yearTwo, setYearTwo] = useState("");
+  const [leftNameChanged, setLeftNameChanged] = useState(-1);
+  const [rightNameChange, setRightNameChanged] = useState(-1);
   
   const [tempPlayerNameOne, setTempPlayerNameOne] = useState("");
   const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState("");
@@ -56,6 +58,9 @@ const ComparisonPage = () => {
   const [maxYearlyTwo, setMaxYearlyTwo] = useState(null);
   const [minYearlyOne, setMinYearlyOne] = useState(null);
   const [minYearlyTwo, setMinYearlyTwo] = useState(null);
+
+  const [maxOverallYears, setMaxOverallYears] = useState(null);
+  const [minOverallYears, setMinOverallYears] = useState(null);
 
   const [dataType, setDataType] = useState("perGame");
 
@@ -76,13 +81,12 @@ const ComparisonPage = () => {
   const splitedSearch = history.location.search.split('&');
   const teamsOrPlayersPath = pathname[2];
   const dataTypePath = pathname[3];
+  
   const parsedQueryParams = splitedSearch.map(term=> term.split('=')[1]);
   const queryNameOne = parsedQueryParams[0];
   const queryYearOne = parsedQueryParams[1];
   const queryNameTwo = parsedQueryParams[2];
   const queryYearTwo = parsedQueryParams[3];
-
-  var isNameChange = false;
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
@@ -136,6 +140,8 @@ const ComparisonPage = () => {
 
       getMinYearlyStatFromfbFirestore(yearOne, isTeam, "optionOne");
       getMinYearlyStatFromfbFirestore(yearTwo, isTeam, "optionTwo");
+
+      getMaxMinOverAllStatFromfbFirestore(isTeam);
 
       getAttrFromFirestore(
         playerNameOne,
@@ -247,6 +253,34 @@ const ComparisonPage = () => {
       });
   };
 
+  const getMaxMinOverAllStatFromfbFirestore = (isTeam) => {
+    fbFirestore
+      .collection("max_yearly_stats")
+      .doc("Overall")
+      .collection("teams_players")
+      .doc(isTeam ? "teams_max" : "players_max")
+      .get()
+      .then((doc) => {
+        setMaxOverallYears(doc.data())
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      fbFirestore
+      .collection("max_yearly_stats")
+      .doc("Overall")
+      .collection("teams_players")
+      .doc(isTeam ? "teams_min" : "players_min")
+      .get()
+      .then((doc) => {
+        setMinOverallYears(doc.data())
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const getMinYearlyStatFromfbFirestore = (year, isTeam, option) => {
     fbFirestore
       .collection("max_yearly_stats")
@@ -269,10 +303,14 @@ const ComparisonPage = () => {
     maxDataTwo,
     minDataOne,
     minDataTwo,
+    maxDataOverall,
+    minDataOverall,
     data,
     attr,
     minPoss
   ) => {
+    //console.log(attr);
+    
     const attrLowerCased =
       attr === "Rebounds"
         ? "total_rebounds"
@@ -294,6 +332,10 @@ const ComparisonPage = () => {
       const maxYearlyTwo =
         maxDataTwo[attrLowerCased].value - minDataTwo[attrLowerCased].value;
 
+      const maxYearlyOverall = 
+        maxDataOverall[attrLowerCased].value - minDataOverall[attrLowerCased].value;
+      
+
       if (dataType === "perPoss") {
         normalizedValue =
           ((data[attr].avg / data["POSS"].avg -
@@ -302,9 +344,8 @@ const ComparisonPage = () => {
           (Math.max(maxYearlyOne, maxYearlyTwo) / minPoss);
       } else {
         normalizedValue =
-          ((data[attr].avg - minDataOne[attrLowerCased].value) /
-            Math.max(maxYearlyOne, maxYearlyTwo)) *
-          100;
+          ((data[attr].avg - minDataOne[attrLowerCased].value) / maxYearlyOverall ) *100;
+          // Math.max(maxYearlyOne, maxYearlyTwo)
       }
     } else {
       normalizedValue =
@@ -346,7 +387,7 @@ const ComparisonPage = () => {
       : getPlayerTeamColour(dataTwo) && rgba(getPlayerTeamColour(dataTwo), 0.2);;
     const minPoss =
       dataOne && dataTwo && Math.min(dataOne["POSS"].avg, dataTwo["POSS"].avg);
-
+  
     const data = {
       labels:
         dataType === "perPoss"
@@ -374,6 +415,8 @@ const ComparisonPage = () => {
                   maxYearlyTwo,
                   minYearlyOne,
                   minYearlyTwo,
+                  maxOverallYears,
+                  minOverallYears,
                   dataOne,
                   attr,
                   minPoss
@@ -401,6 +444,8 @@ const ComparisonPage = () => {
                   maxYearlyTwo,
                   minYearlyOne,
                   minYearlyTwo,
+                  maxOverallYears,
+                  minOverallYears,
                   dataTwo,
                   attr,
                   minPoss
@@ -548,46 +593,38 @@ const ComparisonPage = () => {
     return { sortedPValueListOne, sortedPValueListTwo, sortedPValueListThree };
   };
 
-  // return the promot string on the player and year section
-  const setPromoteString = (nums) => {
+  // return the promot string on the player section
+  const setPromoteStringName = (nums) => {
     if (parsedQueryParams.length == 1) {
-      if (nums == 0 || nums == 2) {
-        return isTeam ? "Enter team name" : "Enter player name";
-      } else {
-        return "Select season";
-      }
+      return isTeam ? "Enter team name" : "Enter player name";
     } else {
-      if (isNameChange) {
-        isNameChange = false;
-        return "Select season";
-      } else {
-        return parsedQueryParams[nums];
-      }
+      return parsedQueryParams[nums];
     }
   }
 
-  const setPromoteStringYear = (nums, isNameChange) => {
-    console.log(isNameChange);
-    if (parsedQueryParams.length == 1) {
-      if (nums == 0 || nums == 2) {
-        return isTeam ? "Enter team name" : "Enter player name";
-      } else {
-        return "Select season";
-      }
+   // return the promot string on the year section
+  const setPromoteStringYear = (nums, check) => {
+    if (check == 1) {
+      setLeftNameChanged(-1);
+      return "Select Year";
+    } else if (check == 2) {
+      setRightNameChanged(-1);
+      return "Select Year";
+    } else if (parsedQueryParams.length == 1) {
+      return "Select Year";
     } else {
-      if (isNameChange) {
-        isNameChange = false;
-        return "Select season";
-      } else {
-        return parsedQueryParams[nums];
-      }
+      return parsedQueryParams[nums];
     }
   }
 
-  const nameChangeEvent = (tempName) => {
+  const nameChangeEvent = (tempName, num) => {
     setTempPlayerNameOne(tempName);
-    console.log("Name Change");
-    isNameChange = true;
+
+    if (num == 1) {
+      setLeftNameChanged(1);
+    } else if (num == 2) {
+      setRightNameChanged(2);
+    }
   }
 
 
@@ -634,8 +671,8 @@ const ComparisonPage = () => {
                 <ComparisonDropdown
                   options={names}
                   isTeam={isTeam}
-                  onChange={(val) => nameChangeEvent(val)}
-                  prompt={setPromoteString(0)}
+                  onChange={(val) => setPlayerNameOne(val)}
+                  prompt={isTeam ? "Enter team name" : "Enter player name"}
                   length="longer"
                   setRef={setRefOne}
                 />
@@ -645,7 +682,7 @@ const ComparisonPage = () => {
                 <ComparisonYearSelection
                   isTeam={isTeam}
                   onChange={(val) => setTempYearOne(val)}
-                  prompt={setPromoteString(1, isNameChange)}
+                  prompt={"Select season"}
                   name={tempPlayerNameOne}
                   setRef={setRefYearOne}
                 />
@@ -658,8 +695,8 @@ const ComparisonPage = () => {
                 <ComparisonDropdown
                   options={names}
                   isTeam={isTeam}
-                  onChange={(val) => setTempPlayerNameTwo(val)}
-                  prompt={setPromoteString(2)}
+                  onChange={(val) => setPlayerNameTwo(val)}
+                  prompt={isTeam ? "Enter team name" : "Enter player name"}
                   length="longer"
                   setRef={setRefTwo}
                 />
@@ -669,7 +706,7 @@ const ComparisonPage = () => {
                 <ComparisonYearSelection
                   isTeam={isTeam}
                   onChange={(val) => setTempYearTwo(val)}
-                  prompt={"pending"}
+                  prompt={"Select season"}
                   name={tempPlayerNameTwo}
                   setRef={setRefYearTwo}
                 />
