@@ -8,6 +8,7 @@ import {
     CloseIcon
 } from './betPointsOverviewBoxStyles'
 import closeIcon from '../../assets/images/closeIcon.svg'
+
 const overviewBox = ( props ) => {
     const { selectedValues, gameId, onRemovePoints }=props
     return(

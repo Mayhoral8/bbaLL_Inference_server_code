@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 //Functions
-import { structureData, pointBoxClickHandler } from './functions'
+import { structureData, pointBoxClickHandler, setTeamIcons } from './functions'
 
 //Actions
 import { getFutureGamesInfo, submitBetPoints, getUserBets } from '../redux/actions/betsActions'
@@ -9,7 +9,7 @@ import { getUserRecord } from '../redux/actions/userRecordActions'
 
 //Components
 import BetPointsOverviewBox from './Shared/betPointsOverviewBox'
-import ContentHeader from './Shared/contentHeader'
+import BettingSectionheader from './Shared/bettingSectionHeader'
 import UserStatsContainer from './Shared/userStatsContainer'
 import Spinner from '../Shared/Spinner/Spinner'
 import WarningPopup from '../Shared/Popups/submitBetWarningPopup'
@@ -24,7 +24,11 @@ import {
     BettingPageContainer,
     ContentC,
     ContentW,
-    BetInfo,
+    ContentHeader,
+    DisplayGamesBtnContainer,
+    BetSectionContainer,
+    BetSectionWrapper,
+    TodayBtnContainer,
     RowC,
     TeamNameContainer,
     TeamName,
@@ -37,13 +41,16 @@ import {
     PointsValueContainer,
     OddsValueContainer,
     TotalScoreValueContainer,
-    CommonChild,
     BetSubmitFormC,
     OverviewHeader,
     SubmitPointsBtn,
     WarningPopupContainer,
     WarningPopupWrapper,
-    UserStatsRankWrapper
+    UserStatsRankWrapper,
+    MoneyLineOddsContainer,
+    TeamIconOddsContainer,
+    TeamIconContainer,
+    TeamIcon,
 } from './styles'
 
 const Betting=(props)=>{
@@ -70,7 +77,6 @@ const Betting=(props)=>{
 
     useEffect(() => {
         if(props.futureGamesInfo[0] && props.userDetails){
-            console.log("REQUEST MADE")
             props.getUserBets(props.userDetails.uid)
             .then(()=>{
                 let targetArray = structureData(props.futureGamesInfo);
@@ -174,13 +180,25 @@ const Betting=(props)=>{
                     <ContentC>
                         <ContentW>
                         <UserStatsRankWrapper>
+
                             <UserStatsContainer/>
                             <UserRankContainer/>
-                        </UserStatsRankWrapper>
-                        <BetInfo>
-                            <ContentHeader/>
 
+                        </UserStatsRankWrapper>
+
+                        <BetSectionContainer>
+                            <ContentHeader>
+                                <h1>NBA Betting</h1>
+                                <DisplayGamesBtnContainer>
+                                    <div>Display Games</div>
+                                    <TodayBtnContainer>Today</TodayBtnContainer>
+                                </DisplayGamesBtnContainer>
+                            </ContentHeader>
+                            <BetSectionWrapper>
+
+                            <BettingSectionheader/>
                             {gameInfo.map((element,index)=>{
+                                let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
                                 return(
                                     <RowC key={index*12}>
                                         <Section1>
@@ -207,7 +225,14 @@ const Betting=(props)=>{
                                                  }}
                                                 >
                                                     <PointsValueContainer>{element.handicap.handicapHomeTeamPoints}</PointsValueContainer>
-                                                    <OddsValueContainer>{element.handicap.handicapHomeTeamOdds}</OddsValueContainer>
+
+                                                    <TeamIconOddsContainer>
+                                                        <TeamIconContainer>
+                                                            <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
+                                                        </TeamIconContainer>
+                                                        <OddsValueContainer>{element.handicap.handicapHomeTeamOdds}</OddsValueContainer>
+                                                    </TeamIconOddsContainer>
+
                                                 </PointsContainer>
 
                                                 <PointsContainer 
@@ -217,7 +242,14 @@ const Betting=(props)=>{
                                                  }}
                                                 >
                                                     <PointsValueContainer>{element.handicap.handicapAwayTeamPoints}</PointsValueContainer>
-                                                    <OddsValueContainer>{element.handicap.handicapAwayTeamOdds}</OddsValueContainer>
+                                                    
+                                                    <TeamIconOddsContainer>
+                                                        <TeamIconContainer>
+                                                            <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
+                                                        </TeamIconContainer>
+                                                        <OddsValueContainer>{element.handicap.handicapAwayTeamOdds}</OddsValueContainer>
+                                                    </TeamIconOddsContainer>
+
                                                 </PointsContainer>
                                             </Col>
 
@@ -228,7 +260,13 @@ const Betting=(props)=>{
                                                     onPointBoxClick(e,'moneyLine',index,gameInfo[index].gameId,'moneyLineSelected',0,gameInfo[index].moneyLine.homeTeamOdds)
                                                  }}
                                                 >
-                                                    {element.moneyLine.homeTeamOdds}
+                                                    <MoneyLineOddsContainer>
+                                                        <TeamIconContainer>
+                                                            <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
+                                                        </TeamIconContainer>
+                                                        {element.moneyLine.homeTeamOdds}
+                                                    </MoneyLineOddsContainer>
+
                                                 </PointsContainer>
 
                                                 <PointsContainer 
@@ -237,7 +275,13 @@ const Betting=(props)=>{
                                                     onPointBoxClick(e,'moneyLine',index,gameInfo[index].gameId,'moneyLineSelected',1,gameInfo[index].moneyLine.awayTeamOdds)
                                                  }}
                                                 >
-                                                    {element.moneyLine.awayTeamOdds}
+                                                    <MoneyLineOddsContainer>
+                                                        <TeamIconContainer>
+                                                            <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
+                                                        </TeamIconContainer>
+                                                        {element.moneyLine.awayTeamOdds}
+                                                    </MoneyLineOddsContainer>
+
                                                 </PointsContainer>
                                             </Col>
 
@@ -249,7 +293,14 @@ const Betting=(props)=>{
                                                  }}
                                                 >
                                                     <TotalScoreValueContainer>{element.overUnder.overTotalScore}</TotalScoreValueContainer>
-                                                    <OddsValueContainer>{element.overUnder.overOddsValue}</OddsValueContainer>
+
+                                                    <TeamIconOddsContainer>
+                                                        <TeamIconContainer>
+                                                            <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
+                                                        </TeamIconContainer>
+                                                        <OddsValueContainer>{element.overUnder.overOddsValue}</OddsValueContainer>
+                                                    </TeamIconOddsContainer>
+
                                                 </PointsContainer>
 
                                                 <PointsContainer
@@ -259,7 +310,14 @@ const Betting=(props)=>{
                                                  }}
                                                 >
                                                     <TotalScoreValueContainer>{element.overUnder.underTotalScore}</TotalScoreValueContainer>
-                                                    <OddsValueContainer>{element.overUnder.underOddsValue}</OddsValueContainer>
+
+                                                    <TeamIconOddsContainer>
+                                                        <TeamIconContainer>
+                                                            <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
+                                                        </TeamIconContainer>
+                                                        <OddsValueContainer>{element.overUnder.underOddsValue}</OddsValueContainer>
+                                                    </TeamIconOddsContainer>
+                                                    
                                                 </PointsContainer>
                                             </Col>
                                         </Section2>
@@ -267,8 +325,9 @@ const Betting=(props)=>{
                                 )
                             })
                             }
+                            </BetSectionWrapper>
 
-                        </BetInfo>
+                        </BetSectionContainer>
                         <BetSubmitFormC>
                             <OverviewHeader>Summary</OverviewHeader>
 

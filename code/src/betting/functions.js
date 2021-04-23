@@ -1,5 +1,38 @@
 import data from './data.json'
 
+//teams logos imports
+import AtlantaHawks from '../assets/teamLogos/Atlanta_Hawks.png'
+import BostonCeltics from '../assets/teamLogos/Boston_Celtics.png'
+import BrooklynNets from '../assets/teamLogos/Brooklyn_Nets.png'
+import CharlotteHornets from '../assets/teamLogos/Charlotte_Hornets.png'
+import ChicagoBulls from '../assets/teamLogos/Chicago_Bulls.png'
+import ClevelandCavaliers from '../assets/teamLogos/Cleveland_Cavaliers.png'
+import DallasMavericks from '../assets/teamLogos/Dallas_Mavericks.png'
+import DenverNuggets from '../assets/teamLogos/Denver_Nuggets.png'
+import DetroitPistons from '../assets/teamLogos/Detroit_Pistons.png'
+import GoldenStateWarriors from '../assets/teamLogos/Golden_State_Warriors.png'
+import HoustonRockets from '../assets/teamLogos/Houston_Rockets.png'
+import IndianaPacers from '../assets/teamLogos/Indiana_Pacers.png'
+import LosAngelesClippers from '../assets/teamLogos/Los_Angeles_Clippers.png'
+import LosAngelesLakers from '../assets/teamLogos/Los_Angeles_Lakers.png'
+import MemphisGrizzlies from '../assets/teamLogos/Memphis_Grizzlies.png'
+import MiamiHeat from '../assets/teamLogos/Miami_Heat.png'
+import MilwaukeeBucks from '../assets/teamLogos/Milwaukee_bucks.png'
+import MinnesotaTimberwolves from '../assets/teamLogos/Minnesota_Timberwolves.png'
+import NewOrleansPelicans from '../assets/teamLogos/New_Orleans_Pelicans.png'
+import NewYorkKnicks from '../assets/teamLogos/New_York_Knicks.png'
+import OklahomaCityThunder from '../assets/teamLogos/Oklahoma_City_Thunder.png'
+import OrlandoMagic from '../assets/teamLogos/Orlando_Magic.png'
+import Philadelphia76ers from '../assets/teamLogos/Philadelphia_76ers.png'
+import PhoenixSuns from '../assets/teamLogos/Phoenix_Suns.png'
+import PortlandTrailBlazers from '../assets/teamLogos/Portland_Trail_Blazers.png'
+import SacramentoKings from '../assets/teamLogos/Sacramento_Kings.png'
+import SanAntonioSpurs from '../assets/teamLogos/San_Antonio_Spurs.png'
+import TorontoRaptors from '../assets/teamLogos/Toronto_Raptors.png'
+import UtahJazz from '../assets/teamLogos/Utah_Jazz.png'
+import WashingtonWizards from '../assets/teamLogos/Washington_Wizards.png'
+import AtlantHawks from '../assets/teamLogos/Atlanta_Hawks.png'
+
 //Data restructuring that comes from the firebase api.
 export const structureData=(futureGamesInfo)=>{
     let targetArray=[]
@@ -155,4 +188,129 @@ export const pointBoxClickHandler=(e, params, index, gameId ,  keyName, selected
     } else{
         props.history.push('/login')
     }
+}
+
+
+export const setTeamIcons = (homeTeam, awayTeam) => {
+    let homeTeamIcon = homeTeam === 'AtlantaHawks' ? AtlantHawks
+    : 
+    homeTeam === 'Boston Celtics' ? BostonCeltics
+    :
+    homeTeam === 'Brooklyn Nets' ? BrooklynNets
+    :
+    homeTeam === 'Charlotte Hornets' ? CharlotteHornets
+    :
+    homeTeam === 'Chicago Bulls' ? ChicagoBulls
+    :
+    homeTeam === 'Cleveland Cavaliers' ? ClevelandCavaliers
+    :
+    homeTeam === 'Dallas Mavericks' ? DallasMavericks
+    :
+    homeTeam === 'Denver Nuggets' ? DenverNuggets
+    :
+    homeTeam === 'Detroit Pistons' ? DetroitPistons
+    :
+    homeTeam === 'Golden State Warrios' ? GoldenStateWarriors
+    :
+    homeTeam === 'Houston Rockets' ? HoustonRockets
+    :
+    homeTeam === 'Indiana Pacers' ? IndianaPacers
+    :
+    homeTeam === 'Los Angeles Clippers' ? LosAngelesClippers
+    :
+    homeTeam === 'Los Angeles Lakers' ? LosAngelesLakers
+    :
+    homeTeam === 'Memphis Grizzlies' ? MemphisGrizzlies
+    :
+    homeTeam === 'Miami Heat' ? MiamiHeat
+    :
+    homeTeam === 'Milwaukee Bucks' ? MilwaukeeBucks
+    :
+    homeTeam === 'Minnesota Timber Wolves' ? MinnesotaTimberwolves
+    :
+    homeTeam === 'New Orleans Pelicans' ? NewOrleansPelicans
+    :
+    homeTeam === 'New York Knicks' ? NewYorkKnicks
+    :
+    homeTeam === 'Oklahoma City Thunder' ? OklahomaCityThunder
+    :
+    homeTeam === 'Orlando Magic' ? OrlandoMagic
+    :
+    homeTeam === 'Philadelphia 76ers' ? Philadelphia76ers
+    :
+    homeTeam === 'Phoenix Suns' ? PhoenixSuns
+    :
+    homeTeam === 'Portland Trail Blazers' ? PortlandTrailBlazers
+    :
+    homeTeam === 'Sacramento Kings' ? SacramentoKings
+    :
+    homeTeam === 'San Antonio Spurs' ? SanAntonioSpurs
+    :
+    homeTeam === 'Toronto Raptors' ? TorontoRaptors
+    :
+    homeTeam === 'Utah Jazz' ? UtahJazz
+    :
+    WashingtonWizards
+
+    let awayTeamIcon = homeTeam === 'AtlantaHawks' ? AtlantHawks
+    : 
+    awayTeam === 'Boston Celtics' ? BostonCeltics
+    :
+    awayTeam === 'Brooklyn Nets' ? BrooklynNets
+    :
+    awayTeam === 'Charlotte Hornets' ? CharlotteHornets
+    :
+    awayTeam === 'Chicago Bulls' ? ChicagoBulls
+    :
+    awayTeam === 'Cleveland Cavaliers' ? ClevelandCavaliers
+    :
+    awayTeam === 'Dallas Mavericks' ? DallasMavericks
+    :
+    awayTeam === 'Denver Nuggets' ? DenverNuggets
+    :
+    awayTeam === 'Detroit Pistons' ? DetroitPistons
+    :
+    awayTeam === 'Golden State Warrios' ? GoldenStateWarriors
+    :
+    awayTeam === 'Houston Rockets' ? HoustonRockets
+    :
+    awayTeam === 'Indiana Pacers' ? IndianaPacers
+    :
+    awayTeam === 'Los Angeles Clippers' ? LosAngelesClippers
+    :
+    awayTeam === 'Los Angeles Lakers' ? LosAngelesLakers
+    :
+    awayTeam === 'Memphis Grizzlies' ? MemphisGrizzlies
+    :
+    awayTeam === 'Miami Heat' ? MiamiHeat
+    :
+    awayTeam === 'Milwaukee Bucks' ? MilwaukeeBucks
+    :
+    awayTeam === 'Minnesota Timber Wolves' ? MinnesotaTimberwolves
+    :
+    awayTeam === 'New Orleans Pelicans' ? NewOrleansPelicans
+    :
+    awayTeam === 'New York Knicks' ? NewYorkKnicks
+    :
+    awayTeam === 'Oklahoma City Thunder' ? OklahomaCityThunder
+    :
+    awayTeam === 'Orlando Magic' ? OrlandoMagic
+    :
+    awayTeam === 'Philadelphia 76ers' ? Philadelphia76ers
+    :
+    awayTeam === 'Phoenix Suns' ? PhoenixSuns
+    :
+    awayTeam === 'Portland Trail Blazers' ? PortlandTrailBlazers
+    :
+    awayTeam === 'Sacramento Kings' ? SacramentoKings
+    :
+    awayTeam === 'San Antonio Spurs' ? SanAntonioSpurs
+    :
+    awayTeam === 'Toronto Raptors' ? TorontoRaptors
+    :
+    awayTeam === 'Utah Jazz' ? UtahJazz
+    :
+    WashingtonWizards
+
+    return {homeTeamIcon, awayTeamIcon}
 }
