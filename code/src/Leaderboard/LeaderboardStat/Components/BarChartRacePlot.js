@@ -20,9 +20,9 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   const pointsData = [];
   const svgRef = useRef();
   const widthDivRef = useRef();
-  const [play, setPlay] = useState(
-    useSelector((state) => state.sharedReducer.isPlay)
-  );
+  // const [play, setPlay] = useState(
+  //   useSelector((state) => state.sharedReducer.isPlay)
+  // );
   const [displayLastFrame, setDisplayLastFrame] = useState(true);
   const MAXFRAMES = 25; // This is tuneable. The max amount of frames for each game
   const FRAMEDURATION = 200; // This is tuneable. The animation speed for each frame in milliseconds
@@ -36,7 +36,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   let biggestVal = 0;
   const dispatch = useDispatch();
 
-  // let play = useSelector((state) => state.sharedReducer.isPlay);
+  let play = useSelector((state) => state.sharedReducer.isPlay);
   console.log(`Is Animation Running:${play} ${frameState.gameIndex}`);
 
   // finds highest number of games
@@ -293,7 +293,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
       setDisplayLastFrame(false);
     }
     dispatch({ type: "CHANGE_PLAY" });
-    setPlay(useSelector((state) => state.sharedReducer.isPlay));
   };
 
   return (
