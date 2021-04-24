@@ -29,9 +29,9 @@ module.exports = merge(common, {
       template: "public/index.html",
     }),
     new Dotenv({
-      path: ".env.development",
+      path: ".env.production",
       systemvars: true,
     }),
   ],
-  devtool: 'cheap-inline-module-source-map'
+  devtool: "cheap-inline-module-source-map",
 });

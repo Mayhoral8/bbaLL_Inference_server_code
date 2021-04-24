@@ -162,9 +162,11 @@ const StatsPage = ({
   if (statData === undefined) {
     return <Spinner />;
   }
+
   // check if playoffs data exist
   const playoffsExist = typeof statData[yearId].value["Playoffs"] === "object";
 
+  console.log(4321);
   statData =
     statCategory === "Basic"
       ? statData[yearId].value[season]
@@ -172,6 +174,7 @@ const StatsPage = ({
           return year.value[season];
         });
 
+  console.log(3333);
   const makeStatsPlot = () => {
     let names = [],
       statY = [],
