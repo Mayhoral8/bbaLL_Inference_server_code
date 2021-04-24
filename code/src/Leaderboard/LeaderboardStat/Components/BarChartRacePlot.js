@@ -7,16 +7,22 @@ import {
   min,
   axisTop,
 } from "d3";
+import { useSelector, useDispatch } from "react-redux";
 import React, { useRef, useEffect, useState } from "react";
-import { ButtonStyle, SliderContainer } from "./barchartrace-style";
-
-import { UserInputContainer } from "./barchartrace-style";
+import {
+  ButtonStyle,
+  SliderContainer,
+  svgContainer,
+  UserInputContainer,
+} from "./barchartrace-style";
 
 const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   const pointsData = [];
   const svgRef = useRef();
   const widthDivRef = useRef();
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(
+    useSelector((state) => state.sharedReducer.isPlay)
+  );
   const [displayLastFrame, setDisplayLastFrame] = useState(true);
   const MAXFRAMES = 25; // This is tuneable. The max amount of frames for each game
   const FRAMEDURATION = 200; // This is tuneable. The animation speed for each frame in milliseconds
@@ -27,6 +33,11 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   let animationsPlayed = 0;
   let numOfTeams = y.length;
   let maxlength = 0;
+  let biggestVal = 0;
+  const dispatch = useDispatch();
+
+  // let play = useSelector((state) => state.sharedReducer.isPlay);
+  console.log(`Is Animation Running:${play} ${frameState.gameIndex}`);
 
   // finds highest number of games
   maxlength = max(y, (entry) => entry.length);
@@ -58,16 +69,21 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
 
   // adds the Best bar (as a team) to each game
   for (let i = 0; i < pointsData.length; i++) {
+    let best_curve_value;
+    if (i < best_curve.length) {
+      best_curve_value = best_curve[i];
+    } else {
+      best_curve_value = best_curve[best_curve.length - 1];
+    }
     let best_curve_obj = {
       name: "BEST: " + best_name.split(/[()]+/)[1],
-      value: best_curve[i],
+      value: best_curve_value,
       color: "#000000",
     };
     pointsData[i].push(best_curve_obj);
   }
   numOfTeams += 1;
 
-  let biggestVal = 0;
   let maxFrameDiff = 0;
   for (let i = 0; i < pointsData.length; i++) {
     let maxcurrent = max(pointsData[i], (entry) => entry.value);
@@ -122,20 +138,31 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
 
   // resets values when the year changes
   useEffect(() => {
+    //setPlay(false);
+    //console.log("State changed when year changes [" + play + "]");
+    // setTimeout(() => {
+    //   setFrameState({
+    //     gameIndex: pointsData.length - 1,
+    //     currentFrame: pointsData[pointsData.length - 1][0].value.length - 1,
+    //   });
+
+    //   //console.log(`Done ${frameState.gameIndex}`);
+    // }, 100);
+
+    setDisplayLastFrame(true);
+
     setFrameState({
-      ...frameState,
       gameIndex: pointsData.length - 1,
       currentFrame: pointsData[pointsData.length - 1][0].value.length - 1,
     });
-    setPlay(false);
-    setDisplayLastFrame(true);
-    console.log("hi");
   }, [y]);
 
   useEffect(() => {
     const svg = select(svgRef.current);
-
     if (frameState.gameIndex < pointsData.length) {
+      console.log(
+        `Is Animation playing inside if statement [${play}] ${frameState.gameIndex}`
+      );
       // sorts the teams by the values in the currentFrame
       pointsData[frameState.gameIndex].sort(
         (a, b) =>
@@ -167,9 +194,11 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .transition()
         .duration(FRAMEDURATION)
         .on("end", function () {
+          console.log(
+            `Is Animation playing inside if statement [${play}] ${frameState.gameIndex}`
+          );
           if (play) {
             animationsPlayed += 1;
-
             if (
               frameState.currentFrame <
                 pointsData[frameState.gameIndex][0].value.length - 1 &&
@@ -177,7 +206,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
             ) {
               animationsPlayed = 0;
               setFrameState({
-                ...frameState,
+                gameIndex: frameState.gameIndex,
                 currentFrame: frameState.currentFrame + 1,
               });
             } else if (
@@ -185,7 +214,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
               animationsPlayed >= numOfTeams
             ) {
               setFrameState({
-                ...frameState,
                 currentFrame: 0,
                 gameIndex: frameState.gameIndex + 1,
               });
@@ -196,12 +224,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         })
         .ease(easeLinear)
         .attr("width", function (entry, index) {
-          // console.log("------Game index: " + frameState.gameIndex);
-          // console.log("------Frame: " + frameState.currentFrame);
-          // console.log(
-          //   "------Length: " + pointsData[frameState.gameIndex][0].value.length
-          // );
-
           return xScale(entry.value[frameState.currentFrame]);
         })
         .attr("y", (entry, index) => yScale(index) + yOffset)
@@ -248,7 +270,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .attr();
       g.select(".domain").remove();
     }
-  });
+  }, [frameState, play]);
 
   // handles setting values when slider
   const sliderHandleOnChange = (e) => {
@@ -270,7 +292,8 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
       });
       setDisplayLastFrame(false);
     }
-    setPlay(!play);
+    dispatch({ type: "CHANGE_PLAY" });
+    setPlay(useSelector((state) => state.sharedReducer.isPlay));
   };
 
   return (

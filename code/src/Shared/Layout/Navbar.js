@@ -31,6 +31,13 @@ const Navbar = ({ changeStat, changeYear }) => {
     } else {
       changeStat({ stat: "Points" });
     }
+<<<<<<< Updated upstream
+=======
+    if (name === "Comparison") {
+      changeIsTeam({ isTeam: false });
+    }
+
+>>>>>>> Stashed changes
     changeYear({ yearId: DEFAULTYEARID });
   };
 
