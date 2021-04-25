@@ -35,10 +35,12 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   let maxlength = 0;
   let biggestVal = 0;
   const dispatch = useDispatch();
+  let play = useRef();
 
-  let play = useSelector((state) => state.sharedReducer.isPlay);
-  console.log(`Is Animation Running:${play} ${frameState.gameIndex}`);
-
+  play.current = useSelector((state) => state.sharedReducer.isPlay);
+  console.log(`Is Animation Running:${play.current} ${frameState.gameIndex}`);
+  console.log(`${frameState.gameIndex} ${frameState.currentFrame}`);
+  console.log(pointsData);
   // finds highest number of games
   maxlength = max(y, (entry) => entry.length);
 
@@ -149,20 +151,20 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
     //   //console.log(`Done ${frameState.gameIndex}`);
     // }, 100);
 
-    setDisplayLastFrame(true);
-
     setFrameState({
       gameIndex: pointsData.length - 1,
       currentFrame: pointsData[pointsData.length - 1][0].value.length - 1,
     });
+
+    setDisplayLastFrame(true);
   }, [y]);
 
   useEffect(() => {
     const svg = select(svgRef.current);
     if (frameState.gameIndex < pointsData.length) {
-      console.log(
-        `Is Animation playing inside if statement [${play}] ${frameState.gameIndex}`
-      );
+      // console.log(
+      //   `Is Animation playing inside if statement [${play}] ${frameState.gameIndex}`
+      // );
       // sorts the teams by the values in the currentFrame
       pointsData[frameState.gameIndex].sort(
         (a, b) =>
@@ -194,10 +196,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .transition()
         .duration(FRAMEDURATION)
         .on("end", function () {
-          console.log(
-            `Is Animation playing inside if statement [${play}] ${frameState.gameIndex}`
-          );
-          if (play) {
+          if (play.current) {
             animationsPlayed += 1;
             if (
               frameState.currentFrame <
@@ -220,6 +219,9 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
 
               animationsPlayed = 0;
             }
+            console.log(
+              `Is Animation playing inside if statement [${play.current}] ${frameState.gameIndex}`
+            );
           }
         })
         .ease(easeLinear)
@@ -230,17 +232,20 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .attr("height", yScale.bandwidth());
 
       // draws the labels
+
       svg
         .selectAll(".label")
         .data(pointsData[frameState.gameIndex], (entry) => entry.name)
         .join("text")
         .attr("fill", "#EEEEEE")
-        .text(
-          (entry) =>
-            `${entry.name} ${
-              Math.round(entry.value[frameState.currentFrame] * 100) / 100
-            }`
-        )
+        .text(function (entry) {
+          console.log(
+            Math.round(entry.value[frameState.currentFrame] * 100) / 100
+          );
+          return `${
+            entry.name
+          } ${Math.round(entry.value[frameState.currentFrame] * 100) / 100}`;
+        })
         .transition()
         .duration(FRAMEDURATION)
         .attr("class", "label")
@@ -270,7 +275,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .attr();
       g.select(".domain").remove();
     }
-  }, [frameState, play]);
+  }, [frameState, play.current]);
 
   // handles setting values when slider
   const sliderHandleOnChange = (e) => {
@@ -309,7 +314,7 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         <UserInputContainer>
           <ButtonStyle>
             <button className="PauseButton" onClick={buttonHandleOnClick}>
-              {play ? "Pause" : "Start"}
+              {play.current ? "Pause" : "Start"}
             </button>
           </ButtonStyle>
 
