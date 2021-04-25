@@ -12,6 +12,19 @@ export const BettingPageContainer = styled.div`
     flex-direction:column;
 `
 
+export const BettingPageSpinnerContainer = styled.div`
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: rgb(255,255,255,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
 export const ContentC = styled.div`
     width:100%;
     height: calc(100% - 40px);
@@ -115,11 +128,25 @@ export const PointsContainer = styled.div`
     margin:0px 5px;
     display:flex;
     flex-direction:column;
-    /* transition: 0.5s;
-    &:hover{
-        border: 2px solid black;
-        transition: 0.5s;
-    } */
+`
+
+export const PointsSpinnerContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`
+
+export const LockIconContainer = styled.div`
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+export const LockIcon = styled.img`
+    height: 50px;
+    width: 50px;
 `
 
 export const OddsValueContainer = styled.div`
@@ -164,8 +191,8 @@ export const CommonChild = styled.li`
 
 
 export const BetSubmitFormC = styled.div`
-    max-width: 17%;
-    min-width: 332.531px;
+    width: 17%;
+    /* min-width: 332.531px; */
     border:1px solid #e6e6e6;
     margin-left:10px;
     display:flex;
@@ -214,8 +241,8 @@ export const WarningPopupWrapper = styled.div`
 `
 
 export const UserStatsRankWrapper = styled.div`
-    min-width: 266.75px;
-    max-width: 13px;
+    /* min-width: 266.75px; */
+    width: 13%;
     margin-right: 10px;
 `
 export const MoneyLineOddsContainer = styled.div`
@@ -241,4 +268,21 @@ export const TeamIconContainer = styled.div`
 export const TeamIcon = styled.img`
     height: 38px;
     width: 50px;
+`
+
+export const LoginModalContainer = styled.div`
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: rgb(255,255,255,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+export const LoginModalWrapper = styled.div`
+    
 `

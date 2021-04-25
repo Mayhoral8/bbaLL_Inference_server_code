@@ -127,7 +127,6 @@ export const structureData=(futureGamesInfo)=>{
             moneyLineSelected:null
         })
     })
-    console.log(targetArray)
     return targetArray
 }
 
@@ -313,4 +312,30 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     WashingtonWizards
 
     return {homeTeamIcon, awayTeamIcon}
+}
+
+
+export const compareUserBetsAndGameInfo = (userBets, gameInfo) => {
+    let gameInfoArray = [...gameInfo]
+    let userBetsArray = [...userBets]
+    for (let i = 0; i < gameInfoArray.length; i++){
+
+        for(let j = 0; j < userBetsArray.length; j++){
+
+            if(gameInfoArray[i].gameId === userBetsArray[j].docId){
+                gameInfoArray[i].disabled = true
+            }
+
+        }
+    }
+    return gameInfoArray
+}
+
+export const removeBtnSelectionClass = (gameInfo) => {
+    for (let i = 0; i < gameInfo.length; i++){
+        gameInfo[i].handicapSelected = null
+        gameInfo[i].moneyLineSelected = null
+        gameInfo[i].overUnderSelected = null
+    }
+    return gameInfo
 }

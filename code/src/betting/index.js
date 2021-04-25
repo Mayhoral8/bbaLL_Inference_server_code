@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
 //Functions
-import { structureData, pointBoxClickHandler, setTeamIcons } from './functions'
+import { structureData, pointBoxClickHandler, setTeamIcons, compareUserBetsAndGameInfo, removeBtnSelectionClass } from './functions'
 
 //Actions
-import { getFutureGamesInfo, submitBetPoints, getUserBets } from '../redux/actions/betsActions'
+import { getFutureGamesInfo, setStructuredFutureGamesInfo, submitBetPoints, getUserBets } from '../redux/actions/betsActions'
 import { getUserRecord } from '../redux/actions/userRecordActions'
 
 //Components
@@ -14,14 +14,20 @@ import UserStatsContainer from './Shared/userStatsContainer'
 import Spinner from '../Shared/Spinner/Spinner'
 import WarningPopup from '../Shared/Popups/submitBetWarningPopup'
 import UserRankContainer from './Shared/usersRankContainer'
+import LoginModal from '../Auth/Login'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 //Libraries and Functions
-import moment from 'moment'
 import {connect} from 'react-redux'
+import {ClipLoader} from 'react-spinners'
+
+//Images
+import lockIcon from '../assets/images/lockIcon.png'
 
 //Styled Components
 import {
     BettingPageContainer,
+    BettingPageSpinnerContainer,
     ContentC,
     ContentW,
     ContentHeader,
@@ -34,10 +40,13 @@ import {
     TeamName,
     TimeContainer,
     VS,
-    PointsContainer,
     Col,
     Section1,
     Section2,
+    PointsContainer,
+    PointsSpinnerContainer,
+    LockIconContainer,
+    LockIcon,
     PointsValueContainer,
     OddsValueContainer,
     TotalScoreValueContainer,
@@ -51,59 +60,97 @@ import {
     TeamIconOddsContainer,
     TeamIconContainer,
     TeamIcon,
+    LoginModalContainer,
+    LoginModalWrapper
 } from './styles'
 
 const Betting=(props)=>{
 
-
-    const [loader,setLoader] = useState(false);
-    const [gameInfo,setGameInfo] = useState([]);
-    const [currentDate,setCurrentDate] = useState(null);
-    const [selectedValues,setSelectedValues] = useState({});
-    const [overviewKeysArray,setOverviewKeysArray] = useState([]);
+    const [loader, setLoader] = useState(false);
+    const [gameInfo, setGameInfo] = useState([]);
+    const [selectedValues, setSelectedValues] = useState({});
+    const [overviewKeysArray, setOverviewKeysArray] = useState([]);
     const [isIndexSelected, setIsIndexSelected] = useState(false);
     const [error, setError] = useState({status:'',message:'',isError:false});
     const [warningPopup, setWarningPopup] = useState({isVisible: false})
-
+    const [loginModalVisible, setLoginModalVisible] = useState(false)
+    const [pointsSpinner, setPointsSpinner] = useState(true)
+    const [bettingPageSpinner, setBettingPageSpinner] = useState(false)
+    const [loadingBetPoints, setLoadingBetPoints] = useState(true)
 
     useEffect(() => {
-        props.getFutureGamesInfo();
+        let response = props.getFutureGamesInfo();
+        if(response.isError){
+            setError({status: response.status, message: response.message, isError:true})
+        }
         window.setInterval(()=>{
-            props.getFutureGamesInfo();
+            let response = props.getFutureGamesInfo();
+            if(response.isError){
+                setError({status: response.status, message: response.message, isError:true})
+            }
             
         },300000);
     },[]);
 
 
     useEffect(() => {
-        if(props.futureGamesInfo[0] && props.userDetails){
-            props.getUserBets(props.userDetails.uid)
-            .then(()=>{
-                let targetArray = structureData(props.futureGamesInfo);
-                setGameInfo(targetArray);
-            })
-            .catch((e)=>{
-                setError({isError:true, message: e.message, status: e.status});
-            })
+        if(props.futureGamesInfo[0]){
+            let targetArray = structureData(props.futureGamesInfo);
+            props.setStructuredFutureGamesInfo(targetArray);
+        }   
+        
+    },[props.futureGamesInfo]);
+
+
+    useEffect(() => {
+
+        if(props.structuredGameInfo[0] && props.userDetails.isLoading){
+            setGameInfo(props.structuredGameInfo)
+        }
+        else if(props.structuredGameInfo[0] &&  !props.userDetails.user.displayName && !props.userDetails.isLoading){
+            setGameInfo(props.structuredGameInfo)
+            setLoadingBetPoints(false)
+        }
+        else if(props.structuredGameInfo[0] &&  props.userDetails.user.displayName && !props.userDetails.isLoading){
+            let response = props.getUserBets(props.userDetails.user.uid)
+            if(response.isError){
+                setError({status: response.status, message: response.message, isError:true})
+            }
         }
 
-        else if(props.futureGamesInfo[0]){
-            let targetArray = structureData(props.futureGamesInfo);
-            setGameInfo(targetArray);
-        };
+    },[props.structuredGameInfo, props.userDetails])
 
-        const currentDate = new Date();
-        setCurrentDate(currentDate);
-        
-    },[props.futureGamesInfo, props.userDetails]);
+    useEffect(() => {
+        if(props.userBetsDetails.bets[0] && !props.userBetsDetails.loading){
+            let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.structuredGameInfo)
+            setPointsSpinner(false)
+            setLoadingBetPoints(false)
+            setGameInfo(computedArray)
+
+        } else if(!props.userBetsDetails.loading){
+            setPointsSpinner(false)
+        }
+    },[props.userBetsDetails])
 
 
-    const onPointBoxClick = ( e, params, index, gameId ,keyName, selectedKey, oddsValue, pointsValue, scoreValue ) => {
-        const returnedObj = pointBoxClickHandler( e, params, index, gameId, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo);
-        setGameInfo( returnedObj.gameInfoUpdated );
-        setSelectedValues( returnedObj.targetObj );
-        setOverviewKeysArray( returnedObj.newOverviewKeysArray );
-        setIsIndexSelected(true);
+    const onPointBoxClick = ( e, params, index, gameId ,keyName, selectedKey, oddsValue, pointsValue, scoreValue, disabled ) => {
+        if(!disabled){
+            if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
+                setLoginModalVisible(true)
+            }
+            else if(!props.userDetails.user.displayName && props.userDetails.isLoading){
+                
+            }
+            else if(props.userDetails.user.displayName && !props.userDetails.isLoading){
+    
+                const returnedObj = pointBoxClickHandler( e, params, index, gameId, keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo);
+                setGameInfo( returnedObj.gameInfoUpdated );
+                setSelectedValues( returnedObj.targetObj );
+                setOverviewKeysArray( returnedObj.newOverviewKeysArray );
+                setIsIndexSelected(true);
+    
+            }
+        }
     };
 
 
@@ -138,32 +185,77 @@ const Betting=(props)=>{
         setWarningPopup({isVisible: true})
     }
 
-    const submitConfirmation = () => {
-        props.submitBetPoints(selectedValues, props.userDetails.uid)
-        .then(()=>{
-            onCancel()
-        })
-        .catch((e)=>{
-            setError({message: e.message, isError:true, status: e.status})
-        })
+
+    const submitConfirmation = async() => {
+        setBettingPageSpinner(true)
+        onCancel()
+        let response = await props.submitBetPoints(selectedValues, props.userDetails.user.uid)
+        if(response.isError){
+            setError({status: response.status, message: response.message, isError:true})
+        }
+        else{
+            let getUserBetsResponse = await props.getUserBets(props.userDetails.user.uid)
+            if(getUserBetsResponse.isError){
+                setError({status: getUserBetsResponse.status, message: getUserBetsResponse.message, isError:true})
+            }
+            else{
+                let computedArray = removeBtnSelectionClass(gameInfo)
+                setGameInfo(computedArray)
+                setOverviewKeysArray([])
+                setIsIndexSelected(false)
+                setSelectedValues({})
+                setBettingPageSpinner(false)
+            }
+        }
     }
+
 
     const onCancel = () => {
         setWarningPopup({isVisible: false})
     }
 
 
-    // console.log("STATE UPDATED: ",error)
-    console.log("STATE UPDATED: ", gameInfo)
+    const onOutsideClick = () => {
+        setLoginModalVisible(false)
+    }
+
+
+    console.log("GAMEINFO STATE: ", gameInfo)
+    // console.log("ERROR STATE: ", error)
     return(
-        <>
+        <> 
             {
-            
-            loader ? 
+                !gameInfo[0] ?
                 <Spinner/>
-            :
-            
+                :
                 <BettingPageContainer className='bettingPageContainer'>
+                    {
+                        loginModalVisible ? 
+                            <LoginModalContainer>
+
+                                <LoginModalWrapper>
+
+                                    <OutsideClickHandler
+                                     onOutsideClick = {() => {
+                                        onOutsideClick()
+                                     }}
+                                    >
+                                        <LoginModal/>
+                                    </OutsideClickHandler>
+
+                                </LoginModalWrapper>
+                                
+                            </LoginModalContainer>
+                        :
+                            null
+                    }
+                    {
+                        bettingPageSpinner ? 
+                            <BettingPageSpinnerContainer>
+                                <Spinner/>
+                            </BettingPageSpinnerContainer>
+                        :null
+                    }
                     {
                         warningPopup.isVisible ? 
                         <WarningPopupContainer>
@@ -202,9 +294,11 @@ const Betting=(props)=>{
                                 return(
                                     <RowC key={index*12}>
                                         <Section1>
+
                                             <TimeContainer>
                                                 {element.gameDetails.gameStartTime.split(' PM')}
                                             </TimeContainer>
+
                                             <TeamNameContainer>
                                                 <TeamName>
                                                     {element.gameDetails.homeTeam}
@@ -214,6 +308,7 @@ const Betting=(props)=>{
                                                     {element.gameDetails.awayTeam}
                                                 </TeamName>
                                             </TeamNameContainer>
+
                                         </Section1>
 
                                         <Section2>
@@ -221,34 +316,84 @@ const Betting=(props)=>{
                                                 <PointsContainer 
                                                  selected={gameInfo[index].handicapSelected === 0} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'handicap',index,gameInfo[index].gameId,'handicapSelected',0,gameInfo[index].handicap.handicapHomeTeamOdds,gameInfo[index].handicap.handicapHomeTeamPoints)
+                                                    onPointBoxClick(
+                                                        e,
+                                                        'handicap',
+                                                        index,
+                                                        gameInfo[index].gameId,
+                                                        'handicapSelected',
+                                                        0,
+                                                        gameInfo[index].handicap.handicapHomeTeamOdds,
+                                                        gameInfo[index].handicap.handicapHomeTeamPoints,
+                                                        null,
+                                                        element.disabled
+                                                    )
                                                  }}
                                                 >
-                                                    <PointsValueContainer>{element.handicap.handicapHomeTeamPoints}</PointsValueContainer>
+                                                    {
+                                                        pointsSpinner ?
+                                                        <PointsSpinnerContainer>
+                                                            <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
+                                                        </PointsSpinnerContainer>
+                                                        :
+                                                        element.disabled ?
+                                                        <LockIconContainer>
+                                                            <LockIcon src={lockIcon}/>
+                                                        </LockIconContainer>
+                                                        :
+                                                        <>
+                                                            <PointsValueContainer>{element.handicap.handicapHomeTeamPoints}</PointsValueContainer>
 
-                                                    <TeamIconOddsContainer>
-                                                        <TeamIconContainer>
-                                                            <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
-                                                        </TeamIconContainer>
-                                                        <OddsValueContainer>{element.handicap.handicapHomeTeamOdds}</OddsValueContainer>
-                                                    </TeamIconOddsContainer>
+                                                            <TeamIconOddsContainer>
+                                                                <TeamIconContainer>
+                                                                    <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
+                                                                </TeamIconContainer>
+                                                                <OddsValueContainer>{element.handicap.handicapHomeTeamOdds}</OddsValueContainer>
+                                                            </TeamIconOddsContainer>
+                                                        </>
+                                                    }
 
                                                 </PointsContainer>
 
                                                 <PointsContainer 
                                                  selected={gameInfo[index].handicapSelected === 1} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'handicap',index,gameInfo[index].gameId,'handicapSelected',1,gameInfo[index].handicap.handicapAwayTeamOdds,gameInfo[index].handicap.handicapAwayTeamPoints)
+                                                    onPointBoxClick(
+                                                        e,
+                                                        'handicap',
+                                                        index,
+                                                        gameInfo[index].gameId,
+                                                        'handicapSelected',
+                                                        1,
+                                                        gameInfo[index].handicap.handicapAwayTeamOdds,
+                                                        gameInfo[index].handicap.handicapAwayTeamPoints,
+                                                        null,
+                                                        element.disabled
+                                                    )
                                                  }}
                                                 >
-                                                    <PointsValueContainer>{element.handicap.handicapAwayTeamPoints}</PointsValueContainer>
-                                                    
-                                                    <TeamIconOddsContainer>
-                                                        <TeamIconContainer>
-                                                            <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
-                                                        </TeamIconContainer>
-                                                        <OddsValueContainer>{element.handicap.handicapAwayTeamOdds}</OddsValueContainer>
-                                                    </TeamIconOddsContainer>
+                                                    {   
+                                                        pointsSpinner ?
+                                                        <PointsSpinnerContainer>
+                                                            <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
+                                                        </PointsSpinnerContainer>
+                                                        :
+                                                        element.disabled ?
+                                                        <LockIconContainer>
+                                                            <LockIcon src={lockIcon}/>
+                                                        </LockIconContainer>
+                                                        :
+                                                        <>
+                                                            <PointsValueContainer>{element.handicap.handicapAwayTeamPoints}</PointsValueContainer>
+                                                        
+                                                            <TeamIconOddsContainer>
+                                                                <TeamIconContainer>
+                                                                    <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
+                                                                </TeamIconContainer>
+                                                                <OddsValueContainer>{element.handicap.handicapAwayTeamOdds}</OddsValueContainer>
+                                                            </TeamIconOddsContainer>
+                                                        </>
+                                                    }
 
                                                 </PointsContainer>
                                             </Col>
@@ -257,30 +402,80 @@ const Betting=(props)=>{
                                                 <PointsContainer 
                                                  selected={gameInfo[index].moneyLineSelected === 0} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'moneyLine',index,gameInfo[index].gameId,'moneyLineSelected',0,gameInfo[index].moneyLine.homeTeamOdds)
+                                                    onPointBoxClick(
+                                                        e,
+                                                        'moneyLine',
+                                                        index,
+                                                        gameInfo[index].gameId,
+                                                        'moneyLineSelected',
+                                                        0,
+                                                        gameInfo[index].moneyLine.homeTeamOdds,
+                                                        null,
+                                                        null,
+                                                        element.disabled
+                                                    )
                                                  }}
                                                 >
-                                                    <MoneyLineOddsContainer>
-                                                        <TeamIconContainer>
-                                                            <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
-                                                        </TeamIconContainer>
-                                                        {element.moneyLine.homeTeamOdds}
-                                                    </MoneyLineOddsContainer>
+                                                    {
+                                                        pointsSpinner ? 
+                                                        <PointsSpinnerContainer>
+                                                            <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
+                                                        </PointsSpinnerContainer>
+                                                        :
+                                                        element.disabled ?
+                                                        <LockIconContainer>
+                                                            <LockIcon src={lockIcon}/>
+                                                        </LockIconContainer>
+                                                        :
+                                                        <>
+                                                            <MoneyLineOddsContainer>
+                                                            <TeamIconContainer>
+                                                                <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
+                                                            </TeamIconContainer>
+                                                                {element.moneyLine.homeTeamOdds}
+                                                            </MoneyLineOddsContainer>
+                                                        </>
+                                                    }
 
                                                 </PointsContainer>
 
                                                 <PointsContainer 
                                                  selected={gameInfo[index].moneyLineSelected === 1} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'moneyLine',index,gameInfo[index].gameId,'moneyLineSelected',1,gameInfo[index].moneyLine.awayTeamOdds)
+                                                    onPointBoxClick(
+                                                        e,
+                                                        'moneyLine',
+                                                        index,
+                                                        gameInfo[index].gameId,
+                                                        'moneyLineSelected',
+                                                        1,
+                                                        gameInfo[index].moneyLine.awayTeamOdds,
+                                                        null,
+                                                        null,
+                                                        element.disabled
+                                                    )
                                                  }}
                                                 >
-                                                    <MoneyLineOddsContainer>
-                                                        <TeamIconContainer>
-                                                            <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
-                                                        </TeamIconContainer>
-                                                        {element.moneyLine.awayTeamOdds}
-                                                    </MoneyLineOddsContainer>
+                                                    {   
+                                                        pointsSpinner ?
+                                                        <PointsSpinnerContainer>
+                                                            <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
+                                                        </PointsSpinnerContainer>
+                                                        :
+                                                        element.disabled ?
+                                                        <LockIconContainer>
+                                                            <LockIcon src={lockIcon}/>
+                                                        </LockIconContainer>
+                                                        :
+                                                        <>
+                                                            <MoneyLineOddsContainer>
+                                                            <TeamIconContainer>
+                                                                <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
+                                                            </TeamIconContainer>
+                                                                {element.moneyLine.awayTeamOdds}
+                                                            </MoneyLineOddsContainer>
+                                                        </>
+                                                    }
 
                                                 </PointsContainer>
                                             </Col>
@@ -289,34 +484,84 @@ const Betting=(props)=>{
                                                 <PointsContainer 
                                                  selected={gameInfo[index].overUnderSelected === 0} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'over',index,gameInfo[index].gameId,'overUnderSelected',0,gameInfo[index].overUnder.overOddsValue,null,gameInfo[index].overUnder.overTotalScore)
+                                                    onPointBoxClick(
+                                                        e,
+                                                        'over',
+                                                        index,
+                                                        gameInfo[index].gameId,
+                                                        'overUnderSelected',
+                                                        0,
+                                                        gameInfo[index].overUnder.overOddsValue,
+                                                        null,
+                                                        gameInfo[index].overUnder.overTotalScore,
+                                                        element.disabled
+                                                    )
                                                  }}
                                                 >
-                                                    <TotalScoreValueContainer>{element.overUnder.overTotalScore}</TotalScoreValueContainer>
+                                                    { 
+                                                        pointsSpinner ?
+                                                        <PointsSpinnerContainer>
+                                                            <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
+                                                        </PointsSpinnerContainer>
+                                                        :
+                                                        element.disabled ?
+                                                        <LockIconContainer>
+                                                            <LockIcon src={lockIcon}/>
+                                                        </LockIconContainer>
+                                                        :
+                                                        <>
+                                                            <TotalScoreValueContainer>{element.overUnder.overTotalScore}</TotalScoreValueContainer>
 
-                                                    <TeamIconOddsContainer>
-                                                        <TeamIconContainer>
-                                                            <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
-                                                        </TeamIconContainer>
-                                                        <OddsValueContainer>{element.overUnder.overOddsValue}</OddsValueContainer>
-                                                    </TeamIconOddsContainer>
+                                                            <TeamIconOddsContainer>
+                                                                <TeamIconContainer>
+                                                                    <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
+                                                                </TeamIconContainer>
+                                                                <OddsValueContainer>{element.overUnder.overOddsValue}</OddsValueContainer>
+                                                            </TeamIconOddsContainer>
+                                                        </>
+                                                    }
 
                                                 </PointsContainer>
 
                                                 <PointsContainer
                                                  selected={gameInfo[index].overUnderSelected === 1} 
                                                  onClick={(e)=>{
-                                                    onPointBoxClick(e,'under',index,gameInfo[index].gameId,'overUnderSelected',1,gameInfo[index].overUnder.underOddsValue,null,gameInfo[index].overUnder.underTotalScore)
+                                                    onPointBoxClick(
+                                                        e,
+                                                        'under',
+                                                        index,
+                                                        gameInfo[index].gameId,
+                                                        'overUnderSelected',
+                                                        1,
+                                                        gameInfo[index].overUnder.underOddsValue,
+                                                        null,
+                                                        gameInfo[index].overUnder.underTotalScore,
+                                                        element.disabled
+                                                    )
                                                  }}
                                                 >
-                                                    <TotalScoreValueContainer>{element.overUnder.underTotalScore}</TotalScoreValueContainer>
+                                                    {
+                                                        pointsSpinner ?
+                                                        <PointsSpinnerContainer>
+                                                            <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
+                                                        </PointsSpinnerContainer>
+                                                        :
+                                                        element.disabled ?
+                                                        <LockIconContainer>
+                                                            <LockIcon src={lockIcon}/>
+                                                        </LockIconContainer>
+                                                        :
+                                                        <>
+                                                            <TotalScoreValueContainer>{element.overUnder.underTotalScore}</TotalScoreValueContainer>
 
-                                                    <TeamIconOddsContainer>
-                                                        <TeamIconContainer>
-                                                            <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
-                                                        </TeamIconContainer>
-                                                        <OddsValueContainer>{element.overUnder.underOddsValue}</OddsValueContainer>
-                                                    </TeamIconOddsContainer>
+                                                            <TeamIconOddsContainer>
+                                                                <TeamIconContainer>
+                                                                    <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
+                                                                </TeamIconContainer>
+                                                                <OddsValueContainer>{element.overUnder.underOddsValue}</OddsValueContainer>
+                                                            </TeamIconOddsContainer>
+                                                        </>
+                                                    }
                                                     
                                                 </PointsContainer>
                                             </Col>
@@ -365,8 +610,9 @@ const mapStateToProps=(state)=>{
         futureGamesInfo: state.betsReducer.futureGamesInfo,
         userDetails: state.authReducer.userDetails,
         userRecord: state.recordReducer.userRecord,
-        userBets: state.betsReducer.userBets
+        userBetsDetails: state.betsReducer.userBetsDetails,
+        structuredGameInfo: state.betsReducer.structuredGameInfo
     }
 }
 export default connect(mapStateToProps,
-    { getFutureGamesInfo, submitBetPoints, getUserRecord, getUserBets, getUserRecord })(Betting)
+    { getFutureGamesInfo, submitBetPoints, getUserRecord, getUserBets, getUserRecord, setStructuredFutureGamesInfo })(Betting)

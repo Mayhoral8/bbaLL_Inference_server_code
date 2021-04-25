@@ -1,22 +1,22 @@
 import {LOGIN} from './types'
 import {fbFirestoreSpigameBet} from '../../App/spigamebetFirebase'
 
-export const LoginAction = (userDetails) => {
+export const LoginAction = (user) => {
     return async(dispatch)=>{
-      fbFirestoreSpigameBet.collection('userRecords').doc(userDetails.uid).get()
+      fbFirestoreSpigameBet.collection('userRecords').doc(user.uid).get()
       .then(async(doc)=>{
         if(!doc.data()){
-          fbFirestoreSpigameBet.collection('userRecords').doc(userDetails.uid).set({
+          fbFirestoreSpigameBet.collection('userRecords').doc(user.uid).set({
             totalPoints:0,
             winPercentage:0,
             rank:'',
-            displayName: userDetails.displayName,
-            emailAddress: userDetails.email
+            displayName: user.displayName,
+            emailAddress: user.email
           })
         }
         dispatch({
           type: LOGIN,
-          payload: userDetails,
+          payload: {user, isLoading: false},
         })
       })
       .catch((e)=>{

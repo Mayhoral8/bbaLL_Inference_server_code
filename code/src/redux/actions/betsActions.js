@@ -1,66 +1,85 @@
 import {fbFirestore} from '../../App/config'
 import {fbFirestoreSpigameBet} from '../../App/spigamebetFirebase'
-import firebase from 'firebase'
-import {GET_FUTURE_GAMES_INFO, GETUSERBETS} from './types'
-import moment from 'moment'
+import {GET_FUTURE_GAMES_INFO, GETUSERBETS, SET_STRUCTURED_GAME_INFO} from './types'
+import moment from 'moment-timezone'
+
 export const getFutureGamesInfo=()=>{
     return async(dispatch)=>{
-        return fbFirestore.collection('future_game_info').get()
-        .then(async(collections)=>{
+        
+        try{
+            let collection = await fbFirestore.collection('future_game_info').get()
             let data=[]
-            await collections.forEach((doc) => {
+
+            await collection.forEach((doc) => {
                 const docData=doc.data()
                 const docId=doc.id
                 data.push({docData,docId})
             })
+
             dispatch({
                 type:GET_FUTURE_GAMES_INFO,
                 payload:data
             })
-            return {status:200}
-        })
-        .catch((e)=>{
+
+            return {success: true}
+        }
+        catch(e){
             throw e
+        }
+    }
+}
+
+export const setStructuredFutureGamesInfo = (data) => {
+    return (dispatch) => {
+        dispatch({
+            type: SET_STRUCTURED_GAME_INFO,
+            payload:data
         })
     }
 }
 
 export const submitBetPoints=(selectedValues, userId)=>{
     return async(dispatch) => {
+        let error = {}
         let keys = Object.keys(selectedValues)
-        keys.map((gameId,i)=>{
-            let gameDate = selectedValues[`${gameId}`].gameDetails.gameDate ? selectedValues[`${gameId}`].gameDetails.gameDate : ''
-            
-            fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).set(selectedValues)
-            .then((res)=>{
-                return
-            })
-            .catch((e)=>{
-                throw e
-            })
-        })
+        for (let i = 0; i < keys.length; i++){
+            let gameDate = selectedValues[`${keys[i]}`].gameDetails.gameDate ? selectedValues[`${keys[i]}`].gameDetails.gameDate : ''
+            try{
+                await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).collection('games').doc(keys[i]).set(selectedValues[keys[i]])
+            }
+            catch(e){
+                error.isError = true
+                error.status = e.status
+                error.message = e.message
+                break
+            }
+        }
+        return error.isError ? error : {success: true}
+
     }
 }
+
 export const getUserBets = (userId) => {
-    // console.log(userId)
     return async(dispatch) => {
         let date = new Date
-        console.log(date)
-        let today = moment(date).format('YYYY-MM-DD')
-        fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(today).get()
-        .then((doc)=>{
-            console.log(doc.exists)
-            // console.log("DOCS: ", doc.docs.data())
-            // doc.docs.map((el, index)=>{
-            //     console.log(el.data())
-            // })
-            // dispatch({
-            //     type: GETUSERBETS,
-            //     payload: docs.data()
-            // })
-        })
-        .catch((e)=>{
-            console.log(e)
-        })
+        let today = moment(date).tz("America/New_York").format('YYYY-MM-DD');
+        
+        try{
+            let collection = await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(today).collection('games').get()
+            let data=[]
+            collection.forEach((doc) => {
+                const docData=doc.data()
+                const docId=doc.id
+                data.push({docData,docId})
+            })
+            dispatch({
+                type: GETUSERBETS,
+                payload: {bets: data, loading: false}
+            })
+            return {success: true}
+        }
+        catch(e){
+            throw e
+        }
     }
 }

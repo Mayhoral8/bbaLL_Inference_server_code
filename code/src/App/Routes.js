@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useEffect, useState} from 'react'
 import {RoutesContainer} from './app-style'
 import { MainContainerDiv } from "./app-style";
 import { GlobalStyle } from "../globalStyles";
@@ -54,41 +54,51 @@ const Games = Loadable({
   });
 
 const Routes=(props)=>{
+    const [spinner, setSpinner] = useState(true)
+
+
     useEffect(()=>{
       firebaseInstanceSpigamebet.auth().onAuthStateChanged(async(user)=>{
           if(user){
-            console.log(user)
-            const {displayName,email,uid}=user
-            const userDetails={displayName,email,uid}
-            await props.LoginAction(userDetails)
-          }else{
-            
+            const {displayName,email,uid} = user
+            await props.LoginAction({displayName,email,uid})
           }
       })
+
     },[])
+
+    const { userDetails } = props;
     return(
-        <RoutesContainer>
-            <GlobalStyle />  
-              <Switch>
-                <Layout>
-                  <MainContainerDiv>
-                    <Route exact path="/" render={() => <Redirect to="/games" />}/>
-                    <Route path="/games" component={Games} />
-                    <Route path="/leaderboard" component={Leaderboard} />
-                    <Route path="/stats" component={Stats} />
-                    <Route path="/player/:player" component={Indiv} />
-                    <Route path="/team/:team" component={Indiv} />
-                    <Route path="/comparison" component={Comparsion} />
-                    <Route exact path="/terms-of-use" component={TermsOfUse} />
-                    <Route exact path="/privacy-policy" component={PrivacyPolicy}/>
-                    <Route path="/404" component={PageNotFound} />
-                    <Route path='/login' component={Login}/>
-                    <Route path='/betting' component={Betting}/>
-                    <Footer />
-                  </MainContainerDiv>
-                </Layout>
-              </Switch>
-        </RoutesContainer>
+        <>
+          {/* {
+            (spinner && userDetails.isLoading) ? 
+              <Spinner/>
+            :
+              
+          } */}
+          <RoutesContainer>
+          <GlobalStyle />  
+            <Switch>
+              <Layout>
+                <MainContainerDiv>
+                  <Route exact path="/" render={() => <Redirect to="/games" />}/>
+                  <Route path="/games" component={Games} />
+                  <Route path="/leaderboard" component={Leaderboard} />
+                  <Route path="/stats" component={Stats} />
+                  <Route path="/player/:player" component={Indiv} />
+                  <Route path="/team/:team" component={Indiv} />
+                  <Route path="/comparison" component={Comparsion} />
+                  <Route exact path="/terms-of-use" component={TermsOfUse} />
+                  <Route exact path="/privacy-policy" component={PrivacyPolicy}/>
+                  <Route path="/404" component={PageNotFound} />
+                  <Route path='/login' component={Login}/>
+                  <Route path='/betting' component={Betting}/>
+                  <Footer />
+                </MainContainerDiv>
+              </Layout>
+            </Switch>
+          </RoutesContainer>
+        </>
     )
 }
 const mapStateToProps=(state)=>{
