@@ -146,9 +146,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   useEffect(() => {
     const svg = select(svgRef.current);
     if (frameState.gameIndex < pointsData.length) {
-      // console.log(
-      //   `Is Animation playing inside if statement [${play}] ${frameState.gameIndex}`
-      // );
       // sorts the teams by the values in the currentFrame
       pointsData[frameState.gameIndex].sort(
         (a, b) =>
@@ -213,7 +210,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .attr("height", yScale.bandwidth());
 
       // draws the labels
-
       svg
         .selectAll(".label")
         .data(pointsData[frameState.gameIndex], (entry) => entry.name)
