@@ -32,6 +32,7 @@ const Navbar = ({ changeStat, changeYear, changeIsTeam }) => {
     } else {
       changeStat({ stat: "Points" });
     }
+
     if (name === "Comparison") {
       changeIsTeam({ isTeam: false });
     }
