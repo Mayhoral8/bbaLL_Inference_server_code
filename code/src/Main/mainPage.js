@@ -1,44 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 import { FullWidthMain } from "../globalStyles";
 import EventList from "./eventlist";
 import SEO from "../Shared/SEO";
-
+import FutureGameOddsCard from "./futureGameOddsCard";
+import { fbFirestore } from "../App/config";
 const GamePageContainer = () => {
-  const currentYear = "2020-21";
-  useFirestoreConnect(() => [
-    {
-      collection: "game_info",
-      doc: currentYear,
-      subcollections: [
-        {
-          collection: "Gamecode",
-        },
-      ],
-      storeAs: "gameInfoJson",
-    },
-    {
-      collection: "game_pbp",
-      doc: currentYear,
-      subcollections: [
-        {
-          collection: "Gamecode",
-        },
-      ],
-      storeAs: "gamePbpJson",
-    },
-    {
-      collection: "game_players",
-      doc: currentYear,
-      subcollections: [
-        {
-          collection: "Gamecode",
-        },
-      ],
-      storeAs: "gamePlayersJson",
-    },
-  ]);
+  const [games, setGames] = useState([]);
+
+  useEffect(() => {
+    fbFirestore
+      .collection("future_game_info")
+      .get()
+      .then((snapshot) => {
+        setGames(snapshot.docs.map((doc) => doc.data()));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const gameInfo = useSelector(
     (state) => state.firestoreReducer.ordered.gameInfoJson
   );
@@ -112,18 +94,25 @@ const GamePageContainer = () => {
           </div>
           <div
             style={{
-              backgroundColor: "gray",
+              backgroundColor: "white",
               marginTop: "3rem",
               marginRight: "3rem",
               height: "100%",
-              width: "25%",
+              width: "400px",
               display: "flex",
+              flexDirection: "column",
               justifyContent: "center",
-              paddingTop: "40rem",
-              paddingBotto: "40rem",
+              padding: "0.5rem",
+              overflowY: "scroll",
+              height: "675px",
+              scrollbarWidth: "thin" /* "auto" or "thin" */,
+              // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
             }}
           >
-            <div>Future Game Odds</div>
+            {games.map((item, index) => {
+              console.log(games.length);
+              return <FutureGameOddsCard data={item} key={index} />;
+            })}
           </div>
         </div>
       </FullWidthMain>

@@ -18,29 +18,29 @@ export const Card = styled.div`
   }
 
   .logo-1 {
-    width: 40%;
+    width: 30%;
     top: -10px;
   }
 
   .logo-2 {
-    width: 40%;
+    width: 30%;
     top: -10px;
   }
 
   .vs-text {
-    font-size: 4.5rem;
+    font-size: 4rem;
     color: white;
     font-family: Roboto;
     filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
     -webkit-text-stroke: 0.5px gray;
     position: relative;
-    top: -10px;
+    top: -5px;
   }
 
   .team-names {
     display: flex;
     flex-direction: row;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     justify-content: space-around;
     position: relative;
     top: -15px;
