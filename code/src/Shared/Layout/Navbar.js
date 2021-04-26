@@ -14,8 +14,9 @@ import { DEFAULTYEARID } from "Constants";
 import logo from "Assets/images/new-logo.png";
 import SidebarSearch from "Shared/Sidebar/Components/SidebarSearch";
 import MobileNavbar from "./MobileNavbar";
+import { changeIsTeam } from "../../redux/actions/sidebarActions";
 
-const Navbar = ({ changeStat, changeYear }) => {
+const Navbar = ({ changeStat, changeYear, changeIsTeam }) => {
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -35,7 +36,6 @@ const Navbar = ({ changeStat, changeYear }) => {
     if (name === "Comparison") {
       changeIsTeam({ isTeam: false });
     }
-
     changeYear({ yearId: DEFAULTYEARID });
   };
 
@@ -77,4 +77,8 @@ const mapStateToProps = (state) => ({
   stat: state.sidebarReducer.stat,
 });
 
-export default connect(mapStateToProps, { changeStat, changeYear })(Navbar);
+export default connect(mapStateToProps, {
+  changeStat,
+  changeYear,
+  changeIsTeam,
+})(Navbar);

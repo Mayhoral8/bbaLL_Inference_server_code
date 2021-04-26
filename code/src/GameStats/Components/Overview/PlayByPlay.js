@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
-import styled from "styled-components";
-import { rgba } from "polished";
+import { PlayByPlayList, ListItem } from "./Overview-styles"
 
 const PlayByPlay = ({ textToDisplay, homeColour, awayColour, currentText }) => {
   let prevTeam = '';
@@ -60,56 +59,5 @@ const PlayByPlay = ({ textToDisplay, homeColour, awayColour, currentText }) => {
     </PlayByPlayList>
   );
 };
-
-const PlayByPlayList = styled.ul`
-  list-style: none;
-  border: 1px solid silver;
-  height: 25rem;
-  overflow-y: auto;
-  h3 {
-    padding: 0.5rem;
-  }
-  @media (max-width: 996px) {
-    margin-top: 2rem;
-    height: 15rem;
-  }
-`;
-
-const ListItem = styled.li`
-  background: ${({ colour, currentCount }) =>
-    colour && rgba(colour, currentCount * 0.1)};
-  display: grid;
-  grid-template-columns: 1fr 5fr;
-
-  .summary-container {
-    display: flex;
-    flex-direction: column;
-  }
-  .summary:not(:first-child) {
-    margin: 0.5rem 0;
-  }
-  .summary {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-  .time {
-    padding: 0.5rem;
-    text-align: center;
-  }
-  @media (max-width: 500px) {
-    .time {
-      padding: 0.3rem;
-      text-align: center;
-      font-size: 0.7rem;
-    }
-    .summary {
-      font-size: 0.7rem;
-      padding: 0.3rem;
-    }
-    .summary:not(:first-child) {
-      margin: 0.2rem 0;
-    }
-  }
-`;
 
 export default PlayByPlay;
