@@ -8,14 +8,20 @@ import Navbar from "./Navbar";
 const Layout = ({ children, location }) => {
   const windowSize = useWindowSize();
   const breakpoint = 500;
-  
+
   return (
     <>
       <Navbar />
       {windowSize < breakpoint ||
-      ["privacy-policy", "terms-of-use", "404", "", "games", "comparison"].includes(
-        location.pathname.split("/")[1]
-      ) ? (
+      [
+        "privacy-policy",
+        "terms-of-use",
+        "404",
+        "",
+        "games",
+        "comparison",
+        "home",
+      ].includes(location.pathname.split("/")[1]) ? (
         ""
       ) : (
         <Sidebar />

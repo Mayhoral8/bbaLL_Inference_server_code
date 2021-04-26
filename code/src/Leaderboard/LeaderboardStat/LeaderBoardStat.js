@@ -26,6 +26,8 @@ const extractDataForPlot = (data, totalProp, statKey) => {
 const LeaderBoardStat = ({ json, statName }) => {
   const makePlot = (plotType) => {
     const yearId = useSelector((state) => state.sharedReducer.yearId);
+
+    const isPlay = useSelector((state) => state.sharedReducer.isPlay);
     const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
     const isTotal = useSelector((state) => state.sharedReducer.isTotal);
 
@@ -84,7 +86,8 @@ const LeaderBoardStat = ({ json, statName }) => {
         default:
           statsAttr = "Total";
       }
-
+      // console.log(isTotal);
+      // console.log(yearId);
       return (
         <ContainerCard graph style={{ margin: "1rem 0" }}>
           <BarChart
