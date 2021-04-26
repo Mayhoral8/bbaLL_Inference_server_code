@@ -20,9 +20,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   const pointsData = [];
   const svgRef = useRef();
   const widthDivRef = useRef();
-  // const [play, setPlay] = useState(
-  //   useSelector((state) => state.sharedReducer.isPlay)
-  // );
   const [displayLastFrame, setDisplayLastFrame] = useState(true);
   const MAXFRAMES = 25; // This is tuneable. The max amount of frames for each game
   const FRAMEDURATION = 200; // This is tuneable. The animation speed for each frame in milliseconds
@@ -35,12 +32,10 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
   let maxlength = 0;
   let biggestVal = 0;
   const dispatch = useDispatch();
-  let play = useRef();
 
+  let play = useRef();
   play.current = useSelector((state) => state.sharedReducer.isPlay);
-  console.log(`Is Animation Running:${play.current} ${frameState.gameIndex}`);
-  console.log(`${frameState.gameIndex} ${frameState.currentFrame}`);
-  console.log(pointsData);
+
   // finds highest number of games
   maxlength = max(y, (entry) => entry.length);
 
@@ -140,17 +135,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
 
   // resets values when the year changes
   useEffect(() => {
-    //setPlay(false);
-    //console.log("State changed when year changes [" + play + "]");
-    // setTimeout(() => {
-    //   setFrameState({
-    //     gameIndex: pointsData.length - 1,
-    //     currentFrame: pointsData[pointsData.length - 1][0].value.length - 1,
-    //   });
-
-    //   //console.log(`Done ${frameState.gameIndex}`);
-    // }, 100);
-
     setFrameState({
       gameIndex: pointsData.length - 1,
       currentFrame: pointsData[pointsData.length - 1][0].value.length - 1,
@@ -219,9 +203,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
 
               animationsPlayed = 0;
             }
-            console.log(
-              `Is Animation playing inside if statement [${play.current}] ${frameState.gameIndex}`
-            );
           }
         })
         .ease(easeLinear)
@@ -239,9 +220,6 @@ const BarChart = ({ y, text, teamColours, best_curve, best_name }) => {
         .join("text")
         .attr("fill", "#EEEEEE")
         .text(function (entry) {
-          console.log(
-            Math.round(entry.value[frameState.currentFrame] * 100) / 100
-          );
           return `${
             entry.name
           } ${Math.round(entry.value[frameState.currentFrame] * 100) / 100}`;
