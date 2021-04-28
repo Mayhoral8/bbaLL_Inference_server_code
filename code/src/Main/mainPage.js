@@ -6,6 +6,8 @@ import EventList from "./eventlist";
 import SEO from "../Shared/SEO";
 import FutureGameOddsCard from "./futureGameOddsCard";
 import { fbFirestore } from "../App/config";
+import useWindowSize from "Shared/hooks/useWindowSize";
+
 const GamePageContainer = () => {
   const [games, setGames] = useState([]);
 
@@ -46,11 +48,12 @@ const GamePageContainer = () => {
           style={{
             display: "flex",
             flexDirection: "row",
+            justifyContent: "flex-end",
             height: "100%",
             width: "100%",
           }}
         >
-          <div
+          {/* <div
             style={{
               backgroundColor: "gray",
               margin: "1rem",
@@ -91,29 +94,58 @@ const GamePageContainer = () => {
                 Survey
               </div>
             </div>
-          </div>
-          <div
-            style={{
-              backgroundColor: "white",
-              marginTop: "3rem",
-              marginRight: "3rem",
-              height: "100%",
-              width: "400px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              padding: "0.5rem",
-              overflowY: "scroll",
-              height: "675px",
-              scrollbarWidth: "thin" /* "auto" or "thin" */,
-              // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
-            }}
-          >
-            {games.map((item, index) => {
-              console.log(games.length);
-              return <FutureGameOddsCard data={item} key={index} />;
-            })}
-          </div>
+          </div> */}
+          {useWindowSize() > 834 ? (
+            <div
+              style={{
+                backgroundColor: "white",
+                marginTop: "3rem",
+                marginRight: "3rem",
+                height: "100%",
+                width: "300px",
+                display: "flex",
+                flexDirection: "column",
+                padding: "0.5rem",
+                overflowY: "scroll",
+                position: "relative",
+                border: "solid gray 1px",
+                height: "675px",
+                scrollbarWidth: "thin" /* "auto" or "thin" */,
+                // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+              }}
+            >
+              {games.map((item, index) => {
+                console.log(games.length);
+                return <FutureGameOddsCard data={item} key={index} />;
+              })}
+            </div>
+          ) : (
+            <div
+              style={{
+                zIndex: 0,
+                backgroundColor: "white",
+                borderTop: "solid gray 1px",
+                borderBottom: "solid gray 1px",
+                marginTop: "3rem",
+                marginLeft: "0rem",
+                marginRight: "0rem",
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                padding: "0.5rem",
+                overflowX: "scroll",
+                overflowY: "hidden",
+                scrollbarWidth: "thin" /* "auto" or "thin" */,
+                // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+              }}
+            >
+              {games.map((item, index) => {
+                console.log(games.length);
+                return <FutureGameOddsCard data={item} key={index} />;
+              })}
+            </div>
+          )}
         </div>
       </FullWidthMain>
     </>
