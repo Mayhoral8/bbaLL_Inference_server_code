@@ -3,11 +3,11 @@ import styled from "styled-components";
 export const Card = styled.div`
   display: flex;
   background: linear-gradient(to right, #e9e9e9 50%, #c4c4c4 50%);
-  margin: 1.5rem;
+  margin: 1rem;
   margin-top: 3rem;
   margin-bottom: 3rem;
   height: 200px;
-
+  min-width: 250px;
   flex-direction: column;
   justify-content: center;
 
@@ -18,34 +18,37 @@ export const Card = styled.div`
   }
 
   .logo-1 {
-    width: 30%;
+    z-index: 0;
+    width: 40%;
     top: -10px;
   }
 
   .logo-2 {
-    width: 30%;
+    z-index: 0;
+    width: 40%;
     top: -10px;
   }
 
   .vs-text {
-    font-size: 4rem;
+    font-size: 3rem;
     color: white;
     font-family: Roboto;
     filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
     -webkit-text-stroke: 0.5px gray;
     position: relative;
-    top: -5px;
+    top: 5px;
   }
 
   .team-names {
     display: flex;
     flex-direction: row;
     font-size: 0.8rem;
-    justify-content: space-around;
+    justify-content: space-evenly;
     position: relative;
     top: -15px;
     margin-top: 1rem;
     font-family: Roboto;
+    text-align: center;
   }
 
   .scores {
