@@ -6,6 +6,7 @@ const FutureGameOddsCard = (item) => {
   const [JSON, setJSON] = useState(item);
   const [homeImg, setHomeImg] = useState("");
   const [awayImg, setAwayImg] = useState("");
+  const gameDate = JSON.data["Game Info"]["Game Time"];
 
   let homeTeam = JSON.data["Game Info"]["Home Team"];
   let awayTeam = JSON.data["Game Info"]["Away Team"];
@@ -54,8 +55,11 @@ const FutureGameOddsCard = (item) => {
     setAwayImg(url);
   });
 
-  // homeTeam = homeTeam.replace(/\s+/g, "<br/>");
-  // awayTeam = awayTeam.replace(/\s+/g, "<br/>");
+  const homeWords = homeTeam.split(" ");
+  const awayWords = awayTeam.split(" ");
+  // shortens team names to 1 word
+  homeTeam = homeWords[homeWords.length - 1];
+  awayTeam = awayWords[awayWords.length - 1];
   return (
     <Card>
       <div
@@ -63,6 +67,7 @@ const FutureGameOddsCard = (item) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-evenly",
+          minHeight: "75px",
         }}
       >
         <img id="img1" className="logo-1" src={homeImg} />
@@ -119,9 +124,7 @@ const FutureGameOddsCard = (item) => {
           </div>
         </div>
 
-        <div className="game-date">
-          Game Date: {JSON.data["Game Info"]["Game Time"]}
-        </div>
+        <div className="game-date">{gameDate}</div>
       </div>
     </Card>
   );
