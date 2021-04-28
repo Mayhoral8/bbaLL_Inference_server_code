@@ -1,10 +1,61 @@
 import React, { useState } from "react";
+import { fbStorage } from "../App/config";
+//import firebasestorage from "firebase";
 import { Card } from "./futuregameoddscard-style";
 const FutureGameOddsCard = (item) => {
   const [JSON, setJSON] = useState(item);
-  const homeTeam = JSON.data["Game Info"]["Home Team"];
-  const awayTeam = JSON.data["Game Info"]["Away Team"];
-  console.log(JSON);
+  const [homeImg, setHomeImg] = useState("");
+  const [awayImg, setAwayImg] = useState("");
+
+  let homeTeam = JSON.data["Game Info"]["Home Team"];
+  let awayTeam = JSON.data["Game Info"]["Away Team"];
+
+  const teamsELO = [
+    Math.round(JSON.data["Game Prediction"]["ELO"][homeTeam]),
+    Math.round(JSON.data["Game Prediction"]["ELO"][awayTeam]),
+  ];
+  const teamsMassey = [
+    Math.round(JSON.data["Game Prediction"]["Massey"][homeTeam] * 100) / 100,
+    Math.round(JSON.data["Game Prediction"]["Massey"][awayTeam] * 100) / 100,
+  ];
+  const allbettingOdds = JSON.data["Game Odds"]["General"];
+  let latestDate = "";
+  Object.keys(allbettingOdds).map((date) => {
+    if (latestDate.length == 0) {
+      latestDate = date;
+    }
+    if (date > latestDate) {
+      latestDate = date;
+    }
+  });
+  const teamsBettingOdds = [
+    Math.round(JSON.data["Game Odds"]["General"][latestDate][homeTeam] * 100) /
+      100,
+    Math.round(JSON.data["Game Odds"]["General"][latestDate][awayTeam] * 100) /
+      100,
+  ];
+  const homeTeamFormatted = homeTeam.replace(/\s+/g, "_");
+  const awayTeamFormatted = awayTeam.replace(/\s+/g, "_");
+  const homeTeamReference = fbStorage.refFromURL(
+    "gs://nba-database-cb52a.appspot.com/team_logo_spi/" +
+      homeTeamFormatted +
+      ".png"
+  );
+  const awayTeamReference = fbStorage.refFromURL(
+    "gs://nba-database-cb52a.appspot.com/team_logo_spi/" +
+      awayTeamFormatted +
+      ".png"
+  );
+  homeTeamReference.getDownloadURL().then((url) => {
+    setHomeImg(url);
+  });
+
+  awayTeamReference.getDownloadURL().then((url) => {
+    setAwayImg(url);
+  });
+
+  // homeTeam = homeTeam.replace(/\s+/g, "<br/>");
+  // awayTeam = awayTeam.replace(/\s+/g, "<br/>");
   return (
     <Card>
       <div
@@ -14,17 +65,11 @@ const FutureGameOddsCard = (item) => {
           justifyContent: "space-evenly",
         }}
       >
-        <img
-          className="logo-1"
-          src="https://firebasestorage.googleapis.com/v0/b/nba-database-cb52a.appspot.com/o/team_logo_spi%2FAtlanta_Hawks.png?alt=media&token=5b0509dd-559f-42c9-9f18-6c65097d22b4"
-        />
+        <img id="img1" className="logo-1" src={homeImg} />
         <div className="vs-text">
           <b>VS</b>
         </div>
-        <img
-          className="logo-2"
-          src="https://firebasestorage.googleapis.com/v0/b/nba-database-cb52a.appspot.com/o/team_logo_spi%2FBoston_Celtics.png?alt=media&token=77445de9-bc0c-4d66-9b64-2387b39d095c"
-        />
+        <img className="logo-2" src={awayImg} />
       </div>
       <div className="team-names">
         <div>{homeTeam}</div>
@@ -34,23 +79,43 @@ const FutureGameOddsCard = (item) => {
       <div className="scores">
         <div className="scores-row">
           <div>
-            <b>{Math.round(JSON.data["Game Prediction"]["ELO"][homeTeam])}</b>
+            {teamsELO[0]} ({calculateELOPercent(teamsELO[0], teamsELO[1])}%)
           </div>
           <div>ELO Rating</div>
-          <div>{Math.round(JSON.data["Game Prediction"]["ELO"][awayTeam])}</div>
-        </div>
-        <div className="scores-row">
-          <div>1.46</div>
-          <div>Massey Rating</div>
           <div>
-            <b>3.56</b>
+            {teamsELO[1]} ({100 - calculateELOPercent(teamsELO[0], teamsELO[1])}
+            %)
           </div>
         </div>
         <div className="scores-row">
-          <div>30%</div>
+          <div>
+            {teamsMassey[0]} (
+            {calculateMasseyPercent(teamsMassey[0], teamsMassey[1])}%)
+          </div>
+          <div>Massey Rating</div>
+          <div>
+            {teamsMassey[1]} (
+            {100 - calculateMasseyPercent(teamsMassey[0], teamsMassey[1])}%)
+          </div>
+        </div>
+        <div className="scores-row">
+          <div>
+            {teamsBettingOdds[0]} (
+            {calculateBettingOddsPercent(
+              teamsBettingOdds[0],
+              teamsBettingOdds[1]
+            )}
+            %)
+          </div>
           <div>Game Odds</div>
           <div>
-            <b>60%</b>
+            {teamsBettingOdds[1]} (
+            {100 -
+              calculateBettingOddsPercent(
+                teamsBettingOdds[0],
+                teamsBettingOdds[1]
+              )}
+            %)
           </div>
         </div>
 
@@ -60,6 +125,24 @@ const FutureGameOddsCard = (item) => {
       </div>
     </Card>
   );
+};
+
+const calculateELOPercent = (teamA, teamB) => {
+  return Math.round((teamA / (teamA + teamB)) * 100);
+};
+
+const calculateMasseyPercent = (teamA, teamB) => {
+  const k = 25;
+  const p1 = 1 / (1 + Math.exp(-teamA / k));
+  const p2 = 1 / (1 + Math.exp(-teamB / k));
+  return Math.round((p1 / (p1 + p2)) * 100);
+};
+
+const calculateBettingOddsPercent = (teamA, teamB) => {
+  const p1 = 1 / teamA;
+  const p2 = 1 / teamB;
+
+  return Math.round((p1 / (p1 + p2)) * 100);
 };
 
 export default FutureGameOddsCard;
