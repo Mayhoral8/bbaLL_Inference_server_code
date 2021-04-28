@@ -34,6 +34,60 @@ export const StyledComparisonBanner = styled.div`
     }
   }
 `
+export const StyledPlayerCandidates = styled.div `
+
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding: 3rem;
+  background-color: yellow;
+  @media (max-width: ${breakpoints.desk}) {
+    margin: 0 auto 0;
+  }
+ 
+  @media (max-width: ${breakpoints.phone}) {
+    font-size: 1.5rem;
+  }
+
+  .comparsion{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .text{
+    text-align: center;
+  }
+  
+  .header{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 50px;
+  }
+
+  .img-container {
+    align-items: center;
+    display: flex;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 6px solid;
+    border-color: ${props=>props.teamColour && props.teamColour};
+    border-radius: 50%;
+    overflow: hidden;
+    @media (max-width: ${breakpoints.tabletLG}) {
+      width: 100px;
+      height: 100px;
+    }
+    @media (max-width: ${breakpoints.tablet}) {
+      display: none;
+    }
+    img {
+      width: 100%;
+      border-radius: ${(props) => (props.isTeam === "true" ? "0" : "50%")};
+      padding: ${(props) => (props.isTeam === "true" ? "1rem" : 0)};
+    }
+  }
+}
+`
 
 // ComparisonPage / StyledComparisonOptions  ==========================
 export const StyledComparisonOptions = styled.section`
