@@ -9,6 +9,7 @@ import { FullWidthMain } from "../globalStyles";
 import ComparisonDropdown from "./ComparisonDropdown";
 import SEO from "../Shared/SEO";
 import names from "JSON/name.json";
+import candidates from "JSON/player_candidates_for_comparison.json";
 import ComparisonBars from "./ComparisonBars";
 import ComparisonYearSelection from "./ComparisonYearSelection";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
@@ -20,6 +21,7 @@ import {
   StyledComparisonProfile,
   StyledComparisonProfileBlank,
   StyledComparisonProfileElement,
+  StyledPlayerCandidates,
   StyledInfo,
   StyledOptionName,
   StyledOptionsNames,
@@ -40,10 +42,17 @@ const abbrTeamAttributes = abbrPlayerAttributes.slice(0, 7);
 const ComparisonPage = () => {
   const [playerNameOne, setPlayerNameOne] = useState("");
   const [playerNameTwo, setPlayerNameTwo] = useState("");
+
+  const [randomNameOne, setRandomNameOne] = useState("");
+  const [randomNameTwo, setRandomNameTwo] = useState("");
+  const [randomNameThree, setrandomNameThree] = useState("");
+  const [randomNameFour, setrandomNameFour] = useState("");
+  const [randomNameFive, setRrandomNameFive] = useState("");
+  const [randomNameSix, setrandomNameSix] = useState("");
+  const [randomYear, setRandomYear] = useState("");
+
   const [yearOne, setYearOne] = useState("");
   const [yearTwo, setYearTwo] = useState("");
-  const [leftNameChanged, setLeftNameChanged] = useState(-1);
-  const [rightNameChange, setRightNameChanged] = useState(-1);
   
   const [tempPlayerNameOne, setTempPlayerNameOne] = useState("");
   const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState("");
@@ -88,6 +97,8 @@ const ComparisonPage = () => {
   const queryNameTwo = parsedQueryParams[2];
   const queryYearTwo = parsedQueryParams[3];
 
+  var defaultComparisonPlayer = new Array();
+  var nameObject;
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
     //console.log("Use Effect")
@@ -593,7 +604,6 @@ const ComparisonPage = () => {
     return { sortedPValueListOne, sortedPValueListTwo, sortedPValueListThree };
   };
 
-  // return the promot string on the player section
   const setPromoteStringName = (nums) => {
     if (parsedQueryParams.length == 1) {
       return isTeam ? "Enter team name" : "Enter player name";
@@ -603,31 +613,61 @@ const ComparisonPage = () => {
   }
 
    // return the promot string on the year section
-  const setPromoteStringYear = (nums, check) => {
-    if (check == 1) {
-      setLeftNameChanged(-1);
-      return "Select Year";
-    } else if (check == 2) {
-      setRightNameChanged(-1);
-      return "Select Year";
-    } else if (parsedQueryParams.length == 1) {
+  const setPromoteStringYear = (nums) => {
+    if(parsedQueryParams.length == 1) {
       return "Select Year";
     } else {
       return parsedQueryParams[nums];
     }
   }
 
-  const nameChangeEvent = (tempName, num) => {
-    setTempPlayerNameOne(tempName);
+  // if this is the fist time loading the screen
+  if (tempPlayerNameOne == "" && tempPlayerNameTwo == "" && playerNameOne == "" && playerNameTwo == "") {
+    // get the year name from the JSON file and conver it to string
+    var year = JSON.stringify(Object.keys(candidates));
 
-    if (num == 1) {
-      setLeftNameChanged(1);
-    } else if (num == 2) {
-      setRightNameChanged(2);
+    // get the player candidates array
+    nameObject = (Object.values(candidates))["0"];
+
+    // remove [] and "" from the year string
+    year = year.replace("[", "");
+    year = year.replace("]", "");
+    year = year.replace(/['"]+/g, "");
+
+    // randomly pick two player file the array
+
+    for (var index = 0; index < 6; index=index+2) {
+      var indexOne = Math.floor((Math.random() * 59) + 0);
+      var indexTwo = Math.floor((Math.random() * 59) + 0);
+      if (indexOne == indexTwo) {
+        indexTwo = Math.floor((Math.random() * 59) + 0);
+      }
+
+      defaultComparisonPlayer.push(indexOne);
+      defaultComparisonPlayer.push(indexTwo);
     }
+    //console.log(nameObject[defaultComparisonPlayer[2]]);
+
+    setPlayerNameOne(nameObject[defaultComparisonPlayer[0]]);
+    setTempPlayerNameOne(nameObject[defaultComparisonPlayer[0]]);
+    setRandomNameOne(nameObject[defaultComparisonPlayer[0]]);
+
+    setPlayerNameTwo(nameObject[defaultComparisonPlayer[1]]);
+    setTempPlayerNameTwo(nameObject[defaultComparisonPlayer[1]])
+    setRandomNameTwo(nameObject[defaultComparisonPlayer[1]])
+
+    setrandomNameThree(nameObject[defaultComparisonPlayer[2]]);
+    setrandomNameFour(nameObject[defaultComparisonPlayer[3]]);
+    setRrandomNameFive(nameObject[defaultComparisonPlayer[4]]);
+    setrandomNameSix(nameObject[defaultComparisonPlayer[5]]);
+
+    setYearOne(year);
+    setTempYearOne(year);
+    setYearTwo(year);
+    setTempYearTwo(year);
+    setRandomYear(year);
   }
-
-
+  
   return (
     <>
       <SEO
@@ -635,6 +675,59 @@ const ComparisonPage = () => {
         description="Compare between NBA teams or players"
       />
       <FullWidthMain>
+        <StyledPlayerCandidates>
+          <div className="header">
+            <div className="comparsion">
+              <div className="continer">
+                <div className="img-container">
+                  <GetPlayerImage playerName={randomNameOne} isTeam={isTeam} />
+                </div>
+                <p className="text">{randomNameOne}</p>
+              </div>
+              <h2 style={{padding:"60px 0"}}>VS</h2>
+              <div className="continer">
+                <div className="img-container">
+                  <GetPlayerImage playerName={randomNameTwo} isTeam={isTeam} />
+                </div>
+                <p className="text">{randomNameTwo}</p>
+              </div>
+            </div>
+
+            <div className="comparsion">
+              <div className="continer">
+                <div className="img-container">
+                  <GetPlayerImage playerName={randomNameThree} isTeam={isTeam} />
+                </div>
+                <p className="text">{randomNameThree}</p>
+              </div>
+              <h2 style={{padding:"60px 0"}}>VS</h2>
+              <div className="continer">
+                <div className="img-container">
+                  <GetPlayerImage playerName={randomNameFour} isTeam={isTeam} />
+                </div>
+                <p className="text">{randomNameFour}</p>
+              </div>
+            </div>
+
+            <div className="comparsion">
+              <div className="continer">
+                <div className="img-container">
+                  <GetPlayerImage playerName={randomNameFive} isTeam={isTeam} />
+                </div>
+                <p className="text">{randomNameFive}</p>
+              </div>
+              <h2 style={{padding:"60px 0"}}>VS</h2>
+              <div className="continer">
+                <div className="img-container">
+                  <GetPlayerImage playerName={randomNameSix} isTeam={isTeam} />
+                </div>
+                <p className="text">{randomNameSix}</p>
+              </div>
+            </div>
+          </div>
+        </StyledPlayerCandidates>
+
+
         <StyledComparisonBanner>
           <h1>
             Compare your favorite <span>teams</span> or <span>players</span>
@@ -671,8 +764,8 @@ const ComparisonPage = () => {
                 <ComparisonDropdown
                   options={names}
                   isTeam={isTeam}
-                  onChange={(val) => setPlayerNameOne(val)}
-                  prompt={isTeam ? "Enter team name" : "Enter player name"}
+                  onChange={(val) => setTempPlayerNameOne(val)}
+                  prompt={setPromoteStringName(0)}
                   length="longer"
                   setRef={setRefOne}
                 />
@@ -682,7 +775,7 @@ const ComparisonPage = () => {
                 <ComparisonYearSelection
                   isTeam={isTeam}
                   onChange={(val) => setTempYearOne(val)}
-                  prompt={"Select season"}
+                  prompt={setPromoteStringYear(1)}
                   name={tempPlayerNameOne}
                   setRef={setRefYearOne}
                 />
@@ -695,8 +788,8 @@ const ComparisonPage = () => {
                 <ComparisonDropdown
                   options={names}
                   isTeam={isTeam}
-                  onChange={(val) => setPlayerNameTwo(val)}
-                  prompt={isTeam ? "Enter team name" : "Enter player name"}
+                  onChange={(val) => setTempPlayerNameTwo(val)}
+                  prompt={setPromoteStringName(2)}
                   length="longer"
                   setRef={setRefTwo}
                 />
@@ -706,7 +799,7 @@ const ComparisonPage = () => {
                 <ComparisonYearSelection
                   isTeam={isTeam}
                   onChange={(val) => setTempYearTwo(val)}
-                  prompt={"Select season"}
+                  prompt={setPromoteStringYear(3)}
                   name={tempPlayerNameTwo}
                   setRef={setRefYearTwo}
                 />
