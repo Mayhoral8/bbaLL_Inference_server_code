@@ -32,6 +32,13 @@ const GamePageContainer = () => {
   const gamePlayers = useSelector(
     (state) => state.firestoreReducer.ordered.gamePlayersJson
   );
+
+  games.sort((game1, game2) => {
+    return (
+      new Date(game1["Game Info"]["Game Time"]) -
+      new Date(game2["Game Info"]["Game Time"])
+    );
+  });
   return (
     <>
       <SEO
