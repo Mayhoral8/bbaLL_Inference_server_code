@@ -3,11 +3,13 @@ import styled from "styled-components";
 export const Card = styled.div`
   display: flex;
   background: linear-gradient(to right, #e9e9e9 50%, #c4c4c4 50%);
+
+  @media screen and (max-width: 834px) {
+    margin: 0.5rem;
+  }
   margin: 1rem;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  height: 200px;
-  min-width: 250px;
+  height: 175px;
+  min-width: 225px;
   flex-direction: column;
   justify-content: center;
 
@@ -20,13 +22,13 @@ export const Card = styled.div`
   .logo-1 {
     z-index: 0;
     width: 40%;
-    top: -10px;
+    top: 5px;
   }
 
   .logo-2 {
     z-index: 0;
     width: 40%;
-    top: -10px;
+    top: 5px;
   }
 
   .vs-text {
@@ -36,31 +38,40 @@ export const Card = styled.div`
     filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
     -webkit-text-stroke: 0.5px gray;
     position: relative;
-    top: 5px;
+    top: 10px;
   }
 
   .team-names {
     display: flex;
     flex-direction: row;
-    font-size: 0.8rem;
-    justify-content: space-evenly;
+    font-size: 1rem;
     position: relative;
-    top: -15px;
-    margin-top: 1rem;
+    top: 0px;
+    margin-top: 0.5rem;
     font-family: Roboto;
     text-align: center;
   }
 
-  .scores {
-    display: flex;
-    flex-direction: column;
+  .team-name1 {
+    width: 50%;
   }
 
-  .scores-row {
+  .team-name2 {
+    width: 50%;
+  }
+  .scores {
     display: flex;
+    justify-content: center;
     flex-direction: row;
-    justify-content: space-evenly;
+  }
+
+  .scores-col {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
     margin-top: 0.25rem;
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
     margin-bottom: 0.25rem;
     font-size: 0.8rem;
   }
@@ -71,8 +82,8 @@ export const Card = styled.div`
     max-width: 80%;
     font-size: 0.8rem;
     text-align: center;
-    padding: 0.2rem;
+    padding: 0.5rem;
     filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
-    margin: 1rem auto 1rem auto;
+    margin: 0.5rem auto 0.5rem auto;
   }
 `;
