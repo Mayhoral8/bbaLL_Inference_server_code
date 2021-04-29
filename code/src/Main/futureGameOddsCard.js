@@ -7,18 +7,11 @@ const FutureGameOddsCard = (item) => {
   const [homeImg, setHomeImg] = useState("");
   const [awayImg, setAwayImg] = useState("");
   const gameDate = JSON.data["Game Info"]["Game Time"];
+  const ratingNames = ["ELO", "Massey", "Odds"];
 
   let homeTeam = JSON.data["Game Info"]["Home Team"];
   let awayTeam = JSON.data["Game Info"]["Away Team"];
 
-  const teamsELO = [
-    Math.round(JSON.data["Game Prediction"]["ELO"][homeTeam]),
-    Math.round(JSON.data["Game Prediction"]["ELO"][awayTeam]),
-  ];
-  const teamsMassey = [
-    Math.round(JSON.data["Game Prediction"]["Massey"][homeTeam] * 100) / 100,
-    Math.round(JSON.data["Game Prediction"]["Massey"][awayTeam] * 100) / 100,
-  ];
   const allbettingOdds = JSON.data["Game Odds"]["General"];
   let latestDate = "";
   Object.keys(allbettingOdds).map((date) => {
@@ -29,12 +22,53 @@ const FutureGameOddsCard = (item) => {
       latestDate = date;
     }
   });
-  const teamsBettingOdds = [
-    Math.round(JSON.data["Game Odds"]["General"][latestDate][homeTeam] * 100) /
-      100,
-    Math.round(JSON.data["Game Odds"]["General"][latestDate][awayTeam] * 100) /
-      100,
+
+  const homeRatings = [
+    [Math.round(JSON.data["Game Prediction"]["ELO"][homeTeam]), 0],
+    [
+      Math.round(JSON.data["Game Prediction"]["Massey"][homeTeam] * 100) / 100,
+      0,
+    ],
+    [
+      Math.round(
+        JSON.data["Game Odds"]["General"][latestDate][homeTeam] * 100
+      ) / 100,
+      0,
+    ],
   ];
+
+  const awayRatings = [
+    [Math.round(JSON.data["Game Prediction"]["ELO"][awayTeam]), 0],
+    [
+      Math.round(JSON.data["Game Prediction"]["Massey"][awayTeam] * 100) / 100,
+      0,
+    ],
+    [
+      Math.round(
+        JSON.data["Game Odds"]["General"][latestDate][awayTeam] * 100
+      ) / 100,
+      0,
+    ],
+  ];
+
+  homeRatings[0][1] = calculateELOPercent(homeRatings[0][0], awayRatings[0][0]);
+  homeRatings[1][1] = calculateMasseyPercent(
+    homeRatings[1][0],
+    awayRatings[1][0]
+  );
+  homeRatings[2][1] = calculateBettingOddsPercent(
+    homeRatings[2][0],
+    awayRatings[2][0]
+  );
+
+  for (let i = 0; i < awayRatings.length; i++) {
+    awayRatings[i][1] = 100 - homeRatings[i][1];
+  }
+  for (let i = 1; i < awayRatings.length; i++) {
+    awayRatings[i][0] = awayRatings[i][0].toFixed(2);
+    homeRatings[i][0] = homeRatings[i][0].toFixed(2);
+  }
+
   const homeTeamFormatted = homeTeam.replace(/\s+/g, "_");
   const awayTeamFormatted = awayTeam.replace(/\s+/g, "_");
   const homeTeamReference = fbStorage.refFromURL(
@@ -62,70 +96,59 @@ const FutureGameOddsCard = (item) => {
   awayTeam = awayWords[awayWords.length - 1];
   return (
     <Card>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          minHeight: "75px",
-        }}
-      >
-        <img id="img1" className="logo-1" src={homeImg} />
-        <div className="vs-text">
-          <b>VS</b>
-        </div>
-        <img className="logo-2" src={awayImg} />
-      </div>
+      {vsImg(homeImg, awayImg)}
       <div className="team-names">
-        <div>{homeTeam}</div>
-        <div>{awayTeam}</div>
+        <div className="team-name1">{homeTeam}</div>
+        <div className="team-name2">{awayTeam}</div>
       </div>
 
       <div className="scores">
-        <div className="scores-row">
-          <div>
-            {teamsELO[0]} ({calculateELOPercent(teamsELO[0], teamsELO[1])}%)
-          </div>
-          <div>ELO Rating</div>
-          <div>
-            {teamsELO[1]} ({100 - calculateELOPercent(teamsELO[0], teamsELO[1])}
-            %)
-          </div>
+        <div className="scores-col">
+          {homeRatings.map((value, index) => {
+            if (value[1] > awayRatings[index][1]) {
+              return (
+                <b>
+                  <p key={index}>
+                    {value[0]} ({value[1]}%)
+                  </p>
+                </b>
+              );
+            } else {
+              return (
+                <p key={index}>
+                  {value[0]} ({value[1]}%)
+                </p>
+              );
+            }
+          })}
         </div>
-        <div className="scores-row">
-          <div>
-            {teamsMassey[0]} (
-            {calculateMasseyPercent(teamsMassey[0], teamsMassey[1])}%)
-          </div>
-          <div>Massey Rating</div>
-          <div>
-            {teamsMassey[1]} (
-            {100 - calculateMasseyPercent(teamsMassey[0], teamsMassey[1])}%)
-          </div>
+        <div className="scores-col">
+          {ratingNames.map((name, index) => {
+            return <p key={index}>{name}</p>;
+          })}
         </div>
-        <div className="scores-row">
-          <div>
-            {teamsBettingOdds[0]} (
-            {calculateBettingOddsPercent(
-              teamsBettingOdds[0],
-              teamsBettingOdds[1]
-            )}
-            %)
-          </div>
-          <div>Game Odds</div>
-          <div>
-            {teamsBettingOdds[1]} (
-            {100 -
-              calculateBettingOddsPercent(
-                teamsBettingOdds[0],
-                teamsBettingOdds[1]
-              )}
-            %)
-          </div>
+        <div className="scores-col">
+          {awayRatings.map((value, index) => {
+            if (value[1] > homeRatings[index][1]) {
+              return (
+                <b>
+                  <p key={index}>
+                    {value[0]} ({value[1]}%)
+                  </p>
+                </b>
+              );
+            } else {
+              return (
+                <p key={index}>
+                  {value[0]} ({value[1]}%)
+                </p>
+              );
+            }
+          })}
         </div>
-
-        <div className="game-date">{gameDate}</div>
       </div>
+
+      <div className="game-date">{gameDate}</div>
     </Card>
   );
 };
@@ -146,6 +169,25 @@ const calculateBettingOddsPercent = (teamA, teamB) => {
   const p2 = 1 / teamB;
 
   return Math.round((p1 / (p1 + p2)) * 100);
+};
+
+const vsImg = (homeImg, awayImg) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        minHeight: "75px",
+      }}
+    >
+      <img id="img1" className="logo-1" src={homeImg} />
+      <div className="vs-text">
+        <b>VS</b>
+      </div>
+      <img className="logo-2" src={awayImg} />
+    </div>
+  );
 };
 
 export default FutureGameOddsCard;
