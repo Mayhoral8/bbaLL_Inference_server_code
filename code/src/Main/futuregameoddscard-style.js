@@ -32,13 +32,13 @@ export const Card = styled.div`
   }
 
   .vs-text {
-    font-size: 3rem;
+    font-size: 2rem;
     color: white;
     font-family: Roboto;
     filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
     -webkit-text-stroke: 0.5px gray;
     position: relative;
-    top: 10px;
+    top: 25px;
   }
 
   .team-names {
@@ -53,10 +53,12 @@ export const Card = styled.div`
   }
 
   .team-name1 {
+    color: ${(props) => props.homeColour};
     width: 50%;
   }
 
   .team-name2 {
+    color: ${(props) => props.awayColour};
     width: 50%;
   }
   .scores {
