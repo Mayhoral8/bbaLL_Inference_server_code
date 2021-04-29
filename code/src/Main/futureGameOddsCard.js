@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { fbStorage } from "../App/config";
+import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 //import firebasestorage from "firebase";
 import { Card } from "./futuregameoddscard-style";
 const FutureGameOddsCard = (item) => {
@@ -69,8 +70,8 @@ const FutureGameOddsCard = (item) => {
     homeRatings[i][0] = homeRatings[i][0].toFixed(2);
   }
 
-  const homeTeamFormatted = homeTeam.replace(/\s+/g, "_");
-  const awayTeamFormatted = awayTeam.replace(/\s+/g, "_");
+  const homeTeamFormatted = homeTeam.replaceAll(" ", "_");
+  const awayTeamFormatted = awayTeam.replaceAll(" ", "_");
   const homeTeamReference = fbStorage.refFromURL(
     "gs://nba-database-cb52a.appspot.com/team_logo_spi/" +
       homeTeamFormatted +
@@ -89,17 +90,27 @@ const FutureGameOddsCard = (item) => {
     setAwayImg(url);
   });
 
+  const teamColours = avoidColourSets(
+    homeTeam.replaceAll(" ", "").toUpperCase(),
+    awayTeam.replaceAll(" ", "").toUpperCase()
+  );
+  console.log(teamColours);
+
   const homeWords = homeTeam.split(" ");
   const awayWords = awayTeam.split(" ");
   // shortens team names to 1 word
   homeTeam = homeWords[homeWords.length - 1];
   awayTeam = awayWords[awayWords.length - 1];
   return (
-    <Card>
+    <Card homeColour={teamColours.colourOne} awayColour={teamColours.colourTwo}>
       {vsImg(homeImg, awayImg)}
       <div className="team-names">
-        <div className="team-name1">{homeTeam}</div>
-        <div className="team-name2">{awayTeam}</div>
+        <div className="team-name1">
+          <b>{homeTeam}</b>
+        </div>
+        <div className="team-name2">
+          <b>{awayTeam}</b>
+        </div>
       </div>
 
       <div className="scores">
