@@ -5,14 +5,18 @@ import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 import { Card } from "./futuregameoddscard-style";
 const FutureGameOddsCard = (item) => {
   const [JSON, setJSON] = useState(item);
+
+  // urls for logo images
   const [homeImg, setHomeImg] = useState("");
   const [awayImg, setAwayImg] = useState("");
+
   const gameDate = JSON.data["Game Info"]["Game Time"];
   const ratingNames = ["ELO", "Massey", "Odds"];
 
-  let homeTeam = JSON.data["Game Info"]["Home Team"];
-  let awayTeam = JSON.data["Game Info"]["Away Team"];
+  let homeTeamName = JSON.data["Game Info"]["Home Team"];
+  let awayTeamName = JSON.data["Game Info"]["Away Team"];
 
+  // Finds the latest date of the all the odds
   const allbettingOdds = JSON.data["Game Odds"]["General"];
   let latestDate = "";
   Object.keys(allbettingOdds).map((date) => {
@@ -25,53 +29,75 @@ const FutureGameOddsCard = (item) => {
   });
 
   const homeRatings = [
-    [Math.round(JSON.data["Game Prediction"]["ELO"][homeTeam]), 0],
-    [
-      Math.round(JSON.data["Game Prediction"]["Massey"][homeTeam] * 100) / 100,
-      0,
-    ],
-    [
-      Math.round(
-        JSON.data["Game Odds"]["General"][latestDate][homeTeam] * 100
-      ) / 100,
-      0,
-    ],
+    {
+      value: Math.round(JSON.data["Game Prediction"]["ELO"][homeTeamName]),
+      percent: 0,
+    },
+
+    {
+      value:
+        Math.round(JSON.data["Game Prediction"]["Massey"][homeTeamName] * 100) /
+        100,
+      percent: 0,
+    },
+
+    {
+      value:
+        Math.round(
+          JSON.data["Game Odds"]["General"][latestDate][homeTeamName] * 100
+        ) / 100,
+      percent: 0,
+    },
   ];
 
   const awayRatings = [
-    [Math.round(JSON.data["Game Prediction"]["ELO"][awayTeam]), 0],
-    [
-      Math.round(JSON.data["Game Prediction"]["Massey"][awayTeam] * 100) / 100,
-      0,
-    ],
-    [
-      Math.round(
-        JSON.data["Game Odds"]["General"][latestDate][awayTeam] * 100
-      ) / 100,
-      0,
-    ],
+    {
+      value: Math.round(JSON.data["Game Prediction"]["ELO"][awayTeamName]),
+      percent: 0,
+    },
+
+    {
+      value:
+        Math.round(JSON.data["Game Prediction"]["Massey"][awayTeamName] * 100) /
+        100,
+      percent: 0,
+    },
+
+    {
+      value:
+        Math.round(
+          JSON.data["Game Odds"]["General"][latestDate][awayTeamName] * 100
+        ) / 100,
+      percent: 0,
+    },
   ];
 
-  homeRatings[0][1] = calculateELOPercent(homeRatings[0][0], awayRatings[0][0]);
-  homeRatings[1][1] = calculateMasseyPercent(
-    homeRatings[1][0],
-    awayRatings[1][0]
+  // calculating percentages for all ratings
+  homeRatings[0].percent = calculateELOPercent(
+    homeRatings[0].value,
+    awayRatings[0].value
   );
-  homeRatings[2][1] = calculateBettingOddsPercent(
-    homeRatings[2][0],
-    awayRatings[2][0]
+  homeRatings[1].percent = calculateMasseyPercent(
+    homeRatings[1].value,
+    awayRatings[1].value
+  );
+  homeRatings[2].percent = calculateBettingOddsPercent(
+    homeRatings[2].value,
+    awayRatings[2].value
   );
 
   for (let i = 0; i < awayRatings.length; i++) {
-    awayRatings[i][1] = 100 - homeRatings[i][1];
+    awayRatings[i].percent = 100 - homeRatings[i].percent;
   }
   for (let i = 1; i < awayRatings.length; i++) {
-    awayRatings[i][0] = awayRatings[i][0].toFixed(2);
-    homeRatings[i][0] = homeRatings[i][0].toFixed(2);
+    console.log(homeRatings[i].value);
+    awayRatings[i].value = awayRatings[i].value.toFixed(2);
+    homeRatings[i].value = homeRatings[i].value.toFixed(2);
   }
 
-  const homeTeamFormatted = homeTeam.replaceAll(" ", "_");
-  const awayTeamFormatted = awayTeam.replaceAll(" ", "_");
+  // formatting team names so respective logos can be fetched
+  const homeTeamFormatted = homeTeamName.replaceAll(" ", "_");
+  const awayTeamFormatted = awayTeamName.replaceAll(" ", "_");
   const homeTeamReference = fbStorage.refFromURL(
     "gs://nba-database-cb52a.appspot.com/team_logo_spi/" +
       homeTeamFormatted +
@@ -85,49 +111,50 @@ const FutureGameOddsCard = (item) => {
   homeTeamReference.getDownloadURL().then((url) => {
     setHomeImg(url);
   });
-
   awayTeamReference.getDownloadURL().then((url) => {
     setAwayImg(url);
   });
 
   const teamColours = avoidColourSets(
-    homeTeam.replaceAll(" ", "").toUpperCase(),
-    awayTeam.replaceAll(" ", "").toUpperCase()
+    // formats team names for function call
+    homeTeamName.replaceAll(" ", "").toUpperCase(),
+    awayTeamName.replaceAll(" ", "").toUpperCase()
   );
-  console.log(teamColours);
 
-  const homeWords = homeTeam.split(" ");
-  const awayWords = awayTeam.split(" ");
-  // shortens team names to 1 word
-  homeTeam = homeWords[homeWords.length - 1];
-  awayTeam = awayWords[awayWords.length - 1];
+  const homeWords = homeTeamName.split(" ");
+  const awayWords = awayTeamName.split(" ");
+
+  // shortens team names to the last word
+  homeTeamName = homeWords[homeWords.length - 1];
+  awayTeamName = awayWords[awayWords.length - 1];
+
   return (
     <Card homeColour={teamColours.colourOne} awayColour={teamColours.colourTwo}>
       {vsImg(homeImg, awayImg)}
       <div className="team-names">
         <div className="team-name1">
-          <b>{homeTeam}</b>
+          <b>{homeTeamName}</b>
         </div>
         <div className="team-name2">
-          <b>{awayTeam}</b>
+          <b>{awayTeamName}</b>
         </div>
       </div>
 
       <div className="scores">
         <div className="scores-col">
-          {homeRatings.map((value, index) => {
-            if (value[1] > awayRatings[index][1]) {
+          {homeRatings.map((obj, index) => {
+            if (obj.percent > awayRatings[index].percent) {
               return (
                 <b>
                   <p key={index}>
-                    {value[0]} ({value[1]}%)
+                    {obj.value} ({obj.percent}%)
                   </p>
                 </b>
               );
             } else {
               return (
                 <p key={index}>
-                  {value[0]} ({value[1]}%)
+                  {obj.value} ({obj.percent}%)
                 </p>
               );
             }
@@ -139,19 +166,19 @@ const FutureGameOddsCard = (item) => {
           })}
         </div>
         <div className="scores-col">
-          {awayRatings.map((value, index) => {
-            if (value[1] > homeRatings[index][1]) {
+          {awayRatings.map((obj, index) => {
+            if (obj.percent > homeRatings[index].percent) {
               return (
                 <b>
                   <p key={index}>
-                    {value[0]} ({value[1]}%)
+                    {obj.value} ({obj.percent}%)
                   </p>
                 </b>
               );
             } else {
               return (
                 <p key={index}>
-                  {value[0]} ({value[1]}%)
+                  {obj.value} ({obj.percent}%)
                 </p>
               );
             }
