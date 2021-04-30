@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Card = styled.div`
   display: flex;
-  background: linear-gradient(to right, #e9e9e9 50%, #c4c4c4 50%);
+  background: linear-gradient(to right, #e9e9e9 50%, #a3a3a3 50%);
 
   @media screen and (max-width: 834px) {
     margin: 0.5rem;
@@ -50,6 +50,9 @@ export const Card = styled.div`
     margin-top: 0.5rem;
     font-family: Roboto;
     text-align: center;
+    // -webkit-text-stroke-width: 5px;
+    // -webkit-text-stroke-color: black;
+    text-shadow: 1px 1px 1px #949494;
   }
 
   .team-name1 {
