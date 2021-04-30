@@ -7,10 +7,13 @@ import SEO from "../Shared/SEO";
 import FutureGameOddsCard from "./futureGameOddsCard";
 import { fbFirestore } from "../App/config";
 import useWindowSize from "Shared/hooks/useWindowSize";
+import PlayerRankingsCard from "./playerRankingsCard";
+import MemeCard from "./memeCard";
 
 const GamePageContainer = () => {
   const [games, setGames] = useState([]);
-
+  const [landingPageData, setLandingPageData] = useState([]);
+  const [memeUrls, setMemeUrls] = useState([]);
   useEffect(() => {
     fbFirestore
       .collection("future_game_info")
@@ -21,8 +24,19 @@ const GamePageContainer = () => {
       .catch((error) => {
         console.log(error);
       });
+    fbFirestore
+      .collection("landing_page_Top10")
+      .get()
+      .then((snapshot) => {
+        const documents = snapshot.docs.map((doc) => doc.data());
+        setMemeUrls(documents["0"].links);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
+  console.log(memeUrls);
   const gameInfo = useSelector(
     (state) => state.firestoreReducer.ordered.gameInfoJson
   );
@@ -55,11 +69,15 @@ const GamePageContainer = () => {
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             height: "100%",
             width: "100%",
           }}
         >
+          <PlayerRankingsCard />
+          <MemeCard urls={memeUrls} />
+          <div style={{ background: "white", margin: "3rem" }}>survey</div>
+
           {/* <div
             style={{
               backgroundColor: "gray",
