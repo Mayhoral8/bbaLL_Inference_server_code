@@ -1,4 +1,4 @@
-import data from './data.json'
+import constants from './constants.json'
 
 //teams logos imports
 import AtlantaHawks from '../assets/teamLogos/Atlanta_Hawks.png'
@@ -36,7 +36,9 @@ import AtlantHawks from '../assets/teamLogos/Atlanta_Hawks.png'
 //Data restructuring that comes from the firebase api.
 export const structureData=(futureGamesInfo)=>{
     let targetArray=[]
-    futureGamesInfo.map(({docId,docData},index)=>{
+
+    futureGamesInfo.map(({docId, docData}, index) => {
+
         let pointsKeysArray=Object.keys(docData['Game Odds'].General)
         let awayTeam=docData['Game Info']['Away Team']
         let homeTeam=docData['Game Info']['Home Team']
@@ -47,139 +49,187 @@ export const structureData=(futureGamesInfo)=>{
             homeTeam,
             gameStartTime: docData['Game Info']['Game Start Time']
         }
-        if(pointsKeysArray.length===0){
-            pointsTargetObj={...docData['Game Info'], bettingOdds:{awayTeamOdds:'', homeTeamOdds:''}}
-        } else{
+
+        if(pointsKeysArray.length === 0){
+            pointsTargetObj = {
+                awayTeamOdds: {
+                    odds: '',
+                    bettingSide: ''
+                },
+                homeTeamOdds: {
+                    odds: '',
+                    bettingSide: ''
+                }
+            }
+        } 
+        else{
+
             pointsKeysArray.sort()
-            let pointsLastIndex=pointsKeysArray.length-1
-            let pointsTargetKey=pointsKeysArray[pointsLastIndex]
-            pointsTargetObj={awayTeamOdds:docData['Game Odds'].General[pointsTargetKey][awayTeam], homeTeamOdds:docData['Game Odds'].General[pointsTargetKey][homeTeam]}
+            let pointsLastIndex = pointsKeysArray.length-1
+            let pointsTargetKey = pointsKeysArray[pointsLastIndex]
+            pointsTargetObj = {
+                awayTeamOdds: {
+                    odds: docData['Game Odds'].General[pointsTargetKey][awayTeam],
+                    bettingSide: awayTeam,
+                }, 
+                homeTeamOdds: {
+                    odds: docData['Game Odds'].General[pointsTargetKey][homeTeam],
+                    bettingSide: homeTeam
+                }
+            }
+
         }
 
 
-        let handiKeysArray=Object.keys(docData['Game Odds'].Handicap)
+        let handiKeysArray = Object.keys(docData['Game Odds'].Handicap)
         let handiTargetObj
-        if(handiKeysArray.length===0){
-            handiTargetObj={handicapHomeTeamOdds:'',handicapAwayTeamOdds:'',handicapHomeTeamPoints:'',handicapAwayTeamPoints:''}
-        } else{
+
+        if(handiKeysArray.length === 0){
+            handiTargetObj = {handicapHomeTeamOdds: '', handicapAwayTeamOdds: '', handicapHomeTeamPoints: '', handicapAwayTeamPoints: ''}
+        } 
+        else{
+
             handiKeysArray.sort()
             let handiLastIndex=handiKeysArray.length-1
             let handiTargetKey=handiKeysArray[handiLastIndex]
-            let childHandiTargetKeysArray=Object.keys(docData['Game Odds'].Handicap[handiTargetKey])
-            let childHandiValue1=childHandiTargetKeysArray[0]
-            let childHandiValue2=childHandiTargetKeysArray[1]
-            let handiPoint1=docData['Game Odds'].Handicap[handiTargetKey][childHandiValue1]
-            let handiPoint2=docData['Game Odds'].Handicap[handiTargetKey][childHandiValue2]
-            handiTargetObj={handicapHomeTeamPoints:childHandiValue1,handicapAwayTeamPoints:childHandiValue2,handicapHomeTeamOdds:handiPoint1,handicapAwayTeamOdds:handiPoint2}
+            let homeTeamObject = docData['Game Odds'].Handicap[handiTargetKey][homeTeam]
+            let awayTeamObject = docData['Game Odds'].Handicap[handiTargetKey][awayTeam]
+
+            let handiHomeTeamKey = Object.keys(homeTeamObject)
+            let handiAwayTeamKey = Object.keys(awayTeamObject)
+
+            handiTargetObj = {
+                awayTeam: {
+                    bettingSide: awayTeam,
+                    odds: awayTeamObject[handiAwayTeamKey[0]],
+                    points: handiAwayTeamKey[0]
+                },
+                homeTeam: {
+                    bettingSide: homeTeam,
+                    odds: homeTeamObject[handiHomeTeamKey[0]],
+                    points: handiHomeTeamKey[0]
+                }
+            }
         }
 
 
         let overUnderKeysArray=Object.keys(docData['Game Odds'].Over_and_under)
         let overUnderTargetObj={}
-        if(overUnderKeysArray.length===0){
+
+        if(overUnderKeysArray.length === 0){
             overUnderTargetObj={overTotalScore:'',underTotalScore:'',overBettingOdds:'',underBettingOdds:''}
-        } else{
-            let newKeysArray = []
-            for(let i = 0; i < overUnderKeysArray.length; i++){
-                let element = overUnderKeysArray[i]
-                if(!docData['Game Odds'].Over_and_under[element].Unavailable){
-                    newKeysArray.push(element)
-                }
+        } 
+        else{
+
+            overUnderKeysArray.sort()
+            let underTotalScore
+            let overTotalScore
+            let overUnderLastIndex = overUnderKeysArray.length-1
+            let overUnderTargetKey=overUnderKeysArray[overUnderLastIndex]
+            let childOverUnderTargetKeys=Object.keys(docData['Game Odds'].Over_and_under[overUnderTargetKey])
+
+            childOverUnderTargetKeys.sort()
+            if(childOverUnderTargetKeys[0].includes('Under')){
+                underTotalScore = childOverUnderTargetKeys[0]
+            }else{
+                overTotalScore = childOverUnderTargetKeys[0]
             }
-            newKeysArray.sort()
-            if(newKeysArray[0]){
-                let underTotalScore
-                let overTotalScore
-                let overUnderLastIndex = newKeysArray.length-1
-                let overUnderTargetKey=newKeysArray[overUnderLastIndex]
-                let childOverUnderTargetKeys=Object.keys(docData['Game Odds'].Over_and_under[overUnderTargetKey])
-
-                if(childOverUnderTargetKeys[0].includes('Under')){
-                    underTotalScore=childOverUnderTargetKeys[0]
-                }else{
-                    overTotalScore=childOverUnderTargetKeys[0]
-                }
-                if(childOverUnderTargetKeys[1].includes('Over')){
-                    overTotalScore=childOverUnderTargetKeys[1]
-                }else{
-                    underTotalScore=childOverUnderTargetKeys[1]
-                }
-
-                let overOddsValue=docData['Game Odds'].Over_and_under[overUnderTargetKey][overTotalScore]
-                let underOddsValue=docData['Game Odds'].Over_and_under[overUnderTargetKey][underTotalScore]
-
-                underTotalScore=childOverUnderTargetKeys[0].split(' ')[1]
-                overTotalScore=childOverUnderTargetKeys[0].split(' ')[1]
-
-                overUnderTargetObj={overTotalScore,underTotalScore,overOddsValue,underOddsValue}
-            } else {
-                overUnderTargetObj={overTotalScore:'',underTotalScore:'',overBettingOdds:'',underBettingOdds:''}
+            if(childOverUnderTargetKeys[1].includes('Over')){
+                overTotalScore = childOverUnderTargetKeys[1]
+            }else{
+                underTotalScore = childOverUnderTargetKeys[1]
             }
+
+            let overOddsValue = docData['Game Odds'].Over_and_under[overUnderTargetKey][overTotalScore]
+            let underOddsValue = docData['Game Odds'].Over_and_under[overUnderTargetKey][underTotalScore]
+
+            underTotalScore = childOverUnderTargetKeys[0].split(' ')[1]
+            overTotalScore = childOverUnderTargetKeys[0].split(' ')[1]
+            overUnderTargetObj = {overTotalScore,underTotalScore,overOddsValue,underOddsValue}
+
         }
+
         targetArray.push({
-            overUnder:{...overUnderTargetObj},
-            moneyLine:{...pointsTargetObj},
-            handicap:{...handiTargetObj},
-            gameDetails:{...gameDetails},
+            overUnder: overUnderTargetObj,
+            moneyLine: pointsTargetObj,
+            handicap: {...handiTargetObj},
+            gameDetails,
             gameId:docId,
             handicapSelected:null,
             overUnderSelected:null,
             moneyLineSelected:null
         })
     })
+
     return targetArray
 }
 
-export const compareData = () => {
 
-}
+export const pointBoxClickHandler=(e, params, index, gameId,  selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
 
-export const pointBoxClickHandler=(e, params, index, gameId ,  keyName, selectedKey, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
     if(props.userDetails){
+
         let gameInfoUpdated = gameInfo;
-        gameInfoUpdated[index][keyName] = selectedKey;
+        gameInfoUpdated[index][selectedType] = colIndex;
         let targetObj={}
         let gameDetailsObj
+
         for(let i = 0; i < gameInfoUpdated.length; i++){
+
             if(gameInfoUpdated[i].gameId === gameId){
                 gameDetailsObj = gameInfoUpdated[i].gameDetails
             }
+
         }
 
         if(selectedValues[gameId]){
-            targetObj=selectedValues
-        } else{
+            targetObj = selectedValues
+        } 
+        else{
+            
             let newObj = { 
-                moneyLine: { ...data.selectedValues.moneyLine },
-                handicap: { ...data.selectedValues.handicap },
-                over: { ...data.selectedValues.over },
-                under: { ...data.selectedValues.under }
+                moneyLine: { ...constants.selectedValues.moneyLine },
+                handicap: { ...constants.selectedValues.handicap },
+                overAndUnder: {...constants.selectedValues.overAndUnder}
             }
-            selectedValues[gameId]=newObj
-            targetObj=selectedValues
+            selectedValues[gameId] = newObj
+            targetObj = selectedValues
+
         }
 
-        if(params==='moneyLine'){
-            targetObj[gameId][params].moneyLineOddsValue=oddsValue;
-        } else if(params==='handicap'){
-            targetObj[gameId][params].handicapOddsValue=oddsValue;
-            targetObj[gameId][params].handicapPointsValue=pointsValue;
-        } else{
+        if(params === 'moneyLine'){
+
+            targetObj[gameId][params].odds = oddsValue;
+            targetObj[gameId][params].bettingSide = bettingSide;
+
+        } 
+        else if(params === 'handicap'){
+
+            targetObj[gameId][params].odds = oddsValue;
+            targetObj[gameId][params].points = pointsValue;
+            targetObj[gameId][params].bettingSide = bettingSide;
+
+        } 
+        else{
+
+            let overAndUnder = {}
+            overAndUnder.odds = oddsValue
+            overAndUnder.totalScore = scoreValue
+
             if(params.includes('over')){
-                targetObj[gameId][params].overOddsValue=oddsValue;
-                targetObj[gameId][params].overTotalScoreValue=scoreValue;
-                targetObj[gameId]['under'].underOddsValue=null;
-                targetObj[gameId]['under'].underTotalScoreValue=null;
-            } else{
-                targetObj[gameId][params].underOddsValue=oddsValue;
-                targetObj[gameId][params].underTotalScoreValue=scoreValue;
-                targetObj[gameId]['over'].overOddsValue=null;
-                targetObj[gameId]['over'].overTotalScoreValue=null;
+                overAndUnder.type = 'over'
+            } 
+            else{
+                overAndUnder.type = 'under'
             }
+
+            targetObj[gameId].overAndUnder = overAndUnder;
         }
+
         targetObj[gameId].gameDetails = gameDetailsObj;
         targetObj[gameId].gameDate = targetObj[gameId].gameDetails.gameDate
         let newOverviewKeysArray=Object.keys(targetObj);
+
         return {
             gameInfoUpdated,targetObj,newOverviewKeysArray
         }
@@ -191,7 +241,7 @@ export const pointBoxClickHandler=(e, params, index, gameId ,  keyName, selected
 
 
 export const setTeamIcons = (homeTeam, awayTeam) => {
-    let homeTeamIcon = homeTeam === 'AtlantaHawks' ? AtlantHawks
+    let homeTeamIcon = homeTeam === 'AtlantaHawks' ? AtlantaHawks
     : 
     homeTeam === 'Boston Celtics' ? BostonCeltics
     :
@@ -323,7 +373,15 @@ export const compareUserBetsAndGameInfo = (userBets, gameInfo) => {
         for(let j = 0; j < userBetsArray.length; j++){
 
             if(gameInfoArray[i].gameId === userBetsArray[j].docId){
-                gameInfoArray[i].disabled = true
+                if(userBetsArray[j].docData.handicap.odds){
+                    gameInfoArray[i].handicap.selected = true
+                }
+                if(userBetsArray[j].docData.moneyLine.odds){
+                    gameInfoArray[i].moneyLine.selected = true
+                }
+                if(userBetsArray[j].docData.overAndUnder.odds){
+                    gameInfoArray[i].overUnder.selected = true
+                }
             }
 
         }

@@ -50,3 +50,14 @@ export const ViewMoreLink = styled.a`
 export const BettingOddsRank = styled.div`
     margin:5px 0px;
 `
+
+export const LogoutImgContainer = styled.div`
+    text-align: center;
+    margin-top: 20px;
+`
+
+export const LogoutImg = styled.img`
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+`

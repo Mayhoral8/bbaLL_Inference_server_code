@@ -23,10 +23,10 @@ const overviewBox = ( props ) => {
             </HeaderC>
             <PointsC>
                 {
-                    selectedValues[gameId].moneyLine.moneyLineOddsValue ?
+                    selectedValues[gameId].moneyLine.odds ?
                     <Points>
                         <span>Money Line:</span> 
-                        <span>{selectedValues[gameId].moneyLine.moneyLineOddsValue} 
+                        <span>{selectedValues[gameId].moneyLine.odds} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
@@ -39,10 +39,10 @@ const overviewBox = ( props ) => {
                     :null
                 }
                 {
-                    selectedValues[gameId].handicap.handicapOddsValue ?
+                    selectedValues[gameId].handicap.odds ?
                     <Points>
                         <span>Handicap:</span> 
-                        <span>{selectedValues[gameId].handicap.handicapOddsValue} 
+                        <span>{selectedValues[gameId].handicap.odds} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
@@ -55,32 +55,34 @@ const overviewBox = ( props ) => {
                     :null
                 }
                 {
-                    selectedValues[gameId].over.overOddsValue ? 
+                    selectedValues[gameId].overAndUnder.type === 'over' ? 
                     <Points>
                         <span>Over:</span> 
-                        <span>{selectedValues[gameId].over.overOddsValue}
+                        <span>{selectedValues[gameId].overAndUnder.odds}
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
                              onClick={( e )=>{
-                                onRemovePoints( e, 'over', gameId )
+                                onRemovePoints( e, 'overAndUnder', gameId )
                              }}
                             />
                         </span>
                     </Points> 
                     : 
-                    selectedValues[gameId].under.underOddsValue ? 
+                    selectedValues[gameId].overAndUnder.type === 'under' ?
                     <Points><span>Under: </span> 
-                        <span>{selectedValues[gameId].under.underOddsValue} 
+                        <span>{selectedValues[gameId].overAndUnder.odds} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
                              onClick={( e )=>{
-                                onRemovePoints( e, 'under', gameId )
+                                onRemovePoints( e, 'overAndUnder', gameId )
                              }}
                             />
                         </span>
-                    </Points>:null
+                    </Points>
+                    :
+                    null
                 }
             </PointsC>
         </OverviewBoxC>

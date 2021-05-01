@@ -1,17 +1,45 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+
+//Actions
+import {LogoutAction} from '../../redux/actions/authActions'
+import {getUserRecord} from '../../redux/actions/recordActions'
+
+//Components
+import {
+    UserStatsContainer, 
+    ProfileImgFiguresViewMore, 
+    ProfileImg, 
+    UserName, 
+    BettingOddsRank, 
+    FiguresViewMore, 
+    ViewMoreLink, 
+    LogoutImgContainer, 
+    LogoutImg
+} from './userStatsContainerStyles'
+
+//Images
 import Img from '../../assets/images/avatar.jpg'
+import logoutIcon from '../../assets/images/logoutIcon.png'
 
-import {UserStatsContainer, ProfileImgFiguresViewMore, ProfileImg, UserName, BettingOddsRank, FiguresViewMore, ViewMoreLink} from './userStatsContainerStyles'
+//Functions and libraries
+import {connect} from 'react-redux'
 
-const UserStatsBox = () => {
+const UserStatsBox = (props) => {
+
+    useEffect(() => {
+        props.getUserRecord(props.userDetails.uid)
+    },[])
+
     return(
         <UserStatsContainer>
-            <UserName>Daniel Wong</UserName>
+            <UserName>{props.userDetails.displayName}</UserName>
             <ProfileImgFiguresViewMore>
                 <ProfileImg src={Img}/>
                 <FiguresViewMore>
-                    <BettingOddsRank>Betting Odds: 20.4%</BettingOddsRank>
-                    <BettingOddsRank>Rank: 12209 (191)</BettingOddsRank>
+                    <BettingOddsRank>Points: {props.userRecord.totalPoints}</BettingOddsRank>
+                    <BettingOddsRank>Rank: {props.userRecord.rank}</BettingOddsRank>
+                    <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
+                    <BettingOddsRank>Winning Rate: {props.userRecord.winPercentage}</BettingOddsRank>
                     <ViewMoreLink>View More...</ViewMoreLink>
                 </FiguresViewMore>
             </ProfileImgFiguresViewMore>
@@ -19,4 +47,11 @@ const UserStatsBox = () => {
     )
 }
 
-export default UserStatsBox
+const mapStateToProps = (state) => {
+    return{
+        userDetails: state.authReducer.userDetails.user,
+        userRecord: state.recordReducer.userRecord
+    }
+}
+
+export default connect(mapStateToProps, {LogoutAction, getUserRecord})(UserStatsBox)

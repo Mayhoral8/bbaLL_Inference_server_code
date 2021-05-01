@@ -15,7 +15,6 @@ export const getFutureGamesInfo=()=>{
                 const docId=doc.id
                 data.push({docData,docId})
             })
-
             dispatch({
                 type:GET_FUTURE_GAMES_INFO,
                 payload:data
@@ -30,30 +29,96 @@ export const getFutureGamesInfo=()=>{
 }
 
 export const setStructuredFutureGamesInfo = (data) => {
-    return (dispatch) => {
+    return async(dispatch) => {
         dispatch({
             type: SET_STRUCTURED_GAME_INFO,
-            payload:data
+            payload: data
         })
     }
 }
 
-export const submitBetPoints=(selectedValues, userId)=>{
+export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
     return async(dispatch) => {
         let error = {}
         let keys = Object.keys(selectedValues)
-        for (let i = 0; i < keys.length; i++){
-            let gameDate = selectedValues[`${keys[i]}`].gameDetails.gameDate ? selectedValues[`${keys[i]}`].gameDetails.gameDate : ''
-            try{
-                await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).collection('games').doc(keys[i]).set(selectedValues[keys[i]])
-            }
-            catch(e){
-                error.isError = true
-                error.status = e.status
-                error.message = e.message
-                break
+
+        for (let i = 0; i < gameInfo.length; i++){
+            
+            for (let j = 0; j < keys.length; j++){
+
+                if(keys[j] === gameInfo[i].gameId){
+
+                    let gameDate = selectedValues[`${keys[j]}`].gameDetails.gameDate ? selectedValues[`${keys[j]}`].gameDetails.gameDate : ''
+
+                    if(gameInfo[i].overUnder.selected || gameInfo[i].moneyLine.selected || gameInfo[i].handicap.selected){
+                        let targetObj = {}
+                        if(
+                            (gameInfo[i].overUnder.selected && gameInfo[i].moneyLine.selected) 
+                            || 
+                            (gameInfo[i].overUnder.selected && gameInfo[i].handicap.selected) 
+                            || 
+                            (gameInfo[i].handicap.selected && gameInfo[i].moneyLine.selected)
+                        ){
+                            if(gameInfo[i].overUnder.selected && gameInfo[i].moneyLine.selected){
+                                targetObj.handicap = selectedValues[keys[j]].handicap
+                            }
+                            else if(gameInfo[i].overUnder.selected && gameInfo[i].handicap.selected ){
+                                targetObj.moneyLine = selectedValues[keys[j]].moneyLine
+                            }
+                            else{
+                                targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                            }
+                        }
+                        else{
+                            if(gameInfo[i].overUnder.selected){
+                                targetObj.handicap = selectedValues[keys[j]].handicap
+                                targetObj.moneyLine = selectedValues[keys[j]].moneyLine
+                            }
+                            if(gameInfo[i].moneyLine.selected){
+                                targetObj.handicap = selectedValues[keys[j]].handicap
+                                targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                            }
+                            if(gameInfo[i].handicap.selected){
+                                targetObj.moneyLine = selectedValues[keys[j]].moneyLine
+                                targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                            }
+                        }
+
+                        try{
+                            await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).collection('games').doc(keys[j]).update(targetObj)
+                        }
+                        catch(e){
+                            error.isError = true
+                            error.status = e.status
+                            error.message = e.message
+                            break
+                        }
+                    }
+                    else{
+
+                        let targetObj = {}
+                        targetObj.gameDetails = selectedValues[keys[j]].gameDetails
+                        targetObj.handicap = selectedValues[keys[j]].handicap
+                        targetObj.moneyLine = selectedValues[keys[j]].moneyLine
+                        targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                        targetObj.gameFinished = false
+
+                        try{
+                            await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).collection('games').doc(keys[j]).set(targetObj)
+                        }
+                        catch(e){
+                            error.isError = true
+                            error.status = e.status
+                            error.message = e.message
+                            break
+                        }
+
+                    }
+                }
+
             }
         }
+
         return error.isError ? error : {success: true}
 
     }

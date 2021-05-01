@@ -5,7 +5,7 @@ export const UsersRankContainer = styled.div`
     background: #EFEFEF;
     margin-top: 20px;
     padding: 20px;
-    height: calc(100% - 355px);
+    height: calc(100% - 482px);
 `
 
 export const Header = styled.h4`
@@ -22,5 +22,5 @@ export const Col = styled.div`
 `
 
 export const ColHeading = styled.div`
-    
+    font-weight: 900;
 `

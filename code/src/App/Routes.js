@@ -15,7 +15,7 @@ import {connect} from 'react-redux'
 import {compose} from 'redux'
 import 'firebase/auth';
 import {firebaseInstanceSpigamebet} from './spigamebetFirebase'
-import {LoginAction} from '../redux/actions/authActions'
+import {checkLoginStatus} from '../redux/actions/authActions'
 const Games = Loadable({
     loader: () => import("../GameStats/GamePageContainer"),
     loading() {
@@ -54,28 +54,16 @@ const Games = Loadable({
   });
 
 const Routes=(props)=>{
-    const [spinner, setSpinner] = useState(true)
-
-
+  
     useEffect(()=>{
-      firebaseInstanceSpigamebet.auth().onAuthStateChanged(async(user)=>{
-          if(user){
-            const {displayName,email,uid} = user
-            await props.LoginAction({displayName,email,uid})
-          }
-      })
-
+      let response = props.checkLoginStatus()
+      if(response.error){
+        //Error handeling
+      }
     },[])
 
-    const { userDetails } = props;
     return(
         <>
-          {/* {
-            (spinner && userDetails.isLoading) ? 
-              <Spinner/>
-            :
-              
-          } */}
           <RoutesContainer>
           <GlobalStyle />  
             <Switch>
@@ -109,5 +97,5 @@ const mapStateToProps=(state)=>{
 }
 export default compose(
     withRouter,
-    connect(mapStateToProps, {LoginAction})
+    connect(mapStateToProps, {checkLoginStatus})
   )(Routes)

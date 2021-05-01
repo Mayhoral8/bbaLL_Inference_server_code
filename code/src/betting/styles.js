@@ -130,6 +130,12 @@ export const PointsContainer = styled.div`
     flex-direction:column;
 `
 
+export const PointsWrapper = styled.div`
+    height: 100%;
+    position: relative;
+    z-index: 1;
+`
+
 export const PointsSpinnerContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -142,11 +148,18 @@ export const LockIconContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
 `
 
 export const LockIcon = styled.img`
-    height: 50px;
+    height: 70px;
     width: 50px;
+    opacity: 0.7;
 `
 
 export const OddsValueContainer = styled.div`
@@ -233,6 +246,7 @@ export const WarningPopupContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 `
 
 export const WarningPopupWrapper = styled.div`
@@ -265,6 +279,15 @@ export const TeamIconContainer = styled.div`
     text-align:center;
 `
 
+export const ArrowIconContainer = styled.div`
+    text-align:center;
+`
+
+export const ArrowIcon = styled.img`
+    height: 38px;
+    width: 50px;
+`
+
 export const TeamIcon = styled.img`
     height: 38px;
     width: 50px;
@@ -281,8 +304,22 @@ export const LoginModalContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 `
 
 export const LoginModalWrapper = styled.div`
     
+`
+
+export const LoginLogoutBtnsContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: #EFEFEF;
+`
+
+export const AuthBtn = styled.img`
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
 `

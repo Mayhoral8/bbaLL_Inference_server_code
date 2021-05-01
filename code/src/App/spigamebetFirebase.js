@@ -14,7 +14,7 @@ const firesbaseConfig = {
   measurementId:process.env.REACT_APP_FIREBASE_MEASUREMENT_ID1
 };
 
-export const firebaseInstanceSpigamebet=firebase.initializeApp(firesbaseConfig,'secondary');
+export const firebaseInstanceSpigamebet = firebase.initializeApp(firesbaseConfig,'secondary');
 
 const db = firebase.database()
 // if (location.hostname === "localhost") {
