@@ -35,7 +35,7 @@ export const Card = styled.div`
   border: solid gray 1px;
 
   margin-top: 3rem;
-  margin: 3rem 1rem 0rem 1rem;
+  margin: 3rem 1rem auto 1rem;
   padding: 1rem;
 
   .button {
