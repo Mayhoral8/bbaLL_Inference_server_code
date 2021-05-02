@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const MemeCard = ({ urls }) => {
   const [currentVid, setCurrentVid] = useState(0);
+  console.log(urls);
 
   const buttonHandle = (event) => {
     if (currentVid < urls.length - 1) {
@@ -12,7 +13,6 @@ const MemeCard = ({ urls }) => {
       setCurrentVid(0);
     }
   };
-  console.log(urls);
   return (
     <Card>
       <ReactPlayer url={urls[currentVid]}></ReactPlayer>
@@ -29,12 +29,13 @@ export const Card = styled.div`
   justify-content: flex-start;
   align-items: center;
 
+  max-height: 450px;
+
   background: white;
   border: solid gray 1px;
 
   margin-top: 3rem;
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin: 3rem 1rem 0rem 1rem;
   padding: 1rem;
 
   .button {
