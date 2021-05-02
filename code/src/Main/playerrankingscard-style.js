@@ -25,7 +25,7 @@ export const CardContainer = styled.div`
   border: solid gray 1px;
   display: inline-block;
   flex-direction: column;
-  min-width: 400px;
+  min-width: 450px;
   max-height: 450px;
 
   border-radius: 5px;
@@ -41,6 +41,14 @@ export const CardContainer = styled.div`
   .players {
     display: flex;
     flex-direction: column;
+  }
+
+  .dropdown {
+    margin: 0rem 0rem 0rem auto;
+    width: 35%;
+  }
+  .select {
+    font-size: 0.9rem;
   }
 
   .player-box {
