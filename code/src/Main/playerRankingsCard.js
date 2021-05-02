@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fbStorage } from "../App/config";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
-import { CardContainer, OutsideContainer } from "./playerrankingscard-style";
+import Select from "react-select";
+import {
+  CardContainer,
+  OutsideContainer,
+  selectContainer,
+} from "./playerrankingscard-style";
 
 const PlayerRankingsCard = ({ data }) => {
   //const [JSON, setJSON] = useState(data);
@@ -92,6 +97,11 @@ const PlayerRankingsCard = ({ data }) => {
     });
   };
 
+  let selectOptions = [];
+  Object.keys(data[rankingTypeIndex]).map((value) => {
+    selectOptions.push({ value: [value], label: [value] });
+  });
+  console.log(selectOptions);
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (
@@ -118,10 +128,32 @@ const PlayerRankingsCard = ({ data }) => {
               </div>
 
               <div className="dropdown">
-                <select
-                  onChange={(e) => {
-                    scoreType.current = e.target.value;
+                {/* <select
+                    onChange={(e) => {
+                      scoreType.current = e.target.value;
 
+                      setTopPlayers(
+                        data[rankingTypeIndex][scoreType.current]
+                          .sort((a, b) => {
+                            const aName = Object.keys(a)[0];
+                            const bName = Object.keys(b)[0];
+                            return a[aName]["Rank"] - b[bName]["Rank"];
+                          })
+                          .slice(0, 4)
+                      );
+                    }}
+                    value={scoreType.current}
+                  >
+                    {Object.keys(data[rankingTypeIndex]).map((scoreTypes) => {
+                      return <option value={scoreTypes}>{scoreTypes}</option>;
+                    })}
+                  </select> */}
+                <Select
+                  value={scoreType.current}
+                  styles={{ width: `${8 * scoreType.current.length + 100}px` }}
+                  onChange={(selected) => {
+                    console.log(selected);
+                    scoreType.current = selected.value[0];
                     setTopPlayers(
                       data[rankingTypeIndex][scoreType.current]
                         .sort((a, b) => {
@@ -132,12 +164,10 @@ const PlayerRankingsCard = ({ data }) => {
                         .slice(0, 4)
                     );
                   }}
-                  value={scoreType.current}
-                >
-                  {Object.keys(data[rankingTypeIndex]).map((scoreTypes) => {
-                    return <option value={scoreTypes}>{scoreTypes}</option>;
-                  })}
-                </select>
+                  options={selectOptions}
+                  className="select"
+                  placeholder={scoreType.current}
+                ></Select>
               </div>
             </div>
 
