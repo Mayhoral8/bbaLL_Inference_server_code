@@ -1,15 +1,31 @@
 import styled from "styled-components";
 
+export const OutsideContainer = styled.div`
+  margin-left: 3rem;
+  margin-top: 3rem;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .left-arrow {
+    transform: rotate(180deg);
+    padding: 0.1rem;
+  }
+  .right-arrow {
+    padding: 0.1rem;
+  }
+`;
 export const CardContainer = styled.div`
   @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap");
 
   background: white;
-  margin-left: 3rem;
-  margin-top: 3rem;
+
   border: solid gray 1px;
   display: inline-block;
   flex-direction: column;
-  max-width: 400px;
+  min-width: 400px;
   max-height: 450px;
 
   border-radius: 5px;
