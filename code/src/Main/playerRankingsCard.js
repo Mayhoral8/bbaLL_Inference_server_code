@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fbStorage } from "../App/config";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
-import { CardContainer } from "./playerrankingscard-style";
+import { CardContainer, OutsideContainer } from "./playerrankingscard-style";
 
 const PlayerRankingsCard = ({ data }) => {
   //const [JSON, setJSON] = useState(data);
-  const [imgs, setImgs] = useState("");
+  const [imgs, setImgs] = useState({});
 
   try {
     if (data == null) {
@@ -22,10 +22,11 @@ const PlayerRankingsCard = ({ data }) => {
     Points: "Points",
     PointsPerPoss: "Possession",
     "Three-Pointers": "Three-points",
-    Num_DD: "Double_frequency",
-    Num_TD: "Triple_frequency",
+    Num_DD: "Num_DD",
+    Num_TD: "Num_TD",
   };
   const [rankingTypeIndex, setRankingTypeIndex] = useState(0);
+  console.log(rankingTypeIndex);
 
   const [topPlayers, setTopPlayers] = useState({});
 
@@ -47,28 +48,64 @@ const PlayerRankingsCard = ({ data }) => {
   useEffect(() => {
     let names = [];
     Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
+    console.log(names);
+    console.log(topPlayers);
     getPic(names);
   }, [topPlayers]);
   console.log(imgs);
 
+  useEffect(() => {
+    scoreType.current = Object.keys(data[rankingTypeIndex])[0];
+    setTopPlayers(
+      data[rankingTypeIndex][scoreType.current]
+        .sort((a, b) => {
+          const aName = Object.keys(a)[0];
+          const bName = Object.keys(b)[0];
+          return a[aName]["Rank"] - b[bName]["Rank"];
+        })
+        .slice(0, 4)
+    );
+  }, [rankingTypeIndex]);
+
   const getPic = async (playerNames) => {
+    setImgs({});
     playerNames.map((name) => {
       const imageReference = fbStorage.refFromURL(
         "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
           name.replaceAll(" ", "_") +
           ".png"
       );
-      imageReference.getDownloadURL().then((url) => {
-        setImgs((imgs) => [...imgs, url]);
-      });
+      console.log(name);
+      imageReference
+        .getDownloadURL()
+        .then((url) => {
+          setImgs((imgs) => ({ [name]: url, ...imgs }));
+        })
+        .catch(() => {
+          const imageReference = fbStorage.refFromURL(
+            "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
+          );
+          imageReference.getDownloadURL().then((url) => {
+            setImgs((imgs) => ({ [name]: url, ...imgs }));
+          });
+        });
     });
   };
 
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (
-        <div>
-          <button>
+        <OutsideContainer>
+          <button
+            className="left-arrow"
+            onClick={() => {
+              if (rankingTypeIndex <= 0) {
+                setRankingTypeIndex(rankingTypes.length - 1);
+              } else {
+                setRankingTypeIndex(rankingTypeIndex - 1);
+              }
+            }}
+          >
             <img
               style={{ maxWidth: "40px" }}
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
@@ -110,7 +147,7 @@ const PlayerRankingsCard = ({ data }) => {
                 return (
                   <div className="player-box">
                     <div className="logo-box">
-                      <img src={imgs[index]} />
+                      <img src={imgs[playerName]} />
                       <div className="player-name">
                         {playerName.split(" ")[0]} <br />
                         {playerName.split(" ")[1]}
@@ -128,7 +165,23 @@ const PlayerRankingsCard = ({ data }) => {
               })}
             </div>
           </CardContainer>
-        </div>
+
+          <button
+            className="right-arrow"
+            onClick={() => {
+              if (rankingTypeIndex >= rankingTypes.length - 1) {
+                setRankingTypeIndex(0);
+              } else {
+                setRankingTypeIndex(rankingTypeIndex + 1);
+              }
+            }}
+          >
+            <img
+              style={{ maxWidth: "40px" }}
+              src="https://image.flaticon.com/icons/png/512/60/60758.png"
+            />
+          </button>
+        </OutsideContainer>
       );
     } else {
       return (
