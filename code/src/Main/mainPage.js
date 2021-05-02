@@ -9,10 +9,50 @@ import { fbFirestore } from "../App/config";
 import useWindowSize from "Shared/hooks/useWindowSize";
 import PlayerRankingsCard from "./playerRankingsCard";
 import MemeCard from "./memeCard";
+import BoxScoreTable from "../GameStats/Components/Boxscore/BoxScoreTable";
+import { autoPercentage } from "chartjs-plugin-watermark";
+
+const getFirebaseData = () => {
+  let data = [];
+  const documents = [
+    "bidaily_Top10",
+    "weekly_Top10",
+    "seasonal_Top10",
+    "team_Top10",
+  ];
+  const collections = {
+    bidaily_Top10: [
+      "FantasyScore",
+      "Points",
+      "PointsPerPoss",
+      "Three-Pointers",
+    ],
+    weekly_Top10: ["FantasyScore", "Points", "PointsPerPoss", "Three-Pointers"],
+    seasonal_Top10: ["Num_DD", "Num_TD"],
+    team_Top10: ["ELO Ranking", "ELO Rating", "Standing"],
+  };
+  documents.forEach((docName) => {
+    let currentData = new Object();
+    collections[docName].forEach((collName) => {
+      fbFirestore
+        .collection("landing_page_Top10")
+        .doc(docName)
+        .collection(collName)
+        .get()
+        .then((snapshot) => {
+          const documents = snapshot.docs.map((doc) => doc.data());
+          currentData[collName] = documents;
+        });
+    });
+    data.push(currentData);
+  });
+  return data;
+};
 
 const GamePageContainer = () => {
+  const collection = "landing_page_Top10";
+  const [data, setData] = useState([{}, {}, {}]);
   const [games, setGames] = useState([]);
-  const [landingPageData, setLandingPageData] = useState([]);
   const [memeUrls, setMemeUrls] = useState([]);
   useEffect(() => {
     fbFirestore
@@ -25,7 +65,7 @@ const GamePageContainer = () => {
         console.log(error);
       });
     fbFirestore
-      .collection("landing_page_Top10")
+      .collection("landing_page_Video")
       .get()
       .then((snapshot) => {
         const documents = snapshot.docs.map((doc) => doc.data());
@@ -34,9 +74,47 @@ const GamePageContainer = () => {
       .catch((error) => {
         console.log(error);
       });
+    setData(getFirebaseData());
   }, []);
+  console.log([data[1], data[2]]);
+  console.log(data);
 
-  console.log(memeUrls);
+  const hasDataLoaded = Object.entries(data[0]).length !== 0;
+
+  const currentYear = "2020-21";
+  useFirestoreConnect(() => [
+    {
+      collection: "game_info",
+      doc: currentYear,
+      subcollections: [
+        {
+          collection: "Gamecode",
+        },
+      ],
+      storeAs: "gameInfoJson",
+    },
+    {
+      collection: "game_pbp",
+      doc: currentYear,
+      subcollections: [
+        {
+          collection: "Gamecode",
+        },
+      ],
+      storeAs: "gamePbpJson",
+    },
+    {
+      collection: "game_players",
+      doc: currentYear,
+      subcollections: [
+        {
+          collection: "Gamecode",
+        },
+      ],
+      storeAs: "gamePlayersJson",
+    },
+  ]);
+
   const gameInfo = useSelector(
     (state) => state.firestoreReducer.ordered.gameInfoJson
   );
@@ -72,11 +150,17 @@ const GamePageContainer = () => {
             justifyContent: "space-between",
             height: "100%",
             width: "100%",
+            maxWidth: "1440px",
+            justifyContent: "center",
+            margin: "0 auto",
           }}
         >
-          <PlayerRankingsCard />
+          {hasDataLoaded ? (
+            <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
+          ) : (
+            <div></div>
+          )}
           <MemeCard urls={memeUrls} />
-          <div style={{ background: "white", margin: "3rem" }}>survey</div>
 
           {/* <div
             style={{
@@ -140,7 +224,6 @@ const GamePageContainer = () => {
               }}
             >
               {games.map((item, index) => {
-                console.log(games.length);
                 return <FutureGameOddsCard data={item} key={index} />;
               })}
             </div>
@@ -166,7 +249,6 @@ const GamePageContainer = () => {
               }}
             >
               {games.map((item, index) => {
-                console.log(games.length);
                 return <FutureGameOddsCard data={item} key={index} />;
               })}
             </div>
