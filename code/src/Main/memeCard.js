@@ -35,7 +35,7 @@ export const Card = styled.div`
   border: solid gray 1px;
 
   margin-top: 3rem;
-  margin: 3rem 1rem auto 1rem;
+  margin: 3rem 3rem auto 1rem;
   padding: 1rem;
 
   .button {
@@ -62,6 +62,10 @@ export const Card = styled.div`
     display: inline-block;
     position: relative;
     transition: 0.5s;
+  }
+  .react-player {
+    padding-top: 56.25%;
+    position: relative;
   }
 
   .button span:after {
