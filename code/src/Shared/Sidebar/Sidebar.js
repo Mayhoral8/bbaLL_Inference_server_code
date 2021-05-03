@@ -28,11 +28,11 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
   const yearParams = searchname && searchname.split("=")[1].split("&")[0];
 
   useEffect(() => {
-    if (teamOrPlayerPath === "teams") {
-      dispatch(changeIsTeam({ isTeam: true }));
-      setActive(0);
-    } else if (teamOrPlayerPath === "players") {
+    if (teamOrPlayerPath === "players") {
       dispatch(changeIsTeam({ isTeam: false }));
+      setActive(0);
+    } else if (teamOrPlayerPath === "teams") {
+      dispatch(changeIsTeam({ isTeam: true }));
       setActive(1);
     } else if (teamOrPlayerPath === "champions") {
       dispatch(changeStatCategory({ statCategory: "Champion" }));
@@ -127,16 +127,15 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
         <List>
           <ListItem
             isActive={active === 0}
-            onClick={() => handleIsTeam(true, 0)}
-          >
-            <Link to={teamOrPlayerLink("teams", true)}>Teams</Link>
-          </ListItem>
-
-          <ListItem
-            isActive={active === 1}
-            onClick={() => handleIsTeam(false, 1)}
+            onClick={() => handleIsTeam(false, 0)}
           >
             <Link to={teamOrPlayerLink("players", true)}>Players</Link>
+          </ListItem>
+          <ListItem
+            isActive={active === 1}
+            onClick={() => handleIsTeam(true, 1)}
+          >
+            <Link to={teamOrPlayerLink("teams", true)}>Teams</Link>
           </ListItem>
 
           {path === "stats" && (
