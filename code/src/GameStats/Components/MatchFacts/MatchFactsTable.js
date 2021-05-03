@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import LeaderTable from '../../../Leaderboard/LeaderboardStat/Components/LeaderTable';
 import { TableDiv } from '../../../Leaderboard/SharedLeaderboard/rightbox-style';
+import { StyledLeaderTable } from "./MatchFacts-styles";
 
 const MatchFactsTable = ({ info, homeTeamName, awayTeamName }) => {
 
@@ -49,18 +49,5 @@ const MatchFactsTable = ({ info, homeTeamName, awayTeamName }) => {
     </>
   );
 }
-
-const StyledLeaderTable = styled.div`
-  max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
-  padding: 2rem 0;
-
-  @media(max-width: 768px) {
-    margin-bottom: 3rem;
-    padding: 0;
-  }
-`
 
 export default MatchFactsTable;
