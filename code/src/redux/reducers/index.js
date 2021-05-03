@@ -5,12 +5,18 @@ import sidebarReducer from "./sidebarReducer";
 import sharedReducer from "./sharedReducer";
 import storageReducer from './storageReducer';
 import gamesReducer from "./gamesReducer";
+import authReducer from './authReducer';
+import betsReducer from './betsReducer';
+import recordReducer from './recordReducer'
 
 export default combineReducers({
-  sharedReducer: sharedReducer,
-  sidebarReducer: sidebarReducer,
-  firebaseReducer: firebaseReducer,
-  firestoreReducer: firestoreReducer,
-  storageReducer: storageReducer,
-  gamesReducer: gamesReducer
+  authReducer,
+  sharedReducer,
+  sidebarReducer,
+  firebaseReducer,
+  firestoreReducer,
+  storageReducer,
+  gamesReducer,
+  betsReducer,
+  recordReducer
 });

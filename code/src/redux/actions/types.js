@@ -15,4 +15,18 @@ export const CHANGE_AVG_TOT = "CHANGE_AVG_TOT";
 export const GET_IMAGE = "GET_IMAGE";
 
 // games
-export const CHANGE_TAB = "CHANGE_TAB";
+
+export const CHANGE_TAB = "CHANGE_TAB"
+
+export const GET_FUTURE_GAMES_INFO='GET_FUTURE_GAMES_INFO'
+
+//Authentication
+export const LOGIN="LOGIN"
+
+//Bets
+export const GETUSERRECORD = 'GetUserRecord'
+
+export const GETUSERBETS = 'GetUserBets'
+
+export const SET_STRUCTURED_GAME_INFO = 'SetStructuredGameInfo'
+

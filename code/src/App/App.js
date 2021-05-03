@@ -1,28 +1,20 @@
 import React, { useEffect } from "react";
-import { Router, Switch, Route, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { Router } from "react-router-dom";
 import { createFirestoreInstance } from "redux-firestore";
 import { ThemeProvider } from "styled-components";
 import { createBrowserHistory } from "history";
-import { MainContainerDiv, BodyDiv } from "./app-style";
-import { GlobalStyle } from "../globalStyles";
 import { theme } from "../Shared/theme";
 import ReactGA from "react-ga";
 import store from "../store";
-import PageNotFound from "../Shared/PageNotFound/PageNotFound";
 import rrfConfig from "../store";
 import firebase from "firebase/app";
-import TermsOfUse from "../Policy/TermsOfUse";
-import PrivacyPolicy from "../Policy/PrivacyPolicy";
-import Layout from "../Shared/Layout/Layout";
-import Footer from "../Shared/Layout/Footer";
-import Loadable from "react-loadable";
-import Spinner from "../Shared/Spinner/Spinner";
-
+import Routes from './Routes'
 ReactGA.initialize(process.env.REACT_APP_GA_TRACKING_ID);
-const browserHistory = createBrowserHistory();
 
+//Browser histroy config
+const browserHistory = createBrowserHistory();
 browserHistory.listen((location, action) => {
   ReactGA.pageview(location.pathname + location.search);
 });
@@ -33,6 +25,7 @@ const rrfProps = {
   dispatch: store.dispatch,
   createFirestoreInstance,
 };
+
 
 const Home = Loadable({
   loader: () => import("../Main/mainPage"),
@@ -80,8 +73,8 @@ const App = () => {
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <ThemeProvider theme={theme}>
-          <GlobalStyle />
           <Router history={browserHistory}>
+            <Routes/>
             <MainContainerDiv>
               <Layout>
                 <Switch>
@@ -114,5 +107,4 @@ const App = () => {
     </Provider>
   );
 };
-
 export default App;
