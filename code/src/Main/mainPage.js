@@ -9,7 +9,7 @@ import { fbFirestore } from "../App/config";
 import useWindowSize from "Shared/hooks/useWindowSize";
 import PlayerRankingsCard from "./playerRankingsCard";
 import MemeCard from "./memeCard";
-import BoxScoreTable from "../GameStats/Components/Boxscore/BoxScoreTable";
+import BoxScoreTable from "./TeamScoreTable";
 import { autoPercentage } from "chartjs-plugin-watermark";
 
 const getFirebaseData = () => {
@@ -54,6 +54,7 @@ const GamePageContainer = () => {
   const [data, setData] = useState([{}, {}, {}]);
   const [games, setGames] = useState([]);
   const [memeUrls, setMemeUrls] = useState([]);
+  const [teamData, setTeamData] = useState({});
   useEffect(() => {
     fbFirestore
       .collection("future_game_info")
@@ -76,8 +77,9 @@ const GamePageContainer = () => {
       });
     setData(getFirebaseData());
   }, []);
-  console.log([data[1], data[2]]);
-  console.log(data);
+
+  console.log(data[3]);
+  console.log(teamData);
 
   const hasDataLoaded = Object.entries(data[0]).length !== 0;
 
@@ -152,73 +154,40 @@ const GamePageContainer = () => {
             width: "100%",
             maxWidth: "1440px",
             justifyContent: "center",
-            margin: "0 auto",
+            margin: "4rem auto auto auto",
           }}
         >
-          {hasDataLoaded ? (
-            <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
-          ) : (
-            <div></div>
-          )}
-          <MemeCard urls={memeUrls} />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              {hasDataLoaded ? (
+                <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
+              ) : (
+                <div></div>
+              )}
+              <MemeCard urls={memeUrls} />
+            </div>
+            {hasDataLoaded ? (
+              <BoxScoreTable leftColHeading={"Teams"} data={data[3]} />
+            ) : (
+              <div></div>
+            )}
+          </div>
 
-          {/* <div
-            style={{
-              backgroundColor: "gray",
-              margin: "1rem",
-              flexDirection: "column",
-              width: "100%",
-              margin: "3rem",
-            }}
-          >
-            <div
-              style={{
-                flexDirection: "row",
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-around",
-              }}
-            >
-              <div style={{}}>
-                <div>Player 1</div>
-                <div>Player 2</div>
-                <div>Player 3</div>
-              </div>
-              <div style={{ paddingTop: "10rem", paddingBottom: "10rem" }}>
-                Meme
-              </div>
-            </div>
-            <div
-              style={{
-                flexDirection: "row",
-                display: "flex",
-                width: "100%",
-                justifyContent: "space-around",
-              }}
-            >
-              <div style={{ paddingTop: "10rem", paddingBottom: "10rem" }}>
-                Top Teams
-              </div>
-              <div style={{ paddingTop: "10rem", paddingBottom: "10rem" }}>
-                Survey
-              </div>
-            </div>
-          </div> */}
           {useWindowSize() > 834 ? (
             <div
               style={{
                 backgroundColor: "white",
-                marginTop: "3rem",
-                marginRight: "3rem",
+                marginTop: "0rem",
+                marginLeft: "3rem",
                 height: "100%",
-                width: "300px",
+                minWidth: "300px",
                 display: "flex",
                 flexDirection: "column",
                 padding: "0.5rem",
                 overflowY: "scroll",
                 position: "relative",
                 border: "solid gray 1px",
-                height: "675px",
+                height: "800px",
                 scrollbarWidth: "thin" /* "auto" or "thin" */,
                 // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
               }}
@@ -234,7 +203,7 @@ const GamePageContainer = () => {
                 backgroundColor: "white",
                 borderTop: "solid gray 1px",
                 borderBottom: "solid gray 1px",
-                marginTop: "3rem",
+                marginTop: "0rem",
                 marginLeft: "0rem",
                 marginRight: "0rem",
                 height: "100%",
