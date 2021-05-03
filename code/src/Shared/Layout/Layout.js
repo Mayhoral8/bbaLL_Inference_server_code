@@ -19,8 +19,9 @@ const Layout = ({ children, location }) => {
         "404",
         "",
         "games",
-        "comparison",
         "home",
+        "comparison",
+
       ].includes(location.pathname.split("/")[1]) ? (
         ""
       ) : (
