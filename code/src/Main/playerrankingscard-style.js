@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
-  margin-left: 3rem;
-  margin-top: 3rem;
+  margin-left: 0rem;
+  margin-top: 0rem;
   margin-bottom: auto;
   display: flex;
   flex-direction: row;
@@ -91,11 +91,16 @@ export const CardContainer = styled.div`
 
   .value {
     display: flex;
+    white-space: nowrap;
+    flex-direction: row;
     justify-content: center; // horizontal align
     align-items: center; //vertical align;
-
     font-family: Roboto Condensed;
     font-weight: 900;
     font-size: 2.5rem;
+  }
+
+  .unit {
+    font-size: 1rem;
   }
 `;

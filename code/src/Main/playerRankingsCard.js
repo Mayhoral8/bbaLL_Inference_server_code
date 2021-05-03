@@ -19,7 +19,17 @@ const PlayerRankingsCard = ({ data }) => {
     data = {};
   }
   const rankingTypes = ["Daily", "Weekly", "Seasonal"];
-  console.log(data);
+
+  const units = {
+    Points: "PTS",
+    Assist: "AST",
+    rebound: "REB",
+    "Three-Pointers": "3PTS",
+    Num_DD: "DD",
+    Num_TD: "TD",
+    FantasyScore: "FAN",
+    PointsPerPoss: "PTS/POSS",
+  };
 
   const scoreType = useRef("Points");
   const valueType = {
@@ -31,7 +41,6 @@ const PlayerRankingsCard = ({ data }) => {
     Num_TD: "Num_TD",
   };
   const [rankingTypeIndex, setRankingTypeIndex] = useState(0);
-  console.log(rankingTypeIndex);
 
   const [topPlayers, setTopPlayers] = useState({});
 
@@ -53,11 +62,9 @@ const PlayerRankingsCard = ({ data }) => {
   useEffect(() => {
     let names = [];
     Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
-    console.log(names);
-    console.log(topPlayers);
+
     getPic(names);
   }, [topPlayers]);
-  console.log(imgs);
 
   useEffect(() => {
     scoreType.current = Object.keys(data[rankingTypeIndex])[0];
@@ -80,7 +87,7 @@ const PlayerRankingsCard = ({ data }) => {
           name.replaceAll(" ", "_") +
           ".png"
       );
-      console.log(name);
+
       imageReference
         .getDownloadURL()
         .then((url) => {
@@ -101,7 +108,7 @@ const PlayerRankingsCard = ({ data }) => {
   Object.keys(data[rankingTypeIndex]).map((value) => {
     selectOptions.push({ value: [value], label: [value] });
   });
-  console.log(selectOptions);
+
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (
@@ -128,31 +135,10 @@ const PlayerRankingsCard = ({ data }) => {
               </div>
 
               <div className="dropdown">
-                {/* <select
-                    onChange={(e) => {
-                      scoreType.current = e.target.value;
-
-                      setTopPlayers(
-                        data[rankingTypeIndex][scoreType.current]
-                          .sort((a, b) => {
-                            const aName = Object.keys(a)[0];
-                            const bName = Object.keys(b)[0];
-                            return a[aName]["Rank"] - b[bName]["Rank"];
-                          })
-                          .slice(0, 4)
-                      );
-                    }}
-                    value={scoreType.current}
-                  >
-                    {Object.keys(data[rankingTypeIndex]).map((scoreTypes) => {
-                      return <option value={scoreTypes}>{scoreTypes}</option>;
-                    })}
-                  </select> */}
                 <Select
                   value={scoreType.current}
                   styles={{ width: `${8 * scoreType.current.length + 100}px` }}
                   onChange={(selected) => {
-                    console.log(selected);
                     scoreType.current = selected.value[0];
                     setTopPlayers(
                       data[rankingTypeIndex][scoreType.current]
@@ -174,6 +160,13 @@ const PlayerRankingsCard = ({ data }) => {
             <div className="players">
               {Object.keys(topPlayers).map((key, index) => {
                 const playerName = Object.keys(topPlayers[key])[0];
+                const score =
+                  Math.round(
+                    topPlayers[key][playerName][valueType[scoreType.current]] *
+                      100
+                  ) / 100;
+                const unit = units[scoreType.current];
+                const scoreToDisplay = `${score} ${unit}`;
                 return (
                   <div className="player-box">
                     <div className="logo-box">
@@ -184,11 +177,10 @@ const PlayerRankingsCard = ({ data }) => {
                       </div>
                     </div>
                     <div className="value">
-                      {Math.round(
-                        topPlayers[key][playerName][
-                          valueType[scoreType.current]
-                        ] * 100
-                      ) / 100}
+                      <div>
+                        {score + " "}
+                        <span className="unit">{unit}</span>
+                      </div>
                     </div>
                   </div>
                 );
