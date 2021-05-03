@@ -90,7 +90,6 @@ const FutureGameOddsCard = (item) => {
     awayRatings[i].percent = 100 - homeRatings[i].percent;
   }
   for (let i = 1; i < awayRatings.length; i++) {
-    console.log(homeRatings[i].value);
     awayRatings[i].value = awayRatings[i].value.toFixed(2);
     homeRatings[i].value = homeRatings[i].value.toFixed(2);
   }

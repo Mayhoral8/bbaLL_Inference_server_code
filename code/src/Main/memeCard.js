@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 const MemeCard = ({ urls }) => {
   const [currentVid, setCurrentVid] = useState(0);
-  console.log(urls);
 
   const buttonHandle = (event) => {
     if (currentVid < urls.length - 1) {
@@ -34,8 +33,7 @@ export const Card = styled.div`
   background: white;
   border: solid gray 1px;
 
-  margin-top: 3rem;
-  margin: 3rem 3rem auto 1rem;
+  margin: 0rem 0rem auto 1rem;
   padding: 1rem;
 
   .button {

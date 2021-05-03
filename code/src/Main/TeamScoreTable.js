@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getClassNameFor } from "../Shared/Functions/gameStatsFunctions";
 import useSortableData from "Shared/hooks/useSortableData";
+import { sort } from "d3-array";
+import { Argsort } from "../Shared/Functions/Argsort";
 
 const TeamScoreTable = ({
   leftColHeading,
@@ -17,12 +19,12 @@ const TeamScoreTable = ({
   players,
   includeYear,
 }) => {
-  const DATA_ATTR = ["ELO Ranking", "ELO Rating", "Standing"];
-  const headings = ["ELO Ranking", "ELO Rating", "Standing"];
+  const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
+  const headings = ["rank", "ELO Rating", "Win(%)"];
   const numOfTeamsToDisplay = 10;
-
+  console.log(data);
   let ObjOfTeams = {};
-  Object.keys(data).map((key, scoreIndex) => {
+  DATA_ATTR.map((key, scoreIndex) => {
     data[key].map((teamObj, teamIndex) => {
       const teamName = Object.keys(teamObj)[0];
       const score = teamObj[teamName];
@@ -30,31 +32,42 @@ const TeamScoreTable = ({
         ObjOfTeams[teamName] = {};
       }
       if (key === "Standing") {
-        ObjOfTeams[teamName][key] = parseFloat(score["PCT"]);
+        ObjOfTeams[teamName]["Win(%)"] = parseFloat(score["PCT"]);
+        ObjOfTeams[teamName]["rank"] = parseFloat(score["rank"]);
       } else {
         ObjOfTeams[teamName][key] = score;
       }
     });
   });
 
-  console.log(ObjOfTeams);
-  function objSlice(obj, lastExclusive) {
-    var filteredKeys = Object.keys(obj).slice(0, lastExclusive);
-    var newObj = {};
-    filteredKeys.forEach(function (key) {
-      newObj[key] = obj[key];
+  function objSlice(obj, last) {
+    var filteredKeys = Object.keys(obj);
+    var rankKeys = [];
+    filteredKeys.forEach((name) => {
+      rankKeys.push(obj[name]["rank"]);
     });
+    const rankIndexs = Argsort(rankKeys);
+
+    var newObj = {};
+    for (let i = 0; i < last; i++) {
+      newObj[rankKeys[i]] = obj[rankKeys[i]];
+    }
     return newObj;
   }
 
   data = objSlice(ObjOfTeams, numOfTeamsToDisplay);
+
   const tableRowData = Object.keys(data).map((name, i) => {
     return (
       <div className="table-row" key={i}>
-        {DATA_ATTR.map((attr) => {
+        {headings.map((attr) => {
           let score = "";
           if (attr in data[name]) {
-            score = Math.round(parseFloat(data[name][attr]) * 100) / 100;
+            if (attr === "Win(%)") {
+              score = Math.round(parseFloat(data[name][attr]) * 100);
+            } else {
+              score = Math.round(parseFloat(data[name][attr]) * 100) / 100;
+            }
           } else {
             score = "  -  ";
           }
