@@ -29,7 +29,7 @@ const getFirebaseData = () => {
     ],
     weekly_Top10: ["FantasyScore", "Points", "PointsPerPoss", "Three-Pointers"],
     seasonal_Top10: ["Num_DD", "Num_TD"],
-    team_Top10: ["ELO Ranking", "ELO Rating", "Standing"],
+    team_Top10: ["Massey Rating", "ELO Rating", "Standing"],
   };
   documents.forEach((docName) => {
     let currentData = new Object();
@@ -77,9 +77,6 @@ const GamePageContainer = () => {
       });
     setData(getFirebaseData());
   }, []);
-
-  console.log(data[3]);
-  console.log(teamData);
 
   const hasDataLoaded = Object.entries(data[0]).length !== 0;
 
@@ -166,11 +163,11 @@ const GamePageContainer = () => {
               )}
               <MemeCard urls={memeUrls} />
             </div>
-            {hasDataLoaded ? (
+            {/* {hasDataLoaded ? (
               <BoxScoreTable leftColHeading={"Teams"} data={data[3]} />
             ) : (
               <div></div>
-            )}
+            )} */}
           </div>
 
           {useWindowSize() > 834 ? (
