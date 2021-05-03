@@ -14,7 +14,6 @@ export const StyledComparisonBanner = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-
   max-width: 1100px;
   margin: 2rem auto 0;
   padding: 3rem;
@@ -33,6 +32,43 @@ export const StyledComparisonBanner = styled.div`
       font-size: 1.5rem;
     }
   }
+`
+export const StyledPlayerCandidates = styled.div `
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding: 3rem;
+  width: 500px;
+  @media (max-width: ${breakpoints.desk}) {
+    margin: 0 auto 0;
+  }
+ 
+  @media (max-width: ${breakpoints.phone}) {
+    font-size: 1.5rem;
+  }
+
+  .centerButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  .button{
+    background-color: #7A1DC4;
+    border: 2px solid #7500DE;
+    border-radius: 10px;
+    color: white;
+    padding: 28px 121px;
+    
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 14px;
+
+text-align: center;
+  }
+
 `
 
 // ComparisonPage / StyledComparisonOptions  ==========================
@@ -167,14 +203,12 @@ export const StyledComparisonProfile = styled.section`
 export const StyledComparisonProfileElement = styled.div`
   display: flex;
   align-items: center;
-
   .img-container {
     align-items: center;
     display: flex;
     width: 150px;
     height: 150px;
     object-fit: cover;
-
     border: 6px solid;
     border-color: ${props=>props.teamColour && props.teamColour};
     border-radius: 50%;
@@ -285,7 +319,6 @@ export const StyledBarContainer = styled.div`
   grid-template-columns: 1fr 150px 1fr;
   text-align: center;
   margin: 1rem 0;
-
   @media (max-width: ${breakpoints.tablet}) {
     grid-template-columns: 1fr 100px 1fr;
   }
@@ -349,4 +382,70 @@ export const StyledRadarCont = styled.div`
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
+`;
+
+export const RandomPlayerContiner = styled.div`
+
+.comparsion{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 4px solid #39204F;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom:20px;
+}
+.nameTag{
+  text-align: center;
+}
+.vsText{
+  padding: 80px 0px;
+  text-align: center;
+}
+.img-container {
+  align-items: center;
+  display: flex;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 6px solid;
+  border-color: ${props=>props.teamColour && props.teamColour};
+  border-radius: 50%;
+  overflow: hidden;
+  @media (max-width: ${breakpoints.tabletLG}) {
+    width: 100px;
+    height: 100px;
+  }
+  @media (max-width: ${breakpoints.tablet}) {
+    display: none;
+  }
+  img {
+    width: 100%;
+    border-radius: ${(props) => (props.isTeam === "true" ? "0" : "50%")};
+    padding: ${(props) => (props.isTeam === "true" ? "1rem" : 0)};
+  }
+}
+`;
+
+
+export const SideNav = styled.div`
+  padding: 0.5ex;
+  margin-top: 100px;
+  height:900px;
+  border-radius: 0.5ex;
+  position: sticky;
+  top: -.3em;
+`;
+
+export const Main = styled.div`
+
+`;
+
+export const MainContent = styled.div`
+  margin: 2.2rem auto;
+  width: 100%;
+  min-height: 80vh;
+  @media screen and (min-width: 996px) {
+    margin: 4rem auto;
+  }
+  display:flex;
 `;

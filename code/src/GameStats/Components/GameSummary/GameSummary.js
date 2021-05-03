@@ -1,13 +1,12 @@
 import React from "react";
-import styled from "styled-components";
 import GameSummaryTab from "./GameSummaryTab";
 import QuarterlyTable from "./QuarterlyTable";
 import GameSummaryBanner from "./GameSummaryBanner";
-import backgroundImage from "../../../assets/images/court.jpg";
 import { getKeyByValue } from "../../../Shared/Functions/GetKeyByValue";
 import { ABB2TEAM } from "../../../constants";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import SelectedGameSummaryTab from "./SelectedGameSummaryTab";
+import { GameSummaryWrapper } from "./GameSummary-Styles";
 
 const GameSummary = ({ gameInfo, selectedGameIndex, gamePbp, gamePlayers }) => {
   let { path, url } = useRouteMatch();
@@ -106,50 +105,4 @@ const GameSummary = ({ gameInfo, selectedGameIndex, gamePbp, gamePlayers }) => {
     </GameSummaryWrapper>
   );
 };
-
-const GameSummaryWrapper = styled.div`
-  width: auto;
-
-  .single-summary {
-    margin: 0;
-    width: 100%;
-    background: var(--white);
-  }
-  .game-summary-content {
-    border: 1px solid silver;
-    border-top: 0;
-    padding: 2rem 0;
-  }
-  .top-section {
-    background-image: linear-gradient(
-        to right,
-        rgba(56, 40, 81, 0.95) 50%,
-        rgba(56, 40, 81, 0.3)
-      ),
-      url(${backgroundImage});
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .colon {
-    display: flex;
-    margin: 0 0.5rem;
-  }
-
-  @media (min-width: 768px) {
-    .single-summary {
-      margin: 2rem 0;
-    }
-    .mobile-quarterly-container {
-      display: none;
-    }
-    .game-summary-content {
-      padding: 2rem;
-    }
-    .colon {
-      display: none;
-    }
-  }
-`;
-
 export default GameSummary;

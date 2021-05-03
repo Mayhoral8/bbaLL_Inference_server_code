@@ -1,5 +1,13 @@
 import styled from "styled-components";
 
+export const svgContainer = styled.div`
+  -webkit-text-stroke-width: 5px;
+  -webkit-text-stroke-color: black;
+  text {
+    outline: 5px solid black;
+  }
+`;
+
 export const UserInputContainer = styled.div`
   display: flex;
   align-items: center;

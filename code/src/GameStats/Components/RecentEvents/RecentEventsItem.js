@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import GetPlayerImage from "../../../Individual/Components/GetPlayerImage";
 import { breakTeamName } from "../../../Shared/Functions/breakTeamName";
+import { RecentEventsItemWrapper } from "./RecentEventsItemList-style";
 
 const RecentEventsItem = ({
   homeTeam,
@@ -53,37 +54,5 @@ const RecentEventsItem = ({
     </RecentEventsItemWrapper>
   );
 };
-
-const RecentEventsItemWrapper = styled.div`
-  display: flex;
-  position: relative;
-  height: 100%;
-  .image-container {
-    width: 30px;
-    height: 30px;
-    margin-right: 0.5rem;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .active.team-container {
-    border-bottom: 5px solid var(--main-purple);
-  }
-  .team-container {
-    padding: 0.5rem 1rem;
-    border-right: 1px solid silver;
-    width: 200px;
-  }
-  .team {
-    display: flex;
-    font-size: 0.9rem;
-    align-items: center;
-    margin: 0.3rem auto;
-  }
-  .team-score {
-    margin-left: auto;
-  }
-`;
 
 export default RecentEventsItem;

@@ -10,6 +10,7 @@ export const Card = styled.div`
   margin: 1rem;
   height: 175px;
   min-width: 225px;
+
   flex-direction: column;
   justify-content: center;
 
@@ -90,5 +91,6 @@ export const Card = styled.div`
     padding: 0.5rem;
     filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
     margin: 0.5rem auto 0.5rem auto;
+
   }
 `;

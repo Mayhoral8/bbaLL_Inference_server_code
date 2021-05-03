@@ -224,6 +224,7 @@ const vsImg = (homeImg, awayImg) => {
       </div>
       <img className="logo-2" src={awayImg} />
     </div>
+
   );
 };
 

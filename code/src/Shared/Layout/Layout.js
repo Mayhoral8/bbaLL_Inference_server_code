@@ -21,6 +21,7 @@ const Layout = ({ children, location }) => {
         "games",
         "home",
         "comparison",
+
       ].includes(location.pathname.split("/")[1]) ? (
         ""
       ) : (
