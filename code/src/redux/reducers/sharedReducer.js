@@ -23,6 +23,7 @@ const yearBig = [
   "2020-21",
 ];
 const initialState = {
+  isPlay: false,
   isTotal: "total",
   width: window.innerWidth,
   height: window.innerHeight,
@@ -72,7 +73,22 @@ export default (state = initialState, action) => {
         yearNames: yearBig,
       };
     case CHANGE_YEAR:
-      return { ...state, yearId: action.payload.yearId };
+      return { ...state, yearId: action.payload.yearId, isPlay: false };
+    case "STOP_PLAY":
+      return {
+        ...state,
+        isPlay: false,
+      };
+    case "START_PLAY":
+      return {
+        ...state,
+        isPlay: true,
+      };
+    case "CHANGE_PLAY":
+      return {
+        ...state,
+        isPlay: !state.isPlay,
+      };
     default:
       return state;
   }
