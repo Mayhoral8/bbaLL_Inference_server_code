@@ -15,4 +15,4 @@ export const CHANGE_AVG_TOT = "CHANGE_AVG_TOT";
 export const GET_IMAGE = "GET_IMAGE";
 
 // games
-export const CHANGE_TAB = "CHANGE_TAB"
+export const CHANGE_TAB = "CHANGE_TAB";

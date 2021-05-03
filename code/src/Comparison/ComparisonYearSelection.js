@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,} from "react";
 import Select from "react-select";
 import { fbFirestore } from "../App/config";
 import { StyledDropdown } from "./comparison-style";
 
-const ComparisonYearSelection = ({ isTeam, name, onChange, setRef }) => {
+const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt}) => {
   const [years, setYears] = useState([]);
 
   useEffect(() => {
@@ -31,6 +31,7 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef }) => {
   };
 
   const handleChange = (selectedOption) => {
+    console.log(selectedOption);
     if (selectedOption) {
       onChange(selectedOption.value);
     }
@@ -39,12 +40,13 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef }) => {
   return (
     <StyledDropdown>
       <Select
-        ref={(ref) => setRef(ref)}
+        ref={ref => setRef(ref)}
         classNamePrefix={"select"}
         isSearchable={false}
         closeMenuOnSelect={true}
         options={years}
         onChange={handleChange}
+        placeholder={prompt}
       />
     </StyledDropdown>
   );
