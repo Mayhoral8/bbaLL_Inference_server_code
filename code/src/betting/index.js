@@ -141,7 +141,6 @@ const Betting=(props)=>{
             setPointsSpinner(false)
             setLoadingBetPoints(false)
             setGameInfo(computedArray)
-            console.log(computedArray)
 
         } else if(!props.userBetsDetails.loading){
             setPointsSpinner(false)
@@ -268,10 +267,7 @@ const Betting=(props)=>{
 
             firebaseInstanceSpigamebet.auth().signInWithPopup(provider)
             .then((res)=>{
-
-                console.log('hiTHere')
-                console.log(res)
-
+                //Needs to configures
             })
             .catch((e)=>{
                 console.log(e)//error handeling
@@ -313,9 +309,6 @@ const Betting=(props)=>{
             setError({status: response.status, message: response.message, isError:true})
         }
     }
-    console.log("GAMEINFO STATE: ", gameInfo)
-    console.log("Selected Values State: ", selectedValues)
-    // console.log("ERROR STATE: ", error)
     return(
         <> 
             {
