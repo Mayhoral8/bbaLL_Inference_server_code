@@ -16,8 +16,14 @@ import {compose} from 'redux'
 import 'firebase/auth';
 import {firebaseInstanceSpigamebet} from './spigamebetFirebase'
 import {checkLoginStatus} from '../redux/actions/authActions'
-const Games = Loadable({
+  const Games = Loadable({
     loader: () => import("../GameStats/GamePageContainer"),
+    loading() {
+      return <Spinner />;
+    },
+  });
+  const Home = Loadable({
+    loader: () => import("../Main/mainPage"),
     loading() {
       return <Spinner />;
     },
@@ -69,7 +75,8 @@ const Routes=(props)=>{
             <Switch>
               <Layout>
                 <MainContainerDiv>
-                  <Route exact path="/" render={() => <Redirect to="/games" />}/>
+                  <Route exact path="/" render={() => <Redirect to="/home" />}/>
+                  <Route path="/home" component={Home} />
                   <Route path="/games" component={Games} />
                   <Route path="/leaderboard" component={Leaderboard} />
                   <Route path="/stats" component={Stats} />

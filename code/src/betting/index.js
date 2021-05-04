@@ -126,12 +126,28 @@ const Betting=(props)=>{
             setPointsSpinner(false)
             setBettingPageSpinner(false)
         }
-        else if(props.structuredGameInfo[0] &&  props.userDetails.user.displayName && !props.userDetails.isLoading){
-            let response = props.getUserBets(props.userDetails.user.uid)
-            if(response.isError){
-                setError({status: response.status, message: response.message, isError:true})
-            }
-        }
+        else if (
+      props.structuredGameInfo[0] &&
+      props.userDetails.user.displayName &&
+      !props.userDetails.isLoading
+    ) {
+      let betsResponse = props.getUserBets(props.userDetails.user.uid);
+      if (betsResponse.isError) {
+        setError({
+          status: betsResponse.status,
+          message: betsResponse.message,
+          isError: true,
+        });
+      }
+      let recordResponse = props.getUserRecord(props.userDetails.user.uid);
+      if (!recordResponse.requestSuccessful) {
+        setError({
+          status: betsResponse.status,
+          message: betsResponse.message,
+          isError: true,
+        });
+      }
+    }
 
     },[props.structuredGameInfo, props.userDetails])
 
