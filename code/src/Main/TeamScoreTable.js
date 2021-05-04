@@ -61,53 +61,67 @@ const TeamScoreTable = ({
   //   }
   // });
 
-  const test = [{ rank: 2 }, { rank: 5 }, { rank: 1 }, {}, {}];
-  console.log(sortTeams(test, "rank"));
-
-  // sorts list and slice to given length
+  // sorts list by object property given
   function sortTeams(arr, attr) {
-    return arr.sort((a, b) => {
-      if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
-        return 0;
+    arr.sort((a, b) => {
+      if (attr === "rank") {
+        if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
+          return 0;
+        }
+        if (!a.hasOwnProperty(attr)) {
+          return 1;
+        }
+        if (!b.hasOwnProperty(attr)) {
+          return -1;
+        }
+        return a[attr] - b[attr];
+      } else {
+        if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
+          return 0;
+        }
+        if (!a.hasOwnProperty(attr)) {
+          return 1;
+        }
+        if (!b.hasOwnProperty(attr)) {
+          return -1;
+        }
+        return b[attr] - a[attr];
       }
-      if (!a.hasOwnProperty(attr)) {
-        return 1;
-      }
-      if (!b.hasOwnProperty(attr)) {
-        return -1;
-      }
-      return a[attr] - b[attr];
     });
+    console.log(arr);
+    console.log(attr);
   }
 
-  sortTeams(listOfTeams, "rank");
   console.log(listOfTeams);
+  sortTeams(listOfTeams, "rank");
 
-  const tableRowData = listOfTeams.map((obj, i) => {
-    return (
-      <div className="table-row" key={i}>
-        {headings.map((attr) => {
-          let value = "";
-          if (attr in obj) {
-            if (attr === "Win(%)") {
-              value = Math.round(parseFloat(obj[attr]) * 100);
-            } else if (attr === "name") {
-              value = obj[attr];
+  const tableRowData = listOfTeams
+    .slice(0, numOfTeamsToDisplay)
+    .map((obj, i) => {
+      return (
+        <div className="table-row" key={i}>
+          {headings.map((attr) => {
+            let value = "";
+            if (attr in obj) {
+              if (attr === "Win(%)") {
+                value = Math.round(parseFloat(obj[attr]) * 100);
+              } else if (attr === "name") {
+                value = obj[attr];
+              } else {
+                value = Math.round(parseFloat(obj[attr]) * 100) / 100;
+              }
             } else {
-              value = Math.round(parseFloat(obj[attr]) * 100) / 100;
+              value = "  -  ";
             }
-          } else {
-            value = "  -  ";
-          }
-          return (
-            <div key={attr} className="table-data">
-              {value}
-            </div>
-          );
-        })}
-      </div>
-    );
-  });
+            return (
+              <div key={attr} className="table-data">
+                {value}
+              </div>
+            );
+          })}
+        </div>
+      );
+    });
 
   // const tableRowData = items.map((detail, i) => {
   //   return (
@@ -129,7 +143,7 @@ const TeamScoreTable = ({
 
   // Fixed column - name
   const fixedColumn = (items) => {
-    return items.map((obj, i) => {
+    return items.slice(0, numOfTeamsToDisplay).map((obj, i) => {
       let value = "";
       if ("rank" in obj) {
         value = obj["rank"];
