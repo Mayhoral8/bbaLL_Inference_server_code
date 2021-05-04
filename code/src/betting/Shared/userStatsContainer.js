@@ -30,8 +30,6 @@ const UserStatsBox = (props) => {
         props.getUserRecord(props.userDetails.uid)
     },[])
 
-    console.log("Hi there")
-
     return(
         <UserStatsContainer>
             <UserName>{props.userDetails.displayName}</UserName>
