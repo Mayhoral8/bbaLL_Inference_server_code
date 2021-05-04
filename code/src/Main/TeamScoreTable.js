@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
@@ -17,53 +17,49 @@ const TeamScoreTable = ({
   const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
   const headings = ["name", "ELO Rating", "Massey Rating", "Win(%)"];
   const numOfTeamsToDisplay = 10;
+
+  const [listOfTeams, setListOfTeams] = useState([]);
   console.log(data);
-  let listOfTeams = [];
+  let placeholderArray = [];
 
-  DATA_ATTR.map((key, scoreIndex) => {
-    data[key].map((teamObj) => {
-      const teamName = Object.keys(teamObj)[0];
-      const score = teamObj[teamName];
-      let teamIndex;
+  useEffect(() => {
+    DATA_ATTR.map((key, scoreIndex) => {
+      data[key].map((teamObj) => {
+        const teamName = Object.keys(teamObj)[0];
+        const score = teamObj[teamName];
+        let teamIndex;
 
-      let doesObjExist = false;
-      for (let i = 0; i < listOfTeams.length; i++) {
-        if (listOfTeams[i].name === teamName) {
-          teamIndex = i;
-          doesObjExist = true;
-          break;
+        let doesObjExist = false;
+        for (let i = 0; i < placeholderArray.length; i++) {
+          if (placeholderArray[i].name === teamName) {
+            teamIndex = i;
+            doesObjExist = true;
+            break;
+          }
         }
-      }
 
-      if (doesObjExist === false) {
-        listOfTeams.push({ name: teamName });
-        teamIndex = listOfTeams.length - 1;
-      }
-      if (key === "Standing") {
-        listOfTeams[teamIndex]["Win(%)"] = parseFloat(score["PCT"]);
+        if (doesObjExist === false) {
+          placeholderArray.push({ name: teamName });
+          teamIndex = placeholderArray.length - 1;
+        }
+        if (key === "Standing") {
+          placeholderArray[teamIndex]["Win(%)"] = parseFloat(score["PCT"]);
 
-        listOfTeams[teamIndex]["rank"] = parseInt(score["rank"]);
-      } else {
-        listOfTeams[teamIndex][key] = score;
-      }
+          placeholderArray[teamIndex]["rank"] = parseInt(score["rank"]);
+        } else {
+          placeholderArray[teamIndex][key] = score;
+        }
+      });
     });
-  });
 
-  console.log(listOfTeams);
+    setListOfTeams(sortTeams(placeholderArray, "rank"));
+  }, []);
 
-  // remove objects without a rank
-  // listOfTeams.forEach((obj, i) => {
-  //   if (!obj.hasOwnProperty("rank")) {
-
-  //     console.log(listOfTeams);
-  //   } else {
-  //     console.log(`${obj.name} ${obj.rank}`);
-  //   }
-  // });
+  console.log(placeholderArray);
 
   // sorts list by object property given
   function sortTeams(arr, attr) {
-    arr.sort((a, b) => {
+    return [...arr].sort((a, b) => {
       if (attr === "rank") {
         if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
           return 0;
@@ -88,12 +84,7 @@ const TeamScoreTable = ({
         return b[attr] - a[attr];
       }
     });
-    console.log(arr);
-    console.log(attr);
   }
-
-  console.log(listOfTeams);
-  sortTeams(listOfTeams, "rank");
 
   const tableRowData = listOfTeams
     .slice(0, numOfTeamsToDisplay)
@@ -166,7 +157,7 @@ const TeamScoreTable = ({
       <div
         key={heading}
         className="table-data"
-        onClick={() => sortTeams(listOfTeams, attr[i])}
+        onClick={() => setListOfTeams(sortTeams(listOfTeams, attr[i]))}
       >
         {heading}
         <i className="fas fa-caret-up"></i>
