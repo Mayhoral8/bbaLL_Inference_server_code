@@ -1,11 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getClassNameFor } from "../Shared/Functions/gameStatsFunctions";
-import useSortableData from "Shared/hooks/useSortableData";
-import { sort } from "d3-array";
-import { Argsort } from "../Shared/Functions/Argsort";
 
 const TeamScoreTable = ({
   leftColHeading,
@@ -20,60 +15,93 @@ const TeamScoreTable = ({
   includeYear,
 }) => {
   const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
-  const headings = ["rank", "ELO Rating", "Win(%)"];
+  const headings = ["name", "ELO Rating", "Massey Rating", "Win(%)"];
   const numOfTeamsToDisplay = 10;
   console.log(data);
-  let ObjOfTeams = {};
+  let listOfTeams = [];
+
   DATA_ATTR.map((key, scoreIndex) => {
-    data[key].map((teamObj, teamIndex) => {
+    data[key].map((teamObj) => {
       const teamName = Object.keys(teamObj)[0];
       const score = teamObj[teamName];
-      if (teamName in ObjOfTeams === false) {
-        ObjOfTeams[teamName] = {};
+      let teamIndex;
+
+      let doesObjExist = false;
+      for (let i = 0; i < listOfTeams.length; i++) {
+        if (listOfTeams[i].name === teamName) {
+          teamIndex = i;
+          doesObjExist = true;
+          break;
+        }
+      }
+
+      if (doesObjExist === false) {
+        listOfTeams.push({ name: teamName });
+        teamIndex = listOfTeams.length - 1;
       }
       if (key === "Standing") {
-        ObjOfTeams[teamName]["Win(%)"] = parseFloat(score["PCT"]);
-        ObjOfTeams[teamName]["rank"] = parseFloat(score["rank"]);
+        listOfTeams[teamIndex]["Win(%)"] = parseFloat(score["PCT"]);
+
+        listOfTeams[teamIndex]["rank"] = parseInt(score["rank"]);
       } else {
-        ObjOfTeams[teamName][key] = score;
+        listOfTeams[teamIndex][key] = score;
       }
     });
   });
 
-  function objSlice(obj, last) {
-    var filteredKeys = Object.keys(obj);
-    var rankKeys = [];
-    filteredKeys.forEach((name) => {
-      rankKeys.push(obj[name]["rank"]);
-    });
-    const rankIndexs = Argsort(rankKeys);
+  console.log(listOfTeams);
 
-    var newObj = {};
-    for (let i = 0; i < last; i++) {
-      newObj[rankKeys[i]] = obj[rankKeys[i]];
-    }
-    return newObj;
+  // remove objects without a rank
+  // listOfTeams.forEach((obj, i) => {
+  //   if (!obj.hasOwnProperty("rank")) {
+
+  //     console.log(listOfTeams);
+  //   } else {
+  //     console.log(`${obj.name} ${obj.rank}`);
+  //   }
+  // });
+
+  const test = [{ rank: 2 }, { rank: 5 }, { rank: 1 }, {}, {}];
+  console.log(sortTeams(test, "rank"));
+
+  // sorts list and slice to given length
+  function sortTeams(arr, attr) {
+    return arr.sort((a, b) => {
+      if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
+        return 0;
+      }
+      if (!a.hasOwnProperty(attr)) {
+        return 1;
+      }
+      if (!b.hasOwnProperty(attr)) {
+        return -1;
+      }
+      return a[attr] - b[attr];
+    });
   }
 
-  data = objSlice(ObjOfTeams, numOfTeamsToDisplay);
+  sortTeams(listOfTeams, "rank");
+  console.log(listOfTeams);
 
-  const tableRowData = Object.keys(data).map((name, i) => {
+  const tableRowData = listOfTeams.map((obj, i) => {
     return (
       <div className="table-row" key={i}>
         {headings.map((attr) => {
-          let score = "";
-          if (attr in data[name]) {
+          let value = "";
+          if (attr in obj) {
             if (attr === "Win(%)") {
-              score = Math.round(parseFloat(data[name][attr]) * 100);
+              value = Math.round(parseFloat(obj[attr]) * 100);
+            } else if (attr === "name") {
+              value = obj[attr];
             } else {
-              score = Math.round(parseFloat(data[name][attr]) * 100) / 100;
+              value = Math.round(parseFloat(obj[attr]) * 100) / 100;
             }
           } else {
-            score = "  -  ";
+            value = "  -  ";
           }
           return (
             <div key={attr} className="table-data">
-              {score}
+              {value}
             </div>
           );
         })}
@@ -101,12 +129,17 @@ const TeamScoreTable = ({
 
   // Fixed column - name
   const fixedColumn = (items) => {
-    return Object.keys(items).map((name, i) => {
-      const slug = name.replace(/\s/g, "_");
+    return items.map((obj, i) => {
+      let value = "";
+      if ("rank" in obj) {
+        value = obj["rank"];
+      } else {
+        value = " - ";
+      }
       return (
         <div className="table-row" key={i}>
           <div className="table-data" key={i}>
-            {name}
+            {value}
           </div>
         </div>
       );
@@ -114,9 +147,13 @@ const TeamScoreTable = ({
   };
 
   // Table heading
-  const tableHeading = (headings) =>
+  const tableHeading = (headings, attr) =>
     headings.map((heading, i) => (
-      <div key={heading} className="table-data">
+      <div
+        key={heading}
+        className="table-data"
+        onClick={() => sortTeams(listOfTeams, attr[i])}
+      >
         {heading}
         <i className="fas fa-caret-up"></i>
         <i className="fas fa-caret-down"></i>
@@ -132,13 +169,13 @@ const TeamScoreTable = ({
             <div className="table-data">{leftColHeading}</div>
           </div>
         </div>
-        <div className="table-body">{fixedColumn(data)}</div>
+        <div className="table-body">{fixedColumn(listOfTeams)}</div>
       </div>
 
       <div className="table-scroll">
         <div className="table data">
           <div className="table-header">
-            <div className="table-row">{tableHeading(headings)}</div>
+            <div className="table-row">{tableHeading(headings, headings)}</div>
           </div>
           <div className="table-body">{tableRowData}</div>
         </div>
