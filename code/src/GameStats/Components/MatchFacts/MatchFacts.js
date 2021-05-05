@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import MatchFactsPlots from './MatchFactsPlots';
 import MatchFactsTable from './MatchFactsTable';
 import MatchFactsTitle from './MatchFactsTitle';
+import { StyledPlots } from './MatchFacts-styles';
 
 const MatchFacts = ({ leads, ties, fantasy, info, abbreviatedHomeTeam, abbreviatedAwayTeam }) => {
 
@@ -63,120 +63,5 @@ const MatchFacts = ({ leads, ties, fantasy, info, abbreviatedHomeTeam, abbreviat
     </>
   );
 }
-
-const StyledPlots = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-top: 4rem;
-  border-top: 1px solid #eee;
-  position: relative;
-  .f-row {
-    display: flex;
-    padding-top: 8rem;
-    justify-content: center;
-  }
-  .vertical-line {
-    width: 2px;
-    height: 100%;
-    background: #eee;
-    margin: auto;
-  }
-  .team-name {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  .table-title {
-    position: absolute;
-    text-transform: uppercase;
-    color: var(--lighter-black);
-    font-size: 1.2rem;
-    background: var(--white);
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -1.7rem;
-    padding: 1rem 2rem;
-  }
-  .legend {
-    position: absolute;
-    left: 50%;
-    top: 1rem;
-    transform: translateX(-50%);
-    display: flex;
-    background: var(--white);
-    padding: 1rem 0 2rem;
-    .box {
-      width: 20px;
-      height: 10px;
-      margin-right: 0.5rem;
-      &.jump {
-        background: #4BC0C0;
-      }
-      &.layup {
-        background: #36A2EB;
-      }
-      &.dunk {
-        background: #FFCE56;
-      }
-      &.hook {
-        background: #FF6384;
-      }
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      margin: 0 0.5rem;
-    }
-    span {
-      font-size: 0.8rem;
-      color: var(--lighter-black);
-    }
-  }
-
-  .table-plot-title {
-    color: var(--lighter-black);
-    font-size: 1.2rem;
-    text-align: center;
-  }
-  
-  .mobile-table-title {
-    margin-bottom: 1rem;
-    span{
-      display: none;
-    }
-  }
-
-  .mobile-plot-title{
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
-    position: absolute;
-    top: 4rem;
-  }
-
-  @media(max-width: 768px) {
-    border-top: none;
-    margin-top: 2rem;
-    .table-title {
-      padding: 0;
-      white-space: nowrap;
-    }
-    .table-title.table {
-      display: none;
-    }
-    .legend {
-      padding: 1rem 0;
-    }
-    .mobile-table-title{
-      span{
-        display: inline-block;
-        margin-left: 0.5rem;
-      }
-    }
-  }
-  @media(min-width: 768px) {
-    grid-template-columns: ${({ plot }) => plot ? '' : '1fr 1rem 1fr'};
-  }
-`
 
 export default MatchFacts;
