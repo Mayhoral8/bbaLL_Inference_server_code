@@ -9,7 +9,7 @@ import { fbFirestore } from "../App/config";
 import useWindowSize from "Shared/hooks/useWindowSize";
 import PlayerRankingsCard from "./playerRankingsCard";
 import MemeCard from "./memeCard";
-import BoxScoreTable from "./TeamScoreTable";
+import TeamScoreTable from "./TeamScoreTable";
 import { autoPercentage } from "chartjs-plugin-watermark";
 
 const getFirebaseData = () => {
@@ -163,11 +163,11 @@ const GamePageContainer = () => {
               )}
               <MemeCard urls={memeUrls} />
             </div>
-            {/* {hasDataLoaded ? (
-              <BoxScoreTable leftColHeading={"Teams"} data={data[3]} />
+            {hasDataLoaded ? (
+              <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
             ) : (
               <div></div>
-            )} */}
+            )}
           </div>
 
           {useWindowSize() > 834 ? (
