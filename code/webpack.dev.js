@@ -29,7 +29,7 @@ module.exports = merge(common, {
       template: "public/index.html",
     }),
     new Dotenv({
-      path: ".env.production",
+      path: ".env.development",
       systemvars: true,
     }),
   ],

@@ -2,6 +2,7 @@ import { rgba } from "polished";
 import styled from "styled-components";
 import { breakpoints } from "../constants/breakpoints.js";
 import backgroundImage from "../assets/images/court.jpg";
+import refresh from "../assets/images/Vector.png";
 
 // ComparisonPage / StyledComparisonBanner  ===========================
 export const StyledComparisonBanner = styled.div`
@@ -65,6 +66,9 @@ export const StyledPlayerCandidates = styled.div `
     font-weight: normal;
     font-size: 20px;
     line-height: 14px;
+    background-image: url(${refresh});
+    background-repeat: no-repeat;
+    background-position: center;
 
 text-align: center;
   }
@@ -386,49 +390,59 @@ export const StyledRadarCont = styled.div`
 
 export const RandomPlayerContiner = styled.div`
 
-.comparsion{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  border: 4px solid #39204F;
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom:20px;
-}
-.nameTag{
-  text-align: center;
-}
-.vsText{
-  padding: 80px 0px;
-  text-align: center;
-}
-.img-container {
-  align-items: center;
-  display: flex;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border: 6px solid;
-  border-color: ${props=>props.teamColour && props.teamColour};
-  border-radius: 50%;
-  overflow: hidden;
-  @media (max-width: ${breakpoints.tabletLG}) {
-    width: 100px;
-    height: 100px;
+  .comparsion{
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    border: 1px solid #39204F;
+    box-shadow: 0px 0px 5px;
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom:20px;
   }
-  @media (max-width: ${breakpoints.tablet}) {
-    display: none;
-  }
-  img {
+  .continer {
     width: 100%;
-    border-radius: ${(props) => (props.isTeam === "true" ? "0" : "50%")};
-    padding: ${(props) => (props.isTeam === "true" ? "1rem" : 0)};
+    text-align: center;
   }
-}
+  .nameTag{
+    text-align: center;
+  }
+  .vsText{
+    padding-top: 50px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    text-align: center;
+  }
+  .img-container-side {
+    display: inline-block;
+    margin: 0 auto;
+    align-items: center;
+    display: flex;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid;
+    border-color: ${props=>props.teamColour && props.teamColour};
+    border-radius: 50%;
+    overflow: hidden;
+    @media (max-width: ${breakpoints.tabletLG}) {
+      width: 100px;
+      height: 100px;
+    }
+    @media (max-width: ${breakpoints.tablet}) {
+      display: none;
+    }
+    img {
+      align-items: center;
+      width: 98%;
+      border-radius: ${(props) => (props.isTeam === "true" ? "0" : "50%")};
+      padding: ${(props) => (props.isTeam === "true" ? "1rem" : 0)};
+    }
+  }
 `;
 
 
 export const SideNav = styled.div`
-  padding: 0.5ex;
   margin-top: 100px;
   height:900px;
   border-radius: 0.5ex;
@@ -437,7 +451,7 @@ export const SideNav = styled.div`
 `;
 
 export const Main = styled.div`
-
+  margin-right: 10px;
 `;
 
 export const MainContent = styled.div`
@@ -448,4 +462,5 @@ export const MainContent = styled.div`
     margin: 4rem auto;
   }
   display:flex;
+  flex-direction: row-reverse;
 `;
