@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
@@ -16,6 +16,22 @@ const TeamScoreTable = ({
 }) => {
   const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
   const headings = ["name", "ELO Rating", "Massey Rating", "Win(%)"];
+
+  const initialSortingType = {
+    name: "",
+    "ELO Rating": "",
+    "Massey Rating": "",
+    "Win(%)": "",
+  };
+
+  // keeps track of what should ascendingly or descendingly sorted
+  const sortingType = useRef({
+    name: "",
+    "ELO Rating": "",
+    "Massey Rating": "",
+    "Win(%)": "",
+  });
+
   const numOfTeamsToDisplay = 10;
 
   const [listOfTeams, setListOfTeams] = useState([]);
@@ -55,12 +71,32 @@ const TeamScoreTable = ({
     setListOfTeams(sortTeams(placeholderArray, "rank"));
   }, []);
 
-  console.log(placeholderArray);
+  console.log(listOfTeams);
 
   // sorts list by object property given
   function sortTeams(arr, attr) {
+    const resetObj = (obj) => {
+      Object.keys(obj).forEach((key) => (obj[key] = ""));
+    };
+
+    if (attr in sortingType.current) {
+      if (sortingType.current[attr].length === 0) {
+        sortingType.current = initialSortingType;
+        sortingType.current[attr] = "descending";
+        console.log("here");
+      } else if (sortingType.current[attr] === "descending") {
+        sortingType.current = initialSortingType;
+        sortingType.current[attr] = "ascending";
+      } else if (sortingType.current[attr] === "ascending") {
+        sortingType.current = initialSortingType;
+        sortingType.current[attr] = "descending";
+      }
+    }
+    console.log(sortingType.current);
     return [...arr].sort((a, b) => {
-      if (attr === "rank") {
+      // mainly to handle when "rank" prop is missing in json
+      // makes sure missing ranks get sorted properly
+      const handleMissingProperties = (a, b) => {
         if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
           return 0;
         }
@@ -70,16 +106,17 @@ const TeamScoreTable = ({
         if (!b.hasOwnProperty(attr)) {
           return -1;
         }
+      };
+
+      if (attr === "rank" || sortingType.current[attr] === "ascending") {
+        if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
+          return handleMissingProperties(a, b);
+        }
+
         return a[attr] - b[attr];
-      } else {
-        if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
-          return 0;
-        }
-        if (!a.hasOwnProperty(attr)) {
-          return 1;
-        }
-        if (!b.hasOwnProperty(attr)) {
-          return -1;
+      } else if (sortingType.current[attr] === "descending") {
+        if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
+          return handleMissingProperties(a, b);
         }
         return b[attr] - a[attr];
       }
@@ -105,7 +142,10 @@ const TeamScoreTable = ({
               value = "  -  ";
             }
             return (
-              <div key={attr} className="table-data">
+              <div
+                key={attr}
+                className={`${sortingType.current[attr]} table-data`}
+              >
                 {value}
               </div>
             );
@@ -152,14 +192,14 @@ const TeamScoreTable = ({
   };
 
   // Table heading
-  const tableHeading = (headings, attr) =>
-    headings.map((heading, i) => (
+  const tableHeading = (headings) =>
+    headings.map((attr, i) => (
       <div
-        key={heading}
-        className="table-data"
-        onClick={() => setListOfTeams(sortTeams(listOfTeams, attr[i]))}
+        key={attr}
+        className={`${sortingType.current[attr]} table-data`}
+        onClick={() => setListOfTeams(sortTeams(listOfTeams, attr))}
       >
-        {heading}
+        {attr}
         <i className="fas fa-caret-up"></i>
         <i className="fas fa-caret-down"></i>
       </div>
@@ -180,7 +220,7 @@ const TeamScoreTable = ({
       <div className="table-scroll">
         <div className="table data">
           <div className="table-header">
-            <div className="table-row">{tableHeading(headings, headings)}</div>
+            <div className="table-row">{tableHeading(headings)}</div>
           </div>
           <div className="table-body">{tableRowData}</div>
         </div>
@@ -190,7 +230,7 @@ const TeamScoreTable = ({
 };
 
 const BoxScoreTableWrapper = styled.div`
-  background: white;
+  //background: white;
   border: solid gray 1px;
   display: flex;
   margin: 2rem 0 0 0rem;
