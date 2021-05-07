@@ -26,7 +26,6 @@ import {
   StyledOptionName,
   StyledOptionsNames,
   StyledOptionsTeams,
-  StyledOptionVs,
   StyledRadarCont,
   MainContent,
   SideNav,
@@ -742,6 +741,7 @@ const ComparisonPage = () => {
               </li>
               <li onClick={() => handleCompareBetween(true)} title="teams">
                 <span className={isTeam ? "active" : null}><Link to='/comparison'>Teams</Link></span>
+
               </li>
             </StyledOptionsTeams>
             <StyledOptionsTeams>
@@ -760,7 +760,7 @@ const ComparisonPage = () => {
             <StyledOptionsNames>
               <StyledOptionName>
                 <div className="form-control">
-                  <label>Name : </label>
+                  <label>Name</label>
                   <ComparisonDropdown
                     options={names}
                     isTeam={isTeam}
@@ -768,23 +768,25 @@ const ComparisonPage = () => {
                     prompt={setPromoteStringName(0)}
                     length="longer"
                     setRef={setRefOne}
+                    colorSchem="red"
                   />
                 </div>
                 <div className="form-control">
-                  <label>Year : </label>
+                  <label>Year</label>
                   <ComparisonYearSelection
                     isTeam={isTeam}
                     onChange={(val) => setTempYearOne(val)}
                     prompt={setPromoteStringYear(1)}
                     name={tempPlayerNameOne}
                     setRef={setRefYearOne}
+                    colorSchem="red"
                   />
                 </div>
               </StyledOptionName>
-              <StyledOptionVs>vs</StyledOptionVs>
+
               <StyledOptionName>
                 <div className="form-control">
-                  <label>Name : </label>
+                  <label>Name</label>
                   <ComparisonDropdown
                     options={names}
                     isTeam={isTeam}
@@ -792,16 +794,18 @@ const ComparisonPage = () => {
                     prompt={setPromoteStringName(2)}
                     length="longer"
                     setRef={setRefTwo}
+                    colorSchem="bule"
                   />
                 </div>
                 <div className="form-control">
-                  <label>Year : </label>
+                  <label>Year</label>
                   <ComparisonYearSelection
                     isTeam={isTeam}
                     onChange={(val) => setTempYearTwo(val)}
                     prompt={setPromoteStringYear(3)}
                     name={tempPlayerNameTwo}
                     setRef={setRefYearTwo}
+                    colorSchem="bule"
                   />
                 </div>
               </StyledOptionName>
