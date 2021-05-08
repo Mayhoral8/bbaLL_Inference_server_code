@@ -25,8 +25,8 @@ export const CardContainer = styled.div`
   border: solid gray 1px;
   display: inline-block;
   flex-direction: column;
-  min-width: 450px;
-  max-height: 450px;
+  min-width: 470px;
+  max-height: 500px;
 
   border-radius: 5px;
   padding: 1rem;
@@ -38,6 +38,11 @@ export const CardContainer = styled.div`
     margin-bottom: 0.5rem;
     font-size: 1.5rem;
   }
+  .title {
+    display: flex;
+    align-items: center;
+  }
+
   .players {
     display: flex;
     flex-direction: column;
