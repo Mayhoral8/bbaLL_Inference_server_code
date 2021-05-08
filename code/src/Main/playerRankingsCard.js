@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import * as teamColours from "../constants/teamColours";
 import { fbStorage } from "../App/config";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 import Select from "react-select";
@@ -58,7 +59,7 @@ const PlayerRankingsCard = ({ data }) => {
       );
     }, []);
   }
-
+  console.log(topPlayers);
   useEffect(() => {
     let names = [];
     Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
@@ -175,11 +176,17 @@ const PlayerRankingsCard = ({ data }) => {
                       100
                   ) / 100;
                 const unit = units[scoreType.current];
-                const scoreToDisplay = `${score} ${unit}`;
+
+                const teamName = topPlayers[key][playerName]["Team"];
+                const playerColour = getPlayerColour(teamName);
+
                 return (
-                  <div className="player-box">
+                  <div key={index} className="player-box">
                     <div className="logo-box">
-                      <img src={imgs[playerName]} />
+                      <img
+                        style={{ border: `2px solid ${playerColour}` }}
+                        src={imgs[playerName]}
+                      />
                       <div className="player-name">
                         {playerName.split(" ")[0]} <br />
                         {playerName.split(" ")[1]}
@@ -224,6 +231,11 @@ const PlayerRankingsCard = ({ data }) => {
   };
 
   return renderComponent();
+};
+
+const getPlayerColour = (name) => {
+  name = name.replaceAll(" ", "").toUpperCase();
+  return teamColours[name];
 };
 
 export default PlayerRankingsCard;
