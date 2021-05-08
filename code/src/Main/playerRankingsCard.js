@@ -104,9 +104,18 @@ const PlayerRankingsCard = ({ data }) => {
     });
   };
 
+  const labelsForDropdown = {
+    FantasyScore: "Fantasy Score",
+    Points: "Points",
+    PointsPerPoss: "Possession",
+    "Three-Pointers": "Three-pointers",
+    Num_DD: "Double-Double",
+    Num_TD: "Triple-Double",
+  };
+
   let selectOptions = [];
   Object.keys(data[rankingTypeIndex]).map((value) => {
-    selectOptions.push({ value: [value], label: [value] });
+    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
   });
 
   const renderComponent = () => {
@@ -152,7 +161,7 @@ const PlayerRankingsCard = ({ data }) => {
                   }}
                   options={selectOptions}
                   className="select"
-                  placeholder={scoreType.current}
+                  placeholder={labelsForDropdown[scoreType.current]}
                 ></Select>
               </div>
             </div>
