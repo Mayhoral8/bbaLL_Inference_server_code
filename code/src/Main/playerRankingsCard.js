@@ -26,8 +26,8 @@ const PlayerRankingsCard = ({ data }) => {
     Assist: "AST",
     rebound: "REB",
     "Three-Pointers": "3PTS",
-    Num_DD: "DD",
-    Num_TD: "TD",
+    Num_DD: "Double-Double",
+    Num_TD: "Triple-Double",
     FantasyScore: "FAN",
     PointsPerPoss: "PTS/POSS",
   };
