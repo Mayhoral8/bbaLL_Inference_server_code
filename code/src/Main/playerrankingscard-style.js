@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
+  @media (min-width: 834px) {
+    position: relative;
+    left: -2.7rem;
+  }
+
   margin-left: 0rem;
   margin-top: 0rem;
   margin-bottom: auto;
@@ -18,8 +23,6 @@ export const OutsideContainer = styled.div`
   }
 `;
 export const CardContainer = styled.div`
-  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap");
-
   background: white;
 
   border: solid gray 1px;
