@@ -115,27 +115,28 @@ const PlayerRankingsCard = ({ data }) => {
   }, [rankingTypeIndex]);
 
   const getPic = async (playerNames) => {
-    setImgs({});
     playerNames.map((name) => {
-      const imageReference = fbStorage.refFromURL(
-        "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
-          name.replaceAll(" ", "_") +
-          ".png"
-      );
+      if (!(name in imgs)) {
+        const imageReference = fbStorage.refFromURL(
+          "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
+            name.replaceAll(" ", "_") +
+            ".png"
+        );
 
-      imageReference
-        .getDownloadURL()
-        .then((url) => {
-          setImgs((imgs) => ({ [name]: url, ...imgs }));
-        })
-        .catch(() => {
-          const imageReference = fbStorage.refFromURL(
-            "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
-          );
-          imageReference.getDownloadURL().then((url) => {
+        imageReference
+          .getDownloadURL()
+          .then((url) => {
             setImgs((imgs) => ({ [name]: url, ...imgs }));
+          })
+          .catch(() => {
+            const imageReference = fbStorage.refFromURL(
+              "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
+            );
+            imageReference.getDownloadURL().then((url) => {
+              setImgs((imgs) => ({ [name]: url, ...imgs }));
+            });
           });
-        });
+      }
     });
   };
 
@@ -185,6 +186,10 @@ const PlayerRankingsCard = ({ data }) => {
                   value={scoreType.current}
                   styles={{ width: `${8 * scoreType.current.length + 100}px` }}
                   onChange={(selected) => {
+                    // stops rankings from cycling when component is clicked
+                    if (cycleInterval !== null) {
+                      setCycleInterval(null);
+                    }
                     scoreType.current = selected.value[0];
                     setTopPlayers(
                       data[rankingTypeIndex][scoreType.current]
@@ -213,12 +218,14 @@ const PlayerRankingsCard = ({ data }) => {
                   ) / 100;
                 const unit = units[scoreType.current];
 
-                let playerColour = "";
+                //sets default colour
+                let playerColour = "black";
+
+                // looks for team colour of player
                 if (topPlayers[key][playerName].hasOwnProperty("Team")) {
                   const teamName = topPlayers[key][playerName]["Team"];
                   playerColour = getPlayerColour(teamName);
                 }
-                playerColour = "black";
 
                 return (
                   <div key={index} className="player-box">
@@ -252,6 +259,7 @@ const PlayerRankingsCard = ({ data }) => {
               } else {
                 setRankingTypeIndex(rankingTypeIndex + 1);
               }
+              // stops the rankings from cycling
               if (cycleInterval !== null) {
                 setCycleInterval(null);
               }
