@@ -230,10 +230,10 @@ const TeamScoreTable = ({
 };
 
 const BoxScoreTableWrapper = styled.div`
-  //background: white;
+  background: white;
   border: solid gray 1px;
   display: flex;
-  margin: 2rem 0 0 0rem;
+  margin: 3rem 0 0 0rem;
   user-select: none;
 
   .table-scroll {
