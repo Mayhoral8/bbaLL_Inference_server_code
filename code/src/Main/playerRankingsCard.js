@@ -45,6 +45,30 @@ const PlayerRankingsCard = ({ data }) => {
 
   const [topPlayers, setTopPlayers] = useState({});
 
+  // for cycling through daily, weekly and seasonal rankings
+  const [isCycling, setIsCycling] = useState(true);
+  const [cycleInterval, setCycleInterval] = useState(5000); // 5 seconds between transition
+
+  const useInterval = (callback, delay) => {
+    const savedCallback = useRef();
+
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  };
+
   const hasDataLoaded = Object.entries(data[0]).length !== 0;
   if (hasDataLoaded) {
     useEffect(() => {
@@ -59,7 +83,17 @@ const PlayerRankingsCard = ({ data }) => {
       );
     }, []);
   }
-  console.log(topPlayers);
+  if (isCycling) {
+    useInterval(() => {
+      console.log(rankingTypeIndex);
+      if (rankingTypeIndex >= rankingTypes.length - 1) {
+        setRankingTypeIndex(0);
+      } else {
+        setRankingTypeIndex(rankingTypeIndex + 1);
+      }
+    }, cycleInterval);
+  }
+
   useEffect(() => {
     let names = [];
     Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
@@ -118,7 +152,6 @@ const PlayerRankingsCard = ({ data }) => {
   Object.keys(data[rankingTypeIndex]).map((value) => {
     selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
   });
-
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (
@@ -130,6 +163,9 @@ const PlayerRankingsCard = ({ data }) => {
                 setRankingTypeIndex(rankingTypes.length - 1);
               } else {
                 setRankingTypeIndex(rankingTypeIndex - 1);
+              }
+              if (cycleInterval !== null) {
+                setCycleInterval(null);
               }
             }}
           >
@@ -177,8 +213,12 @@ const PlayerRankingsCard = ({ data }) => {
                   ) / 100;
                 const unit = units[scoreType.current];
 
-                const teamName = topPlayers[key][playerName]["Team"];
-                const playerColour = getPlayerColour(teamName);
+                let playerColour = "";
+                if (topPlayers[key][playerName].hasOwnProperty("Team")) {
+                  const teamName = topPlayers[key][playerName]["Team"];
+                  playerColour = getPlayerColour(teamName);
+                }
+                playerColour = "black";
 
                 return (
                   <div key={index} className="player-box">
@@ -211,6 +251,9 @@ const PlayerRankingsCard = ({ data }) => {
                 setRankingTypeIndex(0);
               } else {
                 setRankingTypeIndex(rankingTypeIndex + 1);
+              }
+              if (cycleInterval !== null) {
+                setCycleInterval(null);
               }
             }}
           >
