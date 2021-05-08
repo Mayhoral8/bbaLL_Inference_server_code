@@ -10,6 +10,7 @@ import useWindowSize from "Shared/hooks/useWindowSize";
 import PlayerRankingsCard from "./playerRankingsCard";
 import MemeCard from "./memeCard";
 import TeamScoreTable from "./TeamScoreTable";
+import styled from "styled-components";
 import { autoPercentage } from "chartjs-plugin-watermark";
 
 const getFirebaseData = () => {
@@ -142,27 +143,43 @@ const GamePageContainer = () => {
           gamePbp={gamePbp}
           gamePlayers={gamePlayers}
         />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            height: "100%",
-            width: "100%",
-            maxWidth: "1440px",
-            justifyContent: "center",
-            margin: "4rem auto auto auto",
-          }}
-        >
+        <MainPageContainer>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            {useWindowSize() < 834 && (
+              <div
+                style={{
+                  zIndex: 0,
+                  backgroundColor: "white",
+                  borderTop: "solid gray 1px",
+                  borderBottom: "solid gray 1px",
+                  marginTop: "0rem",
+                  marginLeft: "0rem",
+                  marginRight: "0rem",
+                  height: "100%",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  padding: "0.5rem",
+                  overflowX: "scroll",
+                  overflowY: "hidden",
+                  scrollbarWidth: "thin" /* "auto" or "thin" */,
+                  // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+                }}
+              >
+                {games.map((item, index) => {
+                  return <FutureGameOddsCard data={item} key={index} />;
+                })}
+              </div>
+            )}
+
+            <RowContainer>
               {hasDataLoaded ? (
                 <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
               ) : (
                 <div></div>
               )}
               <MemeCard urls={memeUrls} />
-            </div>
+            </RowContainer>
             {hasDataLoaded ? (
               <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
             ) : (
@@ -170,7 +187,7 @@ const GamePageContainer = () => {
             )}
           </div>
 
-          {useWindowSize() > 834 ? (
+          {useWindowSize() > 834 && (
             <div
               style={{
                 backgroundColor: "white",
@@ -193,36 +210,34 @@ const GamePageContainer = () => {
                 return <FutureGameOddsCard data={item} key={index} />;
               })}
             </div>
-          ) : (
-            <div
-              style={{
-                zIndex: 0,
-                backgroundColor: "white",
-                borderTop: "solid gray 1px",
-                borderBottom: "solid gray 1px",
-                marginTop: "0rem",
-                marginLeft: "0rem",
-                marginRight: "0rem",
-                height: "100%",
-                width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                padding: "0.5rem",
-                overflowX: "scroll",
-                overflowY: "hidden",
-                scrollbarWidth: "thin" /* "auto" or "thin" */,
-                // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
-              }}
-            >
-              {games.map((item, index) => {
-                return <FutureGameOddsCard data={item} key={index} />;
-              })}
-            </div>
           )}
-        </div>
+        </MainPageContainer>
       </FullWidthMain>
     </>
   );
 };
+
+const MainPageContainer = styled.div`
+  @media (max-width: 843px) {
+    flex-direction: column;
+  }
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  max-width: 1440px;
+  justify-content: center;
+  margin: 4rem auto auto auto;
+`;
+
+const RowContainer = styled.div`
+  @media (max-width: 843px) {
+    flex-direction: column;
+  }
+  display: flex;
+  flex-direction: row;
+`;
 
 export default GamePageContainer;
