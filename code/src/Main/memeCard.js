@@ -5,19 +5,52 @@ import styled from "styled-components";
 const MemeCard = ({ urls }) => {
   const [currentVid, setCurrentVid] = useState(0);
 
-  const buttonHandle = (event) => {
+  const nextbuttonHandle = (event) => {
     if (currentVid < urls.length - 1) {
       setCurrentVid(currentVid + 1);
     } else {
       setCurrentVid(0);
     }
   };
+  const prevbuttonHandle = (event) => {
+    if (currentVid > 0) {
+      setCurrentVid(currentVid - 1);
+    } else {
+      setCurrentVid(urls.length - 1);
+    }
+  };
   return (
     <Card>
-      <ReactPlayer url={urls[currentVid]}></ReactPlayer>
-      <button className="button" onClick={buttonHandle}>
-        <span>Next Video</span>
-      </button>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <button className="button prev" onClick={prevbuttonHandle}>
+          <span>Previous</span>
+        </button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "1.5rem",
+          }}
+        >
+          Highlights
+        </div>
+        <button className="button next" onClick={nextbuttonHandle}>
+          <span>Next</span>
+        </button>
+      </div>
+      <ReactPlayer
+        url={urls[currentVid]}
+        className="react-player"
+        controls={true}
+      ></ReactPlayer>
     </Card>
   );
 };
@@ -34,7 +67,7 @@ export const Card = styled.div`
   border: solid gray 1px;
 
   margin: 0rem 0rem auto 0rem;
-  padding: 1rem;
+  padding: 0rem 1rem 1rem 1rem;
 
   .button {
     transition-duration: 0.4s;
@@ -44,7 +77,7 @@ export const Card = styled.div`
     color: black;
 
     padding: 1rem;
-    margin: 1rem;
+    margin: 1rem 0rem 1rem 0rem;
 
     text-align: center;
     display: inline-block;
@@ -52,7 +85,7 @@ export const Card = styled.div`
 
     transition-duration: 0.4s;
     cursor: pointer;
-    max-width: 150px;
+    min-width: 120px;
   }
 
   .button span {
@@ -61,12 +94,8 @@ export const Card = styled.div`
     position: relative;
     transition: 0.5s;
   }
-  .react-player {
-    padding-top: 56.25%;
-    position: relative;
-  }
 
-  .button span:after {
+  .next span:after {
     font-size: 1.5rem;
     content: "\\00bb";
     position: absolute;
@@ -76,11 +105,31 @@ export const Card = styled.div`
     transition: 0.5s;
   }
 
-  .button:hover span {
-    padding-right: 25px;
+  .prev span:before {
+    font-size: 1.5rem;
+    content: "\\00bb";
+    transform: rotate(180deg);
+    position: absolute;
+    opacity: 0;
+    top: -3px;
+    left: -75px;
+    transition: 0.5s;
+  }
+
+  .next:hover span {
+    padding-right: 20px;
+  }
+
+  .prev:hover span {
+    padding-left: 20px;
   }
 
   .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+
+  .button:hover span:before {
     opacity: 1;
     right: 0;
   }
