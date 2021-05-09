@@ -78,7 +78,10 @@ export const Card = styled.div`
     margin-right: 0.25rem;
     margin-left: 0.25rem;
     margin-bottom: 0.25rem;
-    font-size: 0.8rem;
+    @media screen and (max-width: 834px) {
+      font-size: 0.8rem;
+    }
+    font-size: 0.9rem;
   }
 
   .game-date {
