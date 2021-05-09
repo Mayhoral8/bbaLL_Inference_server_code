@@ -148,27 +148,38 @@ const GamePageContainer = () => {
             {useWindowSize() < 834 && (
               <div
                 style={{
-                  zIndex: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                   backgroundColor: "white",
                   borderTop: "solid gray 1px",
                   borderBottom: "solid gray 1px",
-                  marginTop: "0rem",
-                  marginLeft: "0rem",
-                  marginRight: "0rem",
-                  height: "100%",
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: "0.5rem",
-                  overflowX: "scroll",
-                  overflowY: "hidden",
-                  scrollbarWidth: "thin" /* "auto" or "thin" */,
-                  // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
                 }}
               >
-                {games.map((item, index) => {
-                  return <FutureGameOddsCard data={item} key={index} />;
-                })}
+                <div style={{ margin: "1rem 0rem 0rem 0rem" }}>
+                  Upcoming Games
+                </div>
+                <div
+                  style={{
+                    zIndex: 0,
+                    marginTop: "0rem",
+                    marginLeft: "0rem",
+                    marginRight: "0rem",
+                    height: "100%",
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    padding: "0.5rem",
+                    overflowX: "scroll",
+                    overflowY: "hidden",
+                    scrollbarWidth: "thin" /* "auto" or "thin" */,
+                    // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+                  }}
+                >
+                  {games.map((item, index) => {
+                    return <FutureGameOddsCard data={item} key={index} />;
+                  })}
+                </div>
               </div>
             )}
 
@@ -206,6 +217,17 @@ const GamePageContainer = () => {
                 // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
               }}
             >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  fontSize: "1.5rem",
+                  margin: "1rem 0rem 1rem 0rem",
+                }}
+              >
+                Upcoming Games
+              </div>
               {games.map((item, index) => {
                 return <FutureGameOddsCard data={item} key={index} />;
               })}
@@ -216,6 +238,23 @@ const GamePageContainer = () => {
     </>
   );
 };
+
+const futureGameList = styled.div`
+  background-color: white;
+  margin-top: 0rem;
+  margin-left: 3rem;
+  height: 100%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  overflow-y: scroll;
+  position: relative;
+  border: solid gray 1px;
+  height: 885px;
+  scrollbar-width: thin;
+  // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+`;
 
 const MainPageContainer = styled.div`
   @media (max-width: 843px) {
