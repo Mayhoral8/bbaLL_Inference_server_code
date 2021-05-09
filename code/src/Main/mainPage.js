@@ -201,7 +201,7 @@ const GamePageContainer = () => {
                 overflowY: "scroll",
                 position: "relative",
                 border: "solid gray 1px",
-                height: "800px",
+                height: "885px",
                 scrollbarWidth: "thin" /* "auto" or "thin" */,
                 // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
               }}
