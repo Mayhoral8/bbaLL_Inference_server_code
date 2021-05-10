@@ -28,51 +28,62 @@ const FutureGameOddsCard = (item) => {
     }
   });
 
+  let gameOdds = {
+    [homeTeamName]: " - ",
+    [awayTeamName]: " - ",
+  };
+
+  if (Object.keys(JSON.data["Game Odds"]["General"]).length > 0) {
+    gameOdds[homeTeamName] =
+      Math.round(
+        JSON.data["Game Odds"]["General"][latestDate][homeTeamName] * 100
+      ) / 100;
+    gameOdds[awayTeamName] =
+      Math.round(
+        JSON.data["Game Odds"]["General"][latestDate][homeTeamName] * 100
+      ) / 100;
+  }
+
   const homeRatings = [
     {
       value: Math.round(JSON.data["Game Prediction"]["ELO"][homeTeamName]),
-      percent: 0,
+      percent: "",
     },
 
     {
       value:
         Math.round(JSON.data["Game Prediction"]["Massey"][homeTeamName] * 100) /
         100,
-      percent: 0,
+      percent: "",
     },
 
     {
-      value:
-        Math.round(
-          JSON.data["Game Odds"]["General"][latestDate][homeTeamName] * 100
-        ) / 100,
-      percent: 0,
+      value: gameOdds[homeTeamName],
+      percent: "",
     },
   ];
 
   const awayRatings = [
     {
       value: Math.round(JSON.data["Game Prediction"]["ELO"][awayTeamName]),
-      percent: 0,
+      percent: "",
     },
 
     {
       value:
         Math.round(JSON.data["Game Prediction"]["Massey"][awayTeamName] * 100) /
         100,
-      percent: 0,
+      percent: "",
     },
 
     {
-      value:
-        Math.round(
-          JSON.data["Game Odds"]["General"][latestDate][awayTeamName] * 100
-        ) / 100,
-      percent: 0,
+      value: gameOdds[awayTeamName],
+      percent: "",
     },
   ];
 
   // calculating percentages for all ratings
+
   homeRatings[0].percent = calculateELOPercent(
     homeRatings[0].value,
     awayRatings[0].value
@@ -81,17 +92,27 @@ const FutureGameOddsCard = (item) => {
     homeRatings[1].value,
     awayRatings[1].value
   );
-  homeRatings[2].percent = calculateBettingOddsPercent(
-    homeRatings[2].value,
-    awayRatings[2].value
-  );
+
+  if (JSON.data["Game Odds"]["General"].hasOwnProperty(latestDate)) {
+    homeRatings[2].percent = calculateBettingOddsPercent(
+      homeRatings[2].value,
+      awayRatings[2].value
+    );
+  }
 
   for (let i = 0; i < awayRatings.length; i++) {
-    awayRatings[i].percent = 100 - homeRatings[i].percent;
-  }
-  for (let i = 1; i < awayRatings.length; i++) {
-    awayRatings[i].value = awayRatings[i].value.toFixed(2);
-    homeRatings[i].value = homeRatings[i].value.toFixed(2);
+    if (awayRatings[i].value !== " - ") {
+      awayRatings[i].percent = 100 - homeRatings[i].percent;
+    }
+    // makes sure ELO isn't rounded to 2 decimals
+    if (i > 0) {
+      if (awayRatings[i].value !== " - ") {
+        awayRatings[i].value = awayRatings[i].value.toFixed(2);
+      }
+      if (homeRatings[i].value !== " - ") {
+        homeRatings[i].value = homeRatings[i].value.toFixed(2);
+      }
+    }
   }
 
   // formatting team names so respective logos can be fetched
@@ -146,14 +167,16 @@ const FutureGameOddsCard = (item) => {
               return (
                 <b key={index}>
                   <p key={index}>
-                    {obj.value} ({obj.percent}%)
+                    {obj.value}{" "}
+                    {obj.percent === "" ? "" : "(" + obj.percent + "%)"}
                   </p>
                 </b>
               );
             } else {
               return (
                 <p key={index}>
-                  {obj.value} ({obj.percent}%)
+                  {obj.value}{" "}
+                  {obj.percent === "" ? "" : "(" + obj.percent + "%)"}
                 </p>
               );
             }
@@ -170,14 +193,16 @@ const FutureGameOddsCard = (item) => {
               return (
                 <b key={index}>
                   <p key={index}>
-                    {obj.value} ({obj.percent}%)
+                    {obj.value}{" "}
+                    {obj.percent === "" ? "" : "(" + obj.percent + "%)"}
                   </p>
                 </b>
               );
             } else {
               return (
                 <p key={index}>
-                  {obj.value} ({obj.percent}%)
+                  {obj.value}{" "}
+                  {obj.percent === "" ? "" : "(" + obj.percent + "%)"}
                 </p>
               );
             }
@@ -224,7 +249,6 @@ const vsImg = (homeImg, awayImg) => {
       </div>
       <img className="logo-2" src={awayImg} />
     </div>
-
   );
 };
 
