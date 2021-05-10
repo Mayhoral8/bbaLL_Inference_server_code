@@ -144,7 +144,7 @@ const FutureGameOddsCard = (item) => {
           {homeRatings.map((obj, index) => {
             if (obj.percent > awayRatings[index].percent) {
               return (
-                <b>
+                <b key={index}>
                   <p key={index}>
                     {obj.value} ({obj.percent}%)
                   </p>
@@ -168,7 +168,7 @@ const FutureGameOddsCard = (item) => {
           {awayRatings.map((obj, index) => {
             if (obj.percent > homeRatings[index].percent) {
               return (
-                <b>
+                <b key={index}>
                   <p key={index}>
                     {obj.value} ({obj.percent}%)
                   </p>

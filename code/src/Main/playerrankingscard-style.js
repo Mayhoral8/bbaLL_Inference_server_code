@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
+  @media (min-width: 834px) {
+    position: relative;
+    left: -2.7rem;
+  }
+
   margin-left: 0rem;
   margin-top: 0rem;
   margin-bottom: auto;
@@ -18,15 +23,13 @@ export const OutsideContainer = styled.div`
   }
 `;
 export const CardContainer = styled.div`
-  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap");
-
   background: white;
 
   border: solid gray 1px;
   display: inline-block;
   flex-direction: column;
-  min-width: 450px;
-  max-height: 450px;
+  min-width: 470px;
+  max-height: 500px;
 
   border-radius: 5px;
   padding: 1rem;
@@ -38,6 +41,11 @@ export const CardContainer = styled.div`
     margin-bottom: 0.5rem;
     font-size: 1.5rem;
   }
+  .title {
+    display: flex;
+    align-items: center;
+  }
+
   .players {
     display: flex;
     flex-direction: column;
@@ -56,13 +64,14 @@ export const CardContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
 
-    background: #c4c4c4;
+    //background: #c4c4c4;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 5px;
+    color: #e0e0e0;
 
-    max-height: 75px;
+    max-height: 85px;
   }
 
   .logo-box {
@@ -86,7 +95,7 @@ export const CardContainer = styled.div`
 
     font-family: Roboto;
     font-weight: 100;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 
   .value {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import * as teamColours from "../constants/teamColours";
 import { fbStorage } from "../App/config";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 import Select from "react-select";
@@ -25,8 +26,8 @@ const PlayerRankingsCard = ({ data }) => {
     Assist: "AST",
     rebound: "REB",
     "Three-Pointers": "3PTS",
-    Num_DD: "DD",
-    Num_TD: "TD",
+    Num_DD: "Double-Double",
+    Num_TD: "Triple-Double",
     FantasyScore: "FAN",
     PointsPerPoss: "PTS/POSS",
   };
@@ -44,6 +45,30 @@ const PlayerRankingsCard = ({ data }) => {
 
   const [topPlayers, setTopPlayers] = useState({});
 
+  // for cycling through daily, weekly and seasonal rankings
+  const [isCycling, setIsCycling] = useState(true);
+  const [cycleInterval, setCycleInterval] = useState(5000); // 5 seconds between transition
+
+  const useInterval = (callback, delay) => {
+    const savedCallback = useRef();
+
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  };
+
   const hasDataLoaded = Object.entries(data[0]).length !== 0;
   if (hasDataLoaded) {
     useEffect(() => {
@@ -57,6 +82,16 @@ const PlayerRankingsCard = ({ data }) => {
           .slice(0, 4)
       );
     }, []);
+  }
+  if (isCycling) {
+    useInterval(() => {
+      console.log(rankingTypeIndex);
+      if (rankingTypeIndex >= rankingTypes.length - 1) {
+        setRankingTypeIndex(0);
+      } else {
+        setRankingTypeIndex(rankingTypeIndex + 1);
+      }
+    }, cycleInterval);
   }
 
   useEffect(() => {
@@ -80,35 +115,44 @@ const PlayerRankingsCard = ({ data }) => {
   }, [rankingTypeIndex]);
 
   const getPic = async (playerNames) => {
-    setImgs({});
     playerNames.map((name) => {
-      const imageReference = fbStorage.refFromURL(
-        "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
-          name.replaceAll(" ", "_") +
-          ".png"
-      );
+      if (!(name in imgs)) {
+        const imageReference = fbStorage.refFromURL(
+          "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
+            name.replaceAll(" ", "_") +
+            ".png"
+        );
 
-      imageReference
-        .getDownloadURL()
-        .then((url) => {
-          setImgs((imgs) => ({ [name]: url, ...imgs }));
-        })
-        .catch(() => {
-          const imageReference = fbStorage.refFromURL(
-            "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
-          );
-          imageReference.getDownloadURL().then((url) => {
+        imageReference
+          .getDownloadURL()
+          .then((url) => {
             setImgs((imgs) => ({ [name]: url, ...imgs }));
+          })
+          .catch(() => {
+            const imageReference = fbStorage.refFromURL(
+              "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
+            );
+            imageReference.getDownloadURL().then((url) => {
+              setImgs((imgs) => ({ [name]: url, ...imgs }));
+            });
           });
-        });
+      }
     });
+  };
+
+  const labelsForDropdown = {
+    FantasyScore: "Fantasy Score",
+    Points: "Points",
+    PointsPerPoss: "Possession",
+    "Three-Pointers": "Three-pointers",
+    Num_DD: "Double-Double",
+    Num_TD: "Triple-Double",
   };
 
   let selectOptions = [];
   Object.keys(data[rankingTypeIndex]).map((value) => {
-    selectOptions.push({ value: [value], label: [value] });
+    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
   });
-
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (
@@ -120,6 +164,9 @@ const PlayerRankingsCard = ({ data }) => {
                 setRankingTypeIndex(rankingTypes.length - 1);
               } else {
                 setRankingTypeIndex(rankingTypeIndex - 1);
+              }
+              if (cycleInterval !== null) {
+                setCycleInterval(null);
               }
             }}
           >
@@ -139,6 +186,10 @@ const PlayerRankingsCard = ({ data }) => {
                   value={scoreType.current}
                   styles={{ width: `${8 * scoreType.current.length + 100}px` }}
                   onChange={(selected) => {
+                    // stops rankings from cycling when component is clicked
+                    if (cycleInterval !== null) {
+                      setCycleInterval(null);
+                    }
                     scoreType.current = selected.value[0];
                     setTopPlayers(
                       data[rankingTypeIndex][scoreType.current]
@@ -152,7 +203,7 @@ const PlayerRankingsCard = ({ data }) => {
                   }}
                   options={selectOptions}
                   className="select"
-                  placeholder={scoreType.current}
+                  placeholder={labelsForDropdown[scoreType.current]}
                 ></Select>
               </div>
             </div>
@@ -166,11 +217,24 @@ const PlayerRankingsCard = ({ data }) => {
                       100
                   ) / 100;
                 const unit = units[scoreType.current];
-                const scoreToDisplay = `${score} ${unit}`;
+
+                //sets default colour
+                let playerColour = "black";
+
+                // looks for team colour of player
+                if (topPlayers[key][playerName].hasOwnProperty("Team")) {
+                  const teamName = topPlayers[key][playerName]["Team"];
+                  playerColour = getPlayerColour(teamName);
+                }
+
                 return (
-                  <div className="player-box">
+                  <div
+                    key={index}
+                    className="player-box"
+                    style={{ background: `${playerColour}` }}
+                  >
                     <div className="logo-box">
-                      <img src={imgs[playerName]} />
+                      <img style={{}} src={imgs[playerName]} />
                       <div className="player-name">
                         {playerName.split(" ")[0]} <br />
                         {playerName.split(" ")[1]}
@@ -196,6 +260,10 @@ const PlayerRankingsCard = ({ data }) => {
               } else {
                 setRankingTypeIndex(rankingTypeIndex + 1);
               }
+              // stops the rankings from cycling
+              if (cycleInterval !== null) {
+                setCycleInterval(null);
+              }
             }}
           >
             <img
@@ -215,6 +283,11 @@ const PlayerRankingsCard = ({ data }) => {
   };
 
   return renderComponent();
+};
+
+const getPlayerColour = (name) => {
+  name = name.replaceAll(" ", "").toUpperCase();
+  return teamColours[name];
 };
 
 export default PlayerRankingsCard;
