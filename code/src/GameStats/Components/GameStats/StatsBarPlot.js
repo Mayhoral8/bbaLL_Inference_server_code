@@ -1,7 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 import { rgba } from 'polished';
-import styled from 'styled-components';
+import { PlotContainer } from "./GameStats-styles";
 
 const StatsBarPlot = ({ info, mirror, y, away }) => {
   // find all objects with key of "Q#"
@@ -96,11 +96,5 @@ const StatsBarPlot = ({ info, mirror, y, away }) => {
     </PlotContainer>
   );
 }
-
-const PlotContainer = styled.div`
-  @media(max-width: 768px) {
-    display: none;
-  }
-`
 
 export default StatsBarPlot;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 import { FullWidthMain } from "../globalStyles";
@@ -131,6 +132,7 @@ const GamePageContainer = () => {
       new Date(game2["Game Info"]["Game Time"])
     );
   });
+
   return (
     <>
       <SEO
