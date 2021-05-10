@@ -192,7 +192,25 @@ const GamePageContainer = () => {
               <MemeCard urls={memeUrls} />
             </RowContainer>
             {hasDataLoaded ? (
-              <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  margin: "3rem 0 0 0rem",
+                  backgroundColor: "white",
+                  border: "solid gray 1px",
+                  padding: "1.5rem",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  Team Rankings
+                </div>
+                <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+              </div>
             ) : (
               <div></div>
             )}
@@ -212,7 +230,7 @@ const GamePageContainer = () => {
                 overflowY: "scroll",
                 position: "relative",
                 border: "solid gray 1px",
-                height: "885px",
+                height: "1015px",
                 scrollbarWidth: "thin" /* "auto" or "thin" */,
                 // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
               }}
