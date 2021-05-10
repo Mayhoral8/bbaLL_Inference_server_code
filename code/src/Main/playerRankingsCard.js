@@ -228,12 +228,13 @@ const PlayerRankingsCard = ({ data }) => {
                 }
 
                 return (
-                  <div key={index} className="player-box">
+                  <div
+                    key={index}
+                    className="player-box"
+                    style={{ background: `${playerColour}` }}
+                  >
                     <div className="logo-box">
-                      <img
-                        style={{ border: `2px solid ${playerColour}` }}
-                        src={imgs[playerName]}
-                      />
+                      <img style={{}} src={imgs[playerName]} />
                       <div className="player-name">
                         {playerName.split(" ")[0]} <br />
                         {playerName.split(" ")[1]}
