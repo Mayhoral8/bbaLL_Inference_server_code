@@ -61,7 +61,8 @@ export const Card = styled.div`
   justify-content: flex-start;
   align-items: center;
 
-  max-height: 450px;
+  height: 100%;
+  max-height: 495px;
 
   background: white;
   border: solid gray 1px;
