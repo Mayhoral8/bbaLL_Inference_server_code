@@ -322,7 +322,7 @@ const OverviewPlot = (props) => {
       fill: false,
       showLine: true,
       borderColor: GREEN_ACCENT_COLOR,
-      borderWidth: 2,
+      borderWidth: 4,
       pointColor: "#fff",
       pointRadius: 0,
       data: yAxisData,
