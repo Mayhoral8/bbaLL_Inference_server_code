@@ -2,7 +2,7 @@ import { rgba } from "polished";
 import styled from "styled-components";
 import { breakpoints } from "../constants/breakpoints.js";
 import backgroundImage from "../assets/images/court.jpg";
-import refresh from "../assets/images/Vector.png";
+import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
 // ComparisonPage / StyledComparisonBanner  ===========================
@@ -34,8 +34,8 @@ export const StyledComparisonBanner = styled.div`
       font-size: 1.5rem;
     }
   }
-`
-export const StyledPlayerCandidates = styled.div `
+`;
+export const StyledPlayerCandidates = styled.div`
   max-width: 1100px;
   margin: 2rem auto 0;
   padding: 3rem;
@@ -43,25 +43,25 @@ export const StyledPlayerCandidates = styled.div `
   @media (max-width: ${breakpoints.desk}) {
     margin: 0 auto 0;
   }
- 
+
   @media (max-width: ${breakpoints.phone}) {
     font-size: 1.5rem;
   }
 
-  .centerButton{
+  .centerButton {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
   }
 
-  .button{
-    background-color: #7A1DC4;
-    border: 2px solid #7500DE;
+  .button {
+    background-color: #7a1dc4;
+    border: 2px solid #7500de;
     border-radius: 10px;
     color: white;
     padding: 28px 121px;
-    
+
     font-family: Roboto;
     font-style: normal;
     font-weight: normal;
@@ -71,10 +71,9 @@ export const StyledPlayerCandidates = styled.div `
     background-repeat: no-repeat;
     background-position: center;
 
-text-align: center;
+    text-align: center;
   }
-
-`
+`;
 
 // ComparisonPage / StyledComparisonOptions  ==========================
 export const StyledComparisonOptions = styled.section`
@@ -103,7 +102,7 @@ export const StyledOptionsTeams = styled.ul`
     padding: 5px 5px;
     &:hover,
     &.active {
-      border: 2px solid #7500DE;
+      border: 2px solid #7500de;
       border-radius: 5px;
       box-shadow: -1px 1px 5px;
     }
@@ -192,9 +191,9 @@ export const StyledComparisonProfile = styled.section`
   max-width: 1100px;
   width: 85%;
   margin: 0 auto 0 auto;
-  font-family:ubuntu;
+  font-family: ubuntu;
   padding: 1.5rem 20px;
-  border: 1px solid #207EEC;
+  border: 1px solid #207eec;
   box-shadow: 0px 0px 5px;
   border-radius: 20px;
   display: grid;
@@ -230,7 +229,7 @@ export const StyledComparisonProfileElement = styled.div`
     height: 150px;
     object-fit: cover;
     border: 6px solid;
-    border-color: ${props=>props.teamColour && props.teamColour};
+    border-color: ${(props) => props.teamColour && props.teamColour};
     border-radius: 50%;
     overflow: hidden;
     @media (max-width: ${breakpoints.tabletLG}) {
@@ -246,7 +245,6 @@ export const StyledComparisonProfileElement = styled.div`
       padding: ${(props) => (props.isTeam === "true" ? "1rem" : 0)};
     }
   }
-
 `;
 export const StyledInfo = styled.div`
   flex: 2;
@@ -292,21 +290,19 @@ export const StyledComparisonProfileBlank = styled.section`
   @media (max-width: ${breakpoints.phone}) {
     margin: 0 1rem;
   }
-`
-
+`;
 
 // ComparisonYearSelection  ===========================================
 export const StyledDropdownBule = styled.div`
-  border: 3px solid #207EEC;
+  border: 3px solid #207eec;
   border-radius: 4px;
   margin-top: 5px;
   .select__control {
     width: 100%;
-    min-width: ${props=>props.length==="longer" ? '13rem': '10rem'};
+    min-width: ${(props) => (props.length === "longer" ? "13rem" : "10rem")};
     border: none;
     border-bottom: 1px solid #ccc;
     border-radius: 0;
-    
   }
   .select__control--is-focused {
     border: none;
@@ -321,16 +317,15 @@ export const StyledDropdownBule = styled.div`
 `;
 
 export const StyledDropdownRed = styled.div`
-  border: 3px solid #EC2020;
+  border: 3px solid #ec2020;
   border-radius: 4px;
   margin-top: 5px;
   .select__control {
     width: 100%;
-    min-width: ${props=>props.length==="longer" ? '13rem': '10rem'};
+    min-width: ${(props) => (props.length === "longer" ? "13rem" : "10rem")};
     border: none;
     border-bottom: 1px solid #ccc;
     border-radius: 0;
-    
   }
   .select__control--is-focused {
     border: none;
@@ -388,7 +383,7 @@ export const StyledBar = styled.div`
     color: ${(props) => props.text && props.text};
     background: ${(props) => (props.bcg ? props.bcg : "mediumaquamarine")};
     padding: 0 1rem;
-    @media(max-width: ${breakpoints.phone}) {
+    @media (max-width: ${breakpoints.phone}) {
       font-size: 0.8rem;
       padding: 0 0.4rem;
     }
@@ -419,7 +414,7 @@ export const StyledBarText = styled.div`
   align-items: center;
   justify-content: center;
   p {
-    @media(max-width: ${breakpoints.phone}) {
+    @media (max-width: ${breakpoints.phone}) {
       font-size: 0.8rem;
     }
     .text-bold {
@@ -438,24 +433,23 @@ export const StyledRadarCont = styled.div`
 `;
 
 export const RandomPlayerContiner = styled.div`
-
-  .comparsion{
+  .comparsion {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    border: 1px solid #39204F;
+    border: 1px solid #39204f;
     box-shadow: 0px 0px 5px;
     border-radius: 10px;
     padding: 5px;
-    margin-bottom:20px;
+    margin-bottom: 20px;
   }
   .continer {
     width: 100%;
     text-align: center;
   }
-  .nameTag{
+  .nameTag {
     text-align: center;
   }
-  .vsText{
+  .vsText {
     padding-top: 50px;
     font-family: Roboto;
     font-style: normal;
@@ -471,7 +465,7 @@ export const RandomPlayerContiner = styled.div`
     height: 80px;
     object-fit: cover;
     border: 2px solid;
-    border-color: ${props=>props.teamColour && props.teamColour};
+    border-color: ${(props) => props.teamColour && props.teamColour};
     border-radius: 50%;
     overflow: hidden;
     @media (max-width: ${breakpoints.tabletLG}) {
@@ -490,13 +484,12 @@ export const RandomPlayerContiner = styled.div`
   }
 `;
 
-
 export const SideNav = styled.div`
   margin-top: 100px;
-  height:900px;
+  height: 900px;
   border-radius: 0.5ex;
   position: sticky;
-  top: -.3em;
+  top: -0.3em;
 `;
 
 export const Main = styled.div`
@@ -510,6 +503,6 @@ export const MainContent = styled.div`
   @media screen and (min-width: 996px) {
     margin: 4rem auto;
   }
-  display:flex;
+  display: flex;
   flex-direction: row-reverse;
 `;
