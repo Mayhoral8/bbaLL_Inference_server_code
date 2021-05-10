@@ -2,11 +2,11 @@ import React from "react";
 import {RandomPlayerContiner} from './comparison-style';
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 
+
+// Larry Nace Jr.
 function RandomComparison(props) {
 
-  console.log(props.compareYear)
   function setPlayer(nameOne, nameTwo) {
-    console.log("function run")
     props.setTempNameOneProp(nameOne.replace(" ", "_").replace(".", ","));
     props.setTempNameTwoProp(nameTwo.replace(" ", "_").replace(".", ","));
     props.setTempYearOneProp(props.compareYear);
@@ -22,7 +22,7 @@ function RandomComparison(props) {
       <RandomPlayerContiner>
           <div className="comparsion" onClick={()=>setPlayer(props.one, props.two)}>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side left">
                 <GetPlayerImage playerName={props.one.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.one}</p>
@@ -30,7 +30,7 @@ function RandomComparison(props) {
             </div>
             <h2 className="vsText">VS</h2>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side right">
                 <GetPlayerImage playerName={props.two.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.two}</p>
@@ -40,7 +40,7 @@ function RandomComparison(props) {
           
           <div className="comparsion" onClick={()=>setPlayer(props.three, props.four)}>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side left">
                 <GetPlayerImage playerName={props.three.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.three}</p>
@@ -48,7 +48,7 @@ function RandomComparison(props) {
             </div>
             <h2 className="vsText">VS</h2>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side right">
                 <GetPlayerImage playerName={props.four.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.four}</p>
@@ -58,7 +58,7 @@ function RandomComparison(props) {
 
           <div className="comparsion" onClick={()=>setPlayer(props.five, props.six)}>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side left">
                 <GetPlayerImage playerName={props.five.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.five}</p>
@@ -66,7 +66,7 @@ function RandomComparison(props) {
             </div>
             <h2 className="vsText">VS</h2>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side right">
                 <GetPlayerImage playerName={props.six.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.six}</p>
@@ -76,7 +76,7 @@ function RandomComparison(props) {
 
           <div className="comparsion" onClick={()=>setPlayer(props.seven, props.eight)}>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side left">
                 <GetPlayerImage playerName={props.seven.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.seven}</p>
@@ -84,7 +84,7 @@ function RandomComparison(props) {
             </div>
             <h2 className="vsText">VS</h2>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side right">
                 <GetPlayerImage playerName={props.eight.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.eight}</p>
@@ -94,7 +94,7 @@ function RandomComparison(props) {
 
           <div className="comparsion" onClick={()=>setPlayer(props.nine, props.ten)}>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side left">
                 <GetPlayerImage playerName={props.nine.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.nine}</p>
@@ -102,7 +102,7 @@ function RandomComparison(props) {
             </div>
             <h2 className="vsText">VS</h2>
             <div className="continer">
-              <div className="img-container-side">
+              <div className="img-container-side right">
                 <GetPlayerImage playerName={props.ten.replace(" ", "_").replace(".", ",")} isTeam={props.team} />
               </div>
               <p className="nameTag">{props.ten}</p>
