@@ -1,11 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getClassNameFor } from "../Shared/Functions/gameStatsFunctions";
-import useSortableData from "Shared/hooks/useSortableData";
-import { sort } from "d3-array";
-import { Argsort } from "../Shared/Functions/Argsort";
 
 const TeamScoreTable = ({
   leftColHeading,
@@ -20,66 +15,146 @@ const TeamScoreTable = ({
   includeYear,
 }) => {
   const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
-  const headings = ["rank", "ELO Rating", "Win(%)"];
-  const numOfTeamsToDisplay = 10;
-  console.log(data);
-  let ObjOfTeams = {};
-  DATA_ATTR.map((key, scoreIndex) => {
-    data[key].map((teamObj, teamIndex) => {
-      const teamName = Object.keys(teamObj)[0];
-      const score = teamObj[teamName];
-      if (teamName in ObjOfTeams === false) {
-        ObjOfTeams[teamName] = {};
-      }
-      if (key === "Standing") {
-        ObjOfTeams[teamName]["Win(%)"] = parseFloat(score["PCT"]);
-        ObjOfTeams[teamName]["rank"] = parseFloat(score["rank"]);
-      } else {
-        ObjOfTeams[teamName][key] = score;
-      }
-    });
+  const headings = ["rank", "name", "ELO Rating", "Massey Rating", "Win(%)"];
+
+  const initialSortingType = {
+    rank: "",
+    name: "",
+    "ELO Rating": "",
+    "Massey Rating": "",
+    "Win(%)": "",
+  };
+
+  // keeps track of what should ascendingly or descendingly sorted
+  const sortingType = useRef({
+    rank: "descending",
+    name: "",
+    "ELO Rating": "",
+    "Massey Rating": "",
+    "Win(%)": "",
   });
 
-  function objSlice(obj, last) {
-    var filteredKeys = Object.keys(obj);
-    var rankKeys = [];
-    filteredKeys.forEach((name) => {
-      rankKeys.push(obj[name]["rank"]);
-    });
-    const rankIndexs = Argsort(rankKeys);
+  const numOfTeamsToDisplay = 10;
 
-    var newObj = {};
-    for (let i = 0; i < last; i++) {
-      newObj[rankKeys[i]] = obj[rankKeys[i]];
+  const [listOfTeams, setListOfTeams] = useState([]);
+  console.log(data);
+  let placeholderArray = [];
+
+  useEffect(() => {
+    DATA_ATTR.map((key, scoreIndex) => {
+      data[key].map((teamObj) => {
+        const teamName = Object.keys(teamObj)[0];
+        const score = teamObj[teamName];
+        let teamIndex;
+
+        let doesObjExist = false;
+        for (let i = 0; i < placeholderArray.length; i++) {
+          if (placeholderArray[i].name === teamName) {
+            teamIndex = i;
+            doesObjExist = true;
+            break;
+          }
+        }
+
+        if (doesObjExist === false) {
+          placeholderArray.push({ name: teamName });
+          teamIndex = placeholderArray.length - 1;
+        }
+        if (key === "Standing") {
+          placeholderArray[teamIndex]["Win(%)"] = parseFloat(score["PCT"]);
+
+          placeholderArray[teamIndex]["rank"] = parseInt(score["rank"]);
+        } else {
+          placeholderArray[teamIndex][key] = score;
+        }
+      });
+    });
+
+    setListOfTeams(sortTeams(placeholderArray, "rank"));
+  }, []);
+
+  console.log(listOfTeams);
+
+  // sorts list by object property given
+  function sortTeams(arr, attr) {
+    const resetObj = (obj) => {
+      Object.keys(obj).forEach((key) => (obj[key] = ""));
+    };
+
+    if (attr in sortingType.current) {
+      if (sortingType.current[attr].length === 0) {
+        sortingType.current = initialSortingType;
+        sortingType.current[attr] = "descending";
+        console.log("here");
+      } else if (sortingType.current[attr] === "descending") {
+        sortingType.current = initialSortingType;
+        sortingType.current[attr] = "ascending";
+      } else if (sortingType.current[attr] === "ascending") {
+        sortingType.current = initialSortingType;
+        sortingType.current[attr] = "descending";
+      }
     }
-    return newObj;
+    console.log(sortingType.current);
+    return [...arr].sort((a, b) => {
+      // mainly to handle when "rank" prop is missing in json
+      // makes sure missing ranks get sorted properly
+      const handleMissingProperties = (a, b) => {
+        if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
+          return 0;
+        }
+        if (!a.hasOwnProperty(attr)) {
+          return 1;
+        }
+        if (!b.hasOwnProperty(attr)) {
+          return -1;
+        }
+      };
+
+      if (sortingType.current[attr] === "ascending") {
+        if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
+          return handleMissingProperties(a, b);
+        }
+
+        return a[attr] - b[attr];
+      } else if (sortingType.current[attr] === "descending") {
+        if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
+          return handleMissingProperties(a, b);
+        }
+        return b[attr] - a[attr];
+      }
+    });
   }
 
-  data = objSlice(ObjOfTeams, numOfTeamsToDisplay);
-
-  const tableRowData = Object.keys(data).map((name, i) => {
-    return (
-      <div className="table-row" key={i}>
-        {headings.map((attr) => {
-          let score = "";
-          if (attr in data[name]) {
-            if (attr === "Win(%)") {
-              score = Math.round(parseFloat(data[name][attr]) * 100);
+  const tableRowData = listOfTeams
+    .slice(0, numOfTeamsToDisplay)
+    .map((obj, i) => {
+      return (
+        <div className="table-row" key={i}>
+          {headings.map((attr) => {
+            let value = "";
+            if (attr in obj) {
+              if (attr === "Win(%)") {
+                value = Math.round(parseFloat(obj[attr]) * 100);
+              } else if (attr === "name") {
+                value = obj[attr];
+              } else {
+                value = Math.round(parseFloat(obj[attr]) * 100) / 100;
+              }
             } else {
-              score = Math.round(parseFloat(data[name][attr]) * 100) / 100;
+              value = "  -  ";
             }
-          } else {
-            score = "  -  ";
-          }
-          return (
-            <div key={attr} className="table-data">
-              {score}
-            </div>
-          );
-        })}
-      </div>
-    );
-  });
+            return (
+              <div
+                key={attr}
+                className={`${sortingType.current[attr]} table-data`}
+              >
+                {value}
+              </div>
+            );
+          })}
+        </div>
+      );
+    });
 
   // const tableRowData = items.map((detail, i) => {
   //   return (
@@ -101,12 +176,17 @@ const TeamScoreTable = ({
 
   // Fixed column - name
   const fixedColumn = (items) => {
-    return Object.keys(items).map((name, i) => {
-      const slug = name.replace(/\s/g, "_");
+    return items.slice(0, numOfTeamsToDisplay).map((obj, i) => {
+      let value = "";
+      if ("rank" in obj) {
+        value = obj["rank"];
+      } else {
+        value = " - ";
+      }
       return (
         <div className="table-row" key={i}>
           <div className="table-data" key={i}>
-            {name}
+            {value}
           </div>
         </div>
       );
@@ -115,9 +195,13 @@ const TeamScoreTable = ({
 
   // Table heading
   const tableHeading = (headings) =>
-    headings.map((heading, i) => (
-      <div key={heading} className="table-data">
-        {heading}
+    headings.map((attr, i) => (
+      <div
+        key={attr}
+        className={`${sortingType.current[attr]} table-data`}
+        onClick={() => setListOfTeams(sortTeams(listOfTeams, attr))}
+      >
+        {attr}
         <i className="fas fa-caret-up"></i>
         <i className="fas fa-caret-down"></i>
       </div>
@@ -126,14 +210,14 @@ const TeamScoreTable = ({
   return (
     <BoxScoreTableWrapper>
       {/* fixed column */}
-      <div className="table name">
+      {/* <div className="table name">
         <div className="table-header">
           <div className="table-row">
             <div className="table-data">{leftColHeading}</div>
           </div>
         </div>
-        <div className="table-body">{fixedColumn(data)}</div>
-      </div>
+        <div className="table-body">{fixedColumn(listOfTeams)}</div>
+      </div> */}
 
       <div className="table-scroll">
         <div className="table data">
@@ -148,10 +232,8 @@ const TeamScoreTable = ({
 };
 
 const BoxScoreTableWrapper = styled.div`
-  background: white;
-  border: solid gray 1px;
   display: flex;
-  margin: 2rem 0 0 0rem;
+  margin: 1.5rem 0 0 0rem;
   user-select: none;
 
   .table-scroll {
