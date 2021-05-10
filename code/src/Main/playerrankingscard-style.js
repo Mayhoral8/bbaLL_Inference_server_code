@@ -64,13 +64,14 @@ export const CardContainer = styled.div`
     flex-direction: row;
     justify-content: space-between;
 
-    background: #c4c4c4;
+    //background: #c4c4c4;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 5px;
+    color: #e0e0e0;
 
-    max-height: 75px;
+    max-height: 85px;
   }
 
   .logo-box {
@@ -94,7 +95,7 @@ export const CardContainer = styled.div`
 
     font-family: Roboto;
     font-weight: 100;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
   }
 
   .value {
