@@ -15,9 +15,10 @@ const TeamScoreTable = ({
   includeYear,
 }) => {
   const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
-  const headings = ["name", "ELO Rating", "Massey Rating", "Win(%)"];
+  const headings = ["rank", "name", "ELO Rating", "Massey Rating", "Win(%)"];
 
   const initialSortingType = {
+    rank: "",
     name: "",
     "ELO Rating": "",
     "Massey Rating": "",
@@ -26,6 +27,7 @@ const TeamScoreTable = ({
 
   // keeps track of what should ascendingly or descendingly sorted
   const sortingType = useRef({
+    rank: "descending",
     name: "",
     "ELO Rating": "",
     "Massey Rating": "",
@@ -108,7 +110,7 @@ const TeamScoreTable = ({
         }
       };
 
-      if (attr === "rank" || sortingType.current[attr] === "ascending") {
+      if (sortingType.current[attr] === "ascending") {
         if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
           return handleMissingProperties(a, b);
         }
@@ -208,14 +210,14 @@ const TeamScoreTable = ({
   return (
     <BoxScoreTableWrapper>
       {/* fixed column */}
-      <div className="table name">
+      {/* <div className="table name">
         <div className="table-header">
           <div className="table-row">
             <div className="table-data">{leftColHeading}</div>
           </div>
         </div>
         <div className="table-body">{fixedColumn(listOfTeams)}</div>
-      </div>
+      </div> */}
 
       <div className="table-scroll">
         <div className="table data">
@@ -230,10 +232,8 @@ const TeamScoreTable = ({
 };
 
 const BoxScoreTableWrapper = styled.div`
-  background: white;
-  border: solid gray 1px;
   display: flex;
-  margin: 3rem 0 0 0rem;
+  margin: 1.5rem 0 0 0rem;
   user-select: none;
 
   .table-scroll {
