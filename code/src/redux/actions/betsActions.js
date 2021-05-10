@@ -85,7 +85,7 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                         }
 
                         try{
-                            await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).collection('games').doc(keys[j]).update(targetObj)
+                            await fbFirestoreSpigameBet.collection('userBets').doc(gameDate).collection('gameId').doc(keys[j]).collection('userId').doc(userId).update(targetObj)
                         }
                         catch(e){
                             error.isError = true
@@ -104,7 +104,8 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                         targetObj.gameFinished = false
 
                         try{
-                            await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(gameDate).collection('games').doc(keys[j]).set(targetObj)
+                            await fbFirestoreSpigameBet.collection('userBets').doc(gameDate).collection('gameId').doc(keys[j]).collection('userId').doc(userId).set(targetObj)
+                            await fbFirestoreSpigameBet.collection('userList').doc(gameDate).collection('gameId').doc(keys[j]).collection('userId').doc(userId).set({userId})
                         }
                         catch(e){
                             error.isError = true
@@ -128,12 +129,11 @@ export const getUserBets = (userId) => {
     return async(dispatch) => {
         let date = new Date
         let today = moment(date).tz("America/New_York").format('YYYY-MM-DD');
-        
         try{
-            let collection = await fbFirestoreSpigameBet.collection('userBets').doc(userId).collection('gameDates').doc(today).collection('games').get()
+            let collection = await fbFirestoreSpigameBet.collection('userBets').doc(today).collection('gameId').doc(userId).collection('userId').get()
             let data=[]
             collection.forEach((doc) => {
-                const docData=doc.data()
+                const docData = doc.data()
                 const docId=doc.id
                 data.push({docData,docId})
             })

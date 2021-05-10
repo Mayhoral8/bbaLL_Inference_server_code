@@ -8,7 +8,7 @@ const BettingSectionheader=()=>{
         <BettingSectionheaderContainer>
             <HeaderSection1>{easternStandardTimeBasedDate}</HeaderSection1>
             <HeaderSection2>
-                <HeaderChildSection>Handicap</HeaderChildSection>
+                <HeaderChildSection>Spread</HeaderChildSection>
                 <HeaderChildSection>Money Line</HeaderChildSection>
                 <HeaderChildSection>Over & Under</HeaderChildSection>
             </HeaderSection2>
