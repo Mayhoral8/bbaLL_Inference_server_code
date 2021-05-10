@@ -170,6 +170,7 @@ const Betting=(props)=>{
     };
 
 
+    console.log("Adding this to make changes to repo")
     const onRemovePoints = (e, params, gameId) => {
         let targetObj = selectedValues;
         let selectedKey = params === 'moneyLine' ? 'moneyLineSelected' : params === 'handicap' ? 'handicapSelected' : 'overUnderSelected';
