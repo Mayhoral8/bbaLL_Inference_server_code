@@ -2,7 +2,7 @@ import { rgba } from "polished";
 import styled from "styled-components";
 import { breakpoints } from "../constants/breakpoints.js";
 import backgroundImage from "../assets/images/court.jpg";
-import refresh from "../assets/images/Vector.png";
+import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
 export const StyledMainContent = styled.div`
