@@ -4,7 +4,7 @@ import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 
 
 // Larry Nace Jr.
-function RandomComparison(props) {
+const RandomComparison = (props) => {
 
   function setPlayer(nameOne, nameTwo) {
     props.setTempNameOneProp(nameOne.replace(" ", "_").replace(".", ","));
