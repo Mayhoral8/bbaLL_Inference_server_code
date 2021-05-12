@@ -9,6 +9,7 @@ import ComparisonDropdown from "./ComparisonDropdown";
 import SEO from "../Shared/SEO";
 import names from "JSON/name.json";
 import candidates from "JSON/player_candidates_for_comparison.json";
+import teamCandidates from "JSON/team_candidates_for_comparison.json";
 
 import RandomPlayerContiner from "./RandomComparison";
 import CompareSideInfo from "./CompareSideInfo";
@@ -49,29 +50,29 @@ const teamAttributes = playerAttributes.slice(0, 7);
 const abbrTeamAttributes = abbrPlayerAttributes.slice(0, 7);
 
 const ComparisonPage = () => {
-  const [playerNameOne, setPlayerNameOne] = useState("");
-  const [playerNameTwo, setPlayerNameTwo] = useState("");
+  const [playerNameOne, setPlayerNameOne] = useState(null);
+  const [playerNameTwo, setPlayerNameTwo] = useState(null);
 
-  const [randomNameOne, setRandomNameOne] = useState("");
-  const [randomNameTwo, setRandomNameTwo] = useState("");
-  const [randomNameThree, setrandomNameThree] = useState("");
-  const [randomNameFour, setrandomNameFour] = useState("");
-  const [randomNameFive, setRrandomNameFive] = useState("");
-  const [randomNameSix, setrandomNameSix] = useState("");
-  const [randomNameSeven, setRandomNameSeven] = useState("");
-  const [randomNameEight, setRandomNameEight] = useState("");
-  const [randomNameNine, setrandomNameNine] = useState("");
-  const [randomNameTen, setrandomNameTen] = useState("");
+  const [randomNameOne, setRandomNameOne] = useState(null);
+  const [randomNameTwo, setRandomNameTwo] = useState(null);
+  const [randomNameThree, setrandomNameThree] = useState(null);
+  const [randomNameFour, setrandomNameFour] = useState(null);
+  const [randomNameFive, setRrandomNameFive] = useState(null);
+  const [randomNameSix, setrandomNameSix] = useState(null);
+  const [randomNameSeven, setRandomNameSeven] = useState(null);
+  const [randomNameEight, setRandomNameEight] = useState(null);
+  const [randomNameNine, setrandomNameNine] = useState(null);
+  const [randomNameTen, setrandomNameTen] = useState(null);
 
 
-  const [yearOne, setYearOne] = useState("");
-  const [yearTwo, setYearTwo] = useState("");
-  const [yearComparison, setYearComparison] = useState("");
+  const [yearOne, setYearOne] = useState(null);
+  const [yearTwo, setYearTwo] = useState(null);
+  const [yearComparison, setYearComparison] = useState(null);
   
-  const [tempPlayerNameOne, setTempPlayerNameOne] = useState("");
-  const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState("");
-  const [tempYearOne, setTempYearOne] = useState("");
-  const [tempYearTwo, setTempYearTwo] = useState("");
+  const [tempPlayerNameOne, setTempPlayerNameOne] = useState(null);
+  const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState(null);
+  const [tempYearOne, setTempYearOne] = useState(null);
+  const [tempYearTwo, setTempYearTwo] = useState(null);
   
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
   const [dataOne, setDataOne] = useState(null);
@@ -634,10 +635,13 @@ const ComparisonPage = () => {
   function loadRandomPlayers() {
       // if this is the fist time loading the screen
       // get the year name from the JSON file and conver it to string
-      year = JSON.stringify(Object.keys(candidates));
+      var data = isTeam ? teamCandidates : candidates;
+      var randRange = isTeam ? 29 : 59;
+
+      year = JSON.stringify(Object.keys(data));
 
       // get the player candidates array
-      nameObject = (Object.values(candidates))["0"];
+      nameObject = (Object.values(data))["0"];
 
       // remove [] and "" from the year string
       year = year.replace("[", "");
@@ -647,16 +651,16 @@ const ComparisonPage = () => {
       // randomly pick two player file the array
 
       for (var index = 0; index < 10; index=index+2) {
-        var indexOne = Math.floor((Math.random() * 59) + 0);
-        var indexTwo = Math.floor((Math.random() * 59) + 0);
+        var indexOne = Math.floor((Math.random() * randRange) + 0);
+        var indexTwo = Math.floor((Math.random() * randRange) + 0);
         if (indexOne == indexTwo) {
-          indexTwo = Math.floor((Math.random() * 59) + 0);
+          indexTwo = Math.floor((Math.random() * randRange) + 0);
         }
 
         defaultComparisonPlayer.push(indexOne);
         defaultComparisonPlayer.push(indexTwo);
       }
-
+      
       
       setRandomNameOne(nameObject[defaultComparisonPlayer[0]]);
       setRandomNameTwo(nameObject[defaultComparisonPlayer[1]])
@@ -681,20 +685,21 @@ const ComparisonPage = () => {
     }
   }
 
-  if (tempPlayerNameOne == "" && tempPlayerNameTwo == "" && playerNameOne == "" && playerNameTwo == "") {
+  if ((tempPlayerNameOne == null && tempPlayerNameTwo == null && playerNameOne == null && playerNameTwo == null)) {
     loadRandomPlayers();  
 
-    setPlayerNameOne(nameObject[defaultComparisonPlayer[0]].replace(" ", "_").replace(".", ","));
-    setTempPlayerNameOne(nameObject[defaultComparisonPlayer[0]].replace(" ", "_").replace(".", ","));
-    setPlayerNameTwo(nameObject[defaultComparisonPlayer[1]].replace(" ", "_").replace(".", ","));
-    setTempPlayerNameTwo(nameObject[defaultComparisonPlayer[1]].replace(" ", "_").replace(".", ","));
+    setPlayerNameOne(nameObject[defaultComparisonPlayer[0]].replace(/ /g, "_").replace(".", ","));
+    setTempPlayerNameOne(nameObject[defaultComparisonPlayer[0]].replace(/ /g, "_").replace(".", ","));
+    setPlayerNameTwo(nameObject[defaultComparisonPlayer[1]].replace(/ /g, "_").replace(".", ","));
+    setTempPlayerNameTwo(nameObject[defaultComparisonPlayer[1]].replace(/ /g, "_").replace(".", ","));
 
     setYearOne("2020-21");
     setTempYearOne("2020-21");
     setYearTwo("2020-21");
     setTempYearTwo("2020-21");
   }
-
+  
+  //console.log(tempPlayerNameOne + " " + tempPlayerNameTwo + " " + playerNameOne + " " + playerNameTwo + " " + isTeam);
   return (
     <>
       <SEO
@@ -844,7 +849,7 @@ const ComparisonPage = () => {
               {isTwoValuesSelected && (
                 <StyledPlayerInfoAndSwitches>
                   <StyledPlayerInfo location={"left"}>
-                    <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"left"}/>
+                    <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"left"} name={playerNameOne} year={yearOne}/>
                   </StyledPlayerInfo>
 
                   <StyleButton left={statistic} right={whoIsBetter}>
@@ -857,7 +862,7 @@ const ComparisonPage = () => {
                   </StyleButton>
 
                   <StyledPlayerInfo location={"right"}>
-                    <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"right"}/>
+                    <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"right"} name={playerNameTwo} year={yearTwo}/>
                   </StyledPlayerInfo>
                 </StyledPlayerInfoAndSwitches>
               )}

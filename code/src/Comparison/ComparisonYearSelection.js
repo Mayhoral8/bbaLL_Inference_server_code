@@ -31,7 +31,6 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, color
   };
 
   const handleChange = (selectedOption) => {
-    console.log(selectedOption);
     if (selectedOption) {
       onChange(selectedOption.value);
     }
