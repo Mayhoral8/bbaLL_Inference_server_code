@@ -42,6 +42,7 @@ import {
     DisplayGamesBtnContainer,
     BetSectionContainer,
     BetSectionWrapper,
+    BetSectionPointsContainer,
     TodayBtnContainer,
     RowC,
     TeamNameContainer,
@@ -72,7 +73,6 @@ import {
     ArrowIcon,
     TeamIcon,
     LoginModalContainer,
-    LoginModalWrapper,
     LoginLogoutBtnsContainer,
     AuthBtn
 } from './styles'
@@ -169,8 +169,6 @@ const Betting=(props)=>{
         }
     };
 
-
-    console.log("Adding this to make changes to repo")
     const onRemovePoints = (e, params, gameId) => {
         let targetObj = selectedValues;
         let selectedKey = params === 'moneyLine' ? 'moneyLineSelected' : params === 'handicap' ? 'handicapSelected' : 'overUnderSelected';
@@ -321,7 +319,7 @@ const Betting=(props)=>{
                         loginModalVisible ? 
                             <LoginModalContainer>
 
-                                <LoginModalWrapper>
+                                <div>
 
                                     <OutsideClickHandler
                                      onOutsideClick = {() => {
@@ -333,7 +331,7 @@ const Betting=(props)=>{
                                         />
                                     </OutsideClickHandler>
 
-                                </LoginModalWrapper>
+                                </div>
                                 
                             </LoginModalContainer>
                         :
@@ -363,21 +361,17 @@ const Betting=(props)=>{
                         <ContentW>
                         <UserStatsRankWrapper>
 
-                            <LoginLogoutBtnsContainer>
+                            <LoginLogoutBtnsContainer onClick = {() => {
+                                props.userDetails.user.uid ? onLogoutClick() : setLoginModalVisible(true)
+                            }}>
                                 {
                                     props.userDetails.user.uid ? 
                                     <AuthBtn 
                                      src = {logoutIcon}
-                                     onClick = {() => {
-                                         onLogoutClick()
-                                     }}
                                     />
                                     :
                                     <AuthBtn
                                      src = {loginIcon}
-                                     onClick = {() => {
-                                         setLoginModalVisible(true)
-                                     }}
                                     />
                                 }
                             </LoginLogoutBtnsContainer>
@@ -404,8 +398,11 @@ const Betting=(props)=>{
                             </ContentHeader>
 
                             <BetSectionWrapper>
-                                <BettingSectionheader/>
+                                <div>
+                                    <BettingSectionheader/>
+                                </div>
 
+                                <BetSectionPointsContainer>
                                 {gameInfo.map((element,index)=>{
                                     let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
                                     return(
@@ -710,6 +707,7 @@ const Betting=(props)=>{
                                     )
                                 })
                                 }
+                                </BetSectionPointsContainer>
 
                             </BetSectionWrapper>
                         </BetSectionContainer>

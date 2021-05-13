@@ -63,9 +63,16 @@ export const BetSectionContainer = styled.div`
 `
 
 export const BetSectionWrapper = styled.div`
-    overflow-y:auto;
-    border: 1px solid #e6e6e6;
-    height: calc(100% - 121px);
+    height: calc(100% - 103px);
+`
+
+export const BetSectionPointsContainer = styled.div`
+    overflow-y: auto;
+    border: 0.5px solid rgba(57, 32, 79, 0.5);
+    border-bottom-left-radius: 5px;
+    border-top: none;
+    border-right: none;
+    height: calc(100% - 58px);
 `
 
 export const RowC = styled.div`
@@ -107,12 +114,12 @@ export const VS = styled.div`
 `
 
 export const TimeContainer = styled.div`
-    border-radius: 8px;
+    border-radius: 20px;
     text-align: center;
     width: 52px;
-    background: #C4C4C4;
-    color: black;
-    height: 20px;
+    background: #002B5C;
+    color: white;
+    padding: 5px 0px;
     margin-right: 20px;
     display: flex;
     flex-direction: column;
@@ -122,7 +129,7 @@ export const PointsContainer = styled.div`
     height:99px;
     width:126px;
     border:${props => props.selected ? '4px solid black' : ''};
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     cursor: pointer;
     margin:0px 5px;
@@ -170,18 +177,18 @@ export const OddsValueContainer = styled.div`
 export const PointsValueContainer = styled.div`
     width: 100%;
     text-align: center;
-    background: rgba(0, 0, 0, 0.08);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    background: #002B5C;
+    color: white;
+    border-radius: 5px;
     font-size: 12px;
 `
 
 export const TotalScoreValueContainer = styled.div`
     width: 100%;
     text-align: center;
-    background: rgba(0, 0, 0, 0.05);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    background: #002B5C;
+    color: white;
+    border-radius: 5px;
     font-size: 12px;
 `
 
@@ -205,13 +212,13 @@ export const CommonChild = styled.li`
 
 export const BetSubmitFormC = styled.div`
     width: 17%;
-    /* min-width: 332.531px; */
-    border:1px solid #e6e6e6;
+    border: 0.5px solid rgba(57, 32, 79, 0.25);
+    box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
+    border-radius: 5px;
     margin-left:10px;
     display:flex;
     flex-direction:column;
     padding:10px;
-    background: #EFEFEF;
     overflow-y:auto;
 `
 
@@ -220,10 +227,12 @@ export const OverviewHeader = styled.h3`
 `
 
 export const SubmitPointsBtn = styled.div`
-    background:#C4C4C4;
+    background: #7500DE;
+    color: white;
     cursor: pointer;
     border-radius:10px;
     width:100%;
+    font-weight: 900;
     min-height:50px;
     display:flex;
     justify-content:center;
@@ -255,7 +264,6 @@ export const WarningPopupWrapper = styled.div`
 `
 
 export const UserStatsRankWrapper = styled.div`
-    /* min-width: 266.75px; */
     width: 13%;
     margin-right: 10px;
 `
@@ -305,17 +313,19 @@ export const LoginModalContainer = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 10;
-`
-
-export const LoginModalWrapper = styled.div`
-    
-`
+`  
 
 export const LoginLogoutBtnsContainer = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    background: #EFEFEF;
+    border: 0.5px solid rgba(57, 32, 79, 0.25);
+    box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover{
+        
+    }
 `
 
 export const AuthBtn = styled.img`

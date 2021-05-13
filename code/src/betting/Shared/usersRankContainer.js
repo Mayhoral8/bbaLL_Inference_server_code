@@ -12,7 +12,7 @@ const UserRankContainer = () => {
                     <div></div>
                 </Col>
                 <Col>
-                    <ColHeading>Points</ColHeading>
+                    <ColHeading>Odds</ColHeading>
                     <div></div>
                 </Col>
             </ColContainer>

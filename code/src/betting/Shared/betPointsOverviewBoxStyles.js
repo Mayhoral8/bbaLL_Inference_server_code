@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const OverviewBoxC=styled.div`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     margin:10px 0px;
+    border-radius: 5px;
 `
 
 export const Input=styled.input`
@@ -16,15 +17,20 @@ export const PointsC=styled.div`
     min-height:137px;
     padding:10px 20px;
 `
+export const Type = styled.span`
+    font-weight: 900;
+`
 
 export const HeaderC=styled.div`
-    background:#ABAAAA;
+    background:#7500DE;
     padding:10px 20px;
+    border-radius: 5px;
 `
 
 export const TeamNameC=styled.div`
     margin:10px 0px;
-    color:black;
+    color: white;
+    font-weight: 900;
 `
 
 export const Points=styled.div`
