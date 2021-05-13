@@ -244,7 +244,7 @@ const Betting=(props)=>{
     }
 
     const onLoginClick = async(params) => {
-
+        let localStorageObj = {}
         if(params === 'google'){
             const provider = new firebase.auth.GoogleAuthProvider()
 
@@ -253,9 +253,13 @@ const Betting=(props)=>{
                 const {uid,displayName,email} = res.user
                 setBettingPageSpinner(true)
                 setLoginModalVisible(false)
-                await props.checkUserRecordCollectionExists({uid, displayName, email, type: 'google'})
+                localStorageObj.uid = uid
+                localStorageObj.displayName = displayName
+                localStorageObj.email = email
+                localStorageObj.type = 'google'
+                localStorage.setItem('User', JSON.stringify(localStorageObj))
+                await props.checkUserRecordCollectionExists(localStorageObj)
                 setBettingPageSpinner(false)
-
             })
             .catch(()=>{
                 setError({status: null, message: 'Google login error', isError:true})
@@ -279,12 +283,15 @@ const Betting=(props)=>{
             .then(async(res)=>{
                 const {displayName, uid} = res.user
                 const {username} = res.additionalUserInfo
-
+                localStorageObj.uid = uid
+                localStorageObj.displayName = username
+                localStorageObj.email = displayName
+                localStorageObj.type = 'twitter'
                 setBettingPageSpinner(true)
                 setLoginModalVisible(false)
-                await props.checkUserRecordCollectionExists({uid, displayName: username, email: displayName, type: 'twitter'})
+                localStorage.setItem('User', JSON.stringify(localStorageObj))
+                await props.checkUserRecordCollectionExists(localStorageObj)
                 setBettingPageSpinner(false)
-
             })
             .catch((e)=>{
                 setError({status: null, message: 'Twitter login error', isError:true})

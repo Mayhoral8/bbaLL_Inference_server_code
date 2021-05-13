@@ -40,15 +40,15 @@ export const setStructuredFutureGamesInfo = (data) => {
 export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
     return async(dispatch) => {
         let error = {}
-        let keys = Object.keys(selectedValues)
+        let gameIdKeys = Object.keys(selectedValues)
 
         for (let i = 0; i < gameInfo.length; i++){
             
-            for (let j = 0; j < keys.length; j++){
+            for (let j = 0; j < gameIdKeys.length; j++){
 
-                if(keys[j] === gameInfo[i].gameId){
+                if(gameIdKeys[j] === gameInfo[i].gameId){
 
-                    let gameDate = selectedValues[`${keys[j]}`].gameDetails.gameDate ? selectedValues[`${keys[j]}`].gameDetails.gameDate : ''
+                    let gameDate = selectedValues[`${gameIdKeys[j]}`].gameDetails.gameDate ? selectedValues[`${gameIdKeys[j]}`].gameDetails.gameDate : ''
 
                     if(gameInfo[i].overUnder.selected || gameInfo[i].moneyLine.selected || gameInfo[i].handicap.selected){
                         let targetObj = {}
@@ -60,32 +60,32 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                             (gameInfo[i].handicap.selected && gameInfo[i].moneyLine.selected)
                         ){
                             if(gameInfo[i].overUnder.selected && gameInfo[i].moneyLine.selected){
-                                targetObj.handicap = selectedValues[keys[j]].handicap
+                                targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
                             }
                             else if(gameInfo[i].overUnder.selected && gameInfo[i].handicap.selected ){
-                                targetObj.moneyLine = selectedValues[keys[j]].moneyLine
+                                targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
                             }
                             else{
-                                targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                                targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
                             }
                         }
                         else{
                             if(gameInfo[i].overUnder.selected){
-                                targetObj.handicap = selectedValues[keys[j]].handicap
-                                targetObj.moneyLine = selectedValues[keys[j]].moneyLine
+                                targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                                targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
                             }
                             if(gameInfo[i].moneyLine.selected){
-                                targetObj.handicap = selectedValues[keys[j]].handicap
-                                targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                                targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                                targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
                             }
                             if(gameInfo[i].handicap.selected){
-                                targetObj.moneyLine = selectedValues[keys[j]].moneyLine
-                                targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                                targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
+                                targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
                             }
                         }
 
                         try{
-                            await fbFirestoreSpigameBet.collection('userBets').doc(gameDate).collection('gameId').doc(keys[j]).collection('userId').doc(userId).update(targetObj)
+                            await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).update(targetObj)
                         }
                         catch(e){
                             error.isError = true
@@ -97,15 +97,36 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                     else{
 
                         let targetObj = {}
-                        targetObj.gameDetails = selectedValues[keys[j]].gameDetails
-                        targetObj.handicap = selectedValues[keys[j]].handicap
-                        targetObj.moneyLine = selectedValues[keys[j]].moneyLine
-                        targetObj.overAndUnder = selectedValues[keys[j]].overAndUnder
+                        targetObj.gameDetails = selectedValues[gameIdKeys[j]].gameDetails
+                        targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                        targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
+                        targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
                         targetObj.gameFinished = false
 
                         try{
-                            await fbFirestoreSpigameBet.collection('userBets').doc(gameDate).collection('gameId').doc(keys[j]).collection('userId').doc(userId).set(targetObj)
-                            await fbFirestoreSpigameBet.collection('userList').doc(gameDate).collection('gameId').doc(keys[j]).collection('userId').doc(userId).set({userId})
+                            let userList = await fbFirestoreSpigameBet.collection('userListTracker').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
+                            let userListTargetObj = userList.data()
+                            if(!userList.data()){
+                                userListTargetObj = {}
+                            }
+                            userListTargetObj[userId] = ''
+
+                            let betHistory = await fbFirestoreSpigameBet.collection('userBetHistoryTracker').doc(userId).get()
+                            let betHistoryTargetObj = betHistory.data()
+                            if(!betHistory.data()){
+                                betHistoryTargetObj = {}
+                                betHistoryTargetObj[gameDate] = {}
+                                betHistoryTargetObj[gameDate][gameIdKeys[j]] = ''
+                            }
+                            else{
+                                let datekeys = Object.keys(betHistoryTargetObj)
+                                for(let k = 0; k < datekeys.length; k++){
+                                    betHistoryTargetObj[datekeys[k]][gameIdKeys[j]] = ''
+                                }
+                            }
+                            await fbFirestoreSpigameBet.collection('userBetHistoryTracker').doc(userId).set(betHistoryTargetObj)
+                            await fbFirestoreSpigameBet.collection('userListTracker').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(userListTargetObj)
+                            await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(targetObj)
                         }
                         catch(e){
                             error.isError = true
@@ -130,11 +151,11 @@ export const getUserBets = (userId) => {
         let date = new Date
         let today = moment(date).tz("America/New_York").format('YYYY-MM-DD');
         try{
-            let collection = await fbFirestoreSpigameBet.collection('userBets').doc(today).collection('gameId').doc(userId).collection('userId').get()
+            let collection = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(today).collection('gameId').get()
             let data=[]
             collection.forEach((doc) => {
                 const docData = doc.data()
-                const docId=doc.id
+                const docId = doc.id
                 data.push({docData,docId})
             })
             dispatch({

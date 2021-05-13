@@ -32,11 +32,10 @@ export const checkLoginStatus = () => {
     try{
       firebaseInstanceSpigamebet.auth().onAuthStateChanged(async(user)=>{
         if(user){
-          console.log("User From Login Status Check",user)
-          const {displayName,email,uid} = user
+          let parsedUser = JSON.parse(localStorage.getItem('User'))
           dispatch({
             type: LOGIN,
-            payload: {user: {displayName, email, uid}, isLoading: false}
+            payload: {user: parsedUser, isLoading: false}
           })
           return {requestSuccessful: true}
         }
@@ -59,6 +58,7 @@ export const logoutAction = () => {
   return async(dispatch) => {
     try {
       await firebaseInstanceSpigamebet.auth().signOut()
+      localStorage.setItem('User', JSON.stringify({}))
       dispatch({
         type: LOGIN,
         payload: {user: {}, isLoading: false},
