@@ -27,8 +27,6 @@ const CompareSideInfo = (props) => {
         console.log(error);
     });
 
-    console.log(resultArray)
-
     if (resultArray != null) {
         one =  resultArray[0];
         two =  resultArray[1];
@@ -41,9 +39,9 @@ const CompareSideInfo = (props) => {
         {props.isTeam == "false" ? (
             <StyledSideInfo location = {props.location}>
                 <p className="info">
-                    Weight(kg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{one}
-                    <br />Height(cm)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{two}
-                    <br />Salary($mln)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{three}
+                    Weight(kg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{one}
+                    <br />Height(cm)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{two}
+                    <br />Salary($mln)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{three}
                 </p>
             </StyledSideInfo>
             ) : (
