@@ -125,36 +125,34 @@ const TeamScoreTable = ({
     });
   }
 
-  const tableRowData = listOfTeams
-    .slice(0, numOfTeamsToDisplay)
-    .map((obj, i) => {
-      return (
-        <div className="table-row" key={i}>
-          {headings.map((attr) => {
-            let value = "";
-            if (attr in obj) {
-              if (attr === "Win(%)") {
-                value = Math.round(parseFloat(obj[attr]) * 100);
-              } else if (attr === "name") {
-                value = obj[attr];
-              } else {
-                value = Math.round(parseFloat(obj[attr]) * 100) / 100;
-              }
+  const tableRowData = listOfTeams.map((obj, i) => {
+    return (
+      <div className="table-row" key={i}>
+        {headings.map((attr) => {
+          let value = "";
+          if (attr in obj) {
+            if (attr === "Win(%)") {
+              value = Math.round(parseFloat(obj[attr]) * 100);
+            } else if (attr === "name") {
+              value = obj[attr];
             } else {
-              value = "  -  ";
+              value = Math.round(parseFloat(obj[attr]) * 100) / 100;
             }
-            return (
-              <div
-                key={attr}
-                className={`${sortingType.current[attr]} table-data`}
-              >
-                {value}
-              </div>
-            );
-          })}
-        </div>
-      );
-    });
+          } else {
+            value = "  -  ";
+          }
+          return (
+            <div
+              key={attr}
+              className={`${sortingType.current[attr]} table-data`}
+            >
+              {value}
+            </div>
+          );
+        })}
+      </div>
+    );
+  });
 
   // const tableRowData = items.map((detail, i) => {
   //   return (
@@ -235,9 +233,11 @@ const BoxScoreTableWrapper = styled.div`
   display: flex;
   margin: 1.5rem 0 0 0rem;
   user-select: none;
+  max-height: 400px;
 
   .table-scroll {
     overflow-x: auto;
+    overflow-y: auto;
     position: relative;
   }
   .table {

@@ -69,7 +69,8 @@ export const CardContainer = styled.div`
     margin-bottom: 0.5rem;
     padding: 0.5rem;
     border-radius: 5px;
-    color: #e0e0e0;
+    //color: #e0e0e0;
+    color: #2e2e2e;
 
     max-height: 85px;
   }
@@ -84,6 +85,7 @@ export const CardContainer = styled.div`
     max-width: 100%;
     max-height: 100%;
     border-radius: 50px;
+    //border: solid black 2px;
   }
 
   .player-name {
