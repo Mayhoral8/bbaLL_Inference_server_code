@@ -106,13 +106,17 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                         try{
                             let userList = await fbFirestoreSpigameBet.collection('userListTracker').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
                             let userListTargetObj = userList.data()
+
                             if(!userList.data()){
                                 userListTargetObj = {}
                             }
-                            userListTargetObj[userId] = ''
 
-                            let betHistory = await fbFirestoreSpigameBet.collection('userBetHistoryTracker').doc(userId).get()
+                            userListTargetObj[userId] = ''
+                            let year = moment(gameDate, 'YYYY-MM-DD').format('YYYY')
+                            let month = moment(gameDate, 'YYYY-MM-DD').format('M')
+                            let betHistory = await fbFirestoreSpigameBet.collection('userBetHistoryTracker').doc(userId).collection('year').doc(year).collection('month').doc(month).get()
                             let betHistoryTargetObj = betHistory.data()
+
                             if(!betHistory.data()){
                                 betHistoryTargetObj = {}
                                 betHistoryTargetObj[gameDate] = {}
@@ -124,8 +128,9 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                                     betHistoryTargetObj[datekeys[k]][gameIdKeys[j]] = ''
                                 }
                             }
-                            await fbFirestoreSpigameBet.collection('userBetHistoryTracker').doc(userId).set(betHistoryTargetObj)
-                            await fbFirestoreSpigameBet.collection('userListTracker').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(userListTargetObj)
+
+                            await fbFirestoreSpigameBet.collection('userBettingHistoryTracker').doc(userId).collection('year').doc(year).collection('month').doc(month).set(betHistoryTargetObj)
+                            await fbFirestoreSpigameBet.collection('userTrackList').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(userListTargetObj)
                             await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(targetObj)
                         }
                         catch(e){

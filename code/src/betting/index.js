@@ -131,6 +131,9 @@ const Betting=(props)=>{
             if(response.isError){
                 setError({status: response.status, message: response.message, isError:true})
             }
+            else{
+                props.getUserRecord(props.userDetails.user.uid)
+            }
         }
 
     },[props.structuredGameInfo, props.userDetails])
@@ -269,7 +272,7 @@ const Betting=(props)=>{
             const provider = new firebase.auth.FacebookAuthProvider();
 
             firebaseInstanceSpigamebet.auth().signInWithPopup(provider)
-            .then((res)=>{
+            .then(async(res)=>{
                 //Needs to configures
             })
             .catch((e)=>{
@@ -384,7 +387,7 @@ const Betting=(props)=>{
                             </LoginLogoutBtnsContainer>
 
                             {
-                                props.userDetails.user.uid ? 
+                                props.userDetails.user.uid && props.userRecord? 
                                 <UserStatsContainer/>
                                 :
                                 null
