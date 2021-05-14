@@ -268,6 +268,9 @@ const BoxScoreTableWrapper = styled.div`
   .table.data {
     width: 100%;
     min-width: 800px;
+    @media (max-width: 834px) {
+      min-width: 550px;
+    }
     max-width: 1300px;
   }
   .table-row {
@@ -290,6 +293,10 @@ const BoxScoreTableWrapper = styled.div`
     padding: 0.5rem;
     overflow: hidden;
     white-space: nowrap;
+    @media (max-width: 834px) {
+      font-size: 0.7rem;
+    }
+
     font-size: 0.9rem;
     a {
       text-decoration: none;
