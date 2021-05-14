@@ -189,33 +189,38 @@ const GamePageContainer = () => {
               {hasDataLoaded ? (
                 <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
               ) : (
-                <div></div>
+                <div
+                  style={{
+                    background: "white",
+                    border: "solid gray 1px",
+                    height: "100%",
+                    width: "100%",
+                    margin: "0rem 3rem 3rem 0rem",
+                    minWidth: "400px",
+                  }}
+                >
+                  <div style={{ fontSize: "1.5rem", padding: "1.5rem" }}>
+                    Player Rankings
+                  </div>
+                </div>
               )}
               <MemeCard urls={memeUrls} />
             </RowContainer>
-            {hasDataLoaded ? (
+
+            <TeamRankingsContainer>
               <div
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  margin: "3rem 0 0 0rem",
-                  backgroundColor: "white",
-                  border: "solid gray 1px",
-                  padding: "1.5rem",
+                  fontSize: "1.5rem",
                 }}
               >
-                <div
-                  style={{
-                    fontSize: "1.5rem",
-                  }}
-                >
-                  Team Rankings
-                </div>
-                <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                Team Rankings
               </div>
-            ) : (
-              <div></div>
-            )}
+              {hasDataLoaded ? (
+                <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+              ) : (
+                <div style={{ minHeight: "400px" }}></div>
+              )}
+            </TeamRankingsContainer>
           </div>
 
           {useWindowSize() > 834 && (
@@ -232,7 +237,7 @@ const GamePageContainer = () => {
                 overflowY: "scroll",
                 position: "relative",
                 border: "solid gray 1px",
-                height: "1015px",
+                height: "1043px",
                 scrollbarWidth: "thin" /* "auto" or "thin" */,
                 // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
               }}
@@ -258,6 +263,19 @@ const GamePageContainer = () => {
     </>
   );
 };
+
+const TeamRankingsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 834px) {
+    margin: 0rem 0rem 0rem 0rem;
+  }
+  margin: 3rem 0rem 0rem 0rem;
+  background-color: white;
+  border: solid gray 1px;
+  padding: 1.5rem;
+`;
 
 const futureGameList = styled.div`
   background-color: white;
@@ -286,13 +304,13 @@ const MainPageContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1640px;
   justify-content: center;
   margin: 4rem auto auto auto;
 `;
 
 const RowContainer = styled.div`
-  @media (max-width: 843px) {
+  @media (max-width: 643px) {
     flex-direction: column;
   }
   display: flex;
