@@ -52,6 +52,12 @@ const Games = Loadable({
       return <Spinner />;
     },
   });
+  const ProfilePage = Loadable({
+    loader: () => import("../Profilepage/index"),
+    loading() {
+      return <Spinner />;
+    },
+  });
 
 const Routes=(props)=>{
   
@@ -81,6 +87,7 @@ const Routes=(props)=>{
                   <Route path="/404" component={PageNotFound} />
                   <Route path='/login' component={Login}/>
                   <Route path='/betting' component={Betting}/>
+                  <Route path='/profile' component={ProfilePage}/>
                   <Footer />
                 </MainContainerDiv>
               </Layout>

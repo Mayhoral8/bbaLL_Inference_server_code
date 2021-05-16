@@ -79,7 +79,6 @@ import {
 
 const Betting=(props)=>{
 
-    const [loader, setLoader] = useState(false);
     const [gameInfo, setGameInfo] = useState([]);
     const [selectedValues, setSelectedValues] = useState({});
     const [overviewKeysArray, setOverviewKeysArray] = useState([]);
