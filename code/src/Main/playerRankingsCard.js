@@ -101,8 +101,10 @@ const PlayerRankingsCard = ({ data }) => {
     getPic(names);
   }, [topPlayers]);
 
+  const InitialLabels = ["Points", "Points", "Num_DD"];
+
   useEffect(() => {
-    scoreType.current = Object.keys(data[rankingTypeIndex])[0];
+    scoreType.current = InitialLabels[rankingTypeIndex];
     setTopPlayers(
       data[rankingTypeIndex][scoreType.current]
         .sort((a, b) => {
@@ -224,7 +226,7 @@ const PlayerRankingsCard = ({ data }) => {
                 // looks for team colour of player
                 if (topPlayers[key][playerName].hasOwnProperty("Team")) {
                   const teamName = topPlayers[key][playerName]["Team"];
-                  playerColour = getPlayerColour(teamName);
+                  playerColour = getPlayerColour(teamName) + "99";
                 }
 
                 return (
