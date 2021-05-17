@@ -6,7 +6,7 @@ export const OutsideContainer = styled.div`
     left: -2.7rem;
   }
 
-  @media (max-width: 834px) {
+  @media (max-width: 1400px) {
     margin: 2rem 0rem 2rem 0rem;
   }
 
@@ -36,8 +36,13 @@ export const CardContainer = styled.div`
   @media (max-width: 834px) {
     min-width: 280px;
   }
+  @media (min-width: 900px) {
+    min-width: 400px;
+  }
+  @media (min-width: 1440px) {
+    min-width: 470px;
+  }
 
-  min-width: 470px;
   max-width: 470px;
   max-height: 500px;
 
