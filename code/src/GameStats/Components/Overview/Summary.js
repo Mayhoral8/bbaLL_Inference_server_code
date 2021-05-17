@@ -169,7 +169,7 @@ const Summary = ({
                   );
                 })}
               </PlotButtons>
-          </PlotButtonsContiner>
+        </PlotButtonsContiner>
       </TapsWrapper>
       
       <SummaryOverviewWrapper>
