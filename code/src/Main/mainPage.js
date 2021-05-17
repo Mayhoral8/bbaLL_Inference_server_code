@@ -57,6 +57,7 @@ const GamePageContainer = () => {
   const [games, setGames] = useState([]);
   const [memeUrls, setMemeUrls] = useState([]);
   const [teamData, setTeamData] = useState({});
+  console.log(games.length);
   useEffect(() => {
     fbFirestore
       .collection("future_game_info")
@@ -158,7 +159,9 @@ const GamePageContainer = () => {
                   borderBottom: "solid gray 1px",
                 }}
               >
-                <div style={{ margin: "1rem 0rem 0rem 0rem" }}>
+                <div
+                  style={{ margin: "1rem 0rem 0rem 0rem", fontSize: "1.5rem" }}
+                >
                   Upcoming Games
                 </div>
                 <div
@@ -181,6 +184,20 @@ const GamePageContainer = () => {
                   {games.map((item, index) => {
                     return <FutureGameOddsCard data={item} key={index} />;
                   })}
+                  {games.length === 0 ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        margin: "1rem auto 1rem auto",
+                      }}
+                    >
+                      Games are unavailable at this time.
+                      <br />
+                      Please check again later.{" "}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             )}
@@ -256,6 +273,20 @@ const GamePageContainer = () => {
               {games.map((item, index) => {
                 return <FutureGameOddsCard data={item} key={index} />;
               })}
+              {games.length === 0 ? (
+                <div
+                  style={{
+                    textAlign: "center",
+                    margin: "auto",
+                  }}
+                >
+                  Games are unavailable at this time.
+                  <br />
+                  Please check again later.{" "}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           )}
         </MainPageContainer>
@@ -306,7 +337,11 @@ const MainPageContainer = styled.div`
   width: 100%;
   max-width: 1640px;
   justify-content: center;
-  margin: 4rem auto auto auto;
+
+  @media screen and (min-width: 996px) {
+    margin: 4rem auto 0rem auto;
+  }
+  margin: 2.2rem auto 0rem auto;
 `;
 
 const RowContainer = styled.div`
