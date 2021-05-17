@@ -73,11 +73,11 @@ const MemeCard = ({ urls }) => {
           <span>Previous</span>
         </button>
         <div
+          className="title"
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            fontSize: "1.5rem",
           }}
         >
           Highlights
@@ -123,13 +123,25 @@ export const Card1 = styled.div`
   }
   width: 100%;
 
+  .title {
+    @media (max-width: 834px) {
+      font-size: 1rem;
+    }
+    font-size: 1.5rem;
+  }
+
   background: white;
   border: solid gray 1px;
 
   @media (min-width: 1200px) {
+    margin: 2rem 0rem 0rem 0rem;
+    max-height: 500px;
+  }
+  @media (min-width: 1400px) {
     margin: 0rem 0rem 0rem 0rem;
     max-height: 485px;
   }
+
   padding: 0rem 1rem 1rem 1rem;
 
   .content {
@@ -155,7 +167,7 @@ export const Card1 = styled.div`
     text-align: center;
     display: inline-block;
     @media (max-width: 834px) {
-      min-width: 100px;
+      min-width: 75px;
       font-size: 0.8rem;
     }
 
