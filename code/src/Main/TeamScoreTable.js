@@ -15,7 +15,7 @@ const TeamScoreTable = ({
   includeYear,
 }) => {
   const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
-  const headings = ["rank", "name", "ELO Rating", "Massey Rating", "Win(%)"];
+  const headings = ["rank", "ELO Rating", "Massey Rating", "Win(%)"];
 
   const initialSortingType = {
     rank: "",
@@ -125,36 +125,34 @@ const TeamScoreTable = ({
     });
   }
 
-  const tableRowData = listOfTeams
-    .slice(0, numOfTeamsToDisplay)
-    .map((obj, i) => {
-      return (
-        <div className="table-row" key={i}>
-          {headings.map((attr) => {
-            let value = "";
-            if (attr in obj) {
-              if (attr === "Win(%)") {
-                value = Math.round(parseFloat(obj[attr]) * 100);
-              } else if (attr === "name") {
-                value = obj[attr];
-              } else {
-                value = Math.round(parseFloat(obj[attr]) * 100) / 100;
-              }
+  const tableRowData = listOfTeams.map((obj, i) => {
+    return (
+      <div className="table-row" key={i}>
+        {headings.map((attr) => {
+          let value = "";
+          if (attr in obj) {
+            if (attr === "Win(%)") {
+              value = Math.round(parseFloat(obj[attr]) * 100);
+            } else if (attr === "name") {
+              value = obj[attr];
             } else {
-              value = "  -  ";
+              value = Math.round(parseFloat(obj[attr]) * 100) / 100;
             }
-            return (
-              <div
-                key={attr}
-                className={`${sortingType.current[attr]} table-data`}
-              >
-                {value}
-              </div>
-            );
-          })}
-        </div>
-      );
-    });
+          } else {
+            value = "  -  ";
+          }
+          return (
+            <div
+              key={attr}
+              className={`${sortingType.current[attr]} table-data`}
+            >
+              {value}
+            </div>
+          );
+        })}
+      </div>
+    );
+  });
 
   // const tableRowData = items.map((detail, i) => {
   //   return (
@@ -176,10 +174,10 @@ const TeamScoreTable = ({
 
   // Fixed column - name
   const fixedColumn = (items) => {
-    return items.slice(0, numOfTeamsToDisplay).map((obj, i) => {
+    return items.map((obj, i) => {
       let value = "";
-      if ("rank" in obj) {
-        value = obj["rank"];
+      if ("name" in obj) {
+        value = obj["name"];
       } else {
         value = " - ";
       }
@@ -210,16 +208,17 @@ const TeamScoreTable = ({
   return (
     <BoxScoreTableWrapper>
       {/* fixed column */}
-      {/* <div className="table name">
-        <div className="table-header">
-          <div className="table-row">
-            <div className="table-data">{leftColHeading}</div>
-          </div>
-        </div>
-        <div className="table-body">{fixedColumn(listOfTeams)}</div>
-      </div> */}
 
       <div className="table-scroll">
+        <div className="table name">
+          <div className="table-header">
+            <div className="table-row">
+              <div className="table-data">{"Name"}</div>
+            </div>
+          </div>
+          <div className="table-body">{fixedColumn(listOfTeams)}</div>
+        </div>
+
         <div className="table data">
           <div className="table-header">
             <div className="table-row">{tableHeading(headings)}</div>
@@ -235,10 +234,13 @@ const BoxScoreTableWrapper = styled.div`
   display: flex;
   margin: 1.5rem 0 0 0rem;
   user-select: none;
+  max-height: 400px;
 
   .table-scroll {
     overflow-x: auto;
+    overflow-y: auto;
     position: relative;
+    display: flex;
   }
   .table {
     font-family: "Roboto Condensed", sans-serif;
@@ -248,6 +250,9 @@ const BoxScoreTableWrapper = styled.div`
     display: flex;
     flex-direction: column;
     min-width: 11rem;
+    @media (max-width: 834px) {
+      min-width: 7.5rem;
+    }
   }
   .table.name {
     border-right: 1px solid #eee;
@@ -268,6 +273,9 @@ const BoxScoreTableWrapper = styled.div`
   .table.data {
     width: 100%;
     min-width: 800px;
+    @media (max-width: 834px) {
+      min-width: 200px;
+    }
     max-width: 1300px;
   }
   .table-row {
@@ -290,6 +298,10 @@ const BoxScoreTableWrapper = styled.div`
     padding: 0.5rem;
     overflow: hidden;
     white-space: nowrap;
+    @media (max-width: 834px) {
+      font-size: 0.7rem;
+    }
+
     font-size: 0.9rem;
     a {
       text-decoration: none;
