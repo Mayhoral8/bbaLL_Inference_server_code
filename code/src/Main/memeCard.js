@@ -19,6 +19,7 @@ const MemeCard = ({ urls }) => {
       setCurrentVid(urls.length - 1);
     }
   };
+
   return (
     // <Card>
     // <div
@@ -58,9 +59,9 @@ const MemeCard = ({ urls }) => {
     //     </div>
     //   </Styles>
     // </Card>
-
     <Card1>
       <div
+        className="top"
         style={{
           display: "flex",
           flexDirection: "row",
@@ -85,16 +86,27 @@ const MemeCard = ({ urls }) => {
           <span>Next</span>
         </button>
       </div>
-      <Styles>
-        <div className="player-wrapper">
-          <ReactPlayer
-            className="react-player"
-            url={urls[currentVid]}
-            width="100%"
-            height="100%"
-          />
-        </div>
-      </Styles>
+
+      <div className="content">
+        {urls.length === 0 ? (
+          <div className="error-message">
+            Videos are Unavailable at this time.
+            <br />
+            Try again later.
+          </div>
+        ) : (
+          <Styles>
+            <div className="player-wrapper">
+              <ReactPlayer
+                className="react-player"
+                url={urls[currentVid]}
+                width="100%"
+                height="100%"
+              />
+            </div>
+          </Styles>
+        )}
+      </div>
     </Card1>
   );
 };
@@ -102,20 +114,33 @@ const MemeCard = ({ urls }) => {
 export const Card1 = styled.div`
   display: flex;
   flex-direction: column;
-  // justify-content: flex-start;
-  //  align-items: center;
-  @media (max-width: 834px) {
-    min-width: 200px;
-    max-height: 355px;
-    margin: 2rem 0rem 0rem 0rem;
+
+  margin: 0rem 0rem 2rem 0rem;
+  min-width: 200px;
+  @media (min-width: 634px) {
+    margin: 2rem 0rem 2rem 0rem;
+    min-height: 355px;
   }
   width: 100%;
 
   background: white;
   border: solid gray 1px;
 
-  margin: 0rem 0rem auto 0rem;
+  @media (min-width: 1200px) {
+    margin: 0rem 0rem 0rem 0rem;
+    max-height: 485px;
+  }
   padding: 0rem 1rem 1rem 1rem;
+
+  .content {
+    margin: auto 0;
+  }
+
+  .error-message {
+    text-align: center;
+    position: relative;
+    top: -5px;
+  }
 
   .button {
     transition-duration: 0.4s;
@@ -199,6 +224,7 @@ export const Styles = styled.div`
   }
 
   .react-player {
+    max-height: 380px;
     position: absolute;
     top: 0;
     left: 0;
@@ -218,7 +244,7 @@ export const Card = styled.div`
   background: white;
   border: solid gray 1px;
 
-  margin: 0rem 0rem auto 0rem;
+  //margin: 0rem 0rem auto 0rem;
   padding: 0rem 1rem 1rem 1rem;
 
   .button {
