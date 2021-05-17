@@ -148,7 +148,7 @@ const GamePageContainer = () => {
         />
         <MainPageContainer>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            {useWindowSize() < 834 && (
+            {useWindowSize() < 1400 && (
               <div
                 style={{
                   display: "flex",
@@ -240,7 +240,7 @@ const GamePageContainer = () => {
             </TeamRankingsContainer>
           </div>
 
-          {useWindowSize() > 834 && (
+          {useWindowSize() > 1400 && (
             <div
               style={{
                 backgroundColor: "white",
@@ -299,7 +299,7 @@ const TeamRankingsContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media (max-width: 834px) {
+  @media (max-width: 1400px) {
     margin: 0rem 0rem 0rem 0rem;
   }
   margin: 3rem 0rem 0rem 0rem;
