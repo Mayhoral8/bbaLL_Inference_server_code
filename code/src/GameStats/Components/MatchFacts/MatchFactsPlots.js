@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import ShotTypeBarPlot from './ShotTypeBarPlot';
 import ShotTypeDonutPlot from './ShotTypeDonutPlot';
+import { StyledMatchFactsPlots } from "./MatchFacts-styles";
 
 const MatchFactsPlots = ({ info, homeTeam, awayTeam }) => {
 
@@ -68,41 +68,5 @@ const MatchFactsPlots = ({ info, homeTeam, awayTeam }) => {
     </StyledMatchFactsPlots>
   );
 }
-
-const StyledMatchFactsPlots = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 5rem 1fr 1fr;
-  grid-template-areas:
-    "homeDonut homeBar vline awayDonut awayBar";
-  margin: auto;
-  margin-top: 8rem;
-  .item-1 {
-    grid-area: homeDonut;
-  }
-  .item-2 {
-    grid-area: homeBar;
-  }
-  .vertical-line {
-    grid-area: vline;
-  }
-  .item-3 {
-    grid-area: awayDonut;
-  }
-  .item-4 {
-    grid-area: awayBar;
-  }
-  @media(max-width: 500px) {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-    "homeDonut awayDonut"
-     "homeBar  awayBar";
-    grid-gap: 1.5rem;
-    width: 100%;
-    margin-top: 5rem;
-    .vertical-line {
-      display:none;
-    }
-  }
-`
 
 export default MatchFactsPlots;

@@ -14,7 +14,9 @@ const GetPlayerImage = ({ playerName, isTeam }) => {
     fbStorage
       .ref()
       .child(
-        `${isTeam ? "team_logo_spi" : "player_photo_hayaoStyle_v2"}/${playerName + '.png'}`
+        `${isTeam ? "team_logo_spi" : "player_photo_hayaoStyle_S"}/${
+          playerName + ".png"
+        }`
       )
       .getDownloadURL()
       .then((url) => {
@@ -25,7 +27,7 @@ const GetPlayerImage = ({ playerName, isTeam }) => {
       .catch(() => {
         fbStorage
           .ref()
-          .child(`player_photo_hayaoStyle_v2/Anonymous_Image.png`)
+          .child(`player_photo_hayaoStyle_S/Anonymous_Image.png`)
           .getDownloadURL()
           .then((url) => {
             if (isMounted) {
@@ -39,17 +41,11 @@ const GetPlayerImage = ({ playerName, isTeam }) => {
     };
   }, [playerName]);
 
-
-  if (playerUrl === '') {
-    return <Loader page={pageLocation} />
+  if (playerUrl === "") {
+    return <Loader page={pageLocation} />;
   }
 
-  return (
-    <img
-      src={playerUrl}
-      alt={playerName}
-    />
-  );
+  return <img src={playerUrl} alt={playerName} />;
 };
 
 export default GetPlayerImage;

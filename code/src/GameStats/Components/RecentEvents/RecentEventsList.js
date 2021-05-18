@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import Carousel from "../Carousel/Carousel";
 import { getMonthName } from "../../../Shared/Functions/GetMonthName";
 import RecentEventsItem from "./RecentEventsItem";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeGamesTab } from "../../../redux/actions/gamesActions";
+import { RecentEventsListWrapper } from "./RecentEventsItemList-style";
 
 const RecentEventsList = ({
   gameInfo,
@@ -143,59 +143,5 @@ const RecentEventsList = ({
   );
 };
 
-const RecentEventsListWrapper = styled.section`
-  box-shadow: var(--box-shadow-2);
-
-  .recent-events-wrapper {
-    display: flex;
-    max-width: 1440px;
-    margin: 0 auto;
-  }
-
-  .slick-slider,
-  .date-select {
-    height: 100px;
-  }
-
-  .carousel {
-    width: calc(100% - 100px);
-    border-right: 1px solid silver;
-  }
-  .date-select {
-    width: 100px;
-    min-width: 100px;
-    position: relative;
-    border-right: 1px solid silver;
-    border-left: 1px solid silver;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    button {
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--lighter-black);
-      width: 100%;
-      height: 100%;
-    }
-    .active-button {
-      background-color: rgba(0, 0, 0, 0.15);
-      font-weight: bold;
-    }
-  }
-
-  .item-container {
-    cursor: pointer;
-    height: 100px;
-    width: 200px;
-  }
-  .slick-prev:before,
-  .slick-next:before {
-    color: black;
-  }
-  .slick-list:focus {
-    outline: none;
-  }
-`;
 
 export default RecentEventsList;

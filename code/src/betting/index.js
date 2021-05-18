@@ -135,6 +135,7 @@ const Betting=(props)=>{
             }
         }
 
+
     },[props.structuredGameInfo, props.userDetails])
 
     useEffect(() => {

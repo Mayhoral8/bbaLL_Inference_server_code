@@ -114,7 +114,7 @@ const StatsPage = ({
       attrPath &&
       !STATSCONSTANTS.STATS[
         teamOrPlayerPath === "teams" ? "BasicTeam" : "BasicPlayer"
-      ].includes(capitalizeFirstLetter(attrPath.replace('_', ' ')))
+      ].includes(capitalizeFirstLetter(attrPath.replace("_", " ")))
     ) {
       history.push("/404");
     }
@@ -143,7 +143,6 @@ const StatsPage = ({
         playerTimeQuery.includes(e.label)
       )
     ) {
-      console.log('5')
       history.push("/404");
     }
   }, [history, statCategory]);
@@ -162,6 +161,7 @@ const StatsPage = ({
   if (statData === undefined) {
     return <Spinner />;
   }
+
   // check if playoffs data exist
   const playoffsExist = typeof statData[yearId].value["Playoffs"] === "object";
 
@@ -414,10 +414,12 @@ const StatsPage = ({
 
   if (isTeam && statCategory === "Champion") {
     attribute_menu = STATSCONSTANTS.STATS.Champion;
-    title = statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
+    title =
+      statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
   } else if (!isTeam && statCategory === "MVP") {
     attribute_menu = STATSCONSTANTS.STATS.MVP;
-    title = statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
+    title =
+      statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
   } else if (isTeam && statCategory === "Basic") {
     attribute_menu = STATSCONSTANTS.STATS.BasicTeam;
     title = makeTitle();
