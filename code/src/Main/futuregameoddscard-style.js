@@ -9,7 +9,7 @@ export const Card = styled.div`
   }
   margin: 1rem;
   height: 175px;
-  min-width: 225px;
+  min-width: 240px;
   max-width: 270px;
 
   flex-direction: column;
