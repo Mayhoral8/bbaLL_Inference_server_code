@@ -85,7 +85,6 @@ const PlayerRankingsCard = ({ data }) => {
   }
   if (isCycling) {
     useInterval(() => {
-      console.log(rankingTypeIndex);
       if (rankingTypeIndex >= rankingTypes.length - 1) {
         setRankingTypeIndex(0);
       } else {

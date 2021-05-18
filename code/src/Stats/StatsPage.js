@@ -143,7 +143,6 @@ const StatsPage = ({
         playerTimeQuery.includes(e.label)
       )
     ) {
-      console.log("5");
       history.push("/404");
     }
   }, [history, statCategory]);
@@ -166,7 +165,6 @@ const StatsPage = ({
   // check if playoffs data exist
   const playoffsExist = typeof statData[yearId].value["Playoffs"] === "object";
 
-  console.log(4321);
   statData =
     statCategory === "Basic"
       ? statData[yearId].value[season]
@@ -174,7 +172,6 @@ const StatsPage = ({
           return year.value[season];
         });
 
-  console.log(3333);
   const makeStatsPlot = () => {
     let names = [],
       statY = [],

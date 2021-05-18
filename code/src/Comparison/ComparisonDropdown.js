@@ -27,7 +27,7 @@ const ComparisonDropdown = ({ isTeam, options, onChange, prompt, length, setRef,
     }
   };
 
-  if(colorSchem == "bule") {
+  if(colorSchem == "blue") {
     return (
       <StyledDropdownBule length={length}>
         <Select
