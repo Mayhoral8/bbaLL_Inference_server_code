@@ -17,6 +17,7 @@ import {
   StyledComparisonBanner,
   StyledComparisonOptions,
   StyledPlayerCandidates,
+  StyledPlayerCanidatesMobile,
   StyledOptionName,
   StyledOptionsNames,
   StyledOptionsTeams,
@@ -26,6 +27,7 @@ import {
 import { fbFirestore } from "../App/config";
 import StatisticsInformation from "./StatisticsInformation";
 import useWindowSize from "../../src/Shared/hooks/useWindowSize";
+import { backgrounds } from "polished";
 
 const ComparisonPage = () => {
   const [playerNameOne, setPlayerNameOne] = useState(null);
@@ -390,7 +392,7 @@ const ComparisonPage = () => {
 
         <StyledMainContent>
           {screenWidth < 1024 && (
-            <div className="randomSection">
+            <StyledPlayerCanidatesMobile>
               <RandomComparisonMobile 
                 one={randomNameOne} 
                 two={randomNameTwo} 
@@ -415,7 +417,10 @@ const ComparisonPage = () => {
                 setYearOneProp = {setYearOne}
                 setYearTwoProp = {setYearTwo}
               />
-            </div>
+              <div className={"button-section"}>
+                <button className={"refresh-button"} onClick={()=>loadRandomPlayers()}></button>
+              </div>
+            </StyledPlayerCanidatesMobile>
           )}
           <StyledComparisonBanner>
             <h1>

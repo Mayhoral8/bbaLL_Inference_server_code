@@ -6,8 +6,26 @@ import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
 export const StyledMainContent = styled.div`
-  .randomSection{
-    margin-top: 4rem;
+
+`
+
+export const StyledPlayerCanidatesMobile = styled.div`
+  margin-top: 4rem;
+  .button-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .refresh-button{
+    background-color: #7A1DC4;
+    border: 2px solid #7500DE;
+    border-radius: 10px;
+    color: white;
+    padding: 2% 8%;
+    background-image: url(${refresh});
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20% auto;
   }
 `
 

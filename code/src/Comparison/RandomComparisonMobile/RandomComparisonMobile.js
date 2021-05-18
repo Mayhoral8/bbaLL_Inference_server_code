@@ -54,10 +54,10 @@ const RandomComparisonMobile = (props) => {
       );
     });
   };
-
+  //breakPoints={breakPoints}
   return (
       <RandomPlayerMobileContiner>
-        <Carousel breakPoints={breakPoints}>
+        <Carousel numOfItems={5}>
           {renderRandomComparisonList()}
         </Carousel>
       </RandomPlayerMobileContiner>
