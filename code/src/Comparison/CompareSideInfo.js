@@ -1,6 +1,6 @@
 import React, {useState}from 'react';
 import "../fonts.css";
-import {StyledSideInfo} from "./comparison-style";
+import {StyledSideInfo} from "./StatisticsInfoemation-style";
 import { fbFirestore } from "../App/config";
 
 
@@ -39,17 +39,17 @@ const CompareSideInfo = (props) => {
         {props.isTeam == "false" ? (
             <StyledSideInfo location = {props.location}>
                 <p className="info">
-                    Weight(kg)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{one}
-                    <br />Height(cm)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{two}
-                    <br />Salary($mln)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{three}
+                    Weight(kg)&nbsp; {one}
+                    <br />Height(cm)&nbsp; {two}
+                    <br />Salary($mln)&nbsp; {three}
                 </p>
             </StyledSideInfo>
             ) : (
             <StyledSideInfo location = {props.location}>    
                 <p className="info">
-                    ELo Score&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;97
-                    <br />Massey Score&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;197
-                    <br />Win Percentage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.8
+                    ELo Score&nbsp;97
+                    <br />Massey Score&nbsp;197
+                    <br />Win Percentage&nbsp;1.8
                 </p>
             </StyledSideInfo>
             )

@@ -18,9 +18,9 @@ export const StyledComparisonProfileBlank = styled.section`
 // ComparisonPage / StyledComparisonProfile  ==========================
 export const StyledComparisonProfile = styled.section`
   max-width: 900px;
-  margin: 0 auto 0 auto;
+  margin: 0 20px; 0 auto;
   font-family:Ubuntu;
-  padding: 1.5rem 3rem;
+  padding: 1.5rem 5px;
   border: 1px solid #207EEC;
   box-shadow: 0px 0px 5px;
   border-radius: 20px;
@@ -30,7 +30,6 @@ export const StyledComparisonProfile = styled.section`
   align-items: center;
   @media (max-width: ${breakpoints.desk}) {
     max-width: inherit;
-    margin: 0 2rem;
   }
   @media (max-width: ${breakpoints.tablet}) {
     margin: 0;
@@ -86,8 +85,8 @@ export const StyledInfo = styled.div`
     font-family: Ubuntu;
     font-style: normal;
     text-transform: capitalize;
-    font-size: 2rem;
-    font-weight: 400;
+    font-size: 20px;
+    font-weight: 500;
     margin-bottom: 0.5rem;
     margin-left: ${(props) => (props.margin === "left" ? "" : "auto")};
     max-width: 15rem;
@@ -110,20 +109,23 @@ export const StyledInfo = styled.div`
 `;
 
 export const StyledPlayerInfoAndSwitches = styled.div `
-  max-width: 900px; 
+  max-width: 800px; 
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr auto 1fr;
   margin: 0 auto 0 auto;
-  @media (max-width: ${breakpoints.desk}) {
-    max-width: inherit;
-    margin: 0 2rem;
-  }
   @media (max-width: ${breakpoints.tablet}) {
-    margin: 0;
+
   }
+
+  @media (max-width: ${breakpoints.phone}) {
+    max-width: 400px;
+    margin: 0 auto 0 auto;
+  }
+
   @media (max-width: ${breakpoints.phoneXXS}) {
-    flex-direction: column;
+
   }
+
 `;
 
 export const StyledPlayerInfo = styled.div`
@@ -131,8 +133,16 @@ export const StyledPlayerInfo = styled.div`
         (props.location == "left" ? "0px 0px 5px rgba(32, 126, 236, 0.5)"
                                   : "0px 0px 5px rgba(236, 32, 32, 0.5)")};
   border-radius: 10px;
-  padding-left: 30px;
+  padding-left: 10px;
   padding-top: 10px;
+  @media (max-width: ${breakpoints.tablet}) {
+    padding-left: 5px;
+  }
+
+  @media (max-width: ${breakpoints.phoneXXS}) {
+    
+  }
+
 `;
 
 export const StyleButton = styled.div`
@@ -142,7 +152,7 @@ export const StyleButton = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: default;
-
+  
   .button {
     display: inline-block;
     text-align: center;
@@ -152,6 +162,11 @@ export const StyleButton = styled.div`
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
+    margin: 10px;
+    @media (max-width: ${breakpoints.phone}) {
+      font-size: 8px;
+      margin: 5px;
+    }
   }
   
   .left{
@@ -164,6 +179,10 @@ export const StyleButton = styled.div`
     border: ${(props) => 
         (props.right == true ? "2px solid #7500DE" : "none")};
     border-radius: 10px;
+  }
+
+  @media (max-width: ${breakpoints.phone}) {
+    margin: 0;
   }
 `;
 
@@ -197,5 +216,22 @@ export const StyledComparisonBars = styled.section`
   }
   .bar-group {
     margin-bottom: 3rem;
+  }
+`;
+
+export const StyledSideInfo = styled.div`
+
+  color: ${(props) => 
+            (props.location == "left" ? "#207EEC" : "#EC2020")};
+  .info {
+    line-height: 2;
+    font-family: Ubuntu;
+    font-size: 16px;
+    @media(max-width: ${breakpoints.phone}) {
+      font-size: 8px;
+    }
+    @media (max-width: ${breakpoints.phoneXXS}) {
+      font-size: 1px;
+    }
   }
 `;

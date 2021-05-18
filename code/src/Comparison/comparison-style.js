@@ -6,6 +6,9 @@ import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
 export const StyledMainContent = styled.div`
+  .randomSection{
+    margin-top: 4rem;
+  }
 `
 
 // ComparisonPage / StyledComparisonBanner  ===========================
@@ -214,16 +217,22 @@ export const StyledBarText = styled.div`
 `;
 
 export const RandomPlayerContiner = styled.div`
-  max-width:200px;
+  max-width: 200px;
   cursor: default;
+`;
+
+export const EachRandomSetWrapper = styled.div`
   .comparsion{
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    max-width: 200px;
     border: 1px solid #39204F;
     box-shadow: 0px 0px 5px;
     border-radius: 10px;
     margin-bottom:20px;
-    min-height: 100px
+    min-height: 100px;
+    @media (min-width: ${breakpoints.desk}) {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+    } 
   }
   .continer {
     text-align: center;
@@ -233,12 +242,14 @@ export const RandomPlayerContiner = styled.div`
     font-size: 10px;
   }
   .vsText{
-    padding-top: 30px;
     font-family: Ubuntu;
     font-style: normal;
     font-weight: 300;
     text-align: center;
     font-size: 15px;
+    @media (min-width: ${breakpoints.desk}) {
+      padding-top: 30px;
+    }
   }
   .img-container-side {
     display: inline-block;
@@ -275,15 +286,18 @@ export const RandomPlayerContiner = styled.div`
     border-color: #EC2020;
     border-radius: 50%;
   }
-`;
+`
 
 
 export const SideNav = styled.div`
   margin-top: 100px;
-  height:900px;
+  height:700px;
   border-radius: 0.5ex;
   position: sticky;
   top: -.3em;
+  @media (max-width: ${breakpoints.desk}) {
+    height:1200px;
+  }
 `;
 
 export const StyledDropdownBule = styled.div`
@@ -351,6 +365,10 @@ export const StyledPlayerCandidates = styled.div `
     background-image: url(${refresh});
     background-repeat: no-repeat;
     background-position: center;
+    @media (min-width: ${breakpoints.desk}) {
+      width: 10px;
+      height: 10px;
+    }
   }
 
 `
@@ -360,15 +378,4 @@ export const StyledButton = styled.button`
   background: var(--main-purple);
   color: var(--white);
   margin-top: 1rem;
-`;
-
-export const StyledSideInfo = styled.div`
-
-  color: ${(props) => 
-            (props.location == "left" ? "#207EEC" : "#EC2020")};
-  .info {
-    line-height: 2;
-    font-family: Ubuntu;
-    font-size: 16px;
-  }
 `;

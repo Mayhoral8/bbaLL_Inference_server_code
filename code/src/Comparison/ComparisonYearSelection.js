@@ -35,7 +35,7 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, color
       onChange(selectedOption.value);
     }
   };
-  if (colorSchem == "bule") {
+  if (colorSchem == "blue") {
     return (
       <StyledDropdownBule>
         <Select
