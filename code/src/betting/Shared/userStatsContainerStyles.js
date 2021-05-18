@@ -2,7 +2,9 @@ import styled from 'styled-components'
 
 export const UserStatsContainer = styled.div`
     width: 100%;
-    background: #EFEFEF;
+    border: 0.5px solid rgba(57, 32, 79, 0.25);
+    box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
+    border-radius: 5px;
     padding:20px;
 `
 

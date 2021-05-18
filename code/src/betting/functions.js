@@ -31,7 +31,6 @@ import SanAntonioSpurs from '../assets/teamLogos/San_Antonio_Spurs.png'
 import TorontoRaptors from '../assets/teamLogos/Toronto_Raptors.png'
 import UtahJazz from '../assets/teamLogos/Utah_Jazz.png'
 import WashingtonWizards from '../assets/teamLogos/Washington_Wizards.png'
-import AtlantHawks from '../assets/teamLogos/Atlanta_Hawks.png'
 
 //Data restructuring that comes from the firebase api.
 export const structureData=(futureGamesInfo)=>{
@@ -85,7 +84,18 @@ export const structureData=(futureGamesInfo)=>{
         let handiTargetObj
 
         if(handiKeysArray.length === 0){
-            handiTargetObj = {handicapHomeTeamOdds: '', handicapAwayTeamOdds: '', handicapHomeTeamPoints: '', handicapAwayTeamPoints: ''}
+            handiTargetObj = {
+                awayTeam: {
+                    bettingSide: '',
+                    odds: '',
+                    points: ''
+                },
+                homeTeam: {
+                    bettingSide: '',
+                    odds: '',
+                    points: ''
+                }
+            }
         } 
         else{
 
@@ -97,6 +107,8 @@ export const structureData=(futureGamesInfo)=>{
 
             let handiHomeTeamKey = Object.keys(homeTeamObject)
             let handiAwayTeamKey = Object.keys(awayTeamObject)
+
+
 
             handiTargetObj = {
                 awayTeam: {
@@ -241,7 +253,7 @@ export const pointBoxClickHandler=(e, params, index, gameId,  selectedType, bett
 
 
 export const setTeamIcons = (homeTeam, awayTeam) => {
-    let homeTeamIcon = homeTeam === 'AtlantaHawks' ? AtlantaHawks
+    let homeTeamIcon = homeTeam === 'Atlanta Hawks' ? AtlantaHawks
     : 
     homeTeam === 'Boston Celtics' ? BostonCeltics
     :
@@ -259,7 +271,7 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     :
     homeTeam === 'Detroit Pistons' ? DetroitPistons
     :
-    homeTeam === 'Golden State Warrios' ? GoldenStateWarriors
+    homeTeam === 'Golden State Warriors' ? GoldenStateWarriors
     :
     homeTeam === 'Houston Rockets' ? HoustonRockets
     :
@@ -275,7 +287,7 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     :
     homeTeam === 'Milwaukee Bucks' ? MilwaukeeBucks
     :
-    homeTeam === 'Minnesota Timber Wolves' ? MinnesotaTimberwolves
+    homeTeam === 'Minnesota Timberwolves' ? MinnesotaTimberwolves
     :
     homeTeam === 'New Orleans Pelicans' ? NewOrleansPelicans
     :
@@ -299,9 +311,11 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     :
     homeTeam === 'Utah Jazz' ? UtahJazz
     :
-    WashingtonWizards
+    homeTeam === 'Washington Wizards' ? WashingtonWizards
+    :
+    null
 
-    let awayTeamIcon = homeTeam === 'AtlantaHawks' ? AtlantHawks
+    let awayTeamIcon = awayTeam === 'Atlanta Hawks' ? AtlantaHawks
     : 
     awayTeam === 'Boston Celtics' ? BostonCeltics
     :
@@ -319,7 +333,7 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     :
     awayTeam === 'Detroit Pistons' ? DetroitPistons
     :
-    awayTeam === 'Golden State Warrios' ? GoldenStateWarriors
+    awayTeam === 'Golden State Warriors' ? GoldenStateWarriors
     :
     awayTeam === 'Houston Rockets' ? HoustonRockets
     :
@@ -335,7 +349,7 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     :
     awayTeam === 'Milwaukee Bucks' ? MilwaukeeBucks
     :
-    awayTeam === 'Minnesota Timber Wolves' ? MinnesotaTimberwolves
+    awayTeam === 'Minnesota Timberwolves' ? MinnesotaTimberwolves
     :
     awayTeam === 'New Orleans Pelicans' ? NewOrleansPelicans
     :
@@ -359,7 +373,9 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     :
     awayTeam === 'Utah Jazz' ? UtahJazz
     :
-    WashingtonWizards
+    awayTeam === 'Washington Wizards' ? WashingtonWizards
+    :
+    null
 
     return {homeTeamIcon, awayTeamIcon}
 }

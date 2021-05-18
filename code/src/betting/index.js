@@ -42,6 +42,7 @@ import {
     DisplayGamesBtnContainer,
     BetSectionContainer,
     BetSectionWrapper,
+    BetSectionPointsContainer,
     TodayBtnContainer,
     RowC,
     TeamNameContainer,
@@ -72,14 +73,12 @@ import {
     ArrowIcon,
     TeamIcon,
     LoginModalContainer,
-    LoginModalWrapper,
     LoginLogoutBtnsContainer,
     AuthBtn
 } from './styles'
 
 const Betting=(props)=>{
 
-    const [loader, setLoader] = useState(false);
     const [gameInfo, setGameInfo] = useState([]);
     const [selectedValues, setSelectedValues] = useState({});
     const [overviewKeysArray, setOverviewKeysArray] = useState([]);
@@ -126,28 +125,16 @@ const Betting=(props)=>{
             setPointsSpinner(false)
             setBettingPageSpinner(false)
         }
-        else if (
-      props.structuredGameInfo[0] &&
-      props.userDetails.user.displayName &&
-      !props.userDetails.isLoading
-    ) {
-      let betsResponse = props.getUserBets(props.userDetails.user.uid);
-      if (betsResponse.isError) {
-        setError({
-          status: betsResponse.status,
-          message: betsResponse.message,
-          isError: true,
-        });
-      }
-      let recordResponse = props.getUserRecord(props.userDetails.user.uid);
-      if (!recordResponse.requestSuccessful) {
-        setError({
-          status: betsResponse.status,
-          message: betsResponse.message,
-          isError: true,
-        });
-      }
-    }
+        else if(props.structuredGameInfo[0] &&  props.userDetails.user.displayName && !props.userDetails.isLoading){
+            let response = props.getUserBets(props.userDetails.user.uid)
+            if(response.isError){
+                setError({status: response.status, message: response.message, isError:true})
+            }
+            else{
+                props.getUserRecord(props.userDetails.user.uid)
+            }
+        }
+
 
     },[props.structuredGameInfo, props.userDetails])
 
@@ -184,7 +171,6 @@ const Betting=(props)=>{
             }   
         }
     };
-
 
     const onRemovePoints = (e, params, gameId) => {
         let targetObj = selectedValues;
@@ -261,7 +247,7 @@ const Betting=(props)=>{
     }
 
     const onLoginClick = async(params) => {
-
+        let localStorageObj = {}
         if(params === 'google'){
             const provider = new firebase.auth.GoogleAuthProvider()
 
@@ -270,9 +256,13 @@ const Betting=(props)=>{
                 const {uid,displayName,email} = res.user
                 setBettingPageSpinner(true)
                 setLoginModalVisible(false)
-                await props.checkUserRecordCollectionExists({uid, displayName, email, type: 'google'})
+                localStorageObj.uid = uid
+                localStorageObj.displayName = displayName
+                localStorageObj.email = email
+                localStorageObj.type = 'google'
+                localStorage.setItem('User', JSON.stringify(localStorageObj))
+                await props.checkUserRecordCollectionExists(localStorageObj)
                 setBettingPageSpinner(false)
-
             })
             .catch(()=>{
                 setError({status: null, message: 'Google login error', isError:true})
@@ -282,7 +272,7 @@ const Betting=(props)=>{
             const provider = new firebase.auth.FacebookAuthProvider();
 
             firebaseInstanceSpigamebet.auth().signInWithPopup(provider)
-            .then((res)=>{
+            .then(async(res)=>{
                 //Needs to configures
             })
             .catch((e)=>{
@@ -296,12 +286,15 @@ const Betting=(props)=>{
             .then(async(res)=>{
                 const {displayName, uid} = res.user
                 const {username} = res.additionalUserInfo
-
+                localStorageObj.uid = uid
+                localStorageObj.displayName = username
+                localStorageObj.email = displayName
+                localStorageObj.type = 'twitter'
                 setBettingPageSpinner(true)
                 setLoginModalVisible(false)
-                await props.checkUserRecordCollectionExists({uid, displayName: username, email: displayName, type: 'twitter'})
+                localStorage.setItem('User', JSON.stringify(localStorageObj))
+                await props.checkUserRecordCollectionExists(localStorageObj)
                 setBettingPageSpinner(false)
-
             })
             .catch((e)=>{
                 setError({status: null, message: 'Twitter login error', isError:true})
@@ -336,7 +329,7 @@ const Betting=(props)=>{
                         loginModalVisible ? 
                             <LoginModalContainer>
 
-                                <LoginModalWrapper>
+                                <div>
 
                                     <OutsideClickHandler
                                      onOutsideClick = {() => {
@@ -348,7 +341,7 @@ const Betting=(props)=>{
                                         />
                                     </OutsideClickHandler>
 
-                                </LoginModalWrapper>
+                                </div>
                                 
                             </LoginModalContainer>
                         :
@@ -378,27 +371,23 @@ const Betting=(props)=>{
                         <ContentW>
                         <UserStatsRankWrapper>
 
-                            <LoginLogoutBtnsContainer>
+                            <LoginLogoutBtnsContainer onClick = {() => {
+                                props.userDetails.user.uid ? onLogoutClick() : setLoginModalVisible(true)
+                            }}>
                                 {
                                     props.userDetails.user.uid ? 
                                     <AuthBtn 
                                      src = {logoutIcon}
-                                     onClick = {() => {
-                                         onLogoutClick()
-                                     }}
                                     />
                                     :
                                     <AuthBtn
                                      src = {loginIcon}
-                                     onClick = {() => {
-                                         setLoginModalVisible(true)
-                                     }}
                                     />
                                 }
                             </LoginLogoutBtnsContainer>
 
                             {
-                                props.userDetails.user.uid ? 
+                                props.userDetails.user.uid && props.userRecord? 
                                 <UserStatsContainer/>
                                 :
                                 null
@@ -419,8 +408,11 @@ const Betting=(props)=>{
                             </ContentHeader>
 
                             <BetSectionWrapper>
-                                <BettingSectionheader/>
+                                <div>
+                                    <BettingSectionheader/>
+                                </div>
 
+                                <BetSectionPointsContainer>
                                 {gameInfo.map((element,index)=>{
                                     let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
                                     return(
@@ -725,6 +717,7 @@ const Betting=(props)=>{
                                     )
                                 })
                                 }
+                                </BetSectionPointsContainer>
 
                             </BetSectionWrapper>
                         </BetSectionContainer>

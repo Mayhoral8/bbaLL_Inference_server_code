@@ -23,7 +23,7 @@ import logoutIcon from '../../assets/images/logoutIcon.png'
 
 //Functions and libraries
 import {connect} from 'react-redux'
-
+import {Link} from 'react-router-dom'
 const UserStatsBox = (props) => {
 
     useEffect(() => {
@@ -40,7 +40,11 @@ const UserStatsBox = (props) => {
                     <BettingOddsRank>Rank: {props.userRecord.rank}</BettingOddsRank>
                     <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
                     <BettingOddsRank>Winning Rate: {props.userRecord.winPercentage}</BettingOddsRank>
-                    <ViewMoreLink>View More...</ViewMoreLink>
+                    <Link
+                     to = '/profile'
+                    >
+                        View More...
+                    </Link>
                 </FiguresViewMore>
             </ProfileImgFiguresViewMore>
         </UserStatsContainer>

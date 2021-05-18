@@ -25,9 +25,9 @@ const Layout = ({ children, location }) => {
 
       ].includes(location.pathname.split("/")[1]) ? (
         ""
-      ) :location.pathname!='/betting'? (
-        <Sidebar />
-      ):null
+      ) : location.pathname != '/betting' && location.pathname != '/profile' ? (
+            <Sidebar />
+      ) : null
       }
       <MobileNavbar />
       {children}

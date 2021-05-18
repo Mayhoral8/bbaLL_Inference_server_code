@@ -3,14 +3,16 @@ export const BettingSectionheaderContainer=styled.div`
     width:100%;
     padding:10px;
     display:flex;
-    background: rgba(0, 0, 0, 0.05);
+    background: #002B5C;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 `
 
 
 export const HeaderSection1=styled.div`
     max-width: 20%;
     min-width: 258px;
-    color: black;
+    color: white;
     font-weight: 900;
 `
 
@@ -25,6 +27,6 @@ export const HeaderSection2=styled.div`
 export const HeaderChildSection=styled.div`
     text-align:center;
     width:33.33%;
-    color: black;
+    color: white;
     font-weight: 900;
 `
