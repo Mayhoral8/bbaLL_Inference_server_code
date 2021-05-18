@@ -1,5 +1,5 @@
 import React from "react";
-import { RandomPlayerContiner } from "./comparison-style";
+import {RandomPlayerContiner} from './comparison-style';
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 
 
@@ -55,10 +55,6 @@ function RandomComparison(props) {
               <p className="nameTag">2020-21</p>
             </div>
           </div>
-          <p className="nameTag">{props.two}</p>
-          <p className="nameTag">2020-21</p>
-        </div>
-      </div>
 
           <div className="comparsion" onClick={()=>setPlayer(props.five, props.six)}>
             <div className="continer">
@@ -77,10 +73,6 @@ function RandomComparison(props) {
               <p className="nameTag">2020-21</p>
             </div>
           </div>
-          <p className="nameTag">{props.four}</p>
-          <p className="nameTag">2020-21</p>
-        </div>
-      </div>
 
           <div className="comparsion" onClick={()=>setPlayer(props.seven, props.eight)}>
             <div className="continer">
@@ -99,21 +91,6 @@ function RandomComparison(props) {
               <p className="nameTag">2020-21</p>
             </div>
           </div>
-          <p className="nameTag">{props.five}</p>
-          <p className="nameTag">2020-21</p>
-        </div>
-        <h2 className="vsText">VS</h2>
-        <div className="continer">
-          <div className="img-container-side">
-            <GetPlayerImage
-              playerName={props.six.replace(" ", "_").replace(".", ",")}
-              isTeam={props.team}
-            />
-          </div>
-          <p className="nameTag">{props.six}</p>
-          <p className="nameTag">2020-21</p>
-        </div>
-      </div>
 
           <div className="comparsion" onClick={()=>setPlayer(props.nine, props.ten)}>
             <div className="continer">
@@ -132,12 +109,8 @@ function RandomComparison(props) {
               <p className="nameTag">2020-21</p>
             </div>
           </div>
-          <p className="nameTag">{props.ten}</p>
-          <p className="nameTag">2020-21</p>
-        </div>
-      </div>
-    </RandomPlayerContiner>
-  );
+      </RandomPlayerContiner>
+  )
 }
 
 export default RandomComparison;
