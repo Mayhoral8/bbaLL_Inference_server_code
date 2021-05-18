@@ -17,9 +17,17 @@ import {getUserBettingHistory} from '../redux/actions/userBettingHistoryActions'
 
 const ProfilePage = (props) => {
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     props.getUserBettingHistory(props.userDetails.user.uid)
+    // }, [])
+    if(props.userDetails.user.displayName){
         props.getUserBettingHistory(props.userDetails.user.uid)
-    }, [])
+    }
+    // useEffect(() => {
+    //     if(props.userDetails.user.displayName && !props.userDetails.isLoading){
+    //         props.getUserBettingHistory(props.userDetails.user.uid)
+    //     }
+    // }, [props.userDetails])
 
     return(
         <ProfilePageContainer>
