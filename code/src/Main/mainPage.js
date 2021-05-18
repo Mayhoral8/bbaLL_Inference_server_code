@@ -57,7 +57,6 @@ const GamePageContainer = () => {
   const [games, setGames] = useState([]);
   const [memeUrls, setMemeUrls] = useState([]);
   const [teamData, setTeamData] = useState({});
-  console.log(games.length);
   useEffect(() => {
     fbFirestore
       .collection("future_game_info")

@@ -37,7 +37,6 @@ const TeamScoreTable = ({
   const numOfTeamsToDisplay = 10;
 
   const [listOfTeams, setListOfTeams] = useState([]);
-  console.log(data);
   let placeholderArray = [];
 
   useEffect(() => {
@@ -73,8 +72,6 @@ const TeamScoreTable = ({
     setListOfTeams(sortTeams(placeholderArray, "rank"));
   }, []);
 
-  console.log(listOfTeams);
-
   // sorts list by object property given
   function sortTeams(arr, attr) {
     const resetObj = (obj) => {
@@ -85,7 +82,6 @@ const TeamScoreTable = ({
       if (sortingType.current[attr].length === 0) {
         sortingType.current = initialSortingType;
         sortingType.current[attr] = "descending";
-        console.log("here");
       } else if (sortingType.current[attr] === "descending") {
         sortingType.current = initialSortingType;
         sortingType.current[attr] = "ascending";
