@@ -40,21 +40,28 @@ const FutureGameOddsCard = (item) => {
       ) / 100;
     gameOdds[awayTeamName] =
       Math.round(
-        JSON.data["Game Odds"]["General"][latestDate][homeTeamName] * 100
+        JSON.data["Game Odds"]["General"][latestDate][awayTeamName] * 100
       ) / 100;
   }
 
   const homeRatings = [
     {
-      value: Math.round(JSON.data["Game Prediction"]["ELO"][homeTeamName]),
-      percent: "",
+      value: Math.round(
+        JSON.data["Game Prediction"]["ELO"][homeTeamName]["rating"]
+      ),
+      percent: Math.round(
+        JSON.data["Game Prediction"]["ELO"][homeTeamName]["prob"] * 100
+      ),
     },
 
     {
       value:
-        Math.round(JSON.data["Game Prediction"]["Massey"][homeTeamName] * 100) /
-        100,
-      percent: "",
+        Math.round(
+          JSON.data["Game Prediction"]["Massey"][homeTeamName]["rating"] * 100
+        ) / 100,
+      percent: Math.round(
+        JSON.data["Game Prediction"]["Massey"][homeTeamName]["prob"] * 100
+      ),
     },
 
     {
@@ -65,15 +72,22 @@ const FutureGameOddsCard = (item) => {
 
   const awayRatings = [
     {
-      value: Math.round(JSON.data["Game Prediction"]["ELO"][awayTeamName]),
-      percent: "",
+      value: Math.round(
+        JSON.data["Game Prediction"]["ELO"][awayTeamName]["rating"]
+      ),
+      percent: Math.round(
+        JSON.data["Game Prediction"]["ELO"][awayTeamName]["prob"] * 100
+      ),
     },
 
     {
       value:
-        Math.round(JSON.data["Game Prediction"]["Massey"][awayTeamName] * 100) /
-        100,
-      percent: "",
+        Math.round(
+          JSON.data["Game Prediction"]["Massey"][awayTeamName]["rating"] * 100
+        ) / 100,
+      percent: Math.round(
+        JSON.data["Game Prediction"]["Massey"][awayTeamName]["prob"] * 100
+      ),
     },
 
     {
@@ -84,26 +98,27 @@ const FutureGameOddsCard = (item) => {
 
   // calculating percentages for all ratings
 
-  homeRatings[0].percent = calculateELOPercent(
-    homeRatings[0].value,
-    awayRatings[0].value
-  );
-  homeRatings[1].percent = calculateMasseyPercent(
-    homeRatings[1].value,
-    awayRatings[1].value
-  );
+  // homeRatings[0].percent = calculateELOPercent(
+  //   homeRatings[0].value,
+  //   awayRatings[0].value
+  // );
+  // homeRatings[1].percent = calculateMasseyPercent(
+  //   homeRatings[1].value,
+  //   awayRatings[1].value
+  // );
 
   if (JSON.data["Game Odds"]["General"].hasOwnProperty(latestDate)) {
     homeRatings[2].percent = calculateBettingOddsPercent(
       homeRatings[2].value,
       awayRatings[2].value
     );
+    awayRatings[2].percent = 100 - homeRatings[2].percent;
   }
 
   for (let i = 0; i < awayRatings.length; i++) {
-    if (awayRatings[i].value !== " - ") {
-      awayRatings[i].percent = 100 - homeRatings[i].percent;
-    }
+    // if (awayRatings[i].value !== " - ") {
+    //   awayRatings[i].percent = 100 - homeRatings[i].percent;
+    // }
     // makes sure ELO isn't rounded to 2 decimals
     if (i > 0) {
       if (awayRatings[i].value !== " - ") {
