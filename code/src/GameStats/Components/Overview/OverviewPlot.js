@@ -110,9 +110,9 @@ const OverviewPlot = (props) => {
   }, [width, selectedPlotBtn]);
 
   // separate win probabily to positive and negative y values
-  const posYValues = [...yAxisData];
-  const negYValues = [...yAxisData];
-  yAxisData.forEach((yval, i) => {
+  const posYValues = [...scoreDiffData];
+  const negYValues = [...scoreDiffData];
+  scoreDiffData.forEach((yval, i) => {
     if (yval.y > 0) {
       posYValues[i] = yval;
       negYValues[i] = 0;
@@ -286,7 +286,7 @@ const OverviewPlot = (props) => {
       label: "Score Difference",
       fill: false,
       showLine: true,
-      borderColor: GREEN_ACCENT_COLOR,
+      borderColor: "black",
       borderWidth: 4,
       pointRadius: 0,
       data: scoreDiffData,
@@ -298,31 +298,31 @@ const OverviewPlot = (props) => {
       fill: true,
       showLine: true,
       borderColor: "transparent",
-      borderWidth: 2,
+      borderWidth: 4,
       backgroundColor: rgba(homeColour, 0.5),
       pointColor: "#fff",
       pointRadius: 0,
       data: posYValues,
-      yAxisID: "left-y-axis"
+      yAxisID: "right-y-axis"
     };
     const yNegDatasets = {
       label: "neg",
       fill: true,
       showLine: true,
       borderColor: "transparent",
-      borderWidth: 2,
+      borderWidth: 4,
       backgroundColor: rgba(awayColour, 0.5),
       pointColor: "#fff",
       pointRadius: 0,
       data: negYValues,
-      yAxisID: "left-y-axis"
+      yAxisID: "right-y-axis"
     };
     const yDatasets = {
       label: labelString,
       fill: false,
       showLine: true,
-      borderColor: "black",
-      borderWidth: 2,
+      borderColor: GREEN_ACCENT_COLOR,
+      borderWidth: 4,
       pointColor: "#fff",
       pointRadius: 0,
       data: yAxisData,

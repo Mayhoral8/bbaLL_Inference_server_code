@@ -10,7 +10,6 @@ const GetPlayerImage = ({ playerName, isTeam }) => {
   const [playerUrl, setPlayerUrl] = useState("");
 
   useEffect(() => {
-    console.log(playerName);
     let isMounted = true;
     fbStorage
       .ref()
