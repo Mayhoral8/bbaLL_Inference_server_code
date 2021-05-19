@@ -93,11 +93,7 @@ const ComparisonBars = ({ listGroup, getTeamColour, list, bcg, dataType }) => {
         className="bar--left"
         width={calcBarLength(attrValueOne, attrValueTwo, "optionOne")}
         text={computeTextColour(computeBcgColour("colourOne", "optionOne"))}
-        bcg={
-          listGroup === "three"
-            ? "rgba(0, 0, 0, 0.2)"
-            : computeBcgColour("colourOne", "optionOne")
-        }
+        bcg={"#207EEC"}
       >
         <p>
           {dataType === "perPoss" ? (attrValueOne * 100).toFixed(1) : attrValueOne.toFixed(1)}
@@ -115,11 +111,7 @@ const ComparisonBars = ({ listGroup, getTeamColour, list, bcg, dataType }) => {
         className="bar--right"
         width={calcBarLength(attrValueOne, attrValueTwo, "optionTwo")}
         text={computeTextColour(computeBcgColour("colourTwo", "optionTwo"))}
-        bcg={
-          listGroup === "three"
-            ? "rgba(0, 0, 0, 0.2)"
-            : computeBcgColour("colourTwo", "optionTwo")
-        }
+        bcg={"#EC2020"}
       >
         <p>
           {dataType === "perPoss" ? (attrValueTwo * 100).toFixed(1) : attrValueTwo.toFixed(1)}

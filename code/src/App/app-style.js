@@ -10,3 +10,7 @@ export const MainContainerDiv = styled.div`
   overflow-y: ${({ menuOpen }) => menuOpen && "hidden"};
 `;
 
+export const RoutesContainer=styled.div`
+  width:100%;
+  height:100%
+`

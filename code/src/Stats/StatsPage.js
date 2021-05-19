@@ -143,7 +143,6 @@ const StatsPage = ({
         playerTimeQuery.includes(e.label)
       )
     ) {
-      console.log("5");
       history.push("/404");
     }
   }, [history, statCategory]);
@@ -162,6 +161,7 @@ const StatsPage = ({
   if (statData === undefined) {
     return <Spinner />;
   }
+
   // check if playoffs data exist
   const playoffsExist = typeof statData[yearId].value["Playoffs"] === "object";
 

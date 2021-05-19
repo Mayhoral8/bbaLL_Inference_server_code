@@ -1,5 +1,10 @@
 export const navConstants = [
   {
+    name: "Home",
+    url: "/home",
+    parentUrl: "home",
+  },
+  {
     name: "Games",
     url: "/games",
     parentUrl: "games",
@@ -19,4 +24,9 @@ export const navConstants = [
     url: "/comparison",
     parentUrl: "comparison",
   },
+  {
+    name: "Betting",
+    url: '/betting',
+    parentUrl:'betting'
+  }
 ];
