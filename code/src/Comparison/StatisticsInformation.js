@@ -17,7 +17,7 @@ import {
     StyleButton,
     StyledRadarCont,
     StyledComparisonBars
-} from "./StatisticsInfoemation-style";
+} from "./StatisticsInformation-style";
 import { playerAttributes, abbrPlayerAttributes } from "../constants";
 import ComparisonBars from "./ComparisonBars";
 import CompareSideInfo from "./CompareSideInfo";

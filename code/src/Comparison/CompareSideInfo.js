@@ -1,6 +1,6 @@
 import React, {useState}from 'react';
 import "../fonts.css";
-import {StyledSideInfo} from "./StatisticsInfoemation-style";
+import {StyledSideInfo} from "./StatisticsInformation-style";
 import { fbFirestore } from "../App/config";
 
 
@@ -31,6 +31,9 @@ const CompareSideInfo = (props) => {
         one =  resultArray[0];
         two =  resultArray[1];
         three =  resultArray[2];
+
+        three = three / 1000000;
+        three = three.toFixed(2);
     }
 
     //console.log("Within CompareSideInfo: " + currentYear + " " + name);
@@ -38,19 +41,25 @@ const CompareSideInfo = (props) => {
         <>
         {props.isTeam == "false" ? (
             <StyledSideInfo location = {props.location}>
-                <p className="info">
-                    Weight(kg)&nbsp; {one}
-                    <br />Height(cm)&nbsp; {two}
-                    <br />Salary($mln)&nbsp; {three}
-                </p>
+                <div className={"info"}>
+                    <span>Weight(kg)</span>
+                    <span>{one}</span>
+                    <span>Height(cm)</span>
+                    <span>{two}</span>
+                    <span>Salary($mln)</span>
+                    <span>{three}</span>
+                </div>
             </StyledSideInfo>
             ) : (
             <StyledSideInfo location = {props.location}>    
-                <p className="info">
-                    ELo Score&nbsp;97
-                    <br />Massey Score&nbsp;197
-                    <br />Win Percentage&nbsp;1.8
-                </p>
+                <div className={"info"}>
+                    <span>Elo Score</span>
+                    <span>20</span>
+                    <span>Massey Score</span>
+                    <span>30</span>
+                    <span>Win Percentage</span>
+                    <span>40</span>
+                </div>
             </StyledSideInfo>
             )
         }
