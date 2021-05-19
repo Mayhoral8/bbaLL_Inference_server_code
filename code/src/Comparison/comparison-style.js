@@ -318,32 +318,8 @@ export const SideNav = styled.div`
   }
 `;
 
-export const StyledDropdownBule = styled.div`
-  border: 3px solid #207EEC;
-  border-radius: 4px;
-  margin-top: 5px;
-  .select__control {
-    width: 100%;
-    min-width: ${props=>props.length==="longer" ? '13rem': '10rem'};
-    border: none;
-    border-bottom: 1px solid #ccc;
-    border-radius: 0;
-    
-  }
-  .select__control--is-focused {
-    border: none;
-    box-shadow: none;
-  }
-  .select__indicator-separator {
-    display: none;
-  }
-  @media (max-width: ${breakpoints.desk}) {
-    width: 100%;
-  }
-`;
-
-export const StyledDropdownRed = styled.div`
-  border: 3px solid #EC2020;
+export const StyledDropdown = styled.div`
+  border: ${props=>props.color === "blue" ? "3px solid #207EEC" : "3px solid #EC2020"};
   border-radius: 4px;
   margin-top: 5px;
   .select__control {

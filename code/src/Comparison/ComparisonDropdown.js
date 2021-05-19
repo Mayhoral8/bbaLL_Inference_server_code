@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import { StyledDropdownRed, StyledDropdownBule } from "./comparison-style";
+import { StyledDropdown } from "./comparison-style";
 
 const ComparisonDropdown = ({ isTeam, options, onChange, prompt, length, setRef, colorSchem}) => {
   const [filteredOptions, setFilteredOptions] = useState([]);
@@ -27,37 +27,20 @@ const ComparisonDropdown = ({ isTeam, options, onChange, prompt, length, setRef,
     }
   };
 
-  if(colorSchem == "blue") {
-    return (
-      <StyledDropdownBule length={length}>
-        <Select
-          ref={ref=> setRef(ref)}
-          classNamePrefix={"select"}
-          closeMenuOnSelect={true}
-          blurInputOnSelect={true}
-          options={filteredOptions}
-          onInputChange={handleInputChange}
-          onChange={handleChange}
-          placeholder={prompt}
-        />
-      </StyledDropdownBule>
-    );
-  } else {
-    return (
-      <StyledDropdownRed length={length}>
-        <Select
-          ref={ref=> setRef(ref)}
-          classNamePrefix={"select"}
-          closeMenuOnSelect={true}
-          blurInputOnSelect={true}
-          options={filteredOptions}
-          onInputChange={handleInputChange}
-          onChange={handleChange}
-          placeholder={prompt}
-        />
-      </StyledDropdownRed>
-    );    
-  }
+  return (
+    <StyledDropdown length={length} color={colorSchem}>
+      <Select
+        ref={ref=> setRef(ref)}
+        classNamePrefix={"select"}
+        closeMenuOnSelect={true}
+        blurInputOnSelect={true}
+        options={filteredOptions}
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+        placeholder={prompt}
+      />
+    </StyledDropdown>
+  );
 };
 
 export default ComparisonDropdown;

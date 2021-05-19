@@ -309,20 +309,28 @@ const ComparisonPage = () => {
   };
 
   const setPromoteStringName = (nums) => {
+    /*
     if (parsedQueryParams.length == 1) {
       return isTeam ? "Enter team name" : "Enter player name";
     } else {
       return parsedQueryParams[nums];
     }
+    */
+
+    return isTeam ? "Enter team name" : "Enter player name";
   };
 
   // return the promot string on the year section
   const setPromoteStringYear = (nums) => {
+    /*
     if(parsedQueryParams.length == 1) {
       return "Select Year";
     } else {
       return parsedQueryParams[nums];
     }
+    */
+    
+    return "Select Year";
   }
 
   function loadRandomPlayers() {
@@ -381,7 +389,6 @@ const ComparisonPage = () => {
     setYearTwo("2020-21");
     setTempYearTwo("2020-21");
   }
-
 
   return (
     <>
