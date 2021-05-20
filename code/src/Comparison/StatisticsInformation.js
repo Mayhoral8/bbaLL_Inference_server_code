@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
-import Versus from "../Shared/Versus/Versus";
+//import Versus from "../Shared/Versus/Versus";
+import CustomizeVersus from "./customizeVersus";
 import { Radar } from "react-chartjs-2";
 import { rgba } from "polished";
 import { Argsort } from "../Shared/Functions/Argsort";
@@ -361,7 +362,7 @@ const StatisticsInformation = (props) => {
                                 <p>{leftSelectedYear}</p>
                             </StyledInfo>
                     </StyledComparisonProfileElement>
-                    <Versus />
+                    <CustomizeVersus />
                     <StyledComparisonProfileElement
                         isTeam={isTeam ? "true" : "false"}
                         teamColour={lightRed}>

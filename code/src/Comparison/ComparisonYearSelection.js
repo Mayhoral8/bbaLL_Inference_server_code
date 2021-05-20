@@ -5,6 +5,8 @@ import { StyledDropdown } from "./comparison-style";
 
 const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, colorSchem}) => {
   const [years, setYears] = useState([]);
+  const [value, setValue] = useState(null);
+
   useEffect(() => {
     if (name) {
       getYearsFromFirestore(name);

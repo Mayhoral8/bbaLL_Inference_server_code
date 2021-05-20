@@ -74,7 +74,9 @@ const ComparisonPage = () => {
   const [refYearOne, setRefYearOne] = useState(null);
   const [refYearTwo, setRefYearTwo] = useState(null);
 
-  const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
+  //const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
+
+  const [isTeam, setIsTeam] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -98,14 +100,21 @@ const ComparisonPage = () => {
 
   const screenWidth = useWindowSize();
 
+  //console.log("begin of the comparsion: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
+
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
 
-    if(teamsOrPlayersPath && dataTypePath && search) {                                 
+    if(teamsOrPlayersPath && dataTypePath && search) {  
+                                     
       if(teamsOrPlayersPath === 'players') {
-        dispatch(changeIsTeam({ isTeam: false }));
+        //dispatch(changeIsTeam({ isTeam: false }));
+        console.log("set isTeam to false")
+        setIsTeam(false);
       } else {
-        dispatch(changeIsTeam({ isTeam: true }));
+        //dispatch(changeIsTeam({ isTeam: true }));
+        console.log("set isTeam to true")
+        setIsTeam(true);
       }
 
       if(dataTypePath === 'per-game') {
@@ -132,13 +141,13 @@ const ComparisonPage = () => {
     }
     
     // set the temp name with new update when they are not empty
-    if (tempPlayerNameOne != "" && tempPlayerNameTwo != "" ) {
+    if (tempPlayerNameOne && tempPlayerNameTwo) {
       setPlayerNameOne(tempPlayerNameOne);
       setPlayerNameTwo(tempPlayerNameTwo);
     }
 
     // set the temp year with new update when they are not empty
-    if (tempYearOne != "" && tempYearTwo != "") {
+    if (tempYearOne && tempYearTwo) {
       setYearOne(tempYearOne);
       setYearTwo(tempYearTwo);
     }
@@ -185,6 +194,17 @@ const ComparisonPage = () => {
     tempPlayerNameTwo,
     playerNameOne,
     playerNameTwo,
+    randomNameOne,
+    randomNameTwo,
+    randomNameThree,
+    randomNameFour,
+    randomNameFive,
+    randomNameSix,
+    randomNameSeven,
+    randomNameEight,
+    randomNameNine,
+    randomNameTen,
+    yearComparison,
     yearOne,
     yearTwo,
     isTeam,
@@ -204,6 +224,18 @@ const ComparisonPage = () => {
     setTempPlayerNameTwo(null);
     setTempYearOne(null);
     setTempYearTwo(null);
+    
+    setRandomNameOne(null);
+    setRandomNameTwo(null)
+    setrandomNameThree(null);
+    setrandomNameFour(null);
+    setRrandomNameFive(null);
+    setrandomNameSix(null);
+    setRandomNameSeven(null);
+    setRandomNameEight(null);
+    setrandomNameNine(null);
+    setrandomNameTen(null);
+    setYearComparison(null);
 
     setDataOne(null);
     setDataTwo(null);
@@ -216,7 +248,8 @@ const ComparisonPage = () => {
     clearValue(refTwo);
     clearValue(refYearOne);
     clearValue(refYearTwo);
-    dispatch(changeIsTeam({ isTeam: bool }));
+    //dispatch(changeIsTeam({ isTeam: bool }));
+    setIsTeam(bool);
   };
 
   const getAttrFromFirestore = (name, year, option, dataType) => {
@@ -309,28 +342,27 @@ const ComparisonPage = () => {
   };
 
   const setPromoteStringName = (nums) => {
-    /*
+
     if (parsedQueryParams.length == 1) {
       return isTeam ? "Enter team name" : "Enter player name";
     } else {
       return parsedQueryParams[nums];
     }
-    */
 
-    return isTeam ? "Enter team name" : "Enter player name";
+
+    //return isTeam ? "Enter team name" : "Enter player name";
   };
 
   // return the promot string on the year section
   const setPromoteStringYear = (nums) => {
-    /*
+
     if(parsedQueryParams.length == 1) {
       return "Select Year";
     } else {
       return parsedQueryParams[nums];
     }
-    */
     
-    return "Select Year";
+    //return "Select Year";
   }
 
   function loadRandomPlayers() {
@@ -375,7 +407,7 @@ const ComparisonPage = () => {
       setrandomNameTen(nameObject[selectedForComparison[9]]);
       setYearComparison(year);
   }
-
+  
   if ((tempPlayerNameOne == null && tempPlayerNameTwo == null && playerNameOne == null && playerNameTwo == null)) {
     loadRandomPlayers();  
 
@@ -389,6 +421,8 @@ const ComparisonPage = () => {
     setYearTwo("2020-21");
     setTempYearTwo("2020-21");
   }
+
+  //console.log("before render the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
 
   return (
     <>

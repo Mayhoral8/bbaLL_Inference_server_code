@@ -188,7 +188,6 @@ export const StyleButton = styled.div`
   @media (max-width: ${breakpoints.phone}) {
     margin: 0;
     grid-template-columns: 1fr;
-    background-color: red;
   }
 `;
 
