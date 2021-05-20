@@ -348,9 +348,11 @@ const StatisticsInformation = (props) => {
                     <StyledComparisonProfileElement 
                         isTeam = {isTeam ? "true" : "false"}
                         teamColour = {lightBule}>
+                          <div className="outline">
                             <div className="img-container">
                                 <GetPlayerImage playerName={leftSelectedName} isTeam={isTeam}/>
                             </div>
+                          </div>
                             <StyledInfo margin="left">
                                 <h3>
                                     <Link
@@ -376,8 +378,10 @@ const StatisticsInformation = (props) => {
                         </h3>
                         <p>{rigthSelectedYear}</p>
                         </StyledInfo>
-                        <div className="img-container">
-                        <GetPlayerImage playerName={rightSelectedName} isTeam={isTeam} />
+                        <div className="outline">
+                          <div className="img-container">
+                            <GetPlayerImage playerName={rightSelectedName} isTeam={isTeam} />
+                          </div>
                         </div>
                     </StyledComparisonProfileElement>
                 </StyledComparisonProfile>

@@ -15,20 +15,19 @@ const CustomizeVersus = () => {
 const ComparisonVS = styled.div`
   margin:${({ center }) => center ? '0 12rem' : '0 4.5rem'};
   padding: 1rem;
-  margin-top: 25%;
   position: relative;
   height: auto;
+
 
   background-image: url(${circle});
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% 100%;
+  background-size: 100% auto;
 
   @media (max-width: ${breakpoints.phone}) {
     font-size: 0.7rem;
     margin: 0 1rem;
     padding: 0.7rem;
-    margin-top: 5%;
   }
 `
 
@@ -38,7 +37,9 @@ const Wrapper = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: auto 100%;
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 export default CustomizeVersus

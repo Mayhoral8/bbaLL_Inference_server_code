@@ -422,7 +422,7 @@ const ComparisonPage = () => {
     setTempYearTwo("2020-21");
   }
 
-  //console.log("before render the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
+  console.log("before render the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
 
   return (
     <>
