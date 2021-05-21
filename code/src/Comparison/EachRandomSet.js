@@ -11,16 +11,20 @@ const EachRandomSet = (props) => {
         <EachRandomSetWrapper>
             <div className="comparsion">
                 <div className="continer">
-                    <div className="img-container-side left">
-                        <GetPlayerImage playerName={nameOne} isTeam={isTeam} />
+                    <div className="outlineLeft">
+                        <div className="img-container-side left">
+                            <GetPlayerImage playerName={nameOne} isTeam={isTeam} />
+                        </div>
                     </div>
                     <p className="nameTag">{props.leftName}</p>
                     <p className="nameTag">2020-21</p>
                 </div>
                 <h2 className="vsText">VS</h2>
                 <div className="continer">
-                    <div className="img-container-side right">
-                        <GetPlayerImage playerName={nameTwo} isTeam={isTeam} />
+                    <div className="outlineRight">
+                        <div className="img-container-side right">
+                            <GetPlayerImage playerName={nameTwo} isTeam={isTeam} />
+                        </div>
                     </div>
                     <p className="nameTag">{props.rightName}</p>
                     <p className="nameTag">2020-21</p>

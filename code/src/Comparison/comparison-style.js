@@ -294,13 +294,13 @@ export const EachRandomSetWrapper = styled.div`
   }
 
   .left{
-    border: 2px solid;
+    border: 3px solid;
     border-color: #207EEC;
     border-radius: 50%;
   }
 
   .right{
-    border: 2px solid;
+    border: 3px solid;
     border-color: #EC2020;
     border-radius: 50%;
   }

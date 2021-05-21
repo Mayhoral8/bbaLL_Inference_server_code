@@ -194,17 +194,6 @@ const ComparisonPage = () => {
     tempPlayerNameTwo,
     playerNameOne,
     playerNameTwo,
-    randomNameOne,
-    randomNameTwo,
-    randomNameThree,
-    randomNameFour,
-    randomNameFive,
-    randomNameSix,
-    randomNameSeven,
-    randomNameEight,
-    randomNameNine,
-    randomNameTen,
-    yearComparison,
     yearOne,
     yearTwo,
     isTeam,
@@ -225,6 +214,7 @@ const ComparisonPage = () => {
     setTempYearOne(null);
     setTempYearTwo(null);
     
+    /*
     setRandomNameOne(null);
     setRandomNameTwo(null)
     setrandomNameThree(null);
@@ -236,7 +226,7 @@ const ComparisonPage = () => {
     setrandomNameNine(null);
     setrandomNameTen(null);
     setYearComparison(null);
-
+    */
     setDataOne(null);
     setDataTwo(null);
 
@@ -408,6 +398,7 @@ const ComparisonPage = () => {
       setYearComparison(year);
   }
   
+
   if ((tempPlayerNameOne == null && tempPlayerNameTwo == null && playerNameOne == null && playerNameTwo == null)) {
     loadRandomPlayers();  
 
@@ -421,6 +412,7 @@ const ComparisonPage = () => {
     setYearTwo("2020-21");
     setTempYearTwo("2020-21");
   }
+
 
   console.log("before render the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
 

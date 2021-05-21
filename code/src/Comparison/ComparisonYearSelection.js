@@ -5,7 +5,6 @@ import { StyledDropdown } from "./comparison-style";
 
 const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, colorSchem}) => {
   const [years, setYears] = useState([]);
-  const [value, setValue] = useState(null);
 
   useEffect(() => {
     if (name) {
@@ -34,9 +33,10 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, color
   const handleChange = (selectedOption) => {
     if (selectedOption) {
       onChange(selectedOption.value);
+      selectedValue = selectedOption.value;
     }
   };
-
+  
   return (
     <StyledDropdown color={colorSchem}>
       <Select
