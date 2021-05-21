@@ -218,7 +218,7 @@ export const pointBoxClickHandler=(e, params, index, gameId,  selectedType, bett
         else if(params === 'handicap'){
 
             targetObj[gameId][params].odds = oddsValue;
-            targetObj[gameId][params].points = pointsValue;
+            targetObj[gameId][params].spread = pointsValue;
             targetObj[gameId][params].bettingSide = bettingSide;
 
         } 

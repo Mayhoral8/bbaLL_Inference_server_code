@@ -37,6 +37,7 @@ export const getUserBettingHistory = (userId) => {
             let bettingHistory = []
             for (let i = 0; i < betDates.length; i++){
                 try{
+
                     let userBettingHistory = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(betDates[i]).collection('gameId').get()
                     let recordsArray = []
                     userBettingHistory.forEach((doc) => {
@@ -44,22 +45,28 @@ export const getUserBettingHistory = (userId) => {
                         const docId = doc.id
                         recordsArray.push({docData, docId})
                     })
+
                     for (let j = 0; j < recordsArray.length; j++){
                         bettingHistory.push(recordsArray[j].docData)
                     }
-                    
+
+                    let structuredBettingHistoryMoneyLine = structureUserGameHistory(bettingHistory, 'moneyLine')
+                    let structuredBettingHistorySpread = structureUserGameHistory(bettingHistory, 'handicap')
+                    let structuredBettingHistoryOverUnder = structureUserGameHistory(bettingHistory, 'overAndUnder')
+                    let bettingHistoryTargetObj = {
+                        moneyLine: structuredBettingHistoryMoneyLine,
+                        spread: structuredBettingHistorySpread,
+                        overUnder: structuredBettingHistoryOverUnder
+                    }
+                    dispatch({
+                        type: 'BettingHistory',
+                        payload: bettingHistoryTargetObj
+                    })
                 }
                 catch(e){
                     throw e
                 }
             }
-            console.log("Unstructured: ", bettingHistory)
-            let structuredBettingHistoryMoneyLine = structureUserGameHistory(bettingHistory, 'moneyLine')
-            let structuredBettingHistorySpread = structureUserGameHistory(bettingHistory, 'handicap')
-            let structuredBettingHistoryOverUnder = structureUserGameHistory(bettingHistory, 'overAndUnder')
-            console.log("MoneyLine: ", structuredBettingHistoryMoneyLine)
-            console.log("Spread: ", structuredBettingHistorySpread)
-            console.log("OverUnder: ",structuredBettingHistoryOverUnder)
         }
     }
 }

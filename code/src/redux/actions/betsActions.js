@@ -23,6 +23,7 @@ export const getFutureGamesInfo=()=>{
             return {success: true}
         }
         catch(e){
+            console.log("ERROR",e)
             throw e
         }
     }
