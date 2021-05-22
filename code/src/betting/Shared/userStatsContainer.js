@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
 //Actions
 import {LogoutAction} from '../../redux/actions/authActions'
@@ -24,11 +24,19 @@ import logoutIcon from '../../assets/images/logoutIcon.png'
 //Functions and libraries
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-const UserStatsBox = (props) => {
+import {ClipLoader} from 'react-spinners'
 
+const UserStatsBox = (props) => {
+    const [statsSpinner, setStatsSpinner] = useState(true)
     useEffect(() => {
         props.getUserRecord(props.userDetails.uid)
     },[])
+
+    useEffect(() => {
+        if(props.userRecord.level){
+            setStatsSpinner(false)
+        }
+    }, [props.userRecord])
 
     return(
         <UserStatsContainer>
@@ -36,15 +44,31 @@ const UserStatsBox = (props) => {
             <ProfileImgFiguresViewMore>
                 <ProfileImg src={Img}/>
                 <FiguresViewMore>
-                    <BettingOddsRank>Points: {props.userRecord.totalPoints}</BettingOddsRank>
-                    <BettingOddsRank>Rank: {props.userRecord.rank}</BettingOddsRank>
-                    <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
-                    <BettingOddsRank>Winning Rate: {props.userRecord.winPercentage}</BettingOddsRank>
-                    <Link
-                     to = '/profile'
-                    >
-                        View More...
-                    </Link>
+                    {
+                        props.userRecord.level
+                        ?
+                        <>
+                            <BettingOddsRank>Points: {props.userRecord.totalPoints}</BettingOddsRank>
+                            <BettingOddsRank>Rank: {props.userRecord.rank}</BettingOddsRank>
+                            <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
+                            <BettingOddsRank>Winning Rate: {" "}
+                                {
+                                    props.userRecord.numBettings === 0
+                                        ?
+                                    0
+                                        :
+                                    props.userRecord.numWins / props.userRecord.numBettings
+                                }
+                            </BettingOddsRank>
+                            <Link
+                            to = '/profile'
+                            >
+                                View More...
+                            </Link>
+                        </>
+                        :
+                        <ClipLoader color = '#C4C4C4' size = '' loading = {statsSpinner}/>
+                    }
                 </FiguresViewMore>
             </ProfileImgFiguresViewMore>
         </UserStatsContainer>
