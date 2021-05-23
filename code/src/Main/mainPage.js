@@ -146,151 +146,156 @@ const GamePageContainer = () => {
           gamePbp={gamePbp}
           gamePlayers={gamePlayers}
         />
-        <MainPageContainer>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {useWindowSize() < 1400 && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  borderTop: "solid gray 1px",
-                  borderBottom: "solid gray 1px",
-                  width: "100%",
-                }}
-              >
-                <div
-                  style={{ margin: "1rem 0rem 0rem 0rem", fontSize: "1.5rem" }}
-                >
-                  Upcoming Games
-                </div>
+        <div style={{ margin: "0rem 3rem 0rem 3rem" }}>
+          <MainPageContainer>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              {useWindowSize() < 1400 && (
                 <div
                   style={{
-                    zIndex: 0,
-                    marginTop: "0rem",
-                    marginLeft: "0rem",
-                    marginRight: "0rem",
-                    height: "100%",
-                    width: "100%",
                     display: "flex",
-                    flexDirection: "row",
-                    padding: "0.5rem",
-                    overflowX: "scroll",
-                    overflowY: "hidden",
-                    scrollbarWidth: "thin" /* "auto" or "thin" */,
-                    // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
-                  }}
-                >
-                  {games.map((item, index) => {
-                    return <FutureGameOddsCard data={item} key={index} />;
-                  })}
-                  {games.length === 0 ? (
-                    <div
-                      style={{
-                        textAlign: "center",
-                        margin: "1rem auto 1rem auto",
-                      }}
-                    >
-                      Games are unavailable at this time.
-                      <br />
-                      Please check again later.{" "}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-            )}
-
-            <RowContainer>
-              {hasDataLoaded ? (
-                <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
-              ) : (
-                <div
-                  style={{
-                    background: "white",
-                    border: "solid gray 1px",
-                    height: "100%",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    borderTop: "solid gray 1px",
+                    borderBottom: "solid gray 1px",
                     width: "100%",
-                    margin: "0rem 3rem 3rem 0rem",
-                    minWidth: "400px",
                   }}
                 >
-                  <div style={{ fontSize: "1.5rem", padding: "1.5rem" }}>
-                    Player Rankings
+                  <div
+                    style={{
+                      margin: "1rem 0rem 0rem 0rem",
+                      fontSize: "1.5rem",
+                    }}
+                  >
+                    Upcoming Games
+                  </div>
+                  <div
+                    style={{
+                      zIndex: 0,
+                      marginTop: "0rem",
+                      marginLeft: "0rem",
+                      marginRight: "0rem",
+                      height: "100%",
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      padding: "0.5rem",
+                      overflowX: "scroll",
+                      overflowY: "hidden",
+                      scrollbarWidth: "thin" /* "auto" or "thin" */,
+                      // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+                    }}
+                  >
+                    {games.map((item, index) => {
+                      return <FutureGameOddsCard data={item} key={index} />;
+                    })}
+                    {games.length === 0 ? (
+                      <div
+                        style={{
+                          textAlign: "center",
+                          margin: "1rem auto 1rem auto",
+                        }}
+                      >
+                        Games are unavailable at this time.
+                        <br />
+                        Please check again later.{" "}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               )}
-              <MemeCard urls={memeUrls} />
-            </RowContainer>
 
-            <TeamRankingsContainer>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                }}
-              >
-                Team Rankings
-              </div>
-              {hasDataLoaded ? (
-                <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
-              ) : (
-                <div style={{ minHeight: "400px" }}></div>
-              )}
-            </TeamRankingsContainer>
-          </div>
+              <RowContainer>
+                {hasDataLoaded ? (
+                  <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
+                ) : (
+                  <div
+                    style={{
+                      background: "white",
+                      border: "solid gray 1px",
+                      height: "100%",
+                      width: "100%",
+                      margin: "0rem 3rem 3rem 0rem",
+                      minWidth: "400px",
+                    }}
+                  >
+                    <div style={{ fontSize: "1.5rem", padding: "1.5rem" }}>
+                      Player Rankings
+                    </div>
+                  </div>
+                )}
+                <MemeCard urls={memeUrls} />
+              </RowContainer>
 
-          {useWindowSize() > 1400 && (
-            <div
-              style={{
-                backgroundColor: "white",
-                marginTop: "0rem",
-                marginLeft: "3rem",
-                height: "100%",
-                minWidth: "300px",
-                display: "flex",
-                flexDirection: "column",
-                padding: "0.5rem",
-                overflowY: "scroll",
-                position: "relative",
-                border: "solid gray 1px",
-                height: "1043px",
-                scrollbarWidth: "thin" /* "auto" or "thin" */,
-                // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  fontSize: "1.5rem",
-                  margin: "1rem 0rem 1rem 0rem",
-                }}
-              >
-                Upcoming Games
-              </div>
-              {games.map((item, index) => {
-                return <FutureGameOddsCard data={item} key={index} />;
-              })}
-              {games.length === 0 ? (
+              <TeamRankingsContainer>
                 <div
                   style={{
-                    textAlign: "center",
-                    margin: "auto",
+                    fontSize: "1.5rem",
                   }}
                 >
-                  Games are unavailable at this time.
-                  <br />
-                  Please check again later.{" "}
+                  Team Rankings
                 </div>
-              ) : (
-                ""
-              )}
+                {hasDataLoaded ? (
+                  <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                ) : (
+                  <div style={{ minHeight: "400px" }}></div>
+                )}
+              </TeamRankingsContainer>
             </div>
-          )}
-        </MainPageContainer>
+
+            {useWindowSize() > 1400 && (
+              <div
+                style={{
+                  backgroundColor: "white",
+                  marginTop: "0rem",
+                  marginLeft: "3rem",
+                  height: "100%",
+                  minWidth: "300px",
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "0.5rem",
+                  overflowY: "scroll",
+                  position: "relative",
+                  border: "solid gray 1px",
+                  height: "1043px",
+                  scrollbarWidth: "thin" /* "auto" or "thin" */,
+                  // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    fontSize: "1.5rem",
+                    margin: "1rem 0rem 1rem 0rem",
+                  }}
+                >
+                  Upcoming Games
+                </div>
+                {games.map((item, index) => {
+                  return <FutureGameOddsCard data={item} key={index} />;
+                })}
+                {games.length === 0 ? (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      margin: "auto",
+                    }}
+                  >
+                    Games are unavailable at this time.
+                    <br />
+                    Please check again later.{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            )}
+          </MainPageContainer>
+        </div>
       </FullWidthMain>
     </>
   );

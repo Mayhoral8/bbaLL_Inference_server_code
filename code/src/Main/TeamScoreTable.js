@@ -14,14 +14,28 @@ const TeamScoreTable = ({
   players,
   includeYear,
 }) => {
-  const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
-  const headings = ["rank", "ELO Rating", "Massey Rating", "Win(%)"];
+  const DATA_ATTR = ["Massey", "ELO", "Standing"];
+  const headings = ["rank", "ELO", "Massey", "Win(%)"];
+  try {
+    if (data == null) {
+    }
+  } catch (error) {
+    data = {};
+  }
 
+  DATA_ATTR.map((key) => {
+    let arr = [];
+    Object.keys(data[key]).map((entry) => {
+      const name = Object.keys(data[key][entry])[0];
+      arr.push({ [name]: data[key][entry][name] });
+    });
+    data[key] = arr;
+  });
   const initialSortingType = {
     rank: "",
     name: "",
-    "ELO Rating": "",
-    "Massey Rating": "",
+    ELO: "",
+    Massey: "",
     "Win(%)": "",
   };
 
@@ -29,8 +43,8 @@ const TeamScoreTable = ({
   const sortingType = useRef({
     rank: "descending",
     name: "",
-    "ELO Rating": "",
-    "Massey Rating": "",
+    ELO: "",
+    Massey: "",
     "Win(%)": "",
   });
 
@@ -90,7 +104,7 @@ const TeamScoreTable = ({
         sortingType.current[attr] = "descending";
       }
     }
-    console.log(sortingType.current);
+    console.log(listOfTeams);
     return [...arr].sort((a, b) => {
       // mainly to handle when "rank" prop is missing in json
       // makes sure missing ranks get sorted properly

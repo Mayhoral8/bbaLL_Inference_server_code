@@ -20,20 +20,18 @@ const PlayerRankingsCard = ({ data }) => {
     data = {};
   }
 
-  // for (const prop in obj) {
+  data.forEach((obj) => {
+    for (const prop in obj) {
+      let arr = [];
 
-  //   for(const score in obj[prop]){
-  //     let arr = []
-  //     for(const name in obj[prop[score]]){
-  //       arr.push([name]: obj[prop][score][name])
-  //       }
+      for (const name in obj[prop]) {
+        arr.push({ [name]: obj[prop][name] });
+      }
 
-  //     obj[prop] = arr;
-  //   }
-  // }
-  console.log(data);
+      obj[prop] = arr;
+    }
+  });
 
-  console.log(data);
   const rankingTypes = ["Daily", "Weekly", "Seasonal"];
 
   const units = {
