@@ -16,38 +16,36 @@ import { autoPercentage } from "chartjs-plugin-watermark";
 
 const getFirebaseData = () => {
   let data = [];
-  const documents = [
-    "bidaily_Top10",
-    "weekly_Top10",
-    "seasonal_Top10",
-    "team_Top10",
-  ];
-  const collections = {
-    bidaily_Top10: [
-      "FantasyScore",
-      "Points",
-      "PointsPerPoss",
-      "Three-Pointers",
-    ],
-    weekly_Top10: ["FantasyScore", "Points", "PointsPerPoss", "Three-Pointers"],
-    seasonal_Top10: ["Num_DD", "Num_TD"],
-    team_Top10: ["Massey Rating", "ELO Rating", "Standing"],
-  };
-  documents.forEach((docName) => {
-    let currentData = new Object();
-    collections[docName].forEach((collName) => {
-      fbFirestore
-        .collection("landing_page_Top10")
-        .doc(docName)
-        .collection(collName)
-        .get()
-        .then((snapshot) => {
-          const documents = snapshot.docs.map((doc) => doc.data());
-          currentData[collName] = documents;
-        });
+  // const documents = [
+  //   "bidaily_Top10",
+  //   "weekly_Top10",
+  //   "seasonal_Top10",
+  //   "team_Top10",
+  // ];
+  // const collections = {
+  //   bidaily_Top10: [
+  //     "FantasyScore",
+  //     "Points",
+  //     "PointsPerPoss",
+  //     "Three-Pointers",
+  //   ],
+  //   weekly_Top10: ["FantasyScore", "Points", "PointsPerPoss", "Three-Pointers"],
+  //   seasonal_Top10: ["Num_DD", "Num_TD"],
+  //   team_Top10: ["Massey Rating", "ELO Rating", "Standing"],
+  // };
+
+  const collections = ["player_ranking", "team_ranking"];
+
+  fbFirestore
+    .collection("ranking")
+    .get()
+    .then((snapshot) => {
+      const documents = snapshot.docs.map((doc) => doc.data());
+      data.push(documents[0]["bidaily"]);
+      data.push(documents[0]["weekly"]);
+      data.push(documents[0]["seasonal"]);
+      data.push(documents[1]);
     });
-    data.push(currentData);
-  });
   return data;
 };
 
@@ -80,7 +78,10 @@ const GamePageContainer = () => {
     setData(getFirebaseData());
   }, []);
 
-  const hasDataLoaded = Object.entries(data[0]).length !== 0;
+  let test = [{}];
+
+  console.log(data);
+  let hasDataLoaded = Object.keys(data).length === 4;
 
   const currentYear = "2020-21";
   useFirestoreConnect(() => [
@@ -156,6 +157,7 @@ const GamePageContainer = () => {
                   backgroundColor: "white",
                   borderTop: "solid gray 1px",
                   borderBottom: "solid gray 1px",
+                  width: "100%",
                 }}
               >
                 <div

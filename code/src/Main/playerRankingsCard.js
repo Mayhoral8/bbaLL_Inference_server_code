@@ -19,6 +19,21 @@ const PlayerRankingsCard = ({ data }) => {
   } catch (error) {
     data = {};
   }
+
+  // for (const prop in obj) {
+
+  //   for(const score in obj[prop]){
+  //     let arr = []
+  //     for(const name in obj[prop[score]]){
+  //       arr.push([name]: obj[prop][score][name])
+  //       }
+
+  //     obj[prop] = arr;
+  //   }
+  // }
+  console.log(data);
+
+  console.log(data);
   const rankingTypes = ["Daily", "Weekly", "Seasonal"];
 
   const units = {
