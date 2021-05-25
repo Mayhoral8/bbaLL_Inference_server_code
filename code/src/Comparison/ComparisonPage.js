@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation} from "react-router-dom";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { changeIsTeam } from "../redux/actions/sidebarActions";
 import ComparisonDropdown from "./ComparisonDropdown";
@@ -76,16 +76,22 @@ const ComparisonPage = () => {
 
   //const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
 
-  const [isTeam, setIsTeam] = useState(false);
-
-  const dispatch = useDispatch();
+  //onst dispatch = useDispatch();
+  const location = useLocation();
   const history = useHistory();
-  const pathname = history.location.pathname.split('/');
-  const search = history.location.search;
-  const splitedSearch = history.location.search.split('&');
+
+  const pathname = location.pathname.split('/');
+  const search = location.search;
+  const splitedSearch = location.search.split('&');
   const teamsOrPlayersPath = pathname[2];
   const dataTypePath = pathname[3];
 
+  var initialIsTeam = null;
+  if(teamsOrPlayersPath === "teams") {
+    initialIsTeam = true
+  } 
+
+  const [isTeam, setIsTeam] = useState(initialIsTeam);
   
   const parsedQueryParams = splitedSearch.map(term=> term.split('=')[1]);
   const queryNameOne = parsedQueryParams[0];
@@ -99,19 +105,22 @@ const ComparisonPage = () => {
   var year;
 
   const screenWidth = useWindowSize();
-
-  //console.log("begin of the comparsion: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
+  console.log("before everything....");
+  //console.log("before every thing happen(Check the history): " + JSON.stringify(history));
+  //const dutinVal = useLocation();
+  console.log("current url: " + JSON.stringify(location) + " History: " + JSON.stringify(history));
+  console.log("begin of the comparsion: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
-
+    console.log("inside useEffect....")
     if(teamsOrPlayersPath && dataTypePath && search) {  
-                                     
+    console.log("reading from the url");
       if(teamsOrPlayersPath === 'players') {
         //dispatch(changeIsTeam({ isTeam: false }));
         console.log("set isTeam to false")
         setIsTeam(false);
-      } else {
+      } else if(teamsOrPlayersPath === 'teams') {
         //dispatch(changeIsTeam({ isTeam: true }));
         console.log("set isTeam to true")
         setIsTeam(true);
@@ -174,14 +183,14 @@ const ComparisonPage = () => {
         "optionTwo",
         dataType === "perPoss" ? "perPoss" : "perGame"
       );
-
+      
+      console.log("History push the url");
       // Routing
-      const navpath = history.location.pathname.split('/')[1];
+      const navpath = location.pathname.split('/')[1];
       const teampath = isTeam? 'teams': 'players';
       const typepath = dataType === 'perGame'? 'per-game': 'per-possession';
-
       const comparisonPath = `/${navpath}/${teampath}/${typepath}?nameOne=${playerNameOne}&yearOne=${yearOne}&nameTwo=${playerNameTwo}&yearTwo=${yearTwo}`;
-    
+        
       history.push(comparisonPath);
 
     } else {
@@ -204,6 +213,7 @@ const ComparisonPage = () => {
   };
 
   const handleCompareBetween = (bool) => {
+    console.log("handle comparsion");
     setPlayerNameOne(null);
     setPlayerNameTwo(null);
     setYearOne(null);
@@ -214,7 +224,6 @@ const ComparisonPage = () => {
     setTempYearOne(null);
     setTempYearTwo(null);
     
-    /*
     setRandomNameOne(null);
     setRandomNameTwo(null)
     setrandomNameThree(null);
@@ -226,7 +235,7 @@ const ComparisonPage = () => {
     setrandomNameNine(null);
     setrandomNameTen(null);
     setYearComparison(null);
-    */
+
     setDataOne(null);
     setDataTwo(null);
 
@@ -338,8 +347,6 @@ const ComparisonPage = () => {
     } else {
       return parsedQueryParams[nums];
     }
-
-
     //return isTeam ? "Enter team name" : "Enter player name";
   };
 
@@ -358,6 +365,16 @@ const ComparisonPage = () => {
   function loadRandomPlayers() {
       // if this is the fist time loading the screen
       // get the year name from the JSON file and conver it to string
+      if(teamsOrPlayersPath === 'players') {
+        //dispatch(changeIsTeam({ isTeam: false }));
+        console.log("reading from the url, set isTeam to false")
+        setIsTeam(false);
+      } else if (teamsOrPlayersPath === 'teams'){
+        console.log("reading from the url, set isTeam to true")
+        setIsTeam(true);
+      }
+      console.log("loading...." + " " + isTeam + " " + teamsOrPlayersPath);
+
       var data = isTeam ? teamCandidates : candidates;
       var randRange = isTeam ? 29 : 59;
 
@@ -397,7 +414,6 @@ const ComparisonPage = () => {
       setrandomNameTen(nameObject[selectedForComparison[9]]);
       setYearComparison(year);
   }
-  
 
   if ((tempPlayerNameOne == null && tempPlayerNameTwo == null && playerNameOne == null && playerNameTwo == null)) {
     loadRandomPlayers();  
@@ -412,9 +428,8 @@ const ComparisonPage = () => {
     setYearTwo("2020-21");
     setTempYearTwo("2020-21");
   }
-
-
-  console.log("before render the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
+  
+  console.log("before return the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
 
   return (
     <>
