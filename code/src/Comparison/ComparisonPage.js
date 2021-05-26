@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation} from "react-router-dom";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { changeIsTeam } from "../redux/actions/sidebarActions";
 import ComparisonDropdown from "./ComparisonDropdown";
 import SEO from "../Shared/SEO";
 import names from "JSON/name.json";
@@ -10,7 +8,6 @@ import candidates from "JSON/player_candidates_for_comparison.json";
 import teamCandidates from "JSON/team_candidates_for_comparison.json";
 import RandomPlayerContiner from "./RandomComparison";
 import RandomComparisonMobile from "./RandomComparisonMobile/RandomComparisonMobile"
-
 import ComparisonYearSelection from "./ComparisonYearSelection";
 import {
   StyledMainContent,
@@ -27,12 +24,8 @@ import {
 import { fbFirestore } from "../App/config";
 import StatisticsInformation from "./StatisticsInformation";
 import useWindowSize from "../../src/Shared/hooks/useWindowSize";
-import { backgrounds } from "polished";
 
 const ComparisonPage = () => {
-  const [playerNameOne, setPlayerNameOne] = useState(null);
-  const [playerNameTwo, setPlayerNameTwo] = useState(null);
-
   const [randomNameOne, setRandomNameOne] = useState(null);
   const [randomNameTwo, setRandomNameTwo] = useState(null);
   const [randomNameThree, setrandomNameThree] = useState(null);
@@ -43,17 +36,8 @@ const ComparisonPage = () => {
   const [randomNameEight, setRandomNameEight] = useState(null);
   const [randomNameNine, setrandomNameNine] = useState(null);
   const [randomNameTen, setrandomNameTen] = useState(null);
-
-
-  const [yearOne, setYearOne] = useState(null);
-  const [yearTwo, setYearTwo] = useState(null);
   const [yearComparison, setYearComparison] = useState(null);
-  
-  const [tempPlayerNameOne, setTempPlayerNameOne] = useState(null);
-  const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState(null);
-  const [tempYearOne, setTempYearOne] = useState(null);
-  const [tempYearTwo, setTempYearTwo] = useState(null);
-  
+
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
   const [dataOne, setDataOne] = useState(null);
   const [dataTwo, setDataTwo] = useState(null);
@@ -66,17 +50,12 @@ const ComparisonPage = () => {
   const [maxOverallYears, setMaxOverallYears] = useState(null);
   const [minOverallYears, setMinOverallYears] = useState(null);
 
-  const [dataType, setDataType] = useState("perGame");
-
   const [refOne, setRefOne] = useState(null);
   const [refTwo, setRefTwo] = useState(null);
 
   const [refYearOne, setRefYearOne] = useState(null);
   const [refYearTwo, setRefYearTwo] = useState(null);
 
-  //const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
-
-  //onst dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
 
@@ -86,26 +65,58 @@ const ComparisonPage = () => {
   const teamsOrPlayersPath = pathname[2];
   const dataTypePath = pathname[3];
 
-  var initialIsTeam = null;
-  if(teamsOrPlayersPath === "teams") {
-    initialIsTeam = true
-  } 
-
-  const [isTeam, setIsTeam] = useState(initialIsTeam);
-  
   const parsedQueryParams = splitedSearch.map(term=> term.split('=')[1]);
   const queryNameOne = parsedQueryParams[0];
   const queryYearOne = parsedQueryParams[1];
   const queryNameTwo = parsedQueryParams[2];
   const queryYearTwo = parsedQueryParams[3];
 
+
+  let tempIsTeam = null;
+  let tempDataType = "perGame";
+  let tempLeftName = null;
+  let tempRightName = null;
+  let tempLeftYear = null;
+  let tempRightYear = null;
+
+  if(teamsOrPlayersPath === 'teams') {
+    tempIsTeam = true;
+  } else if (teamsOrPlayersPath === 'players') {
+    tempIsTeam = false;
+  }
+
+  if(dataType === 'per-possession') {
+    tempDataType = 'perPoss';
+  } else {
+    tempDataType = 'perGame';
+  }
+
+  if (search) {
+    tempLeftName = queryNameOne;
+    tempRightName = queryNameTwo;
+    tempLeftYear = queryYearOne;
+    tempRightYear = queryYearTwo
+  }
+
+  const [isTeam, setIsTeam] = useState(tempIsTeam);
+  const [dataType, setDataType] = useState(tempDataType);
+  const [playerNameOne, setPlayerNameOne] = useState(tempLeftName);
+  const [playerNameTwo, setPlayerNameTwo] = useState(tempRightName);
+  const [yearOne, setYearOne] = useState(tempLeftYear);
+  const [yearTwo, setYearTwo] = useState(tempRightYear);
+
+  const [tempPlayerNameOne, setTempPlayerNameOne] = useState(tempLeftName);
+  const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState(tempRightName);
+  const [tempYearOne, setTempYearOne] = useState(tempLeftYear);
+  const [tempYearTwo, setTempYearTwo] = useState(tempRightYear);
+
   // length 10, stored either player / team name for random compare
-  var selectedForComparison = new Array();
-  var nameObject;
-  var year;
+  let selectedForComparison = new Array();
+  let nameObject;
+  let year;
 
   const screenWidth = useWindowSize();
-  console.log("before everything....");
+ // console.log("before everything....");
   //console.log("before every thing happen(Check the history): " + JSON.stringify(history));
   //const dutinVal = useLocation();
   console.log("current url: " + JSON.stringify(location) + " History: " + JSON.stringify(history));
@@ -113,16 +124,11 @@ const ComparisonPage = () => {
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
-    console.log("inside useEffect....")
+
     if(teamsOrPlayersPath && dataTypePath && search) {  
-    console.log("reading from the url");
       if(teamsOrPlayersPath === 'players') {
-        //dispatch(changeIsTeam({ isTeam: false }));
-        console.log("set isTeam to false")
         setIsTeam(false);
       } else if(teamsOrPlayersPath === 'teams') {
-        //dispatch(changeIsTeam({ isTeam: true }));
-        console.log("set isTeam to true")
         setIsTeam(true);
       }
 
@@ -184,7 +190,7 @@ const ComparisonPage = () => {
         dataType === "perPoss" ? "perPoss" : "perGame"
       );
       
-      console.log("History push the url");
+      //console.log("History push the url");
       // Routing
       const navpath = location.pathname.split('/')[1];
       const teampath = isTeam? 'teams': 'players';
@@ -213,7 +219,7 @@ const ComparisonPage = () => {
   };
 
   const handleCompareBetween = (bool) => {
-    console.log("handle comparsion");
+    //console.log("handle comparsion");
     setPlayerNameOne(null);
     setPlayerNameTwo(null);
     setYearOne(null);
@@ -341,25 +347,12 @@ const ComparisonPage = () => {
   };
 
   const setPromoteStringName = (nums) => {
-
-    if (parsedQueryParams.length == 1) {
-      return isTeam ? "Enter team name" : "Enter player name";
-    } else {
-      return parsedQueryParams[nums];
-    }
-    //return isTeam ? "Enter team name" : "Enter player name";
+    return isTeam ? "Enter team name" : "Enter player name";
   };
 
   // return the promot string on the year section
   const setPromoteStringYear = (nums) => {
-
-    if(parsedQueryParams.length == 1) {
-      return "Select Year";
-    } else {
-      return parsedQueryParams[nums];
-    }
-    
-    //return "Select Year";
+    return "Select Year";
   }
 
   function loadRandomPlayers() {
@@ -367,13 +360,13 @@ const ComparisonPage = () => {
       // get the year name from the JSON file and conver it to string
       if(teamsOrPlayersPath === 'players') {
         //dispatch(changeIsTeam({ isTeam: false }));
-        console.log("reading from the url, set isTeam to false")
+        //console.log("reading from the url, set isTeam to false")
         setIsTeam(false);
       } else if (teamsOrPlayersPath === 'teams'){
-        console.log("reading from the url, set isTeam to true")
+       // console.log("reading from the url, set isTeam to true")
         setIsTeam(true);
       }
-      console.log("loading...." + " " + isTeam + " " + teamsOrPlayersPath);
+      //console.log("loading...." + " " + isTeam + " " + teamsOrPlayersPath);
 
       var data = isTeam ? teamCandidates : candidates;
       var randRange = isTeam ? 29 : 59;
@@ -415,21 +408,19 @@ const ComparisonPage = () => {
       setYearComparison(year);
   }
 
-  if ((tempPlayerNameOne == null && tempPlayerNameTwo == null && playerNameOne == null && playerNameTwo == null)) {
-    loadRandomPlayers();  
-
-    setPlayerNameOne(nameObject[selectedForComparison[0]].replace(/ /g, "_").replace(".", ","));
-    setTempPlayerNameOne(nameObject[selectedForComparison[0]].replace(/ /g, "_").replace(".", ","));
-    setPlayerNameTwo(nameObject[selectedForComparison[1]].replace(/ /g, "_").replace(".", ","));
-    setTempPlayerNameTwo(nameObject[selectedForComparison[1]].replace(/ /g, "_").replace(".", ","));
-
-    setYearOne("2020-21");
-    setTempYearOne("2020-21");
-    setYearTwo("2020-21");
-    setTempYearTwo("2020-21");
-  }
+  if ((randomNameOne == null)) {
+    loadRandomPlayers();
+    
+    if(tempPlayerNameOne == null && tempPlayerNameTwo == null) {
+        setTempPlayerNameOne(nameObject[selectedForComparison[0]].replace(/ /g, "_").replace(".", ","));
+        setTempPlayerNameTwo(nameObject[selectedForComparison[1]].replace(/ /g, "_").replace(".", ","));
+    
+        setTempYearOne("2020-21");
+        setTempYearTwo("2020-21");
+    }
+  } 
   
-  console.log("before return the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
+  //console.log("before return the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
 
   return (
     <>
@@ -505,7 +496,7 @@ const ComparisonPage = () => {
                     </StyledOptionsTeams>
                     <StyledOptionsNames>
                       <StyledOptionName>
-                        <div className="form-control">
+                        <div className="form-control" onClick={()=>clearValue(refYearOne)}>
                           <label>Name</label>
                           <ComparisonDropdown
                             options={names}
@@ -531,7 +522,7 @@ const ComparisonPage = () => {
                       </StyledOptionName>
     
                       <StyledOptionName>
-                        <div className="form-control">
+                        <div className="form-control" onClick={()=>clearValue(refYearTwo)}>
                           <label>Name</label>
                           <ComparisonDropdown
                             options={names}
@@ -605,7 +596,7 @@ const ComparisonPage = () => {
                     </StyledOptionsTeams>
                     <StyledOptionsNames>
                       <StyledOptionName>
-                        <div className="form-control">
+                        <div className="form-control" onClick={()=>clearValue(refYearOne)}>
                           <label>Name</label>
                           <ComparisonDropdown
                             options={names}
@@ -631,7 +622,7 @@ const ComparisonPage = () => {
                       </StyledOptionName>
     
                       <StyledOptionName>
-                        <div className="form-control">
+                        <div className="form-control" onClick={()=>clearValue(refYearTwo)}>
                           <label>Name</label>
                           <ComparisonDropdown
                             options={names}

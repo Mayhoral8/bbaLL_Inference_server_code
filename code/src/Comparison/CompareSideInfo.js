@@ -15,31 +15,64 @@ const CompareSideInfo = ({name, year, isTeam, location}) => {
     }, [name, year])
 
     function getDatasFromFirestore() {
-        fbFirestore.collection("player_basic_info")
-        .doc(name.replace(/ /g, "_").replace(/\./g, ","))
-        .get()
-        .then((doc)=>{
-            var weight = doc.data()["weight"][year];
-            var height = doc.data()["height"][year];
-            var salary = doc.data()["salary"][year];
-            var temp = [];
-            temp.push(weight)
-            temp.push(height)
-            temp.push(salary)
-            setResultArray(temp)
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        if (isTeam == "false") {
+            fbFirestore.collection("player_basic_info")
+            .doc(name.replace(/ /g, "_").replace(/\./g, ","))
+            .get()
+            .then((doc)=>{
+                var weight = doc.data()["weight"][year];
+                var height = doc.data()["height"][year];
+                var salary = doc.data()["salary"][year];
+                var temp = [];
+                temp.push(weight)
+                temp.push(height)
+                temp.push(salary)
+                setResultArray(temp)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        } else if (isTeam == "true") {
+            fbFirestore.collection("team_statistics")
+            .doc(name.replace(/_/g, " "))
+            .collection("years")
+            .doc(year)
+            .get()
+            .then((doc) => {
+                var weight = doc.data()["ELO"];
+                var height = doc.data()["Massey"];
+                var salary = doc.data()["Win_PCT"]["avg"];
+                var temp = [];
+                temp.push(weight)
+                temp.push(height)
+                temp.push(salary)
+                setResultArray(temp)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     if (resultArray != null) {
-        dataOne =  resultArray[0];
-        dataTwo =  resultArray[1];
-        dataThree =  resultArray[2];
+        if (isTeam == "false") {
+            dataOne =  resultArray[0];
+            dataTwo =  resultArray[1];
+            dataThree =  resultArray[2];
+    
+            dataThree = dataThree / 1000000;
+            dataThree = dataThree.toFixed(2);
+        } else {
+            dataOne =  resultArray[0];
+            dataTwo =  resultArray[1];
+            dataThree =  resultArray[2];
 
-        dataThree = dataThree / 1000000;
-        dataThree = dataThree.toFixed(2);
+            dataOne = dataOne.toFixed(2);
+            dataTwo = dataTwo.toFixed(2);
+            dataThree = dataThree * 100;
+            dataThree = dataThree.toFixed(2);
+        }
+
     }
     //console.log("Within CompareSideInfo: " + currentYear + " " + name);
     return (
@@ -59,11 +92,11 @@ const CompareSideInfo = ({name, year, isTeam, location}) => {
             <StyledSideInfo location = {location}>    
                 <div className={"info"}>
                     <span>Elo Score</span>
-                    <span>20</span>
+                    <span>{dataOne}</span>
                     <span>Massey Score</span>
-                    <span>30</span>
+                    <span>{dataTwo}</span>
                     <span>Win Percentage</span>
-                    <span>40</span>
+                    <span>{dataThree}</span>
                 </div>
             </StyledSideInfo>
             )
