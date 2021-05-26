@@ -105,7 +105,7 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                         targetObj.gameFinished = false
 
                         try{
-                            let userList = await fbFirestoreSpigameBet.collection('userListTracker').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
+                            let userList = await fbFirestoreSpigameBet.collection('userTrackList').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
                             let userListTargetObj = userList.data()
 
                             if(!userList.data()){
