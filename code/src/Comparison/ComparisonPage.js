@@ -116,11 +116,11 @@ const ComparisonPage = () => {
   let year;
 
   const screenWidth = useWindowSize();
- // console.log("before everything....");
+  //console.log("before everything....");
   //console.log("before every thing happen(Check the history): " + JSON.stringify(history));
   //const dutinVal = useLocation();
-  console.log("current url: " + JSON.stringify(location) + " History: " + JSON.stringify(history));
-  console.log("begin of the comparsion: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
+  //console.log("current url: " + JSON.stringify(location) + " History: " + JSON.stringify(history));
+  //console.log("begin of the comparsion: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams);
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
