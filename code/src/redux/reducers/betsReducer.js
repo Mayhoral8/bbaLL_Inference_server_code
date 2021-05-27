@@ -1,7 +1,10 @@
 import { GET_FUTURE_GAMES_INFO, GETUSERBETS, SET_STRUCTURED_GAME_INFO } from "../actions/types"
 
 const initialState = {
-  futureGamesInfo: [],
+  futureGamesInfo: {
+    games: [],
+    isLoading: true
+  },
   structuredGameInfo: [],
   userBetsDetails:{
     loading: true,

@@ -11,10 +11,7 @@ import {
     ProfileImg, 
     UserName, 
     BettingOddsRank, 
-    FiguresViewMore, 
-    ViewMoreLink, 
-    LogoutImgContainer, 
-    LogoutImg
+    FiguresViewMore
 } from './userStatsContainerStyles'
 
 //Images
@@ -28,12 +25,17 @@ import {ClipLoader} from 'react-spinners'
 
 const UserStatsBox = (props) => {
     const [statsSpinner, setStatsSpinner] = useState(true)
+    const [winningRate, setWinningRate] = useState(0)
     useEffect(() => {
         props.getUserRecord(props.userDetails.uid)
     },[])
 
     useEffect(() => {
         if(props.userRecord.level){
+            let calWinningRate = props.userRecord.numBettings === 0 ? 0
+            :
+            props.userRecord.numWins / props.userRecord.numBettings
+            setWinningRate(calWinningRate)
             setStatsSpinner(false)
         }
     }, [props.userRecord])
@@ -53,11 +55,7 @@ const UserStatsBox = (props) => {
                             <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
                             <BettingOddsRank>Winning Rate: {" "}
                                 {
-                                    props.userRecord.numBettings === 0
-                                        ?
-                                    0
-                                        :
-                                    props.userRecord.numWins / props.userRecord.numBettings
+                                    winningRate.toFixed(2)
                                 }
                             </BettingOddsRank>
                             <Link

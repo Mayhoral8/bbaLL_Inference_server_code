@@ -26,13 +26,13 @@ export const FiguresViewMore = styled.div`
     flex-direction: column;
     align-items: flex-start;
     text-align:start;
-    width: 160px;
+    width: 100%;
     margin-top:20px;
 `
 
 export const ProfileImg = styled.img`
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
     border-radius: 50%;
     margin-right:10px;
 `

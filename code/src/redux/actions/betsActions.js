@@ -17,13 +17,15 @@ export const getFutureGamesInfo=()=>{
             })
             dispatch({
                 type:GET_FUTURE_GAMES_INFO,
-                payload:data
+                payload: {
+                    games: data,
+                    isLoading: false
+                }
             })
 
             return {success: true}
         }
         catch(e){
-            console.log("ERROR",e)
             throw e
         }
     }

@@ -245,7 +245,7 @@ export const SubmitPointsBtn = styled.div`
     }
 `
 
-export const WarningPopupContainer = styled.div`
+export const PopupContainer = styled.div`
     position:fixed;
     top:0;
     bottom:0;
@@ -258,7 +258,7 @@ export const WarningPopupContainer = styled.div`
     z-index: 10;
 `
 
-export const WarningPopupWrapper = styled.div`
+export const PopupWrapper = styled.div`
     width:500px;
     background: #ffff;
 `

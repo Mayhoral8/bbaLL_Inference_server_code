@@ -1,4 +1,6 @@
 import constants from './constants.json'
+import moment from 'moment'
+import momentTimezone from 'moment-timezone'
 
 //teams logos imports
 import AtlantaHawks from '../assets/teamLogos/Atlanta_Hawks.png'
@@ -180,73 +182,104 @@ export const structureData=(futureGamesInfo)=>{
 export const pointBoxClickHandler=(e, params, index, gameId,  selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
 
     if(props.userDetails){
-
         let gameInfoUpdated = gameInfo;
-        gameInfoUpdated[index][selectedType] = colIndex;
-        let targetObj={}
-        let gameDetailsObj
 
-        for(let i = 0; i < gameInfoUpdated.length; i++){
+        if(gameInfoUpdated[index][selectedType] === colIndex){
 
-            if(gameInfoUpdated[i].gameId === gameId){
-                gameDetailsObj = gameInfoUpdated[i].gameDetails
+            gameInfoUpdated[index][selectedType] = null;
+            let targetObj = selectedValues
+
+            if(!targetObj[gameId].moneyLine.odds && !targetObj[gameId].handicap.odds || !targetObj[gameId].moneyLine.odds && !targetObj[gameId].overAndUnder.odds || !targetObj[gameId].handicap.odds && !targetObj[gameId].overAndUnder.odds){
+                delete targetObj[gameId]
+
+            }
+            else{
+                if(params === 'moneyLine'){
+                    targetObj[gameId][params] = {}
+                } 
+                else if(params === 'handicap'){
+                    targetObj[gameId][params] = {}
+                } 
+                else{
+                    targetObj[gameId].overAndUnder = {};
+                }
+            }
+
+            let newOverviewKeysArray=Object.keys(targetObj);
+            return{
+                gameInfoUpdated, targetObj, newOverviewKeysArray
             }
 
         }
-
-        if(selectedValues[gameId]){
-            targetObj = selectedValues
-        } 
         else{
             
-            let newObj = { 
-                moneyLine: { ...constants.selectedValues.moneyLine },
-                handicap: { ...constants.selectedValues.handicap },
-                overAndUnder: {...constants.selectedValues.overAndUnder}
+            gameInfoUpdated[index][selectedType] = colIndex;
+            let targetObj={}
+            let gameDetailsObj
+
+            for(let i = 0; i < gameInfoUpdated.length; i++){
+
+                if(gameInfoUpdated[i].gameId === gameId){
+                    gameDetailsObj = gameInfoUpdated[i].gameDetails
+                }
+
             }
-            selectedValues[gameId] = newObj
-            targetObj = selectedValues
 
-        }
-
-        if(params === 'moneyLine'){
-
-            targetObj[gameId][params].odds = oddsValue;
-            targetObj[gameId][params].bettingSide = bettingSide;
-
-        } 
-        else if(params === 'handicap'){
-
-            targetObj[gameId][params].odds = oddsValue;
-            targetObj[gameId][params].spread = pointsValue;
-            targetObj[gameId][params].bettingSide = bettingSide;
-
-        } 
-        else{
-
-            let overAndUnder = {}
-            overAndUnder.odds = oddsValue
-            overAndUnder.totalScore = scoreValue
-
-            if(params.includes('over')){
-                overAndUnder.type = 'over'
+            if(selectedValues[gameId]){
+                targetObj = selectedValues
             } 
             else{
-                overAndUnder.type = 'under'
+                
+                let newObj = { 
+                    moneyLine: { ...constants.selectedValues.moneyLine },
+                    handicap: { ...constants.selectedValues.handicap },
+                    overAndUnder: {...constants.selectedValues.overAndUnder}
+                }
+                selectedValues[gameId] = newObj
+                targetObj = selectedValues
+
             }
 
-            targetObj[gameId].overAndUnder = overAndUnder;
+            if(params === 'moneyLine'){
+
+                targetObj[gameId][params].odds = oddsValue;
+                targetObj[gameId][params].bettingSide = bettingSide;
+
+            } 
+            else if(params === 'handicap'){
+
+                targetObj[gameId][params].odds = oddsValue;
+                targetObj[gameId][params].spread = pointsValue;
+                targetObj[gameId][params].bettingSide = bettingSide;
+
+            } 
+            else{
+
+                let overAndUnder = {}
+                overAndUnder.odds = oddsValue
+                overAndUnder.totalScore = scoreValue
+
+                if(params.includes('over')){
+                    overAndUnder.type = 'over'
+                } 
+                else{
+                    overAndUnder.type = 'under'
+                }
+
+                targetObj[gameId].overAndUnder = overAndUnder;
+            }
+
+            targetObj[gameId].gameDetails = gameDetailsObj;
+            targetObj[gameId].gameDate = targetObj[gameId].gameDetails.gameDate
+            let newOverviewKeysArray=Object.keys(targetObj);
+
+            return {
+                gameInfoUpdated, targetObj, newOverviewKeysArray
+            }
         }
 
-        targetObj[gameId].gameDetails = gameDetailsObj;
-        targetObj[gameId].gameDate = targetObj[gameId].gameDetails.gameDate
-        let newOverviewKeysArray=Object.keys(targetObj);
-
-        return {
-            gameInfoUpdated,targetObj,newOverviewKeysArray
-        }
-
-    } else{
+    }
+    else{
         props.history.push('/login')
     }
 }
@@ -412,4 +445,28 @@ export const removeBtnSelectionClass = (gameInfo) => {
         gameInfo[i].overUnderSelected = null
     }
     return gameInfo
+}
+
+export const checkGameTimings = (selectedGames) => {
+    let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
+    let keysArray = Object.keys(selectedGames)
+    let isTrue = 0
+    let isFalse = 0
+    for(let i = 0; i < keysArray.length; i++){
+        let gameStartDate = selectedGames[keysArray[i]].gameDetails.gameDate +  " " +selectedGames[keysArray[i]].gameDetails.gameStartTime
+        let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
+        if(isGameStartTimeBeforeTheCurrentTime){
+            isTrue++
+        }
+        else{
+            isFalse++
+        }
+    }
+
+    if(isTrue === keysArray.length){
+        return true
+    }
+    else{
+        return isFalse
+    }
 }

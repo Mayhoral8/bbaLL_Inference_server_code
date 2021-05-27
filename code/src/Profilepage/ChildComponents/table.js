@@ -54,8 +54,6 @@ const Table = (props) => {
                                             let teamNamesArray = cell.render('Cell').props.cell.value.split('vs')
                                             let homeTeam = teamNamesArray[0].split(' ')
                                             let awayTeam = teamNamesArray[1].split(' ')
-                                            console.log(homeTeam)
-                                            console.log(awayTeam)
                                             return(
                                                 <DataCell {...cell.getCellProps} key = {childIndex}>
                                                     <p>{homeTeam[0] + " " + homeTeam[1]}</p>
