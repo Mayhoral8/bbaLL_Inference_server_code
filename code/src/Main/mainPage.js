@@ -80,7 +80,6 @@ const GamePageContainer = () => {
 
   let test = [{}];
 
-  console.log(data);
   let hasDataLoaded = Object.keys(data).length === 4;
 
   const currentYear = "2020-21";
@@ -141,15 +140,15 @@ const GamePageContainer = () => {
         description="NBA game analytics - powered by AI, Machine learning, & Statistics. We provide match facts, boxscores, shot types, fantasy ranking, and time series analysis. The time series analysis consists of game of runs, effective field goal percentage, fantasy scores, plays (possessions), and play by play texts. We aim to have the most accurate and fastest sports stats provider."
       />
       <FullWidthMain>
-        <EventList
+        {/* <EventList
           gameInfo={gameInfo}
           gamePbp={gamePbp}
           gamePlayers={gamePlayers}
-        />
+        /> */}
         <div style={{ margin: "0rem 3rem 0rem 3rem" }}>
           <MainPageContainer>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              {useWindowSize() < 1400 && (
+              {useWindowSize() < 1400 && games.length > 0 && (
                 <div
                   style={{
                     display: "flex",
@@ -189,7 +188,7 @@ const GamePageContainer = () => {
                     {games.map((item, index) => {
                       return <FutureGameOddsCard data={item} key={index} />;
                     })}
-                    {games.length === 0 ? (
+                    {/* {games.length === 0 ? (
                       <div
                         style={{
                           textAlign: "center",
@@ -202,7 +201,7 @@ const GamePageContainer = () => {
                       </div>
                     ) : (
                       ""
-                    )}
+                    )} */}
                   </div>
                 </div>
               )}
@@ -235,7 +234,7 @@ const GamePageContainer = () => {
                     fontSize: "1.5rem",
                   }}
                 >
-                  Team Rankings
+                  NBA Team Rankings
                 </div>
                 {hasDataLoaded ? (
                   <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
@@ -245,7 +244,7 @@ const GamePageContainer = () => {
               </TeamRankingsContainer>
             </div>
 
-            {useWindowSize() > 1400 && (
+            {useWindowSize() > 1400 && games.length > 0 && (
               <div
                 style={{
                   backgroundColor: "white",
@@ -278,7 +277,7 @@ const GamePageContainer = () => {
                 {games.map((item, index) => {
                   return <FutureGameOddsCard data={item} key={index} />;
                 })}
-                {games.length === 0 ? (
+                {/* {games.length === 0 ? (
                   <div
                     style={{
                       textAlign: "center",
@@ -291,7 +290,7 @@ const GamePageContainer = () => {
                   </div>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
             )}
           </MainPageContainer>
