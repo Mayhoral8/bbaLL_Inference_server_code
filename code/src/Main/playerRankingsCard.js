@@ -19,18 +19,18 @@ const PlayerRankingsCard = ({ data }) => {
   } catch (error) {
     data = {};
   }
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++)
+      for (const prop in data[i]) {
+        let arr = [];
 
-  data.forEach((obj) => {
-    for (const prop in obj) {
-      let arr = [];
+        for (const name in data[i][prop]) {
+          arr.push({ [name]: data[i][prop][name] });
+        }
 
-      for (const name in obj[prop]) {
-        arr.push({ [name]: obj[prop][name] });
+        data[i][prop] = arr;
       }
-
-      obj[prop] = arr;
-    }
-  });
+  }, []);
 
   const rankingTypes = ["Daily", "Weekly", "Seasonal"];
 
@@ -242,25 +242,30 @@ const PlayerRankingsCard = ({ data }) => {
                 }
 
                 return (
-                  <div
+                  <a
                     key={index}
-                    className="player-box"
-                    style={{ background: `${playerColour}` }}
+                    href={`/player/${playerName.replace(" ", "_")}`}
                   >
-                    <div className="logo-box">
-                      <img style={{}} src={imgs[playerName]} />
-                      <div className="player-name">
-                        {playerName.split(" ")[0]} <br />
-                        {playerName.split(" ")[1]}
+                    <div
+                      key={index}
+                      className="player-box"
+                      style={{ background: `${playerColour}` }}
+                    >
+                      <div className="logo-box">
+                        <img style={{}} src={imgs[playerName]} />
+                        <div className="player-name">
+                          {playerName.split(" ")[0]} <br />
+                          {playerName.split(" ")[1]}
+                        </div>
+                      </div>
+                      <div className="value">
+                        <div>
+                          {score + " "}
+                          <span className="unit">{unit}</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="value">
-                      <div>
-                        {score + " "}
-                        <span className="unit">{unit}</span>
-                      </div>
-                    </div>
-                  </div>
+                  </a>
                 );
               })}
             </div>
