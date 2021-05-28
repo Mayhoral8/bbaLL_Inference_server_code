@@ -104,7 +104,6 @@ const TeamScoreTable = ({
         sortingType.current[attr] = "descending";
       }
     }
-    console.log(listOfTeams);
     return [...arr].sort((a, b) => {
       // mainly to handle when "rank" prop is missing in json
       // makes sure missing ranks get sorted properly
@@ -186,15 +185,18 @@ const TeamScoreTable = ({
   const fixedColumn = (items) => {
     return items.map((obj, i) => {
       let value = "";
+      let link = "";
       if ("name" in obj) {
         value = obj["name"];
+        link = `/team/${value.replace(" ", "_")}`;
       } else {
         value = " - ";
       }
+
       return (
         <div className="table-row" key={i}>
           <div className="table-data" key={i}>
-            {value}
+            <a href={link}>{value}</a>
           </div>
         </div>
       );
