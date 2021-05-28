@@ -32,7 +32,7 @@ export const OutsideContainer = styled.div`
 export const CardContainer = styled.div`
   background: white;
 
-  border: solid gray 1px;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
   display: inline-block;
   flex-direction: column;
 

@@ -140,11 +140,11 @@ const GamePageContainer = () => {
         description="NBA game analytics - powered by AI, Machine learning, & Statistics. We provide match facts, boxscores, shot types, fantasy ranking, and time series analysis. The time series analysis consists of game of runs, effective field goal percentage, fantasy scores, plays (possessions), and play by play texts. We aim to have the most accurate and fastest sports stats provider."
       />
       <FullWidthMain>
-        {/* <EventList
+        <EventList
           gameInfo={gameInfo}
           gamePbp={gamePbp}
           gamePlayers={gamePlayers}
-        /> */}
+        />
         <div style={{ margin: "0rem 3rem 0rem 3rem" }}>
           <MainPageContainer>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -155,8 +155,7 @@ const GamePageContainer = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     backgroundColor: "white",
-                    borderTop: "solid gray 1px",
-                    borderBottom: "solid gray 1px",
+                    boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.08)",
                     width: "100%",
                   }}
                 >
@@ -213,7 +212,7 @@ const GamePageContainer = () => {
                   <div
                     style={{
                       background: "white",
-                      border: "solid gray 1px",
+                      boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.08)",
                       height: "100%",
                       width: "100%",
                       margin: "0rem 3rem 3rem 0rem",
@@ -257,7 +256,7 @@ const GamePageContainer = () => {
                   padding: "0.5rem",
                   overflowY: "scroll",
                   position: "relative",
-                  border: "solid gray 1px",
+                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.08)",
                   height: "1043px",
                   scrollbarWidth: "thin" /* "auto" or "thin" */,
                   // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
@@ -309,7 +308,8 @@ const TeamRankingsContainer = styled.div`
   }
   margin: 3rem 0rem 0rem 0rem;
   background-color: white;
-  border: solid gray 1px;
+
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
 `;
 

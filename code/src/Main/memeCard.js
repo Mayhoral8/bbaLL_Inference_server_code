@@ -132,7 +132,7 @@ export const Card1 = styled.div`
   }
 
   background: white;
-  border: solid gray 1px;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
 
   @media (min-width: 1200px) {
     margin: 2rem 0rem 0rem 0rem;
