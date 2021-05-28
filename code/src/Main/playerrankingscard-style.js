@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
-  // @media (min-width: 834px) {
-  //   position: relative;
-  //   left: -2.7rem;
-  // }
+  @media (min-width: 644px) {
+    position: relative;
+    left: -2.7rem;
+  }
 
-  position: relative;
-  left: -2.7rem;
+  // position: relative;
+  // left: -2.7rem;
 
   @media (max-width: 1400px) {
     margin: 2rem 0rem 2rem 0rem;
