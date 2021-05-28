@@ -80,7 +80,7 @@ const MemeCard = ({ urls }) => {
             alignItems: "center",
           }}
         >
-          Highlights
+          NBA Clips
         </div>
         <button className="button next" onClick={nextbuttonHandle}>
           <span>Next</span>
