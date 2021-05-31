@@ -125,7 +125,7 @@ export const Card1 = styled.div`
   width: 100%;
 
   .title {
-    @media (max-width: 834px) {
+    @media (max-width: 865px) {
       font-size: 1rem;
     }
     font-size: 1.5rem;
