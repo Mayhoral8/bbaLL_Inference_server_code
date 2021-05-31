@@ -14,53 +14,26 @@ import TeamScoreTable from "./TeamScoreTable";
 import styled from "styled-components";
 import { autoPercentage } from "chartjs-plugin-watermark";
 
-const getFirebaseData = () => {
-  let data = [];
-  // const documents = [
-  //   "bidaily_Top10",
-  //   "weekly_Top10",
-  //   "seasonal_Top10",
-  //   "team_Top10",
-  // ];
-  // const collections = {
-  //   bidaily_Top10: [
-  //     "FantasyScore",
-  //     "Points",
-  //     "PointsPerPoss",
-  //     "Three-Pointers",
-  //   ],
-  //   weekly_Top10: ["FantasyScore", "Points", "PointsPerPoss", "Three-Pointers"],
-  //   seasonal_Top10: ["Num_DD", "Num_TD"],
-  //   team_Top10: ["Massey Rating", "ELO Rating", "Standing"],
-  // };
-
-  const collections = ["player_ranking", "team_ranking"];
-
-  fbFirestore
-    .collection("ranking")
-    .get()
-    .then((snapshot) => {
-      const documents = snapshot.docs.map((doc) => doc.data());
-      data.push(documents[0]["bidaily"]);
-      data.push(documents[0]["weekly"]);
-      data.push(documents[0]["seasonal"]);
-      data.push(documents[1]);
-    });
-  return data;
-};
-
 const GamePageContainer = () => {
-  const collection = "landing_page_Top10";
   const [data, setData] = useState([{}, {}, {}]);
   const [games, setGames] = useState([]);
   const [memeUrls, setMemeUrls] = useState([]);
-  const [teamData, setTeamData] = useState({});
+  const [playerRankingTypes, setPlayerRankingTypes] = useState([]);
   useEffect(() => {
     fbFirestore
       .collection("future_game_info")
       .get()
       .then((snapshot) => {
-        setGames(snapshot.docs.map((doc) => doc.data()));
+        let gamesFound = [];
+        snapshot.docs.map((doc) => {
+          const obj = doc.data();
+          console.log(obj);
+          if (Object.keys(obj).length !== 0) {
+            gamesFound.push(obj);
+          }
+        });
+
+        setGames(gamesFound);
       })
       .catch((error) => {
         console.log(error);
@@ -79,7 +52,7 @@ const GamePageContainer = () => {
   }, []);
 
   let test = [{}];
-
+  console.log(games);
   let hasDataLoaded = Object.keys(data).length === 4;
 
   const currentYear = "2020-21";
@@ -115,6 +88,51 @@ const GamePageContainer = () => {
       storeAs: "gamePlayersJson",
     },
   ]);
+
+  const getFirebaseData = () => {
+    let data = [];
+    // const documents = [
+    //   "bidaily_Top10",
+    //   "weekly_Top10",
+    //   "seasonal_Top10",
+    //   "team_Top10",
+    // ];
+    // const collections = {
+    //   bidaily_Top10: [
+    //     "FantasyScore",
+    //     "Points",
+    //     "PointsPerPoss",
+    //     "Three-Pointers",
+    //   ],
+    //   weekly_Top10: ["FantasyScore", "Points", "PointsPerPoss", "Three-Pointers"],
+    //   seasonal_Top10: ["Num_DD", "Num_TD"],
+    //   team_Top10: ["Massey Rating", "ELO Rating", "Standing"],
+    // };
+
+    const collections = ["player_ranking", "team_ranking"];
+
+    fbFirestore
+      .collection("ranking")
+      .get()
+      .then((snapshot) => {
+        const documents = snapshot.docs.map((doc) => doc.data());
+        const types = ["bidaily", "weekly", "seasonal"];
+        let foundTypes = [];
+        types.forEach((type) => {
+          if (
+            type in documents[0] &&
+            Object.keys(documents[0][type]).length !== 0
+          ) {
+            data.push(documents[0][type]);
+            foundTypes.push(type);
+          }
+        });
+
+        setPlayerRankingTypes(foundTypes);
+        data.push(documents[1]);
+      });
+    return data;
+  };
 
   const gameInfo = useSelector(
     (state) => state.firestoreReducer.ordered.gameInfoJson
@@ -207,7 +225,10 @@ const GamePageContainer = () => {
 
               <RowContainer>
                 {hasDataLoaded ? (
-                  <PlayerRankingsCard data={[data[0], data[1], data[2]]} />
+                  <PlayerRankingsCard
+                    data={[data[0], data[1], data[2]]}
+                    rankingTypes={playerRankingTypes}
+                  />
                 ) : (
                   <div
                     style={{
@@ -255,6 +276,7 @@ const GamePageContainer = () => {
                   flexDirection: "column",
                   padding: "0.5rem",
                   overflowY: "scroll",
+                  overflowX: "hidden",
                   position: "relative",
                   boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.08)",
                   height: "1043px",
