@@ -255,6 +255,7 @@ const GamePageContainer = () => {
                 style={{
                   backgroundColor: "white",
                   marginTop: "0rem",
+                  marginLeft: "3rem",
                   height: "100%",
                   minWidth: "300px",
                   display: "flex",
