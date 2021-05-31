@@ -188,7 +188,7 @@ const TeamScoreTable = ({
       let link = "";
       if ("name" in obj) {
         value = obj["name"];
-        link = `/team/${value.replace(" ", "_")}`;
+        link = `/team/${value.replaceAll(" ", "_")}`;
       } else {
         value = " - ";
       }
@@ -251,6 +251,7 @@ const BoxScoreTableWrapper = styled.div`
   .table-scroll {
     overflow-x: auto;
     overflow-y: auto;
+    scrollbar-width: thin;
     position: relative;
     display: flex;
   }
