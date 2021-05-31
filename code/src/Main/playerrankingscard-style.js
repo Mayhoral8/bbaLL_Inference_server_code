@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
-  @media (min-width: 834px) {
+  @media (min-width: 1700px) {
     position: relative;
     left: -2.7rem;
   }
+
+  // position: relative;
+  // left: -2.7rem;
 
   @media (max-width: 1400px) {
     margin: 2rem 0rem 2rem 0rem;
@@ -29,14 +32,14 @@ export const OutsideContainer = styled.div`
 export const CardContainer = styled.div`
   background: white;
 
-  border: solid gray 1px;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
   display: inline-block;
   flex-direction: column;
 
   @media (max-width: 834px) {
     min-width: 280px;
   }
-  @media (min-width: 900px) {
+  @media (min-width: 835px) {
     min-width: 400px;
   }
   @media (min-width: 1440px) {

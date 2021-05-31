@@ -80,7 +80,7 @@ const MemeCard = ({ urls }) => {
             alignItems: "center",
           }}
         >
-          Highlights
+          NBA Clips
         </div>
         <button className="button next" onClick={nextbuttonHandle}>
           <span>Next</span>
@@ -125,14 +125,14 @@ export const Card1 = styled.div`
   width: 100%;
 
   .title {
-    @media (max-width: 834px) {
+    @media (max-width: 865px) {
       font-size: 1rem;
     }
     font-size: 1.5rem;
   }
 
   background: white;
-  border: solid gray 1px;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
 
   @media (min-width: 1200px) {
     margin: 2rem 0rem 0rem 0rem;
