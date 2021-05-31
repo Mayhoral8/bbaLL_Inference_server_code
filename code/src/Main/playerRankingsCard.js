@@ -8,10 +8,14 @@ import {
   OutsideContainer,
   selectContainer,
 } from "./playerrankingscard-style";
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
-const PlayerRankingsCard = ({ data }) => {
+const PlayerRankingsCard = ({ data, rankingTypes }) => {
   //const [JSON, setJSON] = useState(data);
   const [imgs, setImgs] = useState({});
+  console.log(rankingTypes);
 
   try {
     if (data == null) {
@@ -19,6 +23,11 @@ const PlayerRankingsCard = ({ data }) => {
   } catch (error) {
     data = {};
   }
+
+  for (let i = 0; i < rankingTypes.length; i++) {
+    rankingTypes[i] = capitalizeFirstLetter(rankingTypes[i]);
+  }
+
   useEffect(() => {
     for (let i = 0; i < data.length; i++)
       for (const prop in data[i]) {
@@ -32,7 +41,7 @@ const PlayerRankingsCard = ({ data }) => {
       }
   }, []);
 
-  const rankingTypes = ["Daily", "Weekly", "Seasonal"];
+  //  const rankingTypes = ["Daily", "Weekly", "Seasonal"];
 
   const units = {
     Points: "PTS",
