@@ -3,21 +3,21 @@ import { fbStorage } from "../App/config";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 //import firebasestorage from "firebase";
 import { Card } from "./futuregameoddscard-style";
-const FutureGameOddsCard = (item) => {
-  const [JSON, setJSON] = useState(item);
+const FutureGameOddsCard = ({ data }) => {
+  const [JSON, setJSON] = useState(data);
 
   // urls for logo images
   const [homeImg, setHomeImg] = useState("");
   const [awayImg, setAwayImg] = useState("");
 
-  const gameDate = JSON.data["Game Info"]["Game Time"];
+  const gameDate = JSON["Game Info"]["Game Time"];
   const ratingNames = ["ELO", "Massey", "Odds"];
 
-  let homeTeamName = JSON.data["Game Info"]["Home Team"];
-  let awayTeamName = JSON.data["Game Info"]["Away Team"];
+  let homeTeamName = JSON["Game Info"]["Home Team"];
+  let awayTeamName = JSON["Game Info"]["Away Team"];
 
   // Finds the latest date of the all the odds
-  const allbettingOdds = JSON.data["Game Odds"]["General"];
+  const allbettingOdds = JSON["Game Odds"]["General"];
   let latestDate = "";
   Object.keys(allbettingOdds).map((date) => {
     if (latestDate.length == 0) {
@@ -33,69 +33,115 @@ const FutureGameOddsCard = (item) => {
     [awayTeamName]: " - ",
   };
 
-  if (Object.keys(JSON.data["Game Odds"]["General"]).length > 0) {
-    gameOdds[homeTeamName] =
-      Math.round(
-        JSON.data["Game Odds"]["General"][latestDate][homeTeamName] * 100
-      ) / 100;
-    gameOdds[awayTeamName] =
-      Math.round(
-        JSON.data["Game Odds"]["General"][latestDate][awayTeamName] * 100
-      ) / 100;
+  // let massey = {
+  //   [homeTeamName]: {
+  //     value: " - ",
+  //     perc: ""
+  //   },
+  //   [awayTeamName]: {
+  //     value: " - ",
+  //     perc: "",
+  //   }
+  // };
+
+  // let elo = {
+  //   [homeTeamName]: {
+  //     value: " - ",
+  //     perc: ""
+  //   },
+  //   [awayTeamName]: {
+  //     value: " - ",
+  //     perc: "",
+  //   }
+  // };
+
+  try {
+  } catch (error) {
+    console.log(error);
   }
-
   const homeRatings = [
-    {
-      value: Math.round(
-        JSON.data["Game Prediction"]["ELO"][homeTeamName]["rating"]
-      ),
-      percent: Math.round(
-        JSON.data["Game Prediction"]["ELO"][homeTeamName]["prob"] * 100
-      ),
-    },
+    { value: " - ", percent: "" },
+
+    { value: " - ", percent: "" },
 
     {
-      value:
-        Math.round(
-          JSON.data["Game Prediction"]["Massey"][homeTeamName]["rating"] * 100
-        ) / 100,
-      percent: Math.round(
-        JSON.data["Game Prediction"]["Massey"][homeTeamName]["prob"] * 100
-      ),
-    },
-
-    {
-      value: gameOdds[homeTeamName],
+      value: " - ",
       percent: "",
     },
   ];
 
   const awayRatings = [
     {
-      value: Math.round(
-        JSON.data["Game Prediction"]["ELO"][awayTeamName]["rating"]
-      ),
-      percent: Math.round(
-        JSON.data["Game Prediction"]["ELO"][awayTeamName]["prob"] * 100
-      ),
+      value: " - ",
+      percent: "",
     },
 
     {
-      value:
-        Math.round(
-          JSON.data["Game Prediction"]["Massey"][awayTeamName]["rating"] * 100
-        ) / 100,
-      percent: Math.round(
-        JSON.data["Game Prediction"]["Massey"][awayTeamName]["prob"] * 100
-      ),
+      value: " - ",
+      percent: "",
     },
 
     {
-      value: gameOdds[awayTeamName],
+      value: " - ",
       percent: "",
     },
   ];
 
+  // JSON["Game Prediction"]["ELO"] = {};
+  //JSON["Game Prediction"]["Massey"] = {};
+  // JSON["Game Odds"]["General"] = {};
+  try {
+    homeRatings[0].value = Math.round(
+      JSON["Game Prediction"]["ELO"][homeTeamName]["rating"]
+    );
+    homeRatings[0].percent = Math.round(
+      JSON["Game Prediction"]["ELO"][homeTeamName]["prob"] * 100
+    );
+
+    awayRatings[0].value = Math.round(
+      JSON["Game Prediction"]["ELO"][awayTeamName]["rating"]
+    );
+    awayRatings[0].percent = Math.round(
+      JSON["Game Prediction"]["ELO"][awayTeamName]["prob"] * 100
+    );
+  } catch (error) {
+    console.log("Missing data for future game Odds");
+  }
+
+  try {
+    homeRatings[1].value =
+      Math.round(
+        JSON["Game Prediction"]["Massey"][homeTeamName]["rating"] * 100
+      ) / 100;
+    homeRatings[1].percent = Math.round(
+      JSON["Game Prediction"]["Massey"][homeTeamName]["prob"] * 100
+    );
+
+    awayRatings[1].value =
+      Math.round(
+        JSON["Game Prediction"]["Massey"][awayTeamName]["rating"] * 100
+      ) / 100;
+    awayRatings[1].percent = Math.round(
+      JSON["Game Prediction"]["Massey"][awayTeamName]["prob"] * 100
+    );
+  } catch (error) {
+    console.log("Missing data for future game Odds");
+  }
+
+  try {
+    if (Object.keys(JSON["Game Odds"]["General"]).length > 0) {
+      homeRatings[2].value =
+        Math.round(
+          JSON["Game Odds"]["General"][latestDate][homeTeamName] * 100
+        ) / 100;
+      awayRatings[2].value =
+        Math.round(
+          JSON["Game Odds"]["General"][latestDate][awayTeamName] * 100
+        ) / 100;
+    }
+  } catch (error) {
+    console.log("Missing data for the future game Odds");
+  }
   // calculating percentages for all ratings
 
   // homeRatings[0].percent = calculateELOPercent(
@@ -107,7 +153,7 @@ const FutureGameOddsCard = (item) => {
   //   awayRatings[1].value
   // );
 
-  if (JSON.data["Game Odds"]["General"].hasOwnProperty(latestDate)) {
+  if (JSON["Game Odds"]["General"].hasOwnProperty(latestDate)) {
     homeRatings[2].percent = calculateBettingOddsPercent(
       homeRatings[2].value,
       awayRatings[2].value
