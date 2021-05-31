@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
-  @media (min-width: 644px) {
+  @media (min-width: 1700px) {
     position: relative;
     left: -2.7rem;
   }
@@ -39,7 +39,7 @@ export const CardContainer = styled.div`
   @media (max-width: 834px) {
     min-width: 280px;
   }
-  @media (min-width: 900px) {
+  @media (min-width: 835px) {
     min-width: 400px;
   }
   @media (min-width: 1440px) {
