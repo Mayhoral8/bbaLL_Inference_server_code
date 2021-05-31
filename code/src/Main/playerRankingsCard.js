@@ -142,7 +142,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
       if (!(name in imgs)) {
         const imageReference = fbStorage.refFromURL(
           "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
-            name.replaceAll(" ", "_") +
+            name.replaceAll(" ", "_").replaceAll(".", ",") +
             ".png"
         );
 
@@ -253,7 +253,9 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
                 return (
                   <a
                     key={index}
-                    href={`/player/${playerName.replace(" ", "_")}`}
+                    href={`/player/${playerName
+                      .replaceAll(" ", "_")
+                      .replaceAll(".", ",")}`}
                   >
                     <div
                       key={index}
