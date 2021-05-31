@@ -163,7 +163,7 @@ const GamePageContainer = () => {
           gamePbp={gamePbp}
           gamePlayers={gamePlayers}
         />
-        <div style={{ margin: "0rem 3rem 0rem 3rem" }}>
+        <div style={{ margin: "0rem 0rem 0rem 0rem" }}>
           <MainPageContainer>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {useWindowSize() < 1400 && games.length > 0 && (
@@ -205,20 +205,6 @@ const GamePageContainer = () => {
                     {games.map((item, index) => {
                       return <FutureGameOddsCard data={item} key={index} />;
                     })}
-                    {/* {games.length === 0 ? (
-                      <div
-                        style={{
-                          textAlign: "center",
-                          margin: "1rem auto 1rem auto",
-                        }}
-                      >
-                        Games are unavailable at this time.
-                        <br />
-                        Please check again later.{" "}
-                      </div>
-                    ) : (
-                      ""
-                    )} */}
                   </div>
                 </div>
               )}
@@ -269,7 +255,6 @@ const GamePageContainer = () => {
                 style={{
                   backgroundColor: "white",
                   marginTop: "0rem",
-                  marginLeft: "3rem",
                   height: "100%",
                   minWidth: "300px",
                   display: "flex",
@@ -298,20 +283,6 @@ const GamePageContainer = () => {
                 {games.map((item, index) => {
                   return <FutureGameOddsCard data={item} key={index} />;
                 })}
-                {/* {games.length === 0 ? (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      margin: "auto",
-                    }}
-                  >
-                    Games are unavailable at this time.
-                    <br />
-                    Please check again later.{" "}
-                  </div>
-                ) : (
-                  ""
-                )} */}
               </div>
             )}
           </MainPageContainer>
@@ -353,7 +324,7 @@ const futureGameList = styled.div`
 `;
 
 const MainPageContainer = styled.div`
-  @media (max-width: 843px) {
+  @media (max-width: 1400px) {
     flex-direction: column;
   }
 
