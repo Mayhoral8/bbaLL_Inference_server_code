@@ -5,22 +5,28 @@ import {
 } from "../../App/spigamebetFirebase";
 
 export const checkUserRecordCollectionExists = (user) => {
-  return async (dispatch) => {
-    try {
-      let response = await fbFirestoreSpigameBet
-        .collection("userRecords")
-        .doc(user.uid)
-        .get();
-      if (!response.data()) {
-        fbFirestoreSpigameBet.collection("userRecords").doc(user.uid).set({
-          totalPoints: 0,
-          numWins: 0,
-          numBettings: 0,
-          rank: "-",
-          displayName: user.displayName,
-          emailAddress: user.email,
-          level: 1,
-        });
+    return async(dispatch)=>{
+      try{
+        let response = await fbFirestoreSpigameBet.collection('userRecords').doc(user.uid).get()
+        if(!response.data()){
+          fbFirestoreSpigameBet.collection('userRecords').doc(user.uid).set({
+            totalPoints: 0,
+            numBettings: 0,
+            numWins: 0,
+            rank: '-',
+            displayName: user.displayName,
+            emailAddress: user.email,
+            level: 1
+          })
+        }
+        dispatch({
+          type: LOGIN,
+          payload: {user, isLoading: false},
+        })
+        return {requestSuccessful: true}
+      }
+      catch(e){
+        throw e
       }
       dispatch({
         type: LOGIN,

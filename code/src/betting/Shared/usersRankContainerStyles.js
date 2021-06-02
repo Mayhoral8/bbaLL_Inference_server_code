@@ -7,7 +7,7 @@ export const UsersRankContainer = styled.div`
     border-radius: 5px;
     margin-top: 20px;
     padding: 20px;
-    height: calc(100% - 488px);
+    height: calc(100% - 433px);
 `
 
 export const Header = styled.h4`

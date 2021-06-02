@@ -71,7 +71,8 @@ const overviewBox = ( props ) => {
                     </Points> 
                     : 
                     selectedValues[gameId].overAndUnder.type === 'under' ?
-                    <Points><span>Under: </span> 
+                    <Points>
+                        <Type>Under: </Type> 
                         <span>{selectedValues[gameId].overAndUnder.odds} 
                             <CloseIcon 
                              src={closeIcon} 

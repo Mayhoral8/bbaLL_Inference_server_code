@@ -1,6 +1,11 @@
 import styled from 'styled-components'
 import * as _ from 'lodash';
 
+const media = {
+    deskLLG: `@media(max-width: 1350px)`,
+    deskLG: `@media(max-width: 1100px)`
+}
+
 export const BettingPageContainer = styled.div`
     width:100%;
     height: calc(100vh - 64px);
@@ -10,6 +15,9 @@ export const BettingPageContainer = styled.div`
     justify-content:center;
     align-items:center;
     flex-direction:column;
+    ${media.deskLLG} {
+        height: auto;
+    }
 `
 
 export const BettingPageSpinnerContainer = styled.div`
@@ -39,6 +47,7 @@ export const ContentW = styled.div`
     height:100%;
     width:100%;
     display:flex;
+    flex-wrap: wrap;
 `
 
 export const ContentHeader = styled.div`
@@ -59,19 +68,21 @@ export const TodayBtnContainer = styled.div`
 `
 
 export const BetSectionContainer = styled.div`
-    width: 70%;
+    width: 67%;
+    ${media.deskLLG} {
+        width: 84%;
+    }
 `
 
 export const BetSectionWrapper = styled.div`
     height: calc(100% - 103px);
+    box-shadow: 0px 0px 5px rgb(57 32 79 / 25%);
+    border-radius: 5px;
 `
 
 export const BetSectionPointsContainer = styled.div`
     overflow-y: auto;
-    border: 0.5px solid rgba(57, 32, 79, 0.5);
     border-bottom-left-radius: 5px;
-    border-top: none;
-    border-right: none;
     height: calc(100% - 58px);
 `
 
@@ -79,7 +90,7 @@ export const RowC = styled.div`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding: 40px 10px;
+    padding: 30px 10px;
     border-bottom:1px solid #bfbfbf;
 `
 
@@ -126,8 +137,8 @@ export const TimeContainer = styled.div`
 `
 
 export const PointsContainer = styled.div`
-    height:99px;
-    width:126px;
+    height: 80px;
+    width: 90px;
     border:${props => props.selected ? '4px solid black' : ''};
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
@@ -211,19 +222,40 @@ export const CommonChild = styled.li`
 
 
 export const BetSubmitFormC = styled.div`
-    width: 17%;
+    width: 18%;
     border: 0.5px solid rgba(57, 32, 79, 0.25);
     box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
     border-radius: 5px;
     margin-left:10px;
+    padding:10px;
+    ${media.deskLLG} {
+        width: 100%;
+        margin-left: 0px;
+        margin-top: 30px;
+        flex-direction: row;
+    }
+    
+`
+
+export const BetSubmitPointsContainer = styled.div`
     display:flex;
     flex-direction:column;
-    padding:10px;
-    overflow-y:auto;
+    overflow-y: auto;
+    ${media.deskLLG} {
+        width: 100%;
+        margin-left: 0px;
+        margin-top: 30px;
+        flex-direction: row;
+        overflow-x: auto;
+    }
 `
 
 export const OverviewHeader = styled.h3`
     padding:20px;
+    ${media.deskLLG} {
+        width: 100%;
+        text-align: center;
+    }
 `
 
 export const SubmitPointsBtn = styled.div`
@@ -245,7 +277,7 @@ export const SubmitPointsBtn = styled.div`
     }
 `
 
-export const WarningPopupContainer = styled.div`
+export const PopupContainer = styled.div`
     position:fixed;
     top:0;
     bottom:0;
@@ -258,7 +290,7 @@ export const WarningPopupContainer = styled.div`
     z-index: 10;
 `
 
-export const WarningPopupWrapper = styled.div`
+export const PopupWrapper = styled.div`
     width:500px;
     background: #ffff;
 `
@@ -266,6 +298,12 @@ export const WarningPopupWrapper = styled.div`
 export const UserStatsRankWrapper = styled.div`
     width: 13%;
     margin-right: 10px;
+    ${media.deskLLG} {
+        width: 15%;
+    }
+    ${media.deskLG} {
+        width: 100%;
+    }
 `
 export const MoneyLineOddsContainer = styled.div`
     height: 100%;
@@ -323,9 +361,6 @@ export const LoginLogoutBtnsContainer = styled.div`
     box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
     border-radius: 5px;
     cursor: pointer;
-    &:hover{
-        
-    }
 `
 
 export const AuthBtn = styled.img`
