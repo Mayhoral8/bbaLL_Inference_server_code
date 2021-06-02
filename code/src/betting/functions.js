@@ -35,7 +35,7 @@ import UtahJazz from '../assets/teamLogos/Utah_Jazz.png'
 import WashingtonWizards from '../assets/teamLogos/Washington_Wizards.png'
 
 //Data restructuring that comes from the firebase api.
-export const structureData=(futureGamesInfo)=>{
+export const structureData = (futureGamesInfo) => {
     let targetArray=[]
 
     futureGamesInfo.map(({docId, docData}, index) => {
@@ -178,8 +178,7 @@ export const structureData=(futureGamesInfo)=>{
     return targetArray
 }
 
-
-export const pointBoxClickHandler=(e, params, index, gameId,  selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo)=>{
+export const pointBoxClickHandler = (e, params, index, gameId,  selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo) => {
 
     if(props.userDetails){
         let gameInfoUpdated = gameInfo;
@@ -283,7 +282,6 @@ export const pointBoxClickHandler=(e, params, index, gameId,  selectedType, bett
         props.history.push('/login')
     }
 }
-
 
 export const setTeamIcons = (homeTeam, awayTeam) => {
     let homeTeamIcon = homeTeam === 'Atlanta Hawks' ? AtlantaHawks
@@ -412,7 +410,6 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
 
     return {homeTeamIcon, awayTeamIcon}
 }
-
 
 export const compareUserBetsAndGameInfo = (userBets, gameInfo) => {
     let gameInfoArray = [...gameInfo]

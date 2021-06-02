@@ -12,6 +12,7 @@ export const UserName = styled.h3`
     width: 100%;
     text-align: center;
     margin-bottom:20px;
+    overflow: hidden;
 `
 
 export const ProfileImgFiguresViewMore = styled.div`

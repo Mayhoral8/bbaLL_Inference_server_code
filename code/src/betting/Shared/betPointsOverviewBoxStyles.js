@@ -1,9 +1,17 @@
 import styled from 'styled-components'
 
+const media = {
+    deskLLG: `@media(max-width: 1350px)`
+}
+
 export const OverviewBoxC=styled.div`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    margin:10px 0px;
+    margin: 10px 0px;
     border-radius: 5px;
+    ${media.deskLLG} {
+        margin: 10px 10px;
+        min-width: 225px;
+    }
 `
 
 export const Input=styled.input`
