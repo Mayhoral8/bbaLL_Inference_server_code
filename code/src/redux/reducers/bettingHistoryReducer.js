@@ -1,5 +1,7 @@
 const initialState={
-    bettingHistory: {}
+    bettingHistory: {
+        isLoading: true
+    }
 }
 const bettingHistoryReducer = (state = initialState, action) => {
     switch(action.type){

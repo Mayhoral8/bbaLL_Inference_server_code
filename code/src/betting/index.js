@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 //Functions
-import { 
-    structureData,
+import {
     pointBoxClickHandler,
     setTeamIcons,
     compareUserBetsAndGameInfo,
@@ -12,7 +11,7 @@ import {
 
 //Actions
 import { logoutAction, checkUserRecordCollectionExists } from '../redux/actions/authActions'
-import { getFutureGamesInfo, setStructuredFutureGamesInfo, submitBetPoints, getUserBets } from '../redux/actions/betsActions'
+import { getFutureGamesInfo, submitBetPoints, getUserBets } from '../redux/actions/betsActions'
 import { getUserRecord } from '../redux/actions/recordActions'
 
 //Components
@@ -104,6 +103,7 @@ const Betting=(props)=>{
     const [loadingBetPoints, setLoadingBetPoints] = useState(true);
     const [numberOfGamesExceedingTimeLimit, setnumberOfGamesExceedingTimeLimit] = useState(0);
 
+
     useEffect(() => {
         let response = props.getFutureGamesInfo();
         if(response.isError){
@@ -118,64 +118,57 @@ const Betting=(props)=>{
         },300000);
     },[]);
 
-
     useEffect(() => {
-        if(props.futureGamesInfo.games[0]){
-            let targetArray = structureData(props.futureGamesInfo.games);
-            props.setStructuredFutureGamesInfo(targetArray);
+
+        if(props.futureGamesInfo.games.length > 0 && !props.futureGamesInfo.isLoading){
+            if(props.userDetails.isLoading){
+                setGameInfo(props.futureGamesInfo.games)
+            }
+            else if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
+                setGameInfo(props.futureGamesInfo.games)
+                setLoadingBetPoints(false)
+                setPointsSpinner(false)
+                setBettingPageSpinner(false)
+            }
+            else if(props.userDetails.user.displayName && !props.userDetails.isLoading){
+                let response = props.getUserBets(props.userDetails.user.uid)
+                if(response.isError){
+                    setError({status: response.status, message: response.message, isError:true})
+                }
+                else{
+                    props.getUserRecord(props.userDetails.user.uid)
+                }
+            }
         }
-        else if(props.futureGamesInfo.games.length === 0 && !props.futureGamesInfo.isLoading){
+
+        else if(props.futureGamesInfo.length < 1 && !props.futureGamesInfo.isLoading){
             setError({
                 message: "No games today"
             })
         }
-        
-    },[props.futureGamesInfo]);
 
-
-    useEffect(() => {
-
-        if(props.structuredGameInfo[0] && props.userDetails.isLoading){
-            setGameInfo(props.structuredGameInfo)
-        }
-        else if(props.structuredGameInfo[0] &&  !props.userDetails.user.displayName && !props.userDetails.isLoading){
-            setGameInfo(props.structuredGameInfo)
-            setLoadingBetPoints(false)
-            setPointsSpinner(false)
-            setBettingPageSpinner(false)
-        }
-        else if(props.structuredGameInfo[0] &&  props.userDetails.user.displayName && !props.userDetails.isLoading){
-            let response = props.getUserBets(props.userDetails.user.uid)
-            if(response.isError){
-                setError({status: response.status, message: response.message, isError:true})
-            }
-            else{
-                props.getUserRecord(props.userDetails.user.uid)
-            }
-        }
-
-    },[props.structuredGameInfo, props.userDetails]);
+    },[props.futureGamesInfo, props.userDetails]);
 
     useEffect(() => {
         if(props.userBetsDetails.bets[0] && !props.userBetsDetails.loading){
-            let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.structuredGameInfo)
+            let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.futureGamesInfo.games)
             setPointsSpinner(false)
             setLoadingBetPoints(false)
             setGameInfo(computedArray)
 
         } else if(!props.userBetsDetails.loading){
             setPointsSpinner(false)
-            setGameInfo(props.structuredGameInfo)
+            setGameInfo(props.futureGamesInfo.games)
         }
     },[props.userBetsDetails]);
 
 
-    const onPointBoxClick = ( e, params, index, gameId ,selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, onScreenSelection,betSubmitted ) => {
+    const onPointBoxClick = ( e, params, index, gameId ,selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, onScreenSelection, betSubmitted, isGameStartTimeBeforeTheCurrentTime ) => {
         if(!betSubmitted && oddsValue){
             if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
                 setLoginModalVisible(true);
             }
-            else if(props.userDetails.user.displayName && !props.userDetails.isLoading){
+            else if(props.userDetails.user.displayName && !props.userDetails.isLoading && isGameStartTimeBeforeTheCurrentTime){
 
                 const returnedObj = pointBoxClickHandler( e, params, index, gameId, selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo, onScreenSelection);
                 setGameInfo( returnedObj.gameInfoUpdated );
@@ -223,7 +216,6 @@ const Betting=(props)=>{
 
     };
 
-
     const onSubmit = async() => {
         setBetSubmitPopup({isVisible: true});
     };
@@ -254,10 +246,10 @@ const Betting=(props)=>{
         }
         else{
             setnumberOfGamesExceedingTimeLimit(result)
+            setBettingPageSpinner(false)
             setExceedingTimeLimitPopup({isVisible: true})
         }
     };
-
 
     const onPopupClose = (params) => {
         if(params === 'Submit bet warning'){
@@ -273,7 +265,6 @@ const Betting=(props)=>{
             }
         }
     };
-
 
     const onOutsideClick = () => {
         setLoginModalVisible(false)
@@ -352,6 +343,7 @@ const Betting=(props)=>{
         }
     };
 
+    
     return(
         <> 
             {
@@ -509,7 +501,8 @@ const Betting=(props)=>{
                                                                         gameInfo[index].handicap.homeTeam.points,
                                                                         null,
                                                                         element.handicapSelected,
-                                                                        element.handicap.selected
+                                                                        element.handicap.selected,
+                                                                        isGameStartTimeBeforeTheCurrentTime
                                                                     )
                                                                 }}
                                                                 >
@@ -566,7 +559,8 @@ const Betting=(props)=>{
                                                                         gameInfo[index].handicap.awayTeam.points,
                                                                         null,
                                                                         element.handicapSelected,
-                                                                        element.handicap.selected
+                                                                        element.handicap.selected,
+                                                                        isGameStartTimeBeforeTheCurrentTime
                                                                     )
                                                                 }}
                                                                 >
@@ -626,7 +620,8 @@ const Betting=(props)=>{
                                                                         null,
                                                                         null,
                                                                         element.moneyLineSelected,
-                                                                        element.moneyLine.selected
+                                                                        element.moneyLine.selected,
+                                                                        isGameStartTimeBeforeTheCurrentTime
                                                                     )
                                                                 }}
                                                                 >
@@ -682,7 +677,8 @@ const Betting=(props)=>{
                                                                         null,
                                                                         null,
                                                                         element.moneyLineSelected,
-                                                                        element.moneyLine.selected
+                                                                        element.moneyLine.selected,
+                                                                        isGameStartTimeBeforeTheCurrentTime
                                                                     )
                                                                 }}
                                                                 >
@@ -740,7 +736,8 @@ const Betting=(props)=>{
                                                                         null,
                                                                         gameInfo[index].overUnder.overTotalScore,
                                                                         element.overUnderSelected,
-                                                                        element.overUnder.selected
+                                                                        element.overUnder.selected,
+                                                                        isGameStartTimeBeforeTheCurrentTime
                                                                     )
                                                                 }}
                                                                 >
@@ -798,7 +795,8 @@ const Betting=(props)=>{
                                                                         null,
                                                                         gameInfo[index].overUnder.underTotalScore,
                                                                         element.overUnderSelected,
-                                                                        element.overUnder.selected
+                                                                        element.overUnder.selected,
+                                                                        isGameStartTimeBeforeTheCurrentTime
                                                                     )
                                                                 }}
                                                                 >
@@ -891,10 +889,9 @@ const mapStateToProps=(state)=>{
         futureGamesInfo: state.betsReducer.futureGamesInfo,
         userDetails: state.authReducer.userDetails,
         userRecord: state.recordReducer.userRecord,
-        userBetsDetails: state.betsReducer.userBetsDetails,
-        structuredGameInfo: state.betsReducer.structuredGameInfo
+        userBetsDetails: state.betsReducer.userBetsDetails
     };
 };
 
 export default connect(mapStateToProps,
-    { getFutureGamesInfo, submitBetPoints, getUserBets, getUserRecord, setStructuredFutureGamesInfo, logoutAction, checkUserRecordCollectionExists })(Betting);
+    { getFutureGamesInfo, submitBetPoints, getUserBets, getUserRecord, logoutAction, checkUserRecordCollectionExists })(Betting);

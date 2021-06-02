@@ -21,19 +21,26 @@ import {getUserBettingHistory} from '../redux/actions/bettingHistoryActions'
 
 const ProfilePage = (props) => {
     const [spinner, setSpinner] = useState(true)
+    const [error, setError] = useState({isError: false, status:'', message: ''})
 
     useEffect(() => {
-        props.getUserBettingHistory(props.userDetails.user.uid)
+        let response = props.getUserBettingHistory(props.userDetails.user.uid)
+        if(response.isError){
+            setError({isError: true, status: response.status, message: response.message})
+        }
     }, [])
 
     useEffect(() => {
         if(props.userDetails.user.displayName && !props.userDetails.isLoading){
-            props.getUserBettingHistory(props.userDetails.user.uid)
+            let response = props.getUserBettingHistory(props.userDetails.user.uid)
+            if(response.isError){
+                setError({isError: true, status: response.status, message: response.message})
+            }
         }
     }, [props.userDetails])
 
     useEffect(() => {
-        if(props.bettingHistory.moneyLine){
+        if(!props.bettingHistory.isLoading){
             setSpinner(false)
         }
     }, [props.bettingHistory])
