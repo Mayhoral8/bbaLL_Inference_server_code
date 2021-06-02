@@ -1,8 +1,5 @@
-import { LOGIN } from "./types";
-import {
-  fbFirestoreSpigameBet,
-  firebaseInstanceSpigamebet,
-} from "../../App/spigamebetFirebase";
+import {LOGIN} from './types'
+import {fbFirestoreSpigameBet, firebaseInstanceSpigamebet} from '../../App/spigamebetFirebase'
 
 export const checkUserRecordCollectionExists = (user) => {
     return async(dispatch)=>{
@@ -28,54 +25,49 @@ export const checkUserRecordCollectionExists = (user) => {
       catch(e){
         throw e
       }
-      dispatch({
-        type: LOGIN,
-        payload: { user, isLoading: false },
-      });
-      return { requestSuccessful: true };
-    } catch (e) {
-      throw e;
     }
-  };
-};
+}
 
 export const checkLoginStatus = () => {
-  return async (dispatch) => {
-    try {
-      firebaseInstanceSpigamebet.auth().onAuthStateChanged(async (user) => {
-        if (user) {
-          let parsedUser = JSON.parse(localStorage.getItem("User"));
+  return async(dispatch) => {
+    try{
+      firebaseInstanceSpigamebet.auth().onAuthStateChanged(async(user)=>{
+        if(user){
+          let parsedUser = JSON.parse(localStorage.getItem('User'))
           dispatch({
             type: LOGIN,
-            payload: { user: parsedUser, isLoading: false },
-          });
-          return { requestSuccessful: true };
-        } else {
-          dispatch({
-            type: LOGIN,
-            payload: { user: {}, isLoading: false },
-          });
-          return { requestSuccessful: true };
+            payload: {user: parsedUser, isLoading: false}
+          })
+          return {requestSuccessful: true}
         }
-      });
-    } catch (e) {
-      throw e;
+        else{
+          dispatch({
+            type: LOGIN,
+            payload: {user: {}, isLoading: false}
+          })
+          return {requestSuccessful: true}
+        }
+      })
     }
-  };
-};
+    catch(e){
+      throw e
+    }
+  }
+}
 
 export const logoutAction = () => {
-  return async (dispatch) => {
+  return async(dispatch) => {
     try {
-      await firebaseInstanceSpigamebet.auth().signOut();
-      localStorage.setItem("User", JSON.stringify({}));
+      await firebaseInstanceSpigamebet.auth().signOut()
+      localStorage.setItem('User', JSON.stringify({}))
       dispatch({
         type: LOGIN,
-        payload: { user: {}, isLoading: false },
-      });
-      return { processed: true };
-    } catch (e) {
-      throw e;
+        payload: {user: {}, isLoading: false},
+      })
+      return {processed: true}
     }
-  };
-};
+    catch(e){
+      throw e
+    }
+  }
+}

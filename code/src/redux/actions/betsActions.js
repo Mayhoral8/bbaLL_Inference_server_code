@@ -155,59 +155,35 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
 
                     }
                 }
-              }
-              await fbFirestoreSpigameBet
-                .collection("userTrackList")
-                .doc(gameDate)
-                .collection("gameId")
-                .doc(gameIdKeys[j])
-                .set(userListTargetObj);
-              await fbFirestoreSpigameBet
-                .collection("userBettingHistory")
-                .doc(userId)
-                .collection("gameDate")
-                .doc(gameDate)
-                .collection("gameId")
-                .doc(gameIdKeys[j])
-                .set(targetObj);
-            } catch (e) {
-              error.isError = true;
-              error.status = e.status;
-              error.message = e.message;
-              break;
+
             }
-          }
         }
-      }
+
+        return error.isError ? error : {success: true}
+
     }
-    return error.isError ? error : { success: true };
-  };
-};
+}
+
 export const getUserBets = (userId) => {
-  return async (dispatch) => {
-    let date = new Date();
-    let today = moment(date).tz("America/New_York").format("YYYY-MM-DD");
-    try {
-      let collection = await fbFirestoreSpigameBet
-        .collection("userBettingHistory")
-        .doc(userId)
-        .collection("gameDate")
-        .doc(today)
-        .collection("gameId")
-        .get();
-      let data = [];
-      collection.forEach((doc) => {
-        const docData = doc.data();
-        const docId = doc.id;
-        data.push({ docData, docId });
-      });
-      dispatch({
-        type: GETUSERBETS,
-        payload: { bets: data, loading: false },
-      });
-      return { success: true };
-    } catch (e) {
-      throw e;
+    return async(dispatch) => {
+        let date = new Date
+        let today = moment(date).tz("America/New_York").format('YYYY-MM-DD');
+        try{
+            let collection = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(today).collection('gameId').get()
+            let data=[]
+            collection.forEach((doc) => {
+                const docData = doc.data()
+                const docId = doc.id
+                data.push({docData,docId})
+            })
+            dispatch({
+                type: GETUSERBETS,
+                payload: {bets: data, loading: false}
+            })
+            return {success: true}
+        }
+        catch(e){
+            throw e
+        }
     }
-  };
-};
+}
