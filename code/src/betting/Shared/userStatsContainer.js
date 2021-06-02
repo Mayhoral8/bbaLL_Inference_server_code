@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 
 //Actions
-import {LogoutAction} from '../../redux/actions/authActions'
-import {getUserRecord} from '../../redux/actions/recordActions'
+import { LogoutAction } from "../../redux/actions/authActions";
+import { getUserRecord } from "../../redux/actions/recordActions";
 
 //Components
 import {
@@ -15,8 +15,8 @@ import {
 } from './userStatsContainerStyles'
 
 //Images
-import Img from '../../assets/images/avatar.jpg'
-import logoutIcon from '../../assets/images/logoutIcon.png'
+import Img from "../../assets/images/avatar.jpg";
+import logoutIcon from "../../assets/images/logoutIcon.png";
 
 //Functions and libraries
 import {connect} from 'react-redux'
@@ -73,11 +73,14 @@ const UserStatsBox = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return{
-        userDetails: state.authReducer.userDetails.user,
-        userRecord: state.recordReducer.userRecord
-    }
-}
 
-export default connect(mapStateToProps, {LogoutAction, getUserRecord})(UserStatsBox)
+const mapStateToProps = (state) => {
+  return {
+    userDetails: state.authReducer.userDetails.user,
+    userRecord: state.recordReducer.userRecord,
+  };
+};
+
+export default connect(mapStateToProps, { LogoutAction, getUserRecord })(
+  UserStatsBox
+);

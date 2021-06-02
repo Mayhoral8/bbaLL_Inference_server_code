@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import TeamTitle from '../GameSummary/TeamTitle';
 import QuarterlyTable from '../GameSummary/QuarterlyTable';
+import { StyledTitle } from "./MatchFacts-styles";
 
 const MatchFactsTitle = ({ leads, ties, homeTeam, awayTeam }) => {
 
@@ -45,15 +45,5 @@ const MatchFactsTitle = ({ leads, ties, homeTeam, awayTeam }) => {
     </StyledTitle>
   );
 }
-
-const StyledTitle = styled.div`
-  display: flex;
-  justify-content: center;
-  @media(max-width: 500px) {
-    .title {
-      display: none;
-    }
-  }
-`
 
 export default MatchFactsTitle;

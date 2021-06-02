@@ -150,6 +150,7 @@ const Betting=(props)=>{
 
     },[props.futureGamesInfo, props.userDetails]);
 
+
     useEffect(() => {
         if(props.userBetsDetails.bets[0] && !props.userBetsDetails.loading){
             let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.futureGamesInfo.games)

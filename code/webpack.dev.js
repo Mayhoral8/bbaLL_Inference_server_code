@@ -33,5 +33,5 @@ module.exports = merge(common, {
       systemvars: true,
     }),
   ],
-  devtool: 'cheap-inline-module-source-map'
+  devtool: "cheap-inline-module-source-map",
 });
