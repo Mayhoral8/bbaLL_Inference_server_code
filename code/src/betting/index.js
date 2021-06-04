@@ -307,6 +307,7 @@ const Betting=(props)=>{
                 // setBettingPageSpinner(false)
             })
             .catch((e)=>{
+                console.log(e)
                 setError({status: null, message: 'Facebook login error', isError:true})
             })
         } 
