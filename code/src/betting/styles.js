@@ -6,6 +6,7 @@ const media = {
     deskMD: `@media(max-width: 930px)`,
     tablet: `@media(max-width: 768px)`,
     phone: `@media(max-width: 550px)`,
+    phoneMD: `@media(max-width: 440px)`,
 }
 
 export const BettingPageContainer = styled.div`
@@ -69,7 +70,7 @@ export const TodayBtnContainer = styled.div`
     padding: 6px 20px;
 `
 
-export const BetSectionContainer = styled.div`
+export const BettingSectionColumn = styled.div`
     width: 67%;
     display: flex;
     flex-direction: column;
@@ -102,6 +103,9 @@ export const RowC = styled.div`
     align-items:center;
     padding: 30px 10px;
     margin: 10px 0px;
+    ${media.phoneMD} {
+        padding: 5px 10px;
+    }
 `
 
 export const Section1 = styled.div`
@@ -110,6 +114,9 @@ export const Section1 = styled.div`
     display:flex;
     align-items: center;
     color:#757575;
+    ${media.phoneMD}{
+        min-width: 100px;
+    }
 `
 
 export const Section2 = styled.div`
@@ -128,13 +135,19 @@ export const TeamName = styled.div`
     color:#333333;
     text-align: center;
     margin: 7px 0px;
+    ${media.phoneMD}{
+        font-size: 14px;
+    }
 `
 
 export const VS = styled.div`
     text-align: center;
+    ${media.phoneMD}{
+        font-size: 12px;
+    }
 `
 
-export const Col = styled.div`
+export const PointsBoxColumn = styled.div`
     display:flex;
     justify-content:center;
     width:33.33%;
@@ -156,7 +169,7 @@ export const CommonChild = styled.li`
 `
 
 
-export const BetSubmitFormC = styled.div`
+export const BetPointsSummaryColumn = styled.div`
     width: 18%;
     border: 0.5px solid rgba(57, 32, 79, 0.25);
     box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
@@ -230,7 +243,7 @@ export const PopupWrapper = styled.div`
     background: #ffff;
 `
 
-export const Col1 = styled.div`
+export const UserStatsAndRankColumn = styled.div`
     width: 13%;
     margin-right: 10px;
     ${media.deskLLG} {

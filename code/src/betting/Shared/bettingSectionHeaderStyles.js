@@ -1,4 +1,9 @@
 import styled from 'styled-components'
+
+const media = {
+    phoneMD: `@media(max-width: 440px)`,
+}
+
 export const BettingSectionheaderContainer=styled.div`
     width:100%;
     padding:10px;
@@ -14,6 +19,9 @@ export const HeaderSection1=styled.div`
     min-width: 129px;
     color: white;
     font-weight: 900;
+    ${media.phoneMD}{
+        min-width: 100px;
+    }
 `
 
 export const HeaderSection2=styled.div`

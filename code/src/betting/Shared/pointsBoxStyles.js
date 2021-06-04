@@ -6,6 +6,7 @@ const media = {
     deskMD: `@media(max-width: 930px)`,
     tablet: `@media(max-width: 768px)`,
     phone: `@media(max-width: 550px)`,
+    phoneMD: `@media(max-width: 440px)`,
 }
 
 export const PointsBoxContainer = styled.div`
@@ -24,10 +25,12 @@ export const PointsBoxContainer = styled.div`
         border:${props => props.selected ? '2px solid black' : ''};
     }
     ${media.tablet}{
-        height: 30px;
-        width: 50px;
         margin: 10px 0px;
         border:${props => props.selected ? '1px solid black' : ''};
+    }
+    ${media.phoneMD}{
+        height: 50px;
+        width: 50px;
     }
 `
 

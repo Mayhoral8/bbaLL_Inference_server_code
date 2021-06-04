@@ -45,7 +45,7 @@ import {
     ContentW,
     ContentHeader,
     DisplayGamesBtnContainer,
-    BetSectionContainer,
+    BettingSectionColumn,
     BetSectionWrapper,
     BetSectionPointsContainer,
     TodayBtnContainer,
@@ -53,16 +53,16 @@ import {
     TeamNameContainer,
     TeamName,
     VS,
-    Col,
+    PointsBoxColumn,
     Section1,
     Section2,
-    BetSubmitFormC,
+    BetPointsSummaryColumn,
     BetSubmitPointsContainer,
     OverviewHeader,
     SubmitPointsBtn,
     PopupContainer,
     PopupWrapper,
-    Col1,
+    UserStatsAndRankColumn,
     UserStatsRankWrapper,
     LoginModalContainer,
     LoginLogoutBtnsContainer,
@@ -85,6 +85,7 @@ const Betting=(props)=>{
     const [numberOfGamesExceedingTimeLimit, setnumberOfGamesExceedingTimeLimit] = useState(0);
 
 
+    //Component did mount, it gets all the future games info from the firebase api
     useEffect(() => {
         let response = props.getFutureGamesInfo();
         if(response.isError){
@@ -99,6 +100,8 @@ const Betting=(props)=>{
         },300000);
     },[]);
 
+    //The function updates when we get the futureGamesInfo and userDetails from the firebase api.
+    //This checks if the user is logged in also if the games are present and then shows results based on the scenario
     useEffect(() => {
 
         if(props.futureGamesInfo.games.length > 0 && !props.futureGamesInfo.isLoading){
@@ -130,6 +133,7 @@ const Betting=(props)=>{
 
     },[props.futureGamesInfo, props.userDetails]);
 
+    //The function checks for the user bets history from the firebase api and runs different functions based on scenarios given in conditionals.
     useEffect(() => {
         if(props.userBetsDetails.bets[0] && !props.userBetsDetails.loading){
             let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.futureGamesInfo.games)
@@ -144,13 +148,18 @@ const Betting=(props)=>{
     },[props.userBetsDetails]);
 
 
+    //The function runs when the user clicks on the pointbox to submit the bet for a game or multiple games at once.
     const onPointBoxClick = ( e, params, index, gameId ,selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, onScreenSelection, betSubmitted, isGameStartTimeBeforeTheCurrentTime ) => {
+        //If the user has already submit a bet on any of the moneyline, overUnder or handicap and the the odds value are present
+        //(sometimes odds values aren't available and the firebase api does not return them)
+        //in this case the bet cannot be initiated and the conditional below runs.
         if(!betSubmitted && oddsValue){
             if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
                 setLoginModalVisible(true);
             }
-            else if(props.userDetails.user.displayName && !props.userDetails.isLoading){
-                console.log('clicked')
+            //If the is logged in, the bet points aren't loading from the api and the 
+            //game hasn't started yet then the function runs in with the conditional statement below.
+            else if(props.userDetails.user.displayName && !props.userDetails.isLoading && isGameStartTimeBeforeTheCurrentTime){
                 const returnedObj = pointBoxClickHandler( e, params, index, gameId, selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo, onScreenSelection);
                 setGameInfo( returnedObj.gameInfoUpdated );
                 setSelectedValues( returnedObj.targetObj );
@@ -161,6 +170,8 @@ const Betting=(props)=>{
         }
     };
 
+    //This function removes the selected bet points whether that be moneyline, handicap or overUnder values,
+    //When the user clicks the cross on each game's points, the function runs to remove those values.
     const onRemovePoints = (e, params, gameId) => {
         let targetObj = selectedValues;
         let selectedKey = params === 'moneyLine' ? 'moneyLineSelected' : params === 'handicap' ? 'handicapSelected' : 'overUnderSelected';
@@ -197,10 +208,13 @@ const Betting=(props)=>{
 
     };
 
+    //The function runs when the user clicks the submit button on the summary container. This then shows the warning pop to
+    //alert the user that the bet submission cannot be undone.
     const onSubmit = async() => {
         setBetSubmitPopup({isVisible: true});
     };
 
+    //If the user after bet submission clicks the submit button on the popup, the function runs and submits the bet into the firebase api.
     const submitConfirmation = async() => {
         setBettingPageSpinner(true)
         onPopupClose('Submit bet warning')
@@ -232,6 +246,7 @@ const Betting=(props)=>{
         }
     };
 
+    //A global function for any pop to be closed within the betting page.
     const onPopupClose = (params) => {
         if(params === 'Submit bet warning'){
             setBetSubmitPopup({isVisible: false})
@@ -247,6 +262,7 @@ const Betting=(props)=>{
         }
     };
 
+    //The function runs when the user click outside the login popup.
     const onOutsideClick = () => {
         setLoginModalVisible(false)
     };
@@ -278,10 +294,20 @@ const Betting=(props)=>{
 
             firebaseInstanceSpigamebet.auth().signInWithPopup(provider)
             .then(async(res)=>{
-                //Needs to configures
+                console.log(res)
+                // const {uid,displayName,email} = res.user
+                // setBettingPageSpinner(true)
+                // setLoginModalVisible(false)
+                // localStorageObj.uid = uid
+                // localStorageObj.displayName = displayName
+                // localStorageObj.email = email
+                // localStorageObj.type = 'google'
+                // localStorage.setItem('User', JSON.stringify(localStorageObj))
+                // await props.checkUserRecordCollectionExists(localStorageObj)
+                // setBettingPageSpinner(false)
             })
             .catch((e)=>{
-                console.log(e)//error handeling
+                setError({status: null, message: 'Facebook login error', isError:true})
             })
         } 
         else{
@@ -323,8 +349,6 @@ const Betting=(props)=>{
             setError({status: response.status, message: response.message, isError:true})
         }
     };
-
-    console.log(selectedValues)
     
     return(
         <> 
@@ -390,7 +414,7 @@ const Betting=(props)=>{
                     
                     <ContentC>
                         <ContentW>
-                            <Col1>
+                            <UserStatsAndRankColumn>
 
                                 <LoginLogoutBtnsContainer onClick = {() => {
                                     props.userDetails.user.uid ? onLogoutClick() : setLoginModalVisible(true)
@@ -418,9 +442,9 @@ const Betting=(props)=>{
                                     <UserRankContainer/>
                                 </UserStatsRankWrapper>
 
-                            </Col1>
+                            </UserStatsAndRankColumn>
 
-                            <BetSectionContainer>
+                            <BettingSectionColumn>
 
                                 <ContentHeader>
                                     <h1>NBA Betting</h1>
@@ -468,7 +492,7 @@ const Betting=(props)=>{
 
                                                             <Section2>
 
-                                                                <Col>
+                                                                <PointsBoxColumn>
                                                                     <PointsBox
                                                                      type = 'handicap'
                                                                      homeOrAway = 'homeTeam'
@@ -495,9 +519,9 @@ const Betting=(props)=>{
                                                                      teamIconsObj = {teamIconsObj}
                                                                      pointsSpinner = {pointsSpinner}
                                                                     />
-                                                                </Col>
+                                                                </PointsBoxColumn>
 
-                                                                <Col>
+                                                                <PointsBoxColumn>
                                                                     <PointsBox
                                                                      type = 'moneyLine'
                                                                      index = {index}
@@ -524,9 +548,9 @@ const Betting=(props)=>{
                                                                      teamIconsObj = {teamIconsObj}
                                                                      pointsSpinner = {pointsSpinner}
                                                                     />
-                                                                </Col>
+                                                                </PointsBoxColumn>
 
-                                                                <Col>
+                                                                <PointsBoxColumn>
                                                                     <PointsBox
                                                                      type = 'overUnder'
                                                                      overOrUnder = 'over'
@@ -557,8 +581,8 @@ const Betting=(props)=>{
                                                                      teamIconsObj = {teamIconsObj}
                                                                      pointsSpinner = {pointsSpinner}
                                                                     />
-                                                                </Col>
-                                                                
+                                                                </PointsBoxColumn>
+
                                                             </Section2>
                                                         </RowC> 
                                                         </>
@@ -569,9 +593,9 @@ const Betting=(props)=>{
                                         </>
                                     }
                                 </BetSectionWrapper>
-                            </BetSectionContainer>
+                            </BettingSectionColumn>
 
-                            <BetSubmitFormC>
+                            <BetPointsSummaryColumn>
                                 <OverviewHeader>Summary</OverviewHeader>
 
                                 <BetSubmitPointsContainer>
@@ -597,7 +621,7 @@ const Betting=(props)=>{
                                         </SubmitPointsBtn>
                                     :null
                                     }
-                            </BetSubmitFormC>
+                            </BetPointsSummaryColumn>
                         </ContentW>
                     </ContentC>
                 </BettingPageContainer>

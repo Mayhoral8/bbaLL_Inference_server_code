@@ -13,12 +13,11 @@ export const UserStatsContainer = styled.div`
     padding:20px;
     ${media.deskLG}{
         height: 300px;
-        width: 400px;
+        width: 500px;
         margin: 0px 10px;
     }
     ${media.deskLG}{
         height: 300px;
-        width: 400px;
         margin: 0px 10px;
     }
     ${media.phone}{
