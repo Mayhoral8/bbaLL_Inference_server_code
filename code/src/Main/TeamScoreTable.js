@@ -14,14 +14,28 @@ const TeamScoreTable = ({
   players,
   includeYear,
 }) => {
-  const DATA_ATTR = ["Massey Rating", "ELO Rating", "Standing"];
-  const headings = ["rank", "ELO Rating", "Massey Rating", "Win(%)"];
+  const DATA_ATTR = ["Massey", "ELO", "Standing"];
+  const headings = ["rank", "ELO", "Massey", "Win(%)"];
+  try {
+    if (data == null) {
+    }
+  } catch (error) {
+    data = {};
+  }
 
+  DATA_ATTR.map((key) => {
+    let arr = [];
+    Object.keys(data[key]).map((entry) => {
+      const name = Object.keys(data[key][entry])[0];
+      arr.push({ [name]: data[key][entry][name] });
+    });
+    data[key] = arr;
+  });
   const initialSortingType = {
     rank: "",
     name: "",
-    "ELO Rating": "",
-    "Massey Rating": "",
+    ELO: "",
+    Massey: "",
     "Win(%)": "",
   };
 
@@ -29,8 +43,8 @@ const TeamScoreTable = ({
   const sortingType = useRef({
     rank: "descending",
     name: "",
-    "ELO Rating": "",
-    "Massey Rating": "",
+    ELO: "",
+    Massey: "",
     "Win(%)": "",
   });
 
@@ -171,15 +185,18 @@ const TeamScoreTable = ({
   const fixedColumn = (items) => {
     return items.map((obj, i) => {
       let value = "";
+      let link = "";
       if ("name" in obj) {
         value = obj["name"];
+        link = `/team/${value.replaceAll(" ", "_")}`;
       } else {
         value = " - ";
       }
+
       return (
         <div className="table-row" key={i}>
           <div className="table-data" key={i}>
-            {value}
+            <a href={link}>{value}</a>
           </div>
         </div>
       );
@@ -234,6 +251,7 @@ const BoxScoreTableWrapper = styled.div`
   .table-scroll {
     overflow-x: auto;
     overflow-y: auto;
+    scrollbar-width: thin;
     position: relative;
     display: flex;
   }

@@ -2,6 +2,7 @@ import {fbFirestore} from '../../App/config'
 import {fbFirestoreSpigameBet} from '../../App/spigamebetFirebase'
 import {GET_FUTURE_GAMES_INFO, GETUSERBETS, SET_STRUCTURED_GAME_INFO} from './types'
 import moment from 'moment-timezone'
+import {structureData} from '../../betting/functions'
 
 export const getFutureGamesInfo=()=>{
     return async(dispatch)=>{
@@ -15,9 +16,14 @@ export const getFutureGamesInfo=()=>{
                 const docId=doc.id
                 data.push({docData,docId})
             })
+
+            let computedData = structureData(data)
             dispatch({
                 type:GET_FUTURE_GAMES_INFO,
-                payload:data
+                payload: {
+                    games: computedData,
+                    isLoading: false
+                }
             })
 
             return {success: true}
@@ -25,15 +31,6 @@ export const getFutureGamesInfo=()=>{
         catch(e){
             throw e
         }
-    }
-}
-
-export const setStructuredFutureGamesInfo = (data) => {
-    return async(dispatch) => {
-        dispatch({
-            type: SET_STRUCTURED_GAME_INFO,
-            payload: data
-        })
     }
 }
 
@@ -105,7 +102,7 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                         targetObj.gameFinished = false
 
                         try{
-                            let userList = await fbFirestoreSpigameBet.collection('userListTracker').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
+                            let userList = await fbFirestoreSpigameBet.collection('userTrackList').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
                             let userListTargetObj = userList.data()
 
                             if(!userList.data()){

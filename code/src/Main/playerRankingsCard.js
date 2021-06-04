@@ -8,10 +8,14 @@ import {
   OutsideContainer,
   selectContainer,
 } from "./playerrankingscard-style";
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
-const PlayerRankingsCard = ({ data }) => {
+const PlayerRankingsCard = ({ data, rankingTypes }) => {
   //const [JSON, setJSON] = useState(data);
   const [imgs, setImgs] = useState({});
+  console.log(rankingTypes);
 
   try {
     if (data == null) {
@@ -19,7 +23,25 @@ const PlayerRankingsCard = ({ data }) => {
   } catch (error) {
     data = {};
   }
-  const rankingTypes = ["Daily", "Weekly", "Seasonal"];
+
+  for (let i = 0; i < rankingTypes.length; i++) {
+    rankingTypes[i] = capitalizeFirstLetter(rankingTypes[i]);
+  }
+
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++)
+      for (const prop in data[i]) {
+        let arr = [];
+
+        for (const name in data[i][prop]) {
+          arr.push({ [name]: data[i][prop][name] });
+        }
+
+        data[i][prop] = arr;
+      }
+  }, []);
+
+  //  const rankingTypes = ["Daily", "Weekly", "Seasonal"];
 
   const units = {
     Points: "PTS",
@@ -120,7 +142,7 @@ const PlayerRankingsCard = ({ data }) => {
       if (!(name in imgs)) {
         const imageReference = fbStorage.refFromURL(
           "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
-            name.replaceAll(" ", "_") +
+            name.replaceAll(" ", "_").replaceAll(".", ",") +
             ".png"
         );
 
@@ -229,25 +251,32 @@ const PlayerRankingsCard = ({ data }) => {
                 }
 
                 return (
-                  <div
+                  <a
                     key={index}
-                    className="player-box"
-                    style={{ background: `${playerColour}` }}
+                    href={`/player/${playerName
+                      .replaceAll(" ", "_")
+                      .replaceAll(".", ",")}`}
                   >
-                    <div className="logo-box">
-                      <img style={{}} src={imgs[playerName]} />
-                      <div className="player-name">
-                        {playerName.split(" ")[0]} <br />
-                        {playerName.split(" ")[1]}
+                    <div
+                      key={index}
+                      className="player-box"
+                      style={{ background: `${playerColour}` }}
+                    >
+                      <div className="logo-box">
+                        <img style={{}} src={imgs[playerName]} />
+                        <div className="player-name">
+                          {playerName.split(" ")[0]} <br />
+                          {playerName.split(" ")[1]}
+                        </div>
+                      </div>
+                      <div className="value">
+                        <div>
+                          {score + " "}
+                          <span className="unit">{unit}</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="value">
-                      <div>
-                        {score + " "}
-                        <span className="unit">{unit}</span>
-                      </div>
-                    </div>
-                  </div>
+                  </a>
                 );
               })}
             </div>

@@ -9,14 +9,14 @@ export const structureUserGameHistory = (gameHistory, type) => {
             score: gameHistory[i][type] ? gameHistory[i][type].odds : '--',
             betOdds: gameHistory[i][type] ? gameHistory[i][type].odds : '--',
             bettingSide: type === 'overAndUnder' && gameHistory[i][type] ? '' : gameHistory[i][type] ? gameHistory[i][type].bettingSide : '--',
-            gameFinished: gameHistory[i].gameFinished
+            gameFinished: gameHistory[i].gameFinished ? 1 : 0
         }
 
         if(type === 'handicap'){
-            targetObj.spread = gameHistory[i][type] ? gameHistory[i][type].points : '--'
+            targetObj.spread = gameHistory[i][type] ? gameHistory[i][type].spread : '--'
         }
-        else if(type === 'overUnder'){
-            targetObj.spread = gameHistory[i][type].totalScore ? gameHistory[i][type].totalScore : '--'
+        else if(type === 'overAndUnder'){
+            targetObj.total = gameHistory[i][type].totalScore ? gameHistory[i][type].totalScore : '--'
             delete targetObj.bettingSide
         }
         structuredGameHistory.push(targetObj)

@@ -7,7 +7,8 @@ import storageReducer from './storageReducer';
 import gamesReducer from "./gamesReducer";
 import authReducer from './authReducer';
 import betsReducer from './betsReducer';
-import recordReducer from './recordReducer'
+import recordReducer from './recordReducer';
+import bettingHistoryReducer from './bettingHistoryReducer'
 
 export default combineReducers({
   authReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
   storageReducer,
   gamesReducer,
   betsReducer,
-  recordReducer
+  recordReducer,
+  bettingHistoryReducer
 });

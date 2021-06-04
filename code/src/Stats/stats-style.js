@@ -159,6 +159,7 @@ export const GraphInstruction = styled.div`
   @media(min-width:600px) {
     display: none;
   }
+  background-color: red;
 `
 
 export const StatButtonPillsContainer = styled.div`
@@ -166,3 +167,11 @@ export const StatButtonPillsContainer = styled.div`
   justify-content: center;
   height: fit-content;
 `
+
+export const PlotInformation = styled.div`
+  padding: 1rem 3rem;
+  .text {
+    font-size: 20px;
+    line-height: 1.5;
+  }
+` 

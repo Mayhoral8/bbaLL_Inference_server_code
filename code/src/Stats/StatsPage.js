@@ -8,7 +8,7 @@ import {
   changeStatCategory,
 } from "../redux/actions/sidebarActions";
 import { preprocessBasicData, preprocessChampNmvpData } from "./StatsHelper";
-import { ButtonsAndSearchBox, GraphInfoDiv } from "./stats-style";
+import { ButtonsAndSearchBox, GraphInfoDiv, PlotInformation} from "./stats-style";
 import { ContainerCard } from "../globalStyles";
 import { MobileFilterDiv } from "../Leaderboard/leader-style";
 import * as CONSTANTS from "../constants/index";
@@ -333,7 +333,6 @@ const StatsPage = ({
               }}
             >
               <GraphInfoDiv>
-                <GraphInfo plotType={graphInfo1} plotType2={graphInfo2} />
                 <StatsPlot
                   x={statX}
                   y={statY}
@@ -350,6 +349,14 @@ const StatsPage = ({
                 />
               </GraphInfoDiv>
             </ContainerCard>
+
+            <PlotInformation>
+              <p className="text">The depiction of players/teams average performance (y-axis) and the consistency (x-axis). 
+              The higher average performance is obviously important but so does their consistency. The high and steady 
+              performing players/teams are on the top right quadrant and the low and steady performing players/teams are on 
+              the bottom right quadrant.</p> 
+            </PlotInformation>
+
             <ContainerCard className="m-1">
               <GraphInfoDiv>
                 <GraphInfo plotType="stats_avg" />
@@ -456,6 +463,7 @@ const StatsPage = ({
           dataType={dataType}
         />
       </MobileFilterDiv>
+      
       {/* Desktop */}
       <ButtonBox
         hide

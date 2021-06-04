@@ -8,7 +8,8 @@ export const checkUserRecordCollectionExists = (user) => {
         if(!response.data()){
           fbFirestoreSpigameBet.collection('userRecords').doc(user.uid).set({
             totalPoints: 0,
-            winPercentage: 0,
+            numBettings: 0,
+            numWins: 0,
             rank: '-',
             displayName: user.displayName,
             emailAddress: user.email,
