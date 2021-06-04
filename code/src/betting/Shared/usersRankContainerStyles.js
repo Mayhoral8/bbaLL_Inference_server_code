@@ -1,5 +1,11 @@
 import styled from 'styled-components'
 
+const media = {
+    deskLLG: `@media(max-width: 1350px)`,
+    deskLG: `@media(max-width: 1100px)`,
+    phone: `@media(max-width: 550px)`,
+}
+
 export const UsersRankContainer = styled.div`
     width: 100%;
     border: 0.5px solid rgba(57, 32, 79, 0.25);
@@ -7,7 +13,14 @@ export const UsersRankContainer = styled.div`
     border-radius: 5px;
     margin-top: 20px;
     padding: 20px;
-    height: calc(100% - 433px);
+    height: 400px;
+    ${media.deskLG}{
+        margin: 0px 10px;
+        height: 300px;
+    }
+    ${media.phone}{
+        display: none;
+    }
 `
 
 export const Header = styled.h4`

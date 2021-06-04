@@ -53,11 +53,11 @@ export const structureData = (futureGamesInfo) => {
 
         if(pointsKeysArray.length === 0){
             pointsTargetObj = {
-                awayTeamOdds: {
+                awayTeam: {
                     odds: '',
                     bettingSide: ''
                 },
-                homeTeamOdds: {
+                homeTeam: {
                     odds: '',
                     bettingSide: ''
                 }
@@ -69,11 +69,11 @@ export const structureData = (futureGamesInfo) => {
             let pointsLastIndex = pointsKeysArray.length-1
             let pointsTargetKey = pointsKeysArray[pointsLastIndex]
             pointsTargetObj = {
-                awayTeamOdds: {
+                awayTeam: {
                     odds: docData['Game Odds'].General[pointsTargetKey][awayTeam],
                     bettingSide: awayTeam,
                 }, 
-                homeTeamOdds: {
+                homeTeam: {
                     odds: docData['Game Odds'].General[pointsTargetKey][homeTeam],
                     bettingSide: homeTeam
                 }

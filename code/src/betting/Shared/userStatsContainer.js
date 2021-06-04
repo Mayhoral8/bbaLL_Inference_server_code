@@ -10,8 +10,12 @@ import {
     ProfileImgFiguresViewMore, 
     ProfileImg, 
     UserName, 
-    BettingOddsRank, 
-    FiguresViewMore
+    Points,
+    Rank,
+    Level,
+    WinningRate, 
+    FiguresViewMore,
+    ViewMoreLink
 } from './userStatsContainerStyles'
 
 //Images
@@ -50,19 +54,21 @@ const UserStatsBox = (props) => {
                         props.userRecord.level
                         ?
                         <>
-                            <BettingOddsRank>Points: {props.userRecord.totalPoints}</BettingOddsRank>
-                            <BettingOddsRank>Rank: {props.userRecord.rank}</BettingOddsRank>
-                            <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
-                            <BettingOddsRank>Winning Rate: {" "}
+                            <Points>Points: {props.userRecord.totalPoints}</Points>
+                            <Rank>Rank: {props.userRecord.rank}</Rank>
+                            <Level>Level: {props.userRecord.level}</Level>
+                            <WinningRate>Win Rate: {" "}
                                 {
                                     winningRate.toFixed(2)
                                 }
-                            </BettingOddsRank>
-                            <Link
-                            to = '/profile'
-                            >
-                                View More...
-                            </Link>
+                            </WinningRate>
+                            <ViewMoreLink>
+                                <Link
+                                to = '/profile'
+                                >
+                                    View More...
+                                </Link>
+                            </ViewMoreLink>
                         </>
                         :
                         <ClipLoader color = '#C4C4C4' size = '' loading = {statsSpinner}/>
