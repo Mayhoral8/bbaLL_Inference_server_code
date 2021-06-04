@@ -355,11 +355,11 @@ const StatisticsInformation = (props) => {
                           </div>
                             <StyledInfo margin="left">
                                 <h3>
-                                    <Link
-                                        to={`/${isTeam ? "team" : "player"}/
-                                        ${leftSelectedName.replace(/\s/g,"_")}`}>
-                                        {leftSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
-                                    </Link>
+                                  <Link
+                                    to={`/${isTeam ? "team" : "player"}/${leftSelectedName.replace(/\s/g,"_")}`}
+                                  >
+                                    {leftSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
+                                  </Link>
                                 </h3>
                                 <p>{leftSelectedYear}</p>
                             </StyledInfo>
@@ -369,14 +369,12 @@ const StatisticsInformation = (props) => {
                         isTeam={isTeam ? "true" : "false"}
                         teamColour={lightRed}>
                         <StyledInfo margin="right">
-                            <h3>
-                                <Link
-                                    to={`/${isTeam ? "team" : "player"}/
-                                    ${rightSelectedName.replace(/\s/g,"_")}`}>
-                                    {rightSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
+                          <h3>
+                            <Link to={`/${isTeam ? "team" : "player"}/${rightSelectedName.replace(/\s/g, "_")}`}>
+                              {rightSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
                             </Link>
-                        </h3>
-                        <p>{rigthSelectedYear}</p>
+                          </h3>
+                          <p>{rigthSelectedYear}</p>
                         </StyledInfo>
                         <div className="outline">
                           <div className="img-container">
