@@ -13,7 +13,9 @@ const EventList = ({ gameInfo, gamePbp, gamePlayers }) => {
   const [selectedGameIndex, setSelectedGameIndex] = useState(
     gameInfo.length - 1
   );
-  const { path, url } = useRouteMatch();
+
+  //leads clicks on events to the games tab
+  const url = "games";
 
   return (
     <>

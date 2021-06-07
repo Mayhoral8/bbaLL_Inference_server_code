@@ -9,6 +9,7 @@ const Layout = ({ children, location }) => {
   const windowSize = useWindowSize();
   const breakpoint = 500;
 
+
   return (
     <>
       <Navbar />
@@ -19,13 +20,15 @@ const Layout = ({ children, location }) => {
         "404",
         "",
         "games",
-        "comparison",
         "home",
+        "comparison",
+
       ].includes(location.pathname.split("/")[1]) ? (
         ""
-      ) : (
-        <Sidebar />
-      )}
+      ) : location.pathname != '/betting' && location.pathname != '/profile' ? (
+            <Sidebar />
+      ) : null
+      }
       <MobileNavbar />
       {children}
     </>

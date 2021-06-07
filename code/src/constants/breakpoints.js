@@ -1,5 +1,6 @@
 // breakpoints
 export const breakpoints = {
+  deskLLG: "1350px",
   deskLG: "1200px",
   desk: "1100px",
   tabletLG: "992px",
