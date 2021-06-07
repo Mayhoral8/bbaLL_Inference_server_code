@@ -419,7 +419,7 @@ const StatisticsInformation = (props) => {
         )}
 
         {isTwoValuesSelected && whoIsBetter && (
-            <StyledComparisonBars>
+          <StyledComparisonBars>
             <div className="bar-group">
                 {sortComparisonBars()["sortedPValueListOne"].length > 0 && (
                 <p className="bar-heading">
@@ -447,8 +447,8 @@ const StatisticsInformation = (props) => {
             <div className="bar-group">
                 {sortComparisonBars()["sortedPValueListTwo"].length > 0 && (
                 <p className="bar-heading">
-                    <strong>{leftSelectedName.replace(/_/g, " ")} </strong>is better than{" "}
-                    <strong>{rightSelectedName.replace(/_/g, " ")} </strong>with
+                    <strong>{rightSelectedName.replace(/_/g, " ")} </strong>is better than{" "}
+                    <strong>{leftSelectedName.replace(/_/g, " ")} </strong>with
                     <strong> 80% or greater probability</strong>
                 </p>
                 )}
@@ -488,7 +488,7 @@ const StatisticsInformation = (props) => {
                 )
                 )}
             </div>
-            </StyledComparisonBars>
+          </StyledComparisonBars>
         )}
       </>
     )
