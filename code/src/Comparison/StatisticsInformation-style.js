@@ -49,15 +49,28 @@ export const StyledComparisonProfileElement = styled.div`
   font-size: 18px;
   text-transform: capitalize;
 
+  .outline{
+    border: 10px solid;
+    border-color: ${props=>props.teamColour && props.teamColour};
+    border-radius: 50%;
+    padding: 8px;
+
+    @media (max-width: ${breakpoints.tablet}) {
+      display: none;
+    }
+  }
+
   .img-container {
     align-items: center;
     display: flex;
     width: 150px;
     height: 150px;
     object-fit: cover;
-    border: 6px solid;
+    position: relative;
+    border: 2px solid;
     border-color: ${props=>props.teamColour && props.teamColour};
     border-radius: 50%;
+
     overflow: hidden;
     @media (max-width: ${breakpoints.tabletLG}) {
       width: 100px;
@@ -72,7 +85,6 @@ export const StyledComparisonProfileElement = styled.div`
       padding: ${(props) => (props.isTeam === "true" ? "1rem" : 0)};
     }
   }
-
 `;
 
 export const StyledInfo = styled.div`
@@ -172,17 +184,22 @@ export const StyleButton = styled.div`
   .left{
     border: ${(props) => 
         (props.left == true ? "2px solid #7500DE" : "none")};
+    box-shadow: ${(props) => 
+      (props.left == true ? "-1px 1px 5px" : "none")};
     border-radius: 10px;
   }
 
   .right{
     border: ${(props) => 
         (props.right == true ? "2px solid #7500DE" : "none")};
+    box-shadow: ${(props) => 
+      (props.right == true ? "-1px 1px 5px" : "none")};
     border-radius: 10px;
   }
 
   @media (max-width: ${breakpoints.phone}) {
     margin: 0;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -224,14 +241,23 @@ export const StyledSideInfo = styled.div`
   color: ${(props) => 
             (props.location == "left" ? "#207EEC" : "#EC2020")};
   .info {
-    line-height: 2;
     font-family: Ubuntu;
     font-size: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     @media(max-width: ${breakpoints.phone}) {
       font-size: 8px;
     }
     @media (max-width: ${breakpoints.phoneXXS}) {
       font-size: 1px;
     }
+  }
+
+  .info > span {
+    padding: 8px 8px;
+  }
+
+  .data {
+    text-align: center;
   }
 `;

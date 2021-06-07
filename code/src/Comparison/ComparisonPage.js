@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation} from "react-router-dom";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { changeIsTeam } from "../redux/actions/sidebarActions";
-import ComparisonDropdown from "./ComparisonDropdown";
+import ComparisonDropdown from "./Components/ComparisonDropdown";
 import SEO from "../Shared/SEO";
 import names from "JSON/name.json";
 import candidates from "JSON/player_candidates_for_comparison.json";
 import teamCandidates from "JSON/team_candidates_for_comparison.json";
 import RandomPlayerContiner from "./RandomComparison";
 import RandomComparisonMobile from "./RandomComparisonMobile/RandomComparisonMobile"
-
-import ComparisonYearSelection from "./ComparisonYearSelection";
+import ComparisonYearSelection from "./Components/ComparisonYearSelection";
 import {
-  StyledMainContent,
   StyledComparisonBanner,
   StyledComparisonOptions,
   StyledPlayerCandidates,
+  StyledPlayerCanidatesMobile,
   StyledOptionName,
   StyledOptionsNames,
   StyledOptionsTeams,
@@ -28,82 +25,88 @@ import StatisticsInformation from "./StatisticsInformation";
 import useWindowSize from "../../src/Shared/hooks/useWindowSize";
 
 const ComparisonPage = () => {
-  const [playerNameOne, setPlayerNameOne] = useState(null);
-  const [playerNameTwo, setPlayerNameTwo] = useState(null);
 
-  const [randomNameOne, setRandomNameOne] = useState(null);
-  const [randomNameTwo, setRandomNameTwo] = useState(null);
-  const [randomNameThree, setrandomNameThree] = useState(null);
-  const [randomNameFour, setrandomNameFour] = useState(null);
-  const [randomNameFive, setRrandomNameFive] = useState(null);
-  const [randomNameSix, setrandomNameSix] = useState(null);
-  const [randomNameSeven, setRandomNameSeven] = useState(null);
-  const [randomNameEight, setRandomNameEight] = useState(null);
-  const [randomNameNine, setrandomNameNine] = useState(null);
-  const [randomNameTen, setrandomNameTen] = useState(null);
+  const location = useLocation();
+  const history = useHistory();
+  const screenWidth = useWindowSize();
 
-
-  const [yearOne, setYearOne] = useState(null);
-  const [yearTwo, setYearTwo] = useState(null);
   const [yearComparison, setYearComparison] = useState(null);
-  
-  const [tempPlayerNameOne, setTempPlayerNameOne] = useState(null);
-  const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState(null);
-  const [tempYearOne, setTempYearOne] = useState(null);
-  const [tempYearTwo, setTempYearTwo] = useState(null);
-  
+  const [randomNamesSet, setRandomNamesSet] = useState(null);
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
+  
   const [dataOne, setDataOne] = useState(null);
   const [dataTwo, setDataTwo] = useState(null);
-
   const [maxYearlyOne, setMaxYearlyOne] = useState(null);
   const [maxYearlyTwo, setMaxYearlyTwo] = useState(null);
   const [minYearlyOne, setMinYearlyOne] = useState(null);
   const [minYearlyTwo, setMinYearlyTwo] = useState(null);
-
   const [maxOverallYears, setMaxOverallYears] = useState(null);
   const [minOverallYears, setMinOverallYears] = useState(null);
 
-  const [dataType, setDataType] = useState("perGame");
-
   const [refOne, setRefOne] = useState(null);
   const [refTwo, setRefTwo] = useState(null);
-
   const [refYearOne, setRefYearOne] = useState(null);
   const [refYearTwo, setRefYearTwo] = useState(null);
 
-  const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
-
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const pathname = history.location.pathname.split('/');
-  const search = history.location.search;
-  const splitedSearch = history.location.search.split('&');
+  const pathname = location.pathname.split('/');
+  const search = location.search;
+  const splitedSearch = location.search.split('&');
   const teamsOrPlayersPath = pathname[2];
   const dataTypePath = pathname[3];
 
-  
   const parsedQueryParams = splitedSearch.map(term=> term.split('=')[1]);
   const queryNameOne = parsedQueryParams[0];
   const queryYearOne = parsedQueryParams[1];
   const queryNameTwo = parsedQueryParams[2];
   const queryYearTwo = parsedQueryParams[3];
 
-  // length 10, stored either player / team name for random compare
-  var selectedForComparison = new Array();
-  var nameObject;
-  var year;
+  let tempIsTeam = null;
+  let tempDataType = "perGame";
+  let tempLeftName = null;
+  let tempRightName = null;
+  let tempLeftYear = null;
+  let tempRightYear = null;
 
-  const screenWidth = useWindowSize();
+  if(teamsOrPlayersPath === 'teams') {
+    tempIsTeam = true;
+  } else if (teamsOrPlayersPath === 'players') {
+    tempIsTeam = false;
+  }
+
+  if(dataType === 'per-possession') {
+    tempDataType = 'perPoss';
+  } else {
+    tempDataType = 'perGame';
+  }
+
+  if (search) {
+    tempLeftName = queryNameOne.replace("%27","'");;
+    tempRightName = queryNameTwo.replace("%27","'");;
+    tempLeftYear = queryYearOne;
+    tempRightYear = queryYearTwo
+  }
+
+  const [isTeam, setIsTeam] = useState(tempIsTeam);
+  const [dataType, setDataType] = useState(tempDataType);
+  const [playerNameOne, setPlayerNameOne] = useState(tempLeftName);
+  const [playerNameTwo, setPlayerNameTwo] = useState(tempRightName);
+  const [yearOne, setYearOne] = useState(tempLeftYear);
+  const [yearTwo, setYearTwo] = useState(tempRightYear);
+
+  const [tempPlayerNameOne, setTempPlayerNameOne] = useState(tempLeftName);
+  const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState(tempRightName);
+  const [tempYearOne, setTempYearOne] = useState(tempLeftYear);
+  const [tempYearTwo, setTempYearTwo] = useState(tempRightYear);
+
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
 
-    if(teamsOrPlayersPath && dataTypePath && search) {                                 
+    if(teamsOrPlayersPath && dataTypePath && search) {  
       if(teamsOrPlayersPath === 'players') {
-        dispatch(changeIsTeam({ isTeam: false }));
-      } else {
-        dispatch(changeIsTeam({ isTeam: true }));
+        setIsTeam(false);
+      } else if(teamsOrPlayersPath === 'teams') {
+        setIsTeam(true);
       }
 
       if(dataTypePath === 'per-game') {
@@ -129,20 +132,30 @@ const ComparisonPage = () => {
       setRefYearTwo(queryYearTwo);
     }
     
+    // if everything is eampy, assign random player to teh tempplayer
+    if(tempPlayerNameOne == null && tempPlayerNameTwo == null) {
+      setPlayerNameOne(randomNamesSet[0].replace(/ /g, "_").replace(".", ","));
+      setPlayerNameTwo(randomNamesSet[1].replace(/ /g, "_").replace(".", ","));
+  
+      setYearOne("2020-21");
+      setYearTwo("2020-21");
+  }
+
     // set the temp name with new update when they are not empty
-    if (tempPlayerNameOne != "" && tempPlayerNameTwo != "" ) {
+    if (tempPlayerNameOne && tempPlayerNameTwo) {
       setPlayerNameOne(tempPlayerNameOne);
       setPlayerNameTwo(tempPlayerNameTwo);
     }
 
     // set the temp year with new update when they are not empty
-    if (tempYearOne != "" && tempYearTwo != "") {
+    if (tempYearOne && tempYearTwo) {
       setYearOne(tempYearOne);
       setYearTwo(tempYearTwo);
     }
 
     if (playerNameOne && playerNameTwo && yearOne && yearTwo) {
       setIsTwoValuesSelected(true);
+      // getting data from the firebase
       getMaxYearlyStatFromfbFirestore(yearOne, isTeam, "optionOne");
       getMaxYearlyStatFromfbFirestore(yearTwo, isTeam, "optionTwo");
 
@@ -163,14 +176,12 @@ const ComparisonPage = () => {
         "optionTwo",
         dataType === "perPoss" ? "perPoss" : "perGame"
       );
-
+      
       // Routing
-      const navpath = history.location.pathname.split('/')[1];
+      const navpath = location.pathname.split('/')[1];
       const teampath = isTeam? 'teams': 'players';
       const typepath = dataType === 'perGame'? 'per-game': 'per-possession';
-
       const comparisonPath = `/${navpath}/${teampath}/${typepath}?nameOne=${playerNameOne}&yearOne=${yearOne}&nameTwo=${playerNameTwo}&yearTwo=${yearTwo}`;
-    
       history.push(comparisonPath);
 
     } else {
@@ -188,11 +199,11 @@ const ComparisonPage = () => {
     isTeam,
   ]);
 
-  const clearValue = (ref) => {
+  function clearValue(ref) {
     ref.select.clearValue();
   };
 
-  const handleCompareBetween = (bool) => {
+  function handleCompareBetween(bool) {
     setPlayerNameOne(null);
     setPlayerNameTwo(null);
     setYearOne(null);
@@ -202,10 +213,12 @@ const ComparisonPage = () => {
     setTempPlayerNameTwo(null);
     setTempYearOne(null);
     setTempYearTwo(null);
+    
+    setRandomNamesSet(null);
+    setYearComparison(null);
 
     setDataOne(null);
     setDataTwo(null);
-
     setMaxYearlyOne(null);
     setMaxYearlyTwo(null);
     setIsTwoValuesSelected(false);
@@ -214,10 +227,10 @@ const ComparisonPage = () => {
     clearValue(refTwo);
     clearValue(refYearOne);
     clearValue(refYearTwo);
-    dispatch(changeIsTeam({ isTeam: bool }));
+    setIsTeam(bool);
   };
 
-  const getAttrFromFirestore = (name, year, option, dataType) => {
+  function getAttrFromFirestore(name, year, option, dataType) {
     fbFirestore
       .collection(isTeam ? "team_statistics" : "player_statistics")
       .doc(name.replace(/_/g, " "))
@@ -244,7 +257,7 @@ const ComparisonPage = () => {
       });
   };
 
-  const getMaxYearlyStatFromfbFirestore = (year, isTeam, option) => {
+  function getMaxYearlyStatFromfbFirestore(year, isTeam, option) {
     fbFirestore
       .collection("max_yearly_stats")
       .doc(year.slice(0, 4))
@@ -261,7 +274,7 @@ const ComparisonPage = () => {
       });
   };
 
-  const getMaxMinOverAllStatFromfbFirestore = (isTeam) => {
+  function getMaxMinOverAllStatFromfbFirestore(isTeam) {
     fbFirestore
       .collection("max_yearly_stats")
       .doc("Overall")
@@ -289,7 +302,7 @@ const ComparisonPage = () => {
       });
   };
 
-  const getMinYearlyStatFromfbFirestore = (year, isTeam, option) => {
+  function getMinYearlyStatFromfbFirestore(year, isTeam, option) {
     fbFirestore
       .collection("max_yearly_stats")
       .doc(year.slice(0, 4))
@@ -306,81 +319,58 @@ const ComparisonPage = () => {
       });
   };
 
-  const setPromoteStringName = (nums) => {
-    if (parsedQueryParams.length == 1) {
-      return isTeam ? "Enter team name" : "Enter player name";
-    } else {
-      return parsedQueryParams[nums];
-    }
-  };
-
-  // return the promot string on the year section
-  const setPromoteStringYear = (nums) => {
-    if(parsedQueryParams.length == 1) {
-      return "Select Year";
-    } else {
-      return parsedQueryParams[nums];
-    }
-  }
-
   function loadRandomPlayers() {
-      // if this is the fist time loading the screen
-      // get the year name from the JSON file and conver it to string
-      var data = isTeam ? teamCandidates : candidates;
-      var randRange = isTeam ? 29 : 59;
+    let selectedForComparison = new Array();
+    let names = new Array();
+    let nameObject;
+    let year;
+    let index;
 
-      year = JSON.stringify(Object.keys(data));
+    if(teamsOrPlayersPath === 'players') {
+      setIsTeam(false);
+    } else if (teamsOrPlayersPath === 'teams'){
+      setIsTeam(true);
+    }
+    //console.log("loading...." + " " + isTeam + " " + teamsOrPlayersPath);
 
-      // get the player candidates array
-      nameObject = (Object.values(data))["0"];
+    let data = isTeam ? teamCandidates : candidates;
+    let randRange = isTeam ? 29 : 59;
 
-      // remove [] and "" from the year string
-      year = year.replace("[", "");
-      year = year.replace("]", "");
-      year = year.replace(/['"]+/g, "");
+    year = JSON.stringify(Object.keys(data));
 
-      // randomly pick two player file the array
+    // get the player candidates array
+    nameObject = (Object.values(data))["0"];
 
-      for (var index = 0; index < 10; index=index+2) {
-        var indexOne = Math.floor((Math.random() * randRange) + 0);
-        var indexTwo = Math.floor((Math.random() * randRange) + 0);
-        if (indexOne == indexTwo) {
-          indexTwo = Math.floor((Math.random() * randRange) + 0);
-        }
+    // remove [] and "" from the year string
+    year = year.replace("[", "");
+    year = year.replace("]", "");
+    year = year.replace(/['"]+/g, "");
 
-        selectedForComparison.push(indexOne);
-        selectedForComparison.push(indexTwo);
+    // randomly pick two player file the array
+
+    for (index = 0; index < 10; index=index+2) {
+      var indexOne = Math.floor((Math.random() * randRange) + 0);
+      var indexTwo = Math.floor((Math.random() * randRange) + 0);
+      if (indexOne == indexTwo) {
+        indexTwo = Math.floor((Math.random() * randRange) + 0);
       }
-      
-      
-      setRandomNameOne(nameObject[selectedForComparison[0]]);
-      setRandomNameTwo(nameObject[selectedForComparison[1]])
-      setrandomNameThree(nameObject[selectedForComparison[2]]);
-      setrandomNameFour(nameObject[selectedForComparison[3]]);
-      setRrandomNameFive(nameObject[selectedForComparison[4]]);
-      setrandomNameSix(nameObject[selectedForComparison[5]]);
-      setRandomNameSeven(nameObject[selectedForComparison[6]]);
-      setRandomNameEight(nameObject[selectedForComparison[7]]);
-      setrandomNameNine(nameObject[selectedForComparison[8]]);
-      setrandomNameTen(nameObject[selectedForComparison[9]]);
-      setYearComparison(year);
+
+      selectedForComparison.push(indexOne);
+      selectedForComparison.push(indexTwo);
+    }
+
+    for (index = 0; index < 10; index += 1) {
+      names.push(nameObject[selectedForComparison[index]])
+    }
+    
+    setYearComparison(year);
+    setRandomNamesSet(names);
   }
 
-  if ((tempPlayerNameOne == null && tempPlayerNameTwo == null && playerNameOne == null && playerNameTwo == null)) {
-    loadRandomPlayers();  
-
-    setPlayerNameOne(nameObject[selectedForComparison[0]].replace(/ /g, "_").replace(".", ","));
-    setTempPlayerNameOne(nameObject[selectedForComparison[0]].replace(/ /g, "_").replace(".", ","));
-    setPlayerNameTwo(nameObject[selectedForComparison[1]].replace(/ /g, "_").replace(".", ","));
-    setTempPlayerNameTwo(nameObject[selectedForComparison[1]].replace(/ /g, "_").replace(".", ","));
-
-    setYearOne("2020-21");
-    setTempYearOne("2020-21");
-    setYearTwo("2020-21");
-    setTempYearTwo("2020-21");
-  }
-
-
+  if ((randomNamesSet == null)) {
+    loadRandomPlayers();
+  } 
+  
   return (
     <>
       <SEO
@@ -388,278 +378,251 @@ const ComparisonPage = () => {
         description="Compare between NBA teams or players"
       />
 
-        <StyledMainContent>
-          {screenWidth < 1024 && (
-            <div className="randomSection">
-              <RandomComparisonMobile 
-                one={randomNameOne} 
-                two={randomNameTwo} 
-                three={randomNameThree} 
-                four={randomNameFour} 
-                five={randomNameFive} 
-                six={randomNameSix}
-                seven={randomNameSeven}
-                eight={randomNameEight}
-                nine = {randomNameNine}
-                ten = {randomNameTen}
-
-                isTeam={isTeam}
-                compareYear = {yearComparison}
-                setTempNameOneProp = {setTempPlayerNameOne}
-                setTempNameTwoProp = {setTempPlayerNameTwo}
-                setTempYearOneProp = {setTempYearOne}
-                setTempYearTwoProp = {setTempYearTwo}
-
-                setNameOneProp = {setPlayerNameOne}
-                setNameTwoProp = {setPlayerNameTwo}
-                setYearOneProp = {setYearOne}
-                setYearTwoProp = {setYearTwo}
-              />
+      <div>
+        {screenWidth < 1024 && (
+          <StyledPlayerCanidatesMobile>
+            <RandomComparisonMobile 
+              isTeam={isTeam}
+              compareYear = {yearComparison}
+              namesArray = {randomNamesSet}
+              setTempNameOneProp = {setTempPlayerNameOne}
+              setTempNameTwoProp = {setTempPlayerNameTwo}
+              setTempYearOneProp = {setTempYearOne}
+              setTempYearTwoProp = {setTempYearTwo}
+            />
+            <div className={"button-section"}>
+              <button className={"refresh-button"} onClick={()=>loadRandomPlayers()}></button>
             </div>
-          )}
-          <StyledComparisonBanner>
-            <h1>
-              Compare your favorite <span>teams</span> or <span>players</span>
-            </h1>
-          </StyledComparisonBanner>
-          
-          {
-            screenWidth < 1024 ? (
-              <MainContent>
-                <div className = "leftContent">
-                  <StyledComparisonOptions>
-                    <StyledOptionsTeams>
-                      <p>Compare between: </p>
-                      <li onClick={() => handleCompareBetween(false)} title="players">
-                        <span className={!isTeam ? "active" : null}><Link to='/comparison'>Players</Link></span>
-                      </li>
-                      <li onClick={() => handleCompareBetween(true)} title="teams">
-                        <span className={isTeam ? "active" : null}><Link to='/comparison'>Teams</Link></span>
-                      </li>
-                    </StyledOptionsTeams>
-                    <StyledOptionsTeams>
-                      <p>View stats: </p>
-                      <li onClick={() => setDataType("perGame")} title="perGame">
-                        <span className={dataType === "perGame" ? "active" : null}>
-                          <Link to={`/comparison/${isTeam? 'teams':'players'}/per-game${search}`}>Per Game</Link>
-                        </span>
-                      </li>
-                      <li onClick={() => setDataType("perPoss")} title="perPoss">
-                        <span className={dataType === "perPoss" ? "active" : null}>
-                        <Link to={`/comparison/${isTeam? 'teams':'players'}/per-possession${search}`}>Per Possession</Link>
-                        </span>
-                      </li>
-                    </StyledOptionsTeams>
-                    <StyledOptionsNames>
-                      <StyledOptionName>
-                        <div className="form-control">
-                          <label>Name</label>
-                          <ComparisonDropdown
-                            options={names}
-                            isTeam={isTeam}
-                            onChange={(val) => setTempPlayerNameOne(val)}
-                            prompt={setPromoteStringName(0)}
-                            length="longer"
-                            setRef={setRefOne}
-                            colorSchem="blue"
-                          />
-                        </div>
-                        <div className="form-control">
-                          <label>Year</label>
-                          <ComparisonYearSelection
-                            isTeam={isTeam}
-                            onChange={(val) => setTempYearOne(val)}
-                            prompt={setPromoteStringYear(1)}
-                            name={tempPlayerNameOne}
-                            setRef={setRefYearOne}
-                            colorSchem="blue"
-                          />
-                        </div>
-                      </StyledOptionName>
-    
-                      <StyledOptionName>
-                        <div className="form-control">
-                          <label>Name</label>
-                          <ComparisonDropdown
-                            options={names}
-                            isTeam={isTeam}
-                            onChange={(val) => setTempPlayerNameTwo(val)}
-                            prompt={setPromoteStringName(2)}
-                            length="longer"
-                            setRef={setRefTwo}
-                            colorSchem="red"
-                          />
-                        </div>
-                        <div className="form-control">
-                          <label>Year</label>
-                          <ComparisonYearSelection
-                            isTeam={isTeam}
-                            onChange={(val) => setTempYearTwo(val)}
-                            prompt={setPromoteStringYear(3)}
-                            name={tempPlayerNameTwo}
-                            setRef={setRefYearTwo}
-                            colorSchem="red"
-                          />
-                        </div>
-                      </StyledOptionName>
-                    </StyledOptionsNames>
-                  </StyledComparisonOptions>
-    
-                  <StatisticsInformation 
-                    isTwoValuesSelected = {isTwoValuesSelected}
-                    isTeam = {isTeam}
-                    dataType={dataType}
-                    leftSelectedName = {playerNameOne}
-                    rightSelectedName = {playerNameTwo}
-                    leftSelectedYear = {yearOne}
-                    rigthSelectedYear = {yearTwo}
-                    dataOne = {dataOne}
-                    dataTwo = {dataTwo}
-                    maxYearlyOne = {maxYearlyOne}
-                    maxYearlyTwo = {maxYearlyTwo}
-                    minYearlyOne = {minYearlyOne}
-                    minYearlyTwo = {minYearlyTwo}
-                    maxOverallYears = {maxOverallYears}
-                    minOverallYears = {minOverallYears}
-                    />
-                </div>
-              </MainContent>  
-            ) : (
-              <MainContent>
-                <div className = "leftContent">
-                  <StyledComparisonOptions>
-                    <StyledOptionsTeams>
-                      <p>Compare between: </p>
-                      <li onClick={() => handleCompareBetween(false)} title="players">
-                        <span className={!isTeam ? "active" : null}><Link to='/comparison'>Players</Link></span>
-                      </li>
-                      <li onClick={() => handleCompareBetween(true)} title="teams">
-                        <span className={isTeam ? "active" : null}><Link to='/comparison'>Teams</Link></span>
-                      </li>
-                    </StyledOptionsTeams>
-                    <StyledOptionsTeams>
-                      <p>View stats: </p>
-                      <li onClick={() => setDataType("perGame")} title="perGame">
-                        <span className={dataType === "perGame" ? "active" : null}>
-                          <Link to={`/comparison/${isTeam? 'teams':'players'}/per-game${search}`}>Per Game</Link>
-                        </span>
-                      </li>
-                      <li onClick={() => setDataType("perPoss")} title="perPoss">
-                        <span className={dataType === "perPoss" ? "active" : null}>
-                        <Link to={`/comparison/${isTeam? 'teams':'players'}/per-possession${search}`}>Per Possession</Link>
-                        </span>
-                      </li>
-                    </StyledOptionsTeams>
-                    <StyledOptionsNames>
-                      <StyledOptionName>
-                        <div className="form-control">
-                          <label>Name</label>
-                          <ComparisonDropdown
-                            options={names}
-                            isTeam={isTeam}
-                            onChange={(val) => setTempPlayerNameOne(val)}
-                            prompt={setPromoteStringName(0)}
-                            length="longer"
-                            setRef={setRefOne}
-                            colorSchem="blue"
-                          />
-                        </div>
-                        <div className="form-control">
-                          <label>Year</label>
-                          <ComparisonYearSelection
-                            isTeam={isTeam}
-                            onChange={(val) => setTempYearOne(val)}
-                            prompt={setPromoteStringYear(1)}
-                            name={tempPlayerNameOne}
-                            setRef={setRefYearOne}
-                            colorSchem="blue"
-                          />
-                        </div>
-                      </StyledOptionName>
-    
-                      <StyledOptionName>
-                        <div className="form-control">
-                          <label>Name</label>
-                          <ComparisonDropdown
-                            options={names}
-                            isTeam={isTeam}
-                            onChange={(val) => setTempPlayerNameTwo(val)}
-                            prompt={setPromoteStringName(2)}
-                            length="longer"
-                            setRef={setRefTwo}
-                            colorSchem="red"
-                          />
-                        </div>
-                        <div className="form-control">
-                          <label>Year</label>
-                          <ComparisonYearSelection
-                            isTeam={isTeam}
-                            onChange={(val) => setTempYearTwo(val)}
-                            prompt={setPromoteStringYear(3)}
-                            name={tempPlayerNameTwo}
-                            setRef={setRefYearTwo}
-                            colorSchem="red"
-                          />
-                        </div>
-                      </StyledOptionName>
-                    </StyledOptionsNames>
-                  </StyledComparisonOptions>
-    
-                  <StatisticsInformation 
-                    isTwoValuesSelected = {isTwoValuesSelected}
-                    isTeam = {isTeam}
-                    dataType={dataType}
-                    leftSelectedName = {playerNameOne}
-                    rightSelectedName = {playerNameTwo}
-                    leftSelectedYear = {yearOne}
-                    rigthSelectedYear = {yearTwo}
-                    dataOne = {dataOne}
-                    dataTwo = {dataTwo}
-                    maxYearlyOne = {maxYearlyOne}
-                    maxYearlyTwo = {maxYearlyTwo}
-                    minYearlyOne = {minYearlyOne}
-                    minYearlyTwo = {minYearlyTwo}
-                    maxOverallYears = {maxOverallYears}
-                    minOverallYears = {minOverallYears}
-                    />
-                </div>
-                <div>
-                  <SideNav>
-                    <StyledPlayerCandidates>
-                      <RandomPlayerContiner 
-                        one={randomNameOne} 
-                        two={randomNameTwo} 
-                        three={randomNameThree} 
-                        four={randomNameFour} 
-                        five={randomNameFive} 
-                        six={randomNameSix}
-                        seven={randomNameSeven}
-                        eight={randomNameEight}
-                        nine = {randomNameNine}
-                        ten = {randomNameTen}
-    
-                        isTeam={isTeam}
-                        compareYear = {yearComparison}
-                        setTempNameOneProp = {setTempPlayerNameOne}
-                        setTempNameTwoProp = {setTempPlayerNameTwo}
-                        setTempYearOneProp = {setTempYearOne}
-                        setTempYearTwoProp = {setTempYearTwo}
-    
-                        setNameOneProp = {setPlayerNameOne}
-                        setNameTwoProp = {setPlayerNameTwo}
-                        setYearOneProp = {setYearOne}
-                        setYearTwoProp = {setYearTwo}
+          </StyledPlayerCanidatesMobile>
+        )}
+        <StyledComparisonBanner>
+          <h1>
+            Compare your favorite <span>teams</span> or <span>players</span>
+          </h1>
+        </StyledComparisonBanner>
+        
+        {
+          screenWidth < 1024 ? (
+            <MainContent>
+              <div className = "leftContent">
+                <StyledComparisonOptions>
+                  <StyledOptionsTeams>
+                    <p>Compare between: </p>
+                    <li onClick={() => handleCompareBetween(false)} title="players">
+                      <span className={!isTeam ? "active" : null}><Link to='/comparison'>Players</Link></span>
+                    </li>
+                    <li onClick={() => handleCompareBetween(true)} title="teams">
+                      <span className={isTeam ? "active" : null}><Link to='/comparison'>Teams</Link></span>
+                    </li>
+                  </StyledOptionsTeams>
+                  <StyledOptionsTeams>
+                    <p>View stats: </p>
+                    <li onClick={() => setDataType("perGame")} title="perGame">
+                      <span className={dataType === "perGame" ? "active" : null}>
+                        <Link to={`/comparison/${isTeam? 'teams':'players'}/per-game${search}`}>Per Game</Link>
+                      </span>
+                    </li>
+                    <li onClick={() => setDataType("perPoss")} title="perPoss">
+                      <span className={dataType === "perPoss" ? "active" : null}>
+                      <Link to={`/comparison/${isTeam? 'teams':'players'}/per-possession${search}`}>Per Possession</Link>
+                      </span>
+                    </li>
+                  </StyledOptionsTeams>
+                  <StyledOptionsNames>
+                    <StyledOptionName>
+                      <div className="form-control" onClick={()=>clearValue(refYearOne)}>
+                        <label>Name</label>
+                        <ComparisonDropdown
+                          options={names}
+                          isTeam={isTeam}
+                          onChange={(val) => setTempPlayerNameOne(val)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
+                          length="longer"
+                          setRef={setRefOne}
+                          colorSchem="blue"
                         />
-                        <div className={"centerButton"}>
-                          <button className={"button"} onClick={()=>loadRandomPlayers()}></button>
-                        </div>
-                    </StyledPlayerCandidates>
-                  </SideNav>
-                </div>
-            </MainContent>
-            )
-          }
-        </StyledMainContent>
+                      </div>
+                      <div className="form-control">
+                        <label>Year</label>
+                        <ComparisonYearSelection
+                          isTeam={isTeam}
+                          onChange={(val) => setTempYearOne(val)}
+                          prompt={"Select Year"}
+                          name={tempPlayerNameOne}
+                          setRef={setRefYearOne}
+                          colorSchem="blue"
+                        />
+                      </div>
+                    </StyledOptionName>
+  
+                    <StyledOptionName>
+                      <div className="form-control" onClick={()=>clearValue(refYearTwo)}>
+                        <label>Name</label>
+                        <ComparisonDropdown
+                          options={names}
+                          isTeam={isTeam}
+                          onChange={(val) => setTempPlayerNameTwo(val)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
+                          length="longer"
+                          setRef={setRefTwo}
+                          colorSchem="red"
+                        />
+                      </div>
+                      <div className="form-control">
+                        <label>Year</label>
+                        <ComparisonYearSelection
+                          isTeam={isTeam}
+                          onChange={(val) => setTempYearTwo(val)}
+                          prompt={"Select Year"}
+                          name={tempPlayerNameTwo}
+                          setRef={setRefYearTwo}
+                          colorSchem="red"
+                        />
+                      </div>
+                    </StyledOptionName>
+                  </StyledOptionsNames>
+                </StyledComparisonOptions>
+  
+                <StatisticsInformation 
+                  isTwoValuesSelected = {isTwoValuesSelected}
+                  isTeam = {isTeam}
+                  dataType={dataType}
+                  leftSelectedName = {playerNameOne}
+                  rightSelectedName = {playerNameTwo}
+                  leftSelectedYear = {yearOne}
+                  rigthSelectedYear = {yearTwo}
+                  dataOne = {dataOne}
+                  dataTwo = {dataTwo}
+                  maxYearlyOne = {maxYearlyOne}
+                  maxYearlyTwo = {maxYearlyTwo}
+                  minYearlyOne = {minYearlyOne}
+                  minYearlyTwo = {minYearlyTwo}
+                  maxOverallYears = {maxOverallYears}
+                  minOverallYears = {minOverallYears}
+                  />
+              </div>
+            </MainContent>  
+          ) : (
+            <MainContent>
+              <div className = "leftContent">
+                <StyledComparisonOptions>
+                  <StyledOptionsTeams>
+                    <p>Compare between: </p>
+                    <li onClick={() => handleCompareBetween(false)} title="players">
+                      <span className={!isTeam ? "active" : null}><Link to='/comparison'>Players</Link></span>
+                    </li>
+                    <li onClick={() => handleCompareBetween(true)} title="teams">
+                      <span className={isTeam ? "active" : null}><Link to='/comparison'>Teams</Link></span>
+                    </li>
+                  </StyledOptionsTeams>
+                  <StyledOptionsTeams>
+                    <p>View stats: </p>
+                    <li onClick={() => setDataType("perGame")} title="perGame">
+                      <span className={dataType === "perGame" ? "active" : null}>
+                        <Link to={`/comparison/${isTeam? 'teams':'players'}/per-game${search}`}>Per Game</Link>
+                      </span>
+                    </li>
+                    <li onClick={() => setDataType("perPoss")} title="perPoss">
+                      <span className={dataType === "perPoss" ? "active" : null}>
+                      <Link to={`/comparison/${isTeam? 'teams':'players'}/per-possession${search}`}>Per Possession</Link>
+                      </span>
+                    </li>
+                  </StyledOptionsTeams>
+                  <StyledOptionsNames>
+                    <StyledOptionName>
+                      <div className="form-control" onClick={()=>clearValue(refYearOne)}>
+                        <label>Name</label>
+                        <ComparisonDropdown
+                          options={names}
+                          isTeam={isTeam}
+                          onChange={(val) => setTempPlayerNameOne(val)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
+                          length="longer"
+                          setRef={setRefOne}
+                          colorSchem="blue"
+                        />
+                      </div>
+                      <div className="form-control">
+                        <label>Year</label>
+                        <ComparisonYearSelection
+                          isTeam={isTeam}
+                          onChange={(val) => setTempYearOne(val)}
+                          prompt={"Select Year"}
+                          name={tempPlayerNameOne}
+                          setRef={setRefYearOne}
+                          colorSchem="blue"
+                        />
+                      </div>
+                    </StyledOptionName>
+  
+                    <StyledOptionName>
+                      <div className="form-control" onClick={()=>clearValue(refYearTwo)}>
+                        <label>Name</label>
+                        <ComparisonDropdown
+                          options={names}
+                          isTeam={isTeam}
+                          onChange={(val) => setTempPlayerNameTwo(val)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
+                          length="longer"
+                          setRef={setRefTwo}
+                          colorSchem="red"
+                        />
+                      </div>
+                      <div className="form-control">
+                        <label>Year</label>
+                        <ComparisonYearSelection
+                          isTeam={isTeam}
+                          onChange={(val) => setTempYearTwo(val)}
+                          prompt={"Select Year"}
+                          name={tempPlayerNameTwo}
+                          setRef={setRefYearTwo}
+                          colorSchem="red"
+                        />
+                      </div>
+                    </StyledOptionName>
+                  </StyledOptionsNames>
+                </StyledComparisonOptions>
+  
+                <StatisticsInformation 
+                  isTwoValuesSelected = {isTwoValuesSelected}
+                  isTeam = {isTeam}
+                  dataType={dataType}
+                  leftSelectedName = {playerNameOne}
+                  rightSelectedName = {playerNameTwo}
+                  leftSelectedYear = {yearOne}
+                  rigthSelectedYear = {yearTwo}
+                  dataOne = {dataOne}
+                  dataTwo = {dataTwo}
+                  maxYearlyOne = {maxYearlyOne}
+                  maxYearlyTwo = {maxYearlyTwo}
+                  minYearlyOne = {minYearlyOne}
+                  minYearlyTwo = {minYearlyTwo}
+                  maxOverallYears = {maxOverallYears}
+                  minOverallYears = {minOverallYears}
+                  />
+              </div>
+              <div>
+                <SideNav>
+                  <StyledPlayerCandidates>
+                    <RandomPlayerContiner                       
+                      isTeam={isTeam}
+                      namesArray = {randomNamesSet}
+                      compareYear = {yearComparison}
+                      setTempNameOneProp = {setTempPlayerNameOne}
+                      setTempNameTwoProp = {setTempPlayerNameTwo}
+                      setTempYearOneProp = {setTempYearOne}
+                      setTempYearTwoProp = {setTempYearTwo}
+                      />
+                      <div className={"centerButton"}>
+                        <button className={"button"} onClick={()=>loadRandomPlayers()}></button>
+                      </div>
+                  </StyledPlayerCandidates>
+                </SideNav>
+              </div>
+          </MainContent>
+          )
+        }
+      </div>
     </>
   );
 };

@@ -1,59 +1,65 @@
 import React from "react";
 import {RandomPlayerContiner} from './comparison-style';
-import EachRandomSet from "./EachRandomSet";
+import EachRandomSet from "./Components/EachRandomSet";
 
 const RandomComparison = (props) => {
   const currentYear = props.compareYear;
+  let valueOne = props.namesArray[0]
+  let valueTwo = props.namesArray[1]
+  let valueThree = props.namesArray[2]
+  let valueFour = props.namesArray[3]
+  let valueFive = props.namesArray[4]
+  let valueSix = props.namesArray[5]
+  let valueSeven = props.namesArray[6]
+  let valueEight = props.namesArray[7]
+  let valueNine = props.namesArray[8]
+  let valueTen = props.namesArray[9]
 
   function setPlayer(nameOne, nameTwo) {
     props.setTempNameOneProp(nameOne.replace(/ /g, "_").replace(".", ","));
     props.setTempNameTwoProp(nameTwo.replace(/ /g, "_").replace(".", ","));
     props.setTempYearOneProp(currentYear);
     props.setTempYearTwoProp(currentYear);
-
-    props.setNameOneProp(nameOne.replace(/ /g, "_").replace(".", ","));
-    props.setNameTwoProp(nameTwo.replace(/ /g, "_").replace(".", ","));
-    props.setYearOneProp(currentYear);
-    props.setYearTwoProp(currentYear);
   }
+
   return (
       <RandomPlayerContiner>
-        <div onClick={()=>setPlayer(props.one, props.two)}>
+        <div onClick={()=>setPlayer(valueOne, valueTwo)}>
           <EachRandomSet 
             setPlayer={setPlayer} 
-            leftName = {props.one} 
-            rightName = {props.two}
+            leftName = {valueOne} 
+            rightName = {valueTwo}
             isTeam = {props.isTeam}/>
         </div>
 
-        <div onClick={()=>setPlayer(props.three, props.four)}>
+        <div onClick={()=>setPlayer(valueThree, valueFour)}>
           <EachRandomSet 
-            onClick={()=>setPlayer(props.three, props.four)} 
-            leftName = {props.three} 
-            rightName = {props.four}
+            onClick={()=>setPlayer(valueThree, valueFour)} 
+            leftName = {valueThree} 
+            rightName = {valueFour}
             isTeam = {props.isTeam}/>
         </div>
 
-        <div onClick={()=>setPlayer(props.five, props.six)}>
+        <div onClick={()=>setPlayer(valueFive, valueSix)}>
           <EachRandomSet  
-            leftName = {props.five} 
-            rightName = {props.six}
+            leftName = {valueFive} 
+            rightName = {valueSix}
             isTeam = {props.isTeam}/>
         </div>
 
-        <div onClick={()=>setPlayer(props.seven, props.eight)}>
+        <div onClick={()=>setPlayer(valueSeven, valueEight)}>
           <EachRandomSet 
-            onClick={()=>setPlayer(props.seven, props.eight)} 
-            leftName = {props.seven} 
-            rightName = {props.eight}
+            onClick={()=>setPlayer(valueSeven, valueEight)} 
+            leftName = {valueSeven} 
+            rightName = {valueEight}
             isTeam = {props.isTeam}/>
         </div>
 
-        <div onClick={()=>setPlayer(props.nine, props.ten)}>
+        <div onClick={()=>setPlayer(valueNine, valueTen)}>
           <EachRandomSet 
-            onClick={()=>setPlayer(props.nine, props.ten)} 
-            leftName = {props.nine} 
-            rightName = {props.ten}
+            onClick={()=>setPlayer(valueNine, valueTen)} 
+            leftName = {valueNine} 
+            rightName = {valueTen}
             isTeam = {props.isTeam}/>
         </div>
       </RandomPlayerContiner>

@@ -5,9 +5,23 @@ import backgroundImage from "../assets/images/court.jpg";
 import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
-export const StyledMainContent = styled.div`
-  .randomSection {
-    margin-top: 4rem;
+export const StyledPlayerCanidatesMobile = styled.div`
+  margin-top: 4rem;
+  .button-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .refresh-button{
+    background-color: #7A1DC4;
+    border: 2px solid #7500DE;
+    border-radius: 10px;
+    color: white;
+    padding: 2% 8%;
+    background-image: url(${refresh});
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20% auto;
   }
 `;
 
@@ -275,18 +289,19 @@ export const EachRandomSetWrapper = styled.div`
     }
   }
 
-  .left {
-    border: 2px solid;
-    border-color: #207eec;
+  .left{
+    border: 3px solid;
+    border-color: #207EEC;
     border-radius: 50%;
   }
 
-  .right {
-    border: 2px solid;
-    border-color: #ec2020;
+  .right{
+    border: 3px solid;
+    border-color: #EC2020;
     border-radius: 50%;
   }
-`;
+`
+
 
 export const SideNav = styled.div`
   margin-top: 100px;
@@ -299,31 +314,10 @@ export const SideNav = styled.div`
   }
 `;
 
-export const StyledDropdownBule = styled.div`
-  border: 3px solid #207eec;
-  border-radius: 4px;
-  margin-top: 5px;
-  .select__control {
-    width: 100%;
-    min-width: ${(props) => (props.length === "longer" ? "13rem" : "10rem")};
-    border: none;
-    border-bottom: 1px solid #ccc;
-    border-radius: 0;
-  }
-  .select__control--is-focused {
-    border: none;
-    box-shadow: none;
-  }
-  .select__indicator-separator {
-    display: none;
-  }
-  @media (max-width: ${breakpoints.desk}) {
-    width: 100%;
-  }
-`;
 
-export const StyledDropdownRed = styled.div`
-  border: 3px solid #ec2020;
+export const StyledDropdown = styled.div`
+  border: ${props=>props.color === "blue" ? "3px solid #207EEC" : "3px solid #EC2020"};
+
   border-radius: 4px;
   margin-top: 5px;
   .select__control {
