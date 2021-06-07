@@ -1,6 +1,6 @@
 import React from "react";
 import {RandomPlayerContiner} from './comparison-style';
-import EachRandomSet from "./EachRandomSet";
+import EachRandomSet from "./Components/EachRandomSet";
 
 const RandomComparison = (props) => {
   const currentYear = props.compareYear;

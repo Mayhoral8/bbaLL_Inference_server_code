@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useLocation} from "react-router-dom";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import ComparisonDropdown from "./ComparisonDropdown";
+import ComparisonDropdown from "./Components/ComparisonDropdown";
 import SEO from "../Shared/SEO";
 import names from "JSON/name.json";
 import candidates from "JSON/player_candidates_for_comparison.json";
 import teamCandidates from "JSON/team_candidates_for_comparison.json";
 import RandomPlayerContiner from "./RandomComparison";
 import RandomComparisonMobile from "./RandomComparisonMobile/RandomComparisonMobile"
-import ComparisonYearSelection from "./ComparisonYearSelection";
+import ComparisonYearSelection from "./Components/ComparisonYearSelection";
 import {
-  StyledMainContent,
   StyledComparisonBanner,
   StyledComparisonOptions,
   StyledPlayerCandidates,
@@ -27,29 +26,27 @@ import useWindowSize from "../../src/Shared/hooks/useWindowSize";
 
 const ComparisonPage = () => {
 
+  const location = useLocation();
+  const history = useHistory();
+  const screenWidth = useWindowSize();
+
   const [yearComparison, setYearComparison] = useState(null);
   const [randomNamesSet, setRandomNamesSet] = useState(null);
-
   const [isTwoValuesSelected, setIsTwoValuesSelected] = useState(false);
+  
   const [dataOne, setDataOne] = useState(null);
   const [dataTwo, setDataTwo] = useState(null);
-
   const [maxYearlyOne, setMaxYearlyOne] = useState(null);
   const [maxYearlyTwo, setMaxYearlyTwo] = useState(null);
   const [minYearlyOne, setMinYearlyOne] = useState(null);
   const [minYearlyTwo, setMinYearlyTwo] = useState(null);
-
   const [maxOverallYears, setMaxOverallYears] = useState(null);
   const [minOverallYears, setMinOverallYears] = useState(null);
 
   const [refOne, setRefOne] = useState(null);
   const [refTwo, setRefTwo] = useState(null);
-
   const [refYearOne, setRefYearOne] = useState(null);
   const [refYearTwo, setRefYearTwo] = useState(null);
-
-  const location = useLocation();
-  const history = useHistory();
 
   const pathname = location.pathname.split('/');
   const search = location.search;
@@ -62,7 +59,6 @@ const ComparisonPage = () => {
   const queryYearOne = parsedQueryParams[1];
   const queryNameTwo = parsedQueryParams[2];
   const queryYearTwo = parsedQueryParams[3];
-
 
   let tempIsTeam = null;
   let tempDataType = "perGame";
@@ -84,8 +80,8 @@ const ComparisonPage = () => {
   }
 
   if (search) {
-    tempLeftName = queryNameOne;
-    tempRightName = queryNameTwo;
+    tempLeftName = queryNameOne.replace("%27","'");;
+    tempRightName = queryNameTwo.replace("%27","'");;
     tempLeftYear = queryYearOne;
     tempRightYear = queryYearTwo
   }
@@ -102,13 +98,7 @@ const ComparisonPage = () => {
   const [tempYearOne, setTempYearOne] = useState(tempLeftYear);
   const [tempYearTwo, setTempYearTwo] = useState(tempRightYear);
 
-  // length 10, stored either player / team name for random compare
-  let selectedForComparison = new Array();
-  let nameObject;
-  let year;
 
-  const screenWidth = useWindowSize();
- 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
 
@@ -185,7 +175,6 @@ const ComparisonPage = () => {
         dataType === "perPoss" ? "perPoss" : "perGame"
       );
       
-      //console.log("History push the url");
       // Routing
       const navpath = location.pathname.split('/')[1];
       const teampath = isTeam? 'teams': 'players';
@@ -209,12 +198,11 @@ const ComparisonPage = () => {
     isTeam,
   ]);
 
-  const clearValue = (ref) => {
+  function clearValue(ref) {
     ref.select.clearValue();
   };
 
-  const handleCompareBetween = (bool) => {
-    //console.log("handle comparsion");
+  function handleCompareBetween(bool) {
     setPlayerNameOne(null);
     setPlayerNameTwo(null);
     setYearOne(null);
@@ -230,20 +218,18 @@ const ComparisonPage = () => {
 
     setDataOne(null);
     setDataTwo(null);
-
     setMaxYearlyOne(null);
     setMaxYearlyTwo(null);
+
     setIsTwoValuesSelected(false);
-    
     clearValue(refOne);
     clearValue(refTwo);
     clearValue(refYearOne);
     clearValue(refYearTwo);
-    //dispatch(changeIsTeam({ isTeam: bool }));
     setIsTeam(bool);
   };
 
-  const getAttrFromFirestore = (name, year, option, dataType) => {
+  function getAttrFromFirestore(name, year, option, dataType) {
     fbFirestore
       .collection(isTeam ? "team_statistics" : "player_statistics")
       .doc(name.replace(/_/g, " "))
@@ -270,7 +256,7 @@ const ComparisonPage = () => {
       });
   };
 
-  const getMaxYearlyStatFromfbFirestore = (year, isTeam, option) => {
+  function getMaxYearlyStatFromfbFirestore(year, isTeam, option) {
     fbFirestore
       .collection("max_yearly_stats")
       .doc(year.slice(0, 4))
@@ -287,7 +273,7 @@ const ComparisonPage = () => {
       });
   };
 
-  const getMaxMinOverAllStatFromfbFirestore = (isTeam) => {
+  function getMaxMinOverAllStatFromfbFirestore(isTeam) {
     fbFirestore
       .collection("max_yearly_stats")
       .doc("Overall")
@@ -315,7 +301,7 @@ const ComparisonPage = () => {
       });
   };
 
-  const getMinYearlyStatFromfbFirestore = (year, isTeam, option) => {
+  function getMinYearlyStatFromfbFirestore(year, isTeam, option) {
     fbFirestore
       .collection("max_yearly_stats")
       .doc(year.slice(0, 4))
@@ -332,18 +318,11 @@ const ComparisonPage = () => {
       });
   };
 
-  const setPromoteStringName = (nums) => {
-    return isTeam ? "Enter team name" : "Enter player name";
-  };
-
-  // return the promot string on the year section
-  const setPromoteStringYear = (nums) => {
-    return "Select Year";
-  }
-
   function loadRandomPlayers() {
-      
+    let selectedForComparison = new Array();
     let names = new Array();
+    let nameObject;
+    let year;
     let index;
 
     if(teamsOrPlayersPath === 'players') {
@@ -399,7 +378,7 @@ const ComparisonPage = () => {
         description="Compare between NBA teams or players"
       />
 
-      <StyledMainContent>
+      <div>
         {screenWidth < 1024 && (
           <StyledPlayerCanidatesMobile>
             <RandomComparisonMobile 
@@ -457,7 +436,7 @@ const ComparisonPage = () => {
                           options={names}
                           isTeam={isTeam}
                           onChange={(val) => setTempPlayerNameOne(val)}
-                          prompt={setPromoteStringName(0)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
                           length="longer"
                           setRef={setRefOne}
                           colorSchem="blue"
@@ -468,7 +447,7 @@ const ComparisonPage = () => {
                         <ComparisonYearSelection
                           isTeam={isTeam}
                           onChange={(val) => setTempYearOne(val)}
-                          prompt={setPromoteStringYear(1)}
+                          prompt={"Select Year"}
                           name={tempPlayerNameOne}
                           setRef={setRefYearOne}
                           colorSchem="blue"
@@ -483,7 +462,7 @@ const ComparisonPage = () => {
                           options={names}
                           isTeam={isTeam}
                           onChange={(val) => setTempPlayerNameTwo(val)}
-                          prompt={setPromoteStringName(2)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
                           length="longer"
                           setRef={setRefTwo}
                           colorSchem="red"
@@ -494,7 +473,7 @@ const ComparisonPage = () => {
                         <ComparisonYearSelection
                           isTeam={isTeam}
                           onChange={(val) => setTempYearTwo(val)}
-                          prompt={setPromoteStringYear(3)}
+                          prompt={"Select Year"}
                           name={tempPlayerNameTwo}
                           setRef={setRefYearTwo}
                           colorSchem="red"
@@ -557,7 +536,7 @@ const ComparisonPage = () => {
                           options={names}
                           isTeam={isTeam}
                           onChange={(val) => setTempPlayerNameOne(val)}
-                          prompt={setPromoteStringName(0)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
                           length="longer"
                           setRef={setRefOne}
                           colorSchem="blue"
@@ -568,7 +547,7 @@ const ComparisonPage = () => {
                         <ComparisonYearSelection
                           isTeam={isTeam}
                           onChange={(val) => setTempYearOne(val)}
-                          prompt={setPromoteStringYear(1)}
+                          prompt={"Select Year"}
                           name={tempPlayerNameOne}
                           setRef={setRefYearOne}
                           colorSchem="blue"
@@ -583,7 +562,7 @@ const ComparisonPage = () => {
                           options={names}
                           isTeam={isTeam}
                           onChange={(val) => setTempPlayerNameTwo(val)}
-                          prompt={setPromoteStringName(2)}
+                          prompt={isTeam ? "Enter team name" : "Enter player name"}
                           length="longer"
                           setRef={setRefTwo}
                           colorSchem="red"
@@ -594,7 +573,7 @@ const ComparisonPage = () => {
                         <ComparisonYearSelection
                           isTeam={isTeam}
                           onChange={(val) => setTempYearTwo(val)}
-                          prompt={setPromoteStringYear(3)}
+                          prompt={"Select Year"}
                           name={tempPlayerNameTwo}
                           setRef={setRefYearTwo}
                           colorSchem="red"
@@ -643,7 +622,7 @@ const ComparisonPage = () => {
           </MainContent>
           )
         }
-      </StyledMainContent>
+      </div>
     </>
   );
 };

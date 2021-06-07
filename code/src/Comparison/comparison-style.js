@@ -5,10 +5,6 @@ import backgroundImage from "../assets/images/court.jpg";
 import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
-export const StyledMainContent = styled.div`
-
-`
-
 export const StyledPlayerCanidatesMobile = styled.div`
   margin-top: 4rem;
   .button-section {
@@ -305,7 +301,6 @@ export const EachRandomSetWrapper = styled.div`
     border-radius: 50%;
   }
 `
-
 
 export const SideNav = styled.div`
   margin-top: 100px;

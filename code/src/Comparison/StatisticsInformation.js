@@ -1,13 +1,15 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
-import GetPlayerImage from "../Individual/Components/GetPlayerImage";
-//import Versus from "../Shared/Versus/Versus";
-import CustomizeVersus from "./customizeVersus";
 import { Radar } from "react-chartjs-2";
 import { rgba } from "polished";
 import { Argsort } from "../Shared/Functions/Argsort";
 import { calcPValue } from "../Shared/Functions/calcPValue";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
+import { playerAttributes, abbrPlayerAttributes } from "../constants";
+import ComparisonBars from "./Components/ComparisonBars";
+import CompareSideInfo from "./Components/CompareSideInfo";
+import GetPlayerImage from "../Individual/Components/GetPlayerImage";
+import CustomizeVersus from "./Components/customizeVersus";
 import {
     StyledComparisonProfileBlank,
     StyledComparisonProfile,
@@ -19,20 +21,12 @@ import {
     StyledRadarCont,
     StyledComparisonBars
 } from "./StatisticsInformation-style";
-import { playerAttributes, abbrPlayerAttributes } from "../constants";
-import ComparisonBars from "./ComparisonBars";
-import CompareSideInfo from "./CompareSideInfo";
 
 const lightBule = "#207EEC";
 const lightRed = "#EC2020";
 
 const StatisticsInformation = (props) => {
-    const isTwoValuesSelected = props.isTwoValuesSelected;
     const isTeam = props.isTeam;
-    const leftSelectedName = props.leftSelectedName;
-    const leftSelectedYear = props.leftSelectedYear;
-    const rightSelectedName = props.rightSelectedName;
-    const rigthSelectedYear = props.rigthSelectedYear;
     const dataType = props.dataType;
     const dataOne = props.dataOne;
     const dataTwo = props.dataTwo;
@@ -42,6 +36,11 @@ const StatisticsInformation = (props) => {
     const minYearlyTwo = props.minYearlyTwo;
     const maxOverallYears = props.maxOverallYears;
     const minOverallYears = props.minOverallYears;
+    const leftSelectedName = props.leftSelectedName;
+    const leftSelectedYear = props.leftSelectedYear;
+    const rightSelectedName = props.rightSelectedName;
+    const rigthSelectedYear = props.rigthSelectedYear;
+    const isTwoValuesSelected = props.isTwoValuesSelected;
 
     const [statistic, setStatistic] = useState(true);
     const [whoIsBetter, setWhoIsBetter] = useState(false);
@@ -342,156 +341,156 @@ const StatisticsInformation = (props) => {
     };
 
     return(
-        <>
-            {isTwoValuesSelected ? (
-                <StyledComparisonProfile>
-                    <StyledComparisonProfileElement 
-                        isTeam = {isTeam ? "true" : "false"}
-                        teamColour = {lightBule}>
-                          <div className="outline">
-                            <div className="img-container">
-                                <GetPlayerImage playerName={leftSelectedName} isTeam={isTeam}/>
-                            </div>
-                          </div>
-                            <StyledInfo margin="left">
-                                <h3>
-                                  <Link
-                                    to={`/${isTeam ? "team" : "player"}/${leftSelectedName.replace(/\s/g,"_")}`}
-                                  >
-                                    {leftSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
-                                  </Link>
-                                </h3>
-                                <p>{leftSelectedYear}</p>
-                            </StyledInfo>
-                    </StyledComparisonProfileElement>
-                    <CustomizeVersus />
-                    <StyledComparisonProfileElement
-                        isTeam={isTeam ? "true" : "false"}
-                        teamColour={lightRed}>
-                        <StyledInfo margin="right">
-                          <h3>
-                            <Link to={`/${isTeam ? "team" : "player"}/${rightSelectedName.replace(/\s/g, "_")}`}>
-                              {rightSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
-                            </Link>
-                          </h3>
-                          <p>{rigthSelectedYear}</p>
+      <>
+        {isTwoValuesSelected ? (
+            <StyledComparisonProfile>
+                <StyledComparisonProfileElement 
+                    isTeam = {isTeam ? "true" : "false"}
+                    teamColour = {lightBule}>
+                      <div className="outline">
+                        <div className="img-container">
+                            <GetPlayerImage playerName={leftSelectedName} isTeam={isTeam}/>
+                        </div>
+                      </div>
+                        <StyledInfo margin="left">
+                            <h3>
+                              <Link
+                                to={`/${isTeam ? "team" : "player"}/${leftSelectedName.replace(/\s/g,"_")}`}
+                              >
+                                {leftSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
+                              </Link>
+                            </h3>
+                            <p>{leftSelectedYear}</p>
                         </StyledInfo>
-                        <div className="outline">
-                          <div className="img-container">
-                            <GetPlayerImage playerName={rightSelectedName} isTeam={isTeam} />
-                          </div>
-                        </div>
-                    </StyledComparisonProfileElement>
-                </StyledComparisonProfile>
-            ) : (
-                <StyledComparisonProfileBlank>
-                    Select teams or players to view comparison
-                </StyledComparisonProfileBlank>
-            )}
+                </StyledComparisonProfileElement>
+                <CustomizeVersus />
+                <StyledComparisonProfileElement
+                    isTeam={isTeam ? "true" : "false"}
+                    teamColour={lightRed}>
+                    <StyledInfo margin="right">
+                      <h3>
+                        <Link to={`/${isTeam ? "team" : "player"}/${rightSelectedName.replace(/\s/g, "_")}`}>
+                          {rightSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
+                        </Link>
+                      </h3>
+                      <p>{rigthSelectedYear}</p>
+                    </StyledInfo>
+                    <div className="outline">
+                      <div className="img-container">
+                        <GetPlayerImage playerName={rightSelectedName} isTeam={isTeam} />
+                      </div>
+                    </div>
+                </StyledComparisonProfileElement>
+            </StyledComparisonProfile>
+        ) : (
+            <StyledComparisonProfileBlank>
+                Select teams or players to view comparison
+            </StyledComparisonProfileBlank>
+        )}
 
-            {isTwoValuesSelected && (
-                <StyledPlayerInfoAndSwitches>
-                    <StyledPlayerInfo location={"left"}>
-                    <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"left"} 
-                            name={leftSelectedName} year={leftSelectedYear}/>
-                    </StyledPlayerInfo>
-                    <StyleButton left={statistic} right={whoIsBetter}>
-                        <div className="button left" onClick={()=>switchDisplay(1)}>
-                            Statistic
-                        </div>
-                        <div className="button right" onClick={()=>switchDisplay(2)}>
-                            Who is Better
-                        </div>
-                  </StyleButton>
-                  <StyledPlayerInfo location={"right"}>
-                  <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"right"} 
-                        name={rightSelectedName} year={rigthSelectedYear}/>
-                  </StyledPlayerInfo>
-                </StyledPlayerInfoAndSwitches>
-            )}
+        {isTwoValuesSelected && (
+            <StyledPlayerInfoAndSwitches>
+                <StyledPlayerInfo location={"left"}>
+                <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"left"} 
+                        name={leftSelectedName} year={leftSelectedYear}/>
+                </StyledPlayerInfo>
+                <StyleButton left={statistic} right={whoIsBetter}>
+                    <div className="button left" onClick={()=>switchDisplay(1)}>
+                        Statistic
+                    </div>
+                    <div className="button right" onClick={()=>switchDisplay(2)}>
+                        Who is Better
+                    </div>
+              </StyleButton>
+              <StyledPlayerInfo location={"right"}>
+              <CompareSideInfo isTeam = {isTeam ? "true" : "false"} location = {"right"} 
+                    name={rightSelectedName} year={rigthSelectedYear}/>
+              </StyledPlayerInfo>
+            </StyledPlayerInfoAndSwitches>
+        )}
 
-            {isTwoValuesSelected && statistic &&(
-                <StyledRadarCont>
-                    <Radar 
-                        data={radarDatasets().data}
-                        options={radarDatasets().options}
+        {isTwoValuesSelected && statistic &&(
+            <StyledRadarCont>
+                <Radar 
+                    data={radarDatasets().data}
+                    options={radarDatasets().options}
+                />
+            </StyledRadarCont>
+        )}
+
+        {isTwoValuesSelected && whoIsBetter && (
+            <StyledComparisonBars>
+            <div className="bar-group">
+                {sortComparisonBars()["sortedPValueListOne"].length > 0 && (
+                <p className="bar-heading">
+                    <strong>{leftSelectedName.replace(/_/g, " ")} </strong>is better than{" "}
+                    <strong>{rightSelectedName.replace(/_/g, " ")} </strong>with
+                    <strong> 80% or greater probability</strong>
+                </p>
+                )}
+
+                {sortComparisonBars()["sortedPValueListOne"].map(
+                (list, index) => (
+                    <ComparisonBars
+                    key={index}
+                    getTeamColour={getTeamColour}
+                    listGroup="one"
+                    list={list}
+                    playerNameOne={leftSelectedName}
+                    playerNameTwo={rightSelectedName}
+                    bcg="colourOne"
+                    dataType={dataType}
                     />
-                </StyledRadarCont>
-            )}
-
-            {isTwoValuesSelected && whoIsBetter && (
-                <StyledComparisonBars>
-                <div className="bar-group">
-                    {sortComparisonBars()["sortedPValueListOne"].length > 0 && (
-                    <p className="bar-heading">
-                        <strong>{leftSelectedName.replace(/_/g, " ")} </strong>is better than{" "}
-                        <strong>{rightSelectedName.replace(/_/g, " ")} </strong>with
-                        <strong> 80% or greater probability</strong>
-                    </p>
-                    )}
-
-                    {sortComparisonBars()["sortedPValueListOne"].map(
-                    (list, index) => (
-                        <ComparisonBars
-                        key={index}
-                        getTeamColour={getTeamColour}
-                        listGroup="one"
-                        list={list}
-                        playerNameOne={leftSelectedName}
-                        playerNameTwo={rightSelectedName}
-                        bcg="colourOne"
-                        dataType={dataType}
-                        />
-                    )
-                    )}
-                </div>
-                <div className="bar-group">
-                    {sortComparisonBars()["sortedPValueListTwo"].length > 0 && (
-                    <p className="bar-heading">
-                        <strong>{leftSelectedName.replace(/_/g, " ")} </strong>is better than{" "}
-                        <strong>{rightSelectedName.replace(/_/g, " ")} </strong>with
-                        <strong> 80% or greater probability</strong>
-                    </p>
-                    )}
-                    {sortComparisonBars()["sortedPValueListTwo"].map(
-                    (list, index) => (
-                        <ComparisonBars
-                        key={index}
-                        getTeamColour={getTeamColour}
-                        listGroup="two"
-                        list={list}
-                        playerNameOne={leftSelectedName}
-                        playerNameTwo={rightSelectedName}
-                        bcg="colourTwo"
-                        dataType={dataType}
-                        />
-                    )
-                    )}
-                </div>
-                <div className="bar-group">
-                    {sortComparisonBars()["sortedPValueListThree"].length > 0 && (
-                    <p className="bar-heading">
-                        Probability is <strong>less than 80%</strong>
-                    </p>
-                    )}
-                    {sortComparisonBars()["sortedPValueListThree"].map(
-                    (list, index) => (
-                        <ComparisonBars
-                        key={index}
-                        getTeamColour={getTeamColour}
-                        listGroup="three"
-                        list={list}
-                        playerNameOne={leftSelectedName}
-                        playerNameTwo={rightSelectedName}
-                        bcg={null}
-                        dataType={dataType}
-                        />
-                    )
-                    )}
-                </div>
-                </StyledComparisonBars>
-            )}
-        </>
+                )
+                )}
+            </div>
+            <div className="bar-group">
+                {sortComparisonBars()["sortedPValueListTwo"].length > 0 && (
+                <p className="bar-heading">
+                    <strong>{leftSelectedName.replace(/_/g, " ")} </strong>is better than{" "}
+                    <strong>{rightSelectedName.replace(/_/g, " ")} </strong>with
+                    <strong> 80% or greater probability</strong>
+                </p>
+                )}
+                {sortComparisonBars()["sortedPValueListTwo"].map(
+                (list, index) => (
+                    <ComparisonBars
+                    key={index}
+                    getTeamColour={getTeamColour}
+                    listGroup="two"
+                    list={list}
+                    playerNameOne={leftSelectedName}
+                    playerNameTwo={rightSelectedName}
+                    bcg="colourTwo"
+                    dataType={dataType}
+                    />
+                )
+                )}
+            </div>
+            <div className="bar-group">
+                {sortComparisonBars()["sortedPValueListThree"].length > 0 && (
+                <p className="bar-heading">
+                    Probability is <strong>less than 80%</strong>
+                </p>
+                )}
+                {sortComparisonBars()["sortedPValueListThree"].map(
+                (list, index) => (
+                    <ComparisonBars
+                    key={index}
+                    getTeamColour={getTeamColour}
+                    listGroup="three"
+                    list={list}
+                    playerNameOne={leftSelectedName}
+                    playerNameTwo={rightSelectedName}
+                    bcg={null}
+                    dataType={dataType}
+                    />
+                )
+                )}
+            </div>
+            </StyledComparisonBars>
+        )}
+      </>
     )
     
 }

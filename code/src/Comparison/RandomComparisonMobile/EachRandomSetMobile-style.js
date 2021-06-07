@@ -35,6 +35,7 @@ export const EachRandomSetWrapper = styled.div`
     font-weight: 300;
     text-align: center;
     font-size: 15px;
+    padding-left: 100px;
     @media (min-width: ${breakpoints.desk}) {
       padding-top: 30px;
     }
