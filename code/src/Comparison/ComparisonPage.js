@@ -132,12 +132,13 @@ const ComparisonPage = () => {
       setRefYearTwo(queryYearTwo);
     }
     
+    // if everything is eampy, assign random player to teh tempplayer
     if(tempPlayerNameOne == null && tempPlayerNameTwo == null) {
-      setTempPlayerNameOne(randomNamesSet[0].replace(/ /g, "_").replace(".", ","));
-      setTempPlayerNameTwo(randomNamesSet[1].replace(/ /g, "_").replace(".", ","));
+      setPlayerNameOne(randomNamesSet[0].replace(/ /g, "_").replace(".", ","));
+      setPlayerNameTwo(randomNamesSet[1].replace(/ /g, "_").replace(".", ","));
   
-      setTempYearOne("2020-21");
-      setTempYearTwo("2020-21");
+      setYearOne("2020-21");
+      setYearTwo("2020-21");
   }
 
     // set the temp name with new update when they are not empty
@@ -154,6 +155,7 @@ const ComparisonPage = () => {
 
     if (playerNameOne && playerNameTwo && yearOne && yearTwo) {
       setIsTwoValuesSelected(true);
+      // getting data from the firebase
       getMaxYearlyStatFromfbFirestore(yearOne, isTeam, "optionOne");
       getMaxYearlyStatFromfbFirestore(yearTwo, isTeam, "optionTwo");
 
@@ -180,7 +182,6 @@ const ComparisonPage = () => {
       const teampath = isTeam? 'teams': 'players';
       const typepath = dataType === 'perGame'? 'per-game': 'per-possession';
       const comparisonPath = `/${navpath}/${teampath}/${typepath}?nameOne=${playerNameOne}&yearOne=${yearOne}&nameTwo=${playerNameTwo}&yearTwo=${yearTwo}`;
-        
       history.push(comparisonPath);
 
     } else {
@@ -220,8 +221,8 @@ const ComparisonPage = () => {
     setDataTwo(null);
     setMaxYearlyOne(null);
     setMaxYearlyTwo(null);
-
     setIsTwoValuesSelected(false);
+    
     clearValue(refOne);
     clearValue(refTwo);
     clearValue(refYearOne);
@@ -370,7 +371,6 @@ const ComparisonPage = () => {
     loadRandomPlayers();
   } 
   
-  //console.log("before return the page: " + tempPlayerNameOne + " " + playerNameOne + " " + " " + isTeam + " " + parsedQueryParams + " " + teamsOrPlayersPath);
   return (
     <>
       <SEO
