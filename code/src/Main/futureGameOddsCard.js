@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { fbStorage } from "../App/config";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 //import firebasestorage from "firebase";
@@ -6,7 +7,7 @@ import { Card } from "./futuregameoddscard-style";
 const FutureGameOddsCard = ({ data }) => {
   const [JSON, setJSON] = useState(data);
 
-  // urls for logo images
+  // urls for team logo images
   const [homeImg, setHomeImg] = useState("");
   const [awayImg, setAwayImg] = useState("");
 
@@ -28,41 +29,16 @@ const FutureGameOddsCard = ({ data }) => {
     }
   });
 
-  let gameOdds = {
-    [homeTeamName]: " - ",
-    [awayTeamName]: " - ",
-  };
-
-  // let massey = {
-  //   [homeTeamName]: {
-  //     value: " - ",
-  //     perc: ""
-  //   },
-  //   [awayTeamName]: {
-  //     value: " - ",
-  //     perc: "",
-  //   }
-  // };
-
-  // let elo = {
-  //   [homeTeamName]: {
-  //     value: " - ",
-  //     perc: ""
-  //   },
-  //   [awayTeamName]: {
-  //     value: " - ",
-  //     perc: "",
-  //   }
-  // };
-
-  try {
-  } catch (error) {
-    console.log(error);
-  }
   const homeRatings = [
-    { value: " - ", percent: "" },
+    {
+      value: " - ",
+      percent: "",
+    },
 
-    { value: " - ", percent: "" },
+    {
+      value: " - ",
+      percent: "",
+    },
 
     {
       value: " - ",
@@ -87,9 +63,6 @@ const FutureGameOddsCard = ({ data }) => {
     },
   ];
 
-  // JSON["Game Prediction"]["ELO"] = {};
-  //JSON["Game Prediction"]["Massey"] = {};
-  // JSON["Game Odds"]["General"] = {};
   try {
     homeRatings[0].value = Math.round(
       JSON["Game Prediction"]["ELO"][homeTeamName]["rating"]
@@ -142,17 +115,8 @@ const FutureGameOddsCard = ({ data }) => {
   } catch (error) {
     console.log("Missing data for the future game Odds");
   }
-  // calculating percentages for all ratings
 
-  // homeRatings[0].percent = calculateELOPercent(
-  //   homeRatings[0].value,
-  //   awayRatings[0].value
-  // );
-  // homeRatings[1].percent = calculateMasseyPercent(
-  //   homeRatings[1].value,
-  //   awayRatings[1].value
-  // );
-
+  // Remove this when Game Odds percentage is available in firebase
   if (JSON["Game Odds"]["General"].hasOwnProperty(latestDate)) {
     homeRatings[2].percent = calculateBettingOddsPercent(
       homeRatings[2].value,
@@ -161,11 +125,9 @@ const FutureGameOddsCard = ({ data }) => {
     awayRatings[2].percent = 100 - homeRatings[2].percent;
   }
 
+  // Rounding values to 2 decimal places
   for (let i = 0; i < awayRatings.length; i++) {
-    // if (awayRatings[i].value !== " - ") {
-    //   awayRatings[i].percent = 100 - homeRatings[i].percent;
-    // }
-    // makes sure ELO isn't rounded to 2 decimals
+    // i > 0 makes sure ELO isn't rounded to 2 decimals
     if (i > 0) {
       if (awayRatings[i].value !== " - ") {
         awayRatings[i].value = awayRatings[i].value.toFixed(2);
@@ -205,7 +167,7 @@ const FutureGameOddsCard = ({ data }) => {
   const homeWords = homeTeamName.split(" ");
   const awayWords = awayTeamName.split(" ");
 
-  // shortens team names to the last word
+  // shortens team names to the last word to that it fits on the Card
   homeTeamName = homeWords[homeWords.length - 1];
   awayTeamName = awayWords[awayWords.length - 1];
 
@@ -295,21 +257,49 @@ const calculateBettingOddsPercent = (teamA, teamB) => {
 };
 
 const vsImg = (homeImg, awayImg) => {
+  const LogoBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    min-height: 75px;
+
+    img {
+      margin: 0rem;
+      position: relative;
+      z-index: 99;
+    }
+
+    .logo-1 {
+      z-index: 0;
+      width: 40%;
+      top: 5px;
+    }
+
+    .logo-2 {
+      z-index: 0;
+      width: 40%;
+      top: 5px;
+    }
+
+    .vs-text {
+      font-size: 2rem;
+      color: white;
+      font-family: Roboto;
+      filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
+      -webkit-text-stroke: 0.5px gray;
+      position: relative;
+      top: 25px;
+    }
+  `;
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        minHeight: "75px",
-      }}
-    >
-      <img id="img1" className="logo-1" src={homeImg} />
+    <LogoBox>
+      <img className="logo-1" src={homeImg} />
       <div className="vs-text">
         <b>VS</b>
       </div>
       <img className="logo-2" src={awayImg} />
-    </div>
+    </LogoBox>
   );
 };
 
