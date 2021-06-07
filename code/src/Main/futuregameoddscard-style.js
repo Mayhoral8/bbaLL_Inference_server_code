@@ -15,34 +15,6 @@ export const Card = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  img {
-    margin: 0rem;
-    position: relative;
-    z-index: 99;
-  }
-
-  .logo-1 {
-    z-index: 0;
-    width: 40%;
-    top: 5px;
-  }
-
-  .logo-2 {
-    z-index: 0;
-    width: 40%;
-    top: 5px;
-  }
-
-  .vs-text {
-    font-size: 2rem;
-    color: white;
-    font-family: Roboto;
-    filter: drop-shadow(0.2rem 0.2rem 0.35rem rgba(0, 0, 0, 0.3));
-    -webkit-text-stroke: 0.5px gray;
-    position: relative;
-    top: 25px;
-  }
-
   .team-names {
     display: flex;
     flex-direction: row;
