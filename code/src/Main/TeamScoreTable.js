@@ -242,7 +242,7 @@ const BoxScoreTableWrapper = styled.div`
   display: flex;
   margin: 1.5rem 0 0 0rem;
   user-select: none;
-  max-height: 400px;
+  max-height: 410px;
 
   .table-scroll {
     overflow-x: auto;
