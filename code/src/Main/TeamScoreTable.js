@@ -2,19 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
-const TeamScoreTable = ({
-  leftColHeading,
-  data,
-  bottomRowHeading,
-  renderTeamData,
-  attr,
-  sortConfig,
-  handleSort,
-  isTeam,
-  players,
-  includeYear,
-}) => {
+const TeamScoreTable = ({ data }) => {
+  // keys found in firebase data
   const DATA_ATTR = ["Massey", "ELO", "Standing"];
+
   const headings = ["rank", "ELO", "Massey", "Win(%)"];
   try {
     if (data == null) {
@@ -23,6 +14,7 @@ const TeamScoreTable = ({
     data = {};
   }
 
+  // Reformatts Incoming Data
   DATA_ATTR.map((key) => {
     let arr = [];
     Object.keys(data[key]).map((entry) => {
@@ -31,6 +23,8 @@ const TeamScoreTable = ({
     });
     data[key] = arr;
   });
+
+  // Used to Reset sortingType object
   const initialSortingType = {
     rank: "",
     name: "",
@@ -40,6 +34,7 @@ const TeamScoreTable = ({
   };
 
   // keeps track of what should ascendingly or descendingly sorted
+  // Rank is the default
   const sortingType = useRef({
     rank: "descending",
     name: "",
@@ -48,18 +43,34 @@ const TeamScoreTable = ({
     "Win(%)": "",
   });
 
-  const numOfTeamsToDisplay = 10;
-
+  // Holds stats of all teams
   const [listOfTeams, setListOfTeams] = useState([]);
+
   let placeholderArray = [];
 
   useEffect(() => {
-    DATA_ATTR.map((key, scoreIndex) => {
+    DATA_ATTR.map((key) => {
       data[key].map((teamObj) => {
+        // Mainly restructuring the team data into the format below
+        /* Array of objects, each team has own object
+        [
+          {
+            name: "teamName",
+            rank: "2",
+            ELO: "999",
+          },
+          {
+            name: "teamName",
+            rank: "2",
+            ELO: "999",
+          }
+        ];
+        */
         const teamName = Object.keys(teamObj)[0];
         const score = teamObj[teamName];
         let teamIndex;
 
+        // checks if a team object has been created in placeholder array
         let doesObjExist = false;
         for (let i = 0; i < placeholderArray.length; i++) {
           if (placeholderArray[i].name === teamName) {
@@ -69,13 +80,15 @@ const TeamScoreTable = ({
           }
         }
 
+        // creates team object if one doesn't exist
         if (doesObjExist === false) {
           placeholderArray.push({ name: teamName });
           teamIndex = placeholderArray.length - 1;
         }
+
+        // Adds data to array, special case for adding "Standing" data
         if (key === "Standing") {
           placeholderArray[teamIndex]["Win(%)"] = parseFloat(score["PCT"]);
-
           placeholderArray[teamIndex]["rank"] = parseInt(score["rank"]);
         } else {
           placeholderArray[teamIndex][key] = score;
@@ -87,12 +100,10 @@ const TeamScoreTable = ({
   }, []);
 
   // sorts list by object property given
-  function sortTeams(arr, attr) {
-    const resetObj = (obj) => {
-      Object.keys(obj).forEach((key) => (obj[key] = ""));
-    };
-
+  const sortTeams = (arr, attr) => {
+    // sets the new sorting type based on previous type
     if (attr in sortingType.current) {
+      // no sorting type was set before, initalize to "desc"
       if (sortingType.current[attr].length === 0) {
         sortingType.current = initialSortingType;
         sortingType.current[attr] = "descending";
@@ -106,7 +117,7 @@ const TeamScoreTable = ({
     }
     return [...arr].sort((a, b) => {
       // mainly to handle when "rank" prop is missing in json
-      // makes sure missing ranks get sorted properly
+      // makes sure missing ranks get sorted properly(i.e. go to bottom of list)
       const handleMissingProperties = (a, b) => {
         if (!a.hasOwnProperty(attr) && !b.hasOwnProperty(attr)) {
           return 0;
@@ -120,25 +131,29 @@ const TeamScoreTable = ({
       };
 
       if (sortingType.current[attr] === "ascending") {
+        // handles return if 1 prop is missing from object
         if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
           return handleMissingProperties(a, b);
         }
 
         return a[attr] - b[attr];
       } else if (sortingType.current[attr] === "descending") {
+        // handles return if 1 prop is missing from object
         if (!a.hasOwnProperty(attr) || !b.hasOwnProperty(attr)) {
           return handleMissingProperties(a, b);
         }
         return b[attr] - a[attr];
       }
     });
-  }
+  };
 
   const tableRowData = listOfTeams.map((obj, i) => {
     return (
       <div className="table-row" key={i}>
         {headings.map((attr) => {
           let value = "";
+
+          // formatting value based on data type
           if (attr in obj) {
             if (attr === "Win(%)") {
               value = Math.round(parseFloat(obj[attr]) * 100);
@@ -163,25 +178,7 @@ const TeamScoreTable = ({
     );
   });
 
-  // const tableRowData = items.map((detail, i) => {
-  //   return (
-  //     <div className="table-row" key={i}>
-  //       {DATA_ATTR.map((attr) => (
-  //         <div
-  //           key={attr}
-  //           className={`${getClassNameFor(attr, sortConfig)} ${topNValues(
-  //             attr,
-  //             detail
-  //           )} table-data`}
-  //         >
-  //           {renderPlayerData(attr, detail)}
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // });
-
-  // Fixed column - name
+  // Fixed column - Team names with links attached to each name
   const fixedColumn = (items) => {
     return items.map((obj, i) => {
       let value = "";
@@ -209,6 +206,7 @@ const TeamScoreTable = ({
       <div
         key={attr}
         className={`${sortingType.current[attr]} table-data`}
+        // sorts teams based on the current heading clicked
         onClick={() => setListOfTeams(sortTeams(listOfTeams, attr))}
       >
         {attr}
@@ -219,8 +217,6 @@ const TeamScoreTable = ({
 
   return (
     <BoxScoreTableWrapper>
-      {/* fixed column */}
-
       <div className="table-scroll">
         <div className="table name">
           <div className="table-header">
