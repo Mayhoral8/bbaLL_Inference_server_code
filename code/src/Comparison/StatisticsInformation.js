@@ -55,6 +55,18 @@ const StatisticsInformation = (props) => {
         const lightRedHover = rgba(lightRed, 0.2);
         const minPoss = 
             dataOne && dataTwo && Math.min(dataOne["POSS"].avg, dataTwo["POSS"].avg);
+        let statOne;
+        let statTwo;
+ 
+        if (dataOne && dataTwo) {
+          statOne = attributes.filter((attr) => (dataType === "perPoss" ? attr !== "POSS" : attr))
+          .map(
+          (attr) => dataOne[attr]['avg']);
+
+          statTwo = attributes.filter((attr) => (dataType === "perPoss" ? attr !== "POSS" : attr))
+          .map(
+          (attr) => dataTwo[attr]['avg']);  
+        }
 
         const data = {
             labels:
@@ -64,6 +76,7 @@ const StatisticsInformation = (props) => {
             datasets: [
                 {
                     label: leftSelectedName.replace(/_/g, " "),
+                    labels: statOne,
                     backgroundColor: lightBuleHover,
                     borderColor: lightBule,
                     pointBackgroundColor: lightBule,
@@ -93,33 +106,34 @@ const StatisticsInformation = (props) => {
                 },
 
                 {
-                    label: rightSelectedName.replace(/_/g, " "),
-                    backgroundColor: lightRedHover,
-                    borderColor: lightRed,
-                    pointBackgroundColor: lightRed,
-                    pointBorderColor: "#fff",
-                    pointRadius: 6,
-                    pointHoverBackgroundColor: lightRedHover,
-                    pointHoverBorderColor: lightRed,
-                    data: attributes
-                        .filter((attr) => (dataType === "perPoss" ? attr !== "POSS" : attr))
-                        .map(
-                        (attr) =>
-                            dataTwo &&
-                            maxYearlyOne &&
-                            maxYearlyTwo &&
-                            normalizeRadarData(
-                                maxYearlyOne,
-                                maxYearlyTwo,
-                                minYearlyOne,
-                                minYearlyTwo,
-                                maxOverallYears,
-                                minOverallYears,
-                                dataTwo,
-                                attr,
-                                minPoss
-                            )
-                        ),
+                  label: rightSelectedName.replace(/_/g, " "),
+                  labels: statTwo,
+                  backgroundColor: lightRedHover,
+                  borderColor: lightRed,
+                  pointBackgroundColor: lightRed,
+                  pointBorderColor: "#fff",
+                  pointRadius: 6,
+                  pointHoverBackgroundColor: lightRedHover,
+                  pointHoverBorderColor: lightRed,
+                  data: attributes
+                      .filter((attr) => (dataType === "perPoss" ? attr !== "POSS" : attr))
+                      .map(
+                      (attr) =>
+                          dataTwo &&
+                          maxYearlyOne &&
+                          maxYearlyTwo &&
+                          normalizeRadarData(
+                              maxYearlyOne,
+                              maxYearlyTwo,
+                              minYearlyOne,
+                              minYearlyTwo,
+                              maxOverallYears,
+                              minOverallYears,
+                              dataTwo,
+                              attr,
+                              minPoss
+                          )
+                      ),
                 },
             ],
         };
@@ -148,9 +162,14 @@ const StatisticsInformation = (props) => {
                 },
                 label: function (tooltipItem, data) {
                     const arrayPosition = tooltipItem.datasetIndex === 0 ? 0 : 1;
-                    return `${data["datasets"][arrayPosition]["label"]}: ${
-                    data["datasets"][arrayPosition]["data"][tooltipItem["index"]]
-                    }%`;
+                    if (arrayPosition === 0) {
+                      return `${data["datasets"][arrayPosition]["label"]}: ${data["datasets"][arrayPosition].labels[tooltipItem["index"]].toFixed(1)} (${
+                        data["datasets"][arrayPosition]["data"][tooltipItem["index"]]}%)`
+                    } else if (arrayPosition === 1) {
+                      return `${data["datasets"][arrayPosition]["label"]}: ${data["datasets"][arrayPosition].labels[tooltipItem["index"]].toFixed(1)} (${
+                        data["datasets"][arrayPosition]["data"][tooltipItem["index"]]}%)`
+                    }
+                    
                 },
                 },
             },
@@ -343,45 +362,45 @@ const StatisticsInformation = (props) => {
     return(
       <>
         {isTwoValuesSelected ? (
-            <StyledComparisonProfile>
-                <StyledComparisonProfileElement 
-                    isTeam = {isTeam ? "true" : "false"}
-                    teamColour = {lightBule}>
-                      <div className="outline">
-                        <div className="img-container">
-                            <GetPlayerImage playerName={leftSelectedName} isTeam={isTeam}/>
-                        </div>
-                      </div>
-                        <StyledInfo margin="left">
-                            <h3>
-                              <Link
-                                to={`/${isTeam ? "team" : "player"}/${leftSelectedName.replace(/\s/g,"_")}`}
-                              >
-                                {leftSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
-                              </Link>
-                            </h3>
-                            <p>{leftSelectedYear}</p>
-                        </StyledInfo>
-                </StyledComparisonProfileElement>
-                <CustomizeVersus />
-                <StyledComparisonProfileElement
-                    isTeam={isTeam ? "true" : "false"}
-                    teamColour={lightRed}>
-                    <StyledInfo margin="right">
-                      <h3>
-                        <Link to={`/${isTeam ? "team" : "player"}/${rightSelectedName.replace(/\s/g, "_")}`}>
-                          {rightSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
-                        </Link>
-                      </h3>
-                      <p>{rigthSelectedYear}</p>
-                    </StyledInfo>
-                    <div className="outline">
-                      <div className="img-container">
-                        <GetPlayerImage playerName={rightSelectedName} isTeam={isTeam} />
-                      </div>
+          <StyledComparisonProfile>
+            <StyledComparisonProfileElement 
+                isTeam = {isTeam ? "true" : "false"}
+                teamColour = {lightBule}>
+                  <div className="outline">
+                    <div className="img-container">
+                        <GetPlayerImage playerName={leftSelectedName} isTeam={isTeam}/>
                     </div>
-                </StyledComparisonProfileElement>
-            </StyledComparisonProfile>
+                  </div>
+                    <StyledInfo margin="left">
+                        <h3>
+                          <Link
+                            to={`/${isTeam ? "team" : "player"}/${leftSelectedName.replace(/\s/g,"_")}`}
+                          >
+                            {leftSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
+                          </Link>
+                        </h3>
+                        <p>{leftSelectedYear}</p>
+                    </StyledInfo>
+            </StyledComparisonProfileElement>
+            <CustomizeVersus />
+            <StyledComparisonProfileElement
+                  isTeam={isTeam ? "true" : "false"}
+                  teamColour={lightRed}>
+                  <StyledInfo margin="right">
+                    <h3>
+                      <Link to={`/${isTeam ? "team" : "player"}/${rightSelectedName.replace(/\s/g, "_")}`}>
+                        {rightSelectedName.replace(/_/g, " ").replace(/,/g, ".")}
+                      </Link>
+                    </h3>
+                    <p>{rigthSelectedYear}</p>
+                  </StyledInfo>
+                  <div className="outline">
+                    <div className="img-container">
+                      <GetPlayerImage playerName={rightSelectedName} isTeam={isTeam} />
+                    </div>
+                  </div>
+              </StyledComparisonProfileElement>
+          </StyledComparisonProfile>
         ) : (
             <StyledComparisonProfileBlank>
                 Select teams or players to view comparison
