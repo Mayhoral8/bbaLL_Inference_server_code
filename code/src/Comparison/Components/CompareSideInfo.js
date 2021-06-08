@@ -84,7 +84,7 @@ const CompareSideInfo = ({name, year, isTeam, location}) => {
                     <span>Height(cm)</span>
                     <span>{dataTwo}</span>
                     <span>Salary($mln)</span>
-                    <span>{dataThree}</span>
+                    <span>{dataThree}M</span>
                 </div>
             </StyledSideInfo>
             ) : (

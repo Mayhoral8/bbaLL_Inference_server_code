@@ -176,7 +176,7 @@ export const StyleButton = styled.div`
     font-size: 16px;
     margin: 10px;
     @media (max-width: ${breakpoints.phone}) {
-      font-size: 8px;
+      font-size: 10px;
       margin: 5px;
     }
   }

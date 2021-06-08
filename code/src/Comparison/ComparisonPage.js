@@ -97,7 +97,8 @@ const ComparisonPage = () => {
   const [tempPlayerNameTwo, setTempPlayerNameTwo] = useState(tempRightName);
   const [tempYearOne, setTempYearOne] = useState(tempLeftYear);
   const [tempYearTwo, setTempYearTwo] = useState(tempRightYear);
-
+  let clearLeftValue = false;
+  let clearRightValue = false;
 
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
@@ -139,7 +140,7 @@ const ComparisonPage = () => {
   
       setYearOne("2020-21");
       setYearTwo("2020-21");
-  }
+    }
 
     // set the temp name with new update when they are not empty
     if (tempPlayerNameOne && tempPlayerNameTwo) {
@@ -202,6 +203,15 @@ const ComparisonPage = () => {
   function clearValue(ref) {
     ref.select.clearValue();
   };
+
+  function clearValueProm(ref, num) {
+    ref.select.clearValue();
+    if(num === 1) {
+      clearLeftValue = true;
+    } else if (num == 2) {
+      clearRightValue = true;
+    }
+  }
 
   function handleCompareBetween(bool) {
     setPlayerNameOne(null);
@@ -365,6 +375,37 @@ const ComparisonPage = () => {
     
     setYearComparison(year);
     setRandomNamesSet(names);
+  }
+
+  function setPromoteStringName (nums) {
+    if (playerNameOne && playerNameTwo) {
+      if (nums == 1) {
+        return playerNameOne.replace(/_/g, " ").replace(",", ".");
+      } else if (nums == 2) {
+        return playerNameTwo.replace(/_/g, " ").replace(",", ".");
+      }
+    }
+    return isTeam ? "Enter team name" : "Enter player name";
+  };
+
+  // return the promot string on the year section
+  function setPromoteStringYear(nums) {
+    
+    if (nums == 1) {
+     if (yearOne) {
+        return yearOne
+      } else {
+        return "Select Year";
+      }
+    } else if (nums == 2) {
+      if (yearTwo){
+        return yearTwo
+      } else {
+        return "Select Year";
+      }
+    }
+    
+    return "Select Year";
   }
 
   if ((randomNamesSet == null)) {
@@ -536,7 +577,7 @@ const ComparisonPage = () => {
                           options={names}
                           isTeam={isTeam}
                           onChange={(val) => setTempPlayerNameOne(val)}
-                          prompt={isTeam ? "Enter team name" : "Enter player name"}
+                          prompt={setPromoteStringName(1)}
                           length="longer"
                           setRef={setRefOne}
                           colorSchem="blue"
@@ -547,7 +588,7 @@ const ComparisonPage = () => {
                         <ComparisonYearSelection
                           isTeam={isTeam}
                           onChange={(val) => setTempYearOne(val)}
-                          prompt={"Select Year"}
+                          prompt={setPromoteStringYear(1)}
                           name={tempPlayerNameOne}
                           setRef={setRefYearOne}
                           colorSchem="blue"
@@ -562,7 +603,7 @@ const ComparisonPage = () => {
                           options={names}
                           isTeam={isTeam}
                           onChange={(val) => setTempPlayerNameTwo(val)}
-                          prompt={isTeam ? "Enter team name" : "Enter player name"}
+                          prompt={setPromoteStringName(2)}
                           length="longer"
                           setRef={setRefTwo}
                           colorSchem="red"
@@ -573,7 +614,7 @@ const ComparisonPage = () => {
                         <ComparisonYearSelection
                           isTeam={isTeam}
                           onChange={(val) => setTempYearTwo(val)}
-                          prompt={"Select Year"}
+                          prompt={setPromoteStringYear(2)}
                           name={tempPlayerNameTwo}
                           setRef={setRefYearTwo}
                           colorSchem="red"
