@@ -1,28 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import constants from './constants.json'
-
-//Child Components
-import Table from './ChildComponents/table'
-
-//Styled Components
+import Table from './ChildComponents/table' //Child Components
 import {
     ProfilePageContainer,
     TablesContainer
 } from './indexStyles'
-
-//Shared Components
 import Spinner from '../Shared/Spinner/Spinner'
-
-//Functions and Libraries
 import {connect} from 'react-redux'
-
-//Actions
 import {getUserBettingHistory} from '../redux/actions/bettingHistoryActions'
 
 const ProfilePage = (props) => {
     const [spinner, setSpinner] = useState(true)
     const [error, setError] = useState({isError: false, status:'', message: ''})
 
+    //console.log("what's props" + props + " " + JSON.stringify(props));
     useEffect(() => {
         let response = props.getUserBettingHistory(props.userDetails.user.uid)
         if(response.isError){

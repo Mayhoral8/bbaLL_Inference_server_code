@@ -1,4 +1,4 @@
-export const structureUserGameHistory = (gameHistory, type) => {
+export function structureUserGameHistory(gameHistory, type) {
     let structuredGameHistory = []
 
     for (let i = 0; i < gameHistory.length; i++){
