@@ -8,7 +8,7 @@ import {
   changeStatCategory,
 } from "../redux/actions/sidebarActions";
 import { preprocessBasicData, preprocessChampNmvpData } from "./StatsHelper";
-import { ButtonsAndSearchBox, GraphInfoDiv } from "./stats-style";
+import { ButtonsAndSearchBox, GraphInfoDiv, PlotInformation} from "./stats-style";
 import { ContainerCard } from "../globalStyles";
 import { MobileFilterDiv } from "../Leaderboard/leader-style";
 import * as CONSTANTS from "../constants/index";
@@ -114,7 +114,7 @@ const StatsPage = ({
       attrPath &&
       !STATSCONSTANTS.STATS[
         teamOrPlayerPath === "teams" ? "BasicTeam" : "BasicPlayer"
-      ].includes(capitalizeFirstLetter(attrPath.replace('_', ' ')))
+      ].includes(capitalizeFirstLetter(attrPath.replace("_", " ")))
     ) {
       history.push("/404");
     }
@@ -143,7 +143,6 @@ const StatsPage = ({
         playerTimeQuery.includes(e.label)
       )
     ) {
-      console.log('5')
       history.push("/404");
     }
   }, [history, statCategory]);
@@ -162,6 +161,7 @@ const StatsPage = ({
   if (statData === undefined) {
     return <Spinner />;
   }
+
   // check if playoffs data exist
   const playoffsExist = typeof statData[yearId].value["Playoffs"] === "object";
 
@@ -333,7 +333,6 @@ const StatsPage = ({
               }}
             >
               <GraphInfoDiv>
-                <GraphInfo plotType={graphInfo1} plotType2={graphInfo2} />
                 <StatsPlot
                   x={statX}
                   y={statY}
@@ -350,6 +349,14 @@ const StatsPage = ({
                 />
               </GraphInfoDiv>
             </ContainerCard>
+
+            <PlotInformation>
+              <p className="text">The depiction of players/teams average performance (y-axis) and the consistency (x-axis). 
+              The higher average performance is obviously important but so does their consistency. The high and steady 
+              performing players/teams are on the top right quadrant and the low and steady performing players/teams are on 
+              the bottom right quadrant.</p> 
+            </PlotInformation>
+
             <ContainerCard className="m-1">
               <GraphInfoDiv>
                 <GraphInfo plotType="stats_avg" />
@@ -414,10 +421,12 @@ const StatsPage = ({
 
   if (isTeam && statCategory === "Champion") {
     attribute_menu = STATSCONSTANTS.STATS.Champion;
-    title = statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
+    title =
+      statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
   } else if (!isTeam && statCategory === "MVP") {
     attribute_menu = STATSCONSTANTS.STATS.MVP;
-    title = statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
+    title =
+      statCategory + " - " + stat.replace("Vs", "vs").replace(/-|_/g, " ");
   } else if (isTeam && statCategory === "Basic") {
     attribute_menu = STATSCONSTANTS.STATS.BasicTeam;
     title = makeTitle();
@@ -454,6 +463,7 @@ const StatsPage = ({
           dataType={dataType}
         />
       </MobileFilterDiv>
+      
       {/* Desktop */}
       <ButtonBox
         hide

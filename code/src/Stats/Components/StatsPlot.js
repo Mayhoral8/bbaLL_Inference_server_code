@@ -8,6 +8,7 @@ import { GraphInstruction, StatsPlotDiv } from "../stats-style";
 import useWindowSize from "../../Shared/hooks/useWindowSize";
 import logo from "Assets/images/new-logo-square.png";
 import { Scatter, defaults } from "react-chartjs-2";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { createScatterPlot } from "../../Shared/Functions/scatterPlotFunctions";
 
 const StatsPlot = ({
@@ -33,6 +34,8 @@ const StatsPlot = ({
     yAxisDistance,
     labelDisplay,
     callback;
+
+  Chart.plugins.register(ChartDataLabels);
 
   if (windowSize < breakpoint) {
     labelFontSize = 12;
@@ -81,19 +84,26 @@ const StatsPlot = ({
   x.forEach((x, i) => createScatterPlot(y, scatterObj, x, i));
 
   const data = {
+    labels: newNames,
     datasets: [
       {
-        label: "",
         backgroundColor: "white",
-        pointRadius: 15,
         borderColor: "white",
+        pointRadius: 1,
         data: scatterObj,
         labels: newNames,
+        datalabels: {
+          align: "center",
+          anchor: "center",
+          font: {
+            size: "17",
+            weight: "100",
+          }
+        }
       },
     ],
   };
 
-  // Plot options
   defaults.global.defaultFontFamily = "Roboto Condensed";
   const options = {
     responsive: true,
@@ -218,6 +228,8 @@ const StatsPlot = ({
     },
   };
 
+
+
   // handle click event on data points
   const handleClickData = (e) => {
     if (e[0]) {
@@ -257,6 +269,50 @@ const StatsPlot = ({
           <Scatter
             data={data}
             options={options}
+            plugins={[
+              {
+                beforeDraw: function(chart, args, options) {
+                  const ctx = chart.ctx;
+                  const canvas = chart.canvas;
+                  const chartArea = chart.chartArea;
+
+                  let startingX = chartArea.left;
+                  let endingX = chartArea.right;
+                  let startingY = chartArea.top;
+                  let endingY = chartArea.bottom;
+                  let width = endingX - startingX;
+                  let height = endingY - startingY; 
+
+                  // Chart background
+                  let leftTopCorner = canvas.getContext("2d").createLinearGradient(0, 0, 0, height / 2);
+                  let rightTopCorner = canvas.getContext("2d").createLinearGradient(0, 0, 0, height / 2);
+                  let letBottomCorner = canvas.getContext("2d").createLinearGradient(0, startingY + height / 2, 0, height);
+                  let rightBottomCorner = canvas.getContext("2d").createLinearGradient(0, startingY + height / 2, 0, height);
+                  leftTopCorner.addColorStop(0, "rgba(0, 255, 0, 0.4)");
+                  leftTopCorner.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+                  rightTopCorner.addColorStop(0, "rgba(60, 255, 0, 0.4)");
+                  rightTopCorner.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+                  letBottomCorner.addColorStop(0, "rgba(0, 0, 0, 0)");
+                  letBottomCorner.addColorStop(1, "rgba(255, 0, 0, 0.4)")
+
+                  rightBottomCorner.addColorStop(0, "rgba(0, 0, 0, 0)");
+                  rightBottomCorner.addColorStop(1,"rgba(255, 20, 0, 0.4)")
+                  ctx.fillStyle = leftTopCorner;
+                  ctx.fillRect(startingX, startingY,width / 2, height / 2);
+
+                  ctx.fillStyle = rightTopCorner;
+                  ctx.fillRect(startingX + width / 2, startingY,width / 2, height / 2);
+
+                  ctx.fillStyle = letBottomCorner;
+                  ctx.fillRect(startingX, startingY + height / 2, width / 2, height / 2);
+
+                  ctx.fillStyle = rightBottomCorner;
+                  ctx.fillRect(startingX + width / 2, startingY + height / 2, width / 2, height / 2)
+                }
+              }
+            ]}
             onElementsClick={handleClickData}
           />
         </div>

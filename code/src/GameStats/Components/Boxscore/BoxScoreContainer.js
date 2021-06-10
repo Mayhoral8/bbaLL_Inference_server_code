@@ -1,11 +1,13 @@
 import React from 'react';
 import BoxScore from './BoxScore';
 import TeamTitle from '../GameSummary/TeamTitle';
+import { BoxScoreContainerWrapper } from "./BoxScore-style";
 
 const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info }) => {
 
   return (
     <>
+    <BoxScoreContainerWrapper>
       {/* Away team */}
       <TeamTitle name={info.Away.Team} />
       <BoxScore
@@ -20,6 +22,7 @@ const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info }) => {
         selectedGameIndex={selectedGameIndex}
         info={info.Home}
       />
+      </BoxScoreContainerWrapper>
     </>
   )
 }

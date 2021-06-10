@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 
 //Actions
 import {getUserRecord} from '../../redux/actions/recordActions'
+import {LogoutAction} from "../../redux/actions/authActions";
+
 
 //Components
 import {
@@ -30,6 +32,7 @@ import rankIcon from '../../assets/images/rank.svg'
 import winRateIcon from '../../assets/images/winRate.svg'
 import loginIcon from '../../assets/images/loginIcon.png'
 import logoutIcon from '../../assets/images/logoutIcon.png'
+
 
 //Functions and libraries
 import {connect} from 'react-redux'
@@ -156,11 +159,12 @@ const UserStatsBox = (props) => {
     )
 }
 
+
 const mapStateToProps = (state) => {
-    return{
-        userDetails: state.authReducer.userDetails.user,
-        userRecord: state.recordReducer.userRecord
-    }
-}
+  return {
+    userDetails: state.authReducer.userDetails.user,
+    userRecord: state.recordReducer.userRecord,
+  };
+};
 
 export default connect(mapStateToProps, {getUserRecord})(UserStatsBox)
