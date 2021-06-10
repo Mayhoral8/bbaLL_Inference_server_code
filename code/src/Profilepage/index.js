@@ -4,16 +4,16 @@ import Table from './ChildComponents/table' //Child Components
 import {
     ProfilePageContainer,
     TablesContainer
-} from './indexStyles'
+} from './Styles/index-styles'
 import Spinner from '../Shared/Spinner/Spinner'
 import {connect} from 'react-redux'
 import {getUserBettingHistory} from '../redux/actions/bettingHistoryActions'
+import RightContiner from './ChildComponents/rightContiner'
 
 const ProfilePage = (props) => {
     const [spinner, setSpinner] = useState(true)
     const [error, setError] = useState({isError: false, status:'', message: ''})
-
-    //console.log("what's props" + props + " " + JSON.stringify(props));
+ 
     useEffect(() => {
         let response = props.getUserBettingHistory(props.userDetails.user.uid)
         if(response.isError){
@@ -41,20 +41,8 @@ const ProfilePage = (props) => {
             <Spinner/>
             :
             <ProfilePageContainer>
-                <TablesContainer>
-                    <Table
-                     columns = {constants.moneyLineTableColumns}
-                     data = {props.bettingHistory.moneyLine}
-                    />
-                    <Table
-                     columns = {constants.spreadTableColumns}
-                     data = {props.bettingHistory.spread}
-                    />
-                    <Table
-                     columns = {constants.overUnderTableColumns}
-                     data = {props.bettingHistory.overUnder}
-                    />
-                </TablesContainer>
+                <div>left</div>
+                <RightContiner userHistory = {props.bettingHistory}/>
             </ProfilePageContainer>
     )
 }

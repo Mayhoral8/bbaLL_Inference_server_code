@@ -5,6 +5,7 @@ export function structureUserGameHistory(gameHistory, type) {
 
         let targetObj = {
             gameDate: gameHistory[i].gameDetails.gameDate,
+            gameTime: gameHistory[i].gameDetails.gameStartTime,
             vs: gameHistory[i].gameDetails.homeTeam + "  vs  " + gameHistory[i].gameDetails.awayTeam,
             score: gameHistory[i][type] ? gameHistory[i][type].odds : '--',
             betOdds: gameHistory[i][type] ? gameHistory[i][type].odds : '--',
