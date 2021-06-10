@@ -58,9 +58,11 @@ export const LockIconContainer = styled.div`
 `
 
 export const LockIcon = styled.img`
-    height: 70px;
     width: 50px;
-    opacity: 0.7;
+    opacity: 0.9;
+    ${media.deskMD}{
+        width: 40px;
+    }
 `
 
 export const OddsValueContainer = styled.div`

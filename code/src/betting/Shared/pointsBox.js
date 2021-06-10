@@ -19,9 +19,9 @@ import {
 
 import {ClipLoader} from 'react-spinners'
 
-import lockIcon from '../../assets/images/lockIcon.jpg'
+import blueLock from '../../assets/images/blueLock.png'
 import yellowLock from '../../assets/images/yellowLock.png'
-import redLock from '../../assets/images/redLock.jpg'
+import redLock from '../../assets/images/redLock.png'
 import overIcon from '../../assets/images/overIcon.png'
 import underIcon from '../../assets/images/underIcon.png'
 
@@ -41,19 +41,6 @@ const PointsBox = ({
     teamIconsObj,
     pointsSpinner
 }) => {
-    // console.log(type)
-    // console.log(overOrUnderOddsValue)
-    // console.log(overOrUnder)
-    // console.log(homeOrAway)
-    // console.log(index)
-    // console.log(gameInfo)
-    // console.log(selectedClass)
-    // console.log(element)
-    // console.log(colIndex)
-    // console.log(onPointBoxClick)
-    // console.log(isGameStartTimeBeforeTheCurrentTime)
-    // console.log(teamIconsObj)
-    // console.log(pointsSpinner)
     return(
         <PointsBoxContainer 
          selected = {
@@ -188,7 +175,7 @@ const PointsBox = ({
                         type === 'overUnder' ? 
                             element[type].selected ?
                             <LockIconContainer>
-                                <LockIcon src={lockIcon}/>
+                                <LockIcon src={blueLock}/>
                             </LockIconContainer>
                             :
                             !element[type][overOrUnderOddsValue]
@@ -208,7 +195,7 @@ const PointsBox = ({
                         [
                             element[type].selected ?
                         <LockIconContainer>
-                            <LockIcon src={lockIcon}/>
+                            <LockIcon src={blueLock}/>
                         </LockIconContainer>
                         :
                         !element[type][homeOrAway].odds
