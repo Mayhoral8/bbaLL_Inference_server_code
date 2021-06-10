@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react'
 
 //Actions
-import { LogoutAction } from "../../redux/actions/authActions";
-import { getUserRecord } from "../../redux/actions/recordActions";
+import {getUserRecord} from '../../redux/actions/recordActions'
+import {LogoutAction} from "../../redux/actions/authActions";
+
 
 //Components
 import {
@@ -10,13 +11,28 @@ import {
     ProfileImgFiguresViewMore, 
     ProfileImg, 
     UserName, 
-    BettingOddsRank, 
-    FiguresViewMore
+    PointsRank,
+    LevelWinRate,
+    Stats,
+    StatsContainer,
+    ViewMoreLink,
+    IconFigure,
+    Icon,
+    Figure,
+    LoginLogoutBtnsContainer,
+    LoginLogoutBtnsWrapper,
+    AuthBtn
 } from './userStatsContainerStyles'
 
 //Images
-import Img from "../../assets/images/avatar.jpg";
-import logoutIcon from "../../assets/images/logoutIcon.png";
+import Img from '../../assets/images/avatar.jpg'
+import starIcon from '../../assets/images/star.svg'
+import levelIcon from '../../assets/images/level.svg'
+import rankIcon from '../../assets/images/rank.svg'
+import winRateIcon from '../../assets/images/winRate.svg'
+import loginIcon from '../../assets/images/loginIcon.png'
+import logoutIcon from '../../assets/images/logoutIcon.png'
+
 
 //Functions and libraries
 import {connect} from 'react-redux'
@@ -45,29 +61,99 @@ const UserStatsBox = (props) => {
             <UserName>{props.userDetails.displayName}</UserName>
             <ProfileImgFiguresViewMore>
                 <ProfileImg src={Img}/>
-                <FiguresViewMore>
+                <StatsContainer>
                     {
                         props.userRecord.level
                         ?
                         <>
-                            <BettingOddsRank>Points: {props.userRecord.totalPoints}</BettingOddsRank>
-                            <BettingOddsRank>Rank: {props.userRecord.rank}</BettingOddsRank>
-                            <BettingOddsRank>Level: {props.userRecord.level}</BettingOddsRank>
-                            <BettingOddsRank>Winning Rate: {" "}
-                                {
-                                    winningRate.toFixed(2)
-                                }
-                            </BettingOddsRank>
+                            <PointsRank>
+                                <Stats>
+                                    Points
+                                    <IconFigure>
+                                        <Icon src = {starIcon}/>
+                                        <Figure>
+                                            {props.userRecord.totalPoints}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+
+                                <Stats>
+                                    Rank
+                                    <IconFigure>
+                                        <Icon src = {rankIcon}/>
+                                        <Figure>
+                                            {props.userRecord.rank}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+                            </PointsRank>
+
+                            <LevelWinRate>
+                                <Stats>
+                                    Level
+                                    <IconFigure>
+                                        <Icon src = {levelIcon}/>
+                                        <Figure>
+                                            {props.userRecord.level}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+
+                                <Stats>
+                                    Win Rate
+                                    <IconFigure>
+                                        <Icon src = {winRateIcon}/>
+                                        <Figure>
+                                            {winningRate.toFixed(2)}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+                            </LevelWinRate>
+                        </>
+                        :
+                        <ClipLoader color = '#C4C4C4' size = '' loading = {statsSpinner}/>
+                    }
+
+                    {
+                        props.userRecord.level 
+                        ? 
+                        <ViewMoreLink>
                             <Link
                             to = '/profile'
                             >
                                 View More...
                             </Link>
-                        </>
+                        </ViewMoreLink>
                         :
-                        <ClipLoader color = '#C4C4C4' size = '' loading = {statsSpinner}/>
+                        null
                     }
-                </FiguresViewMore>
+
+                    {
+                        props.userDetails.displayName
+                        ?
+                        <LoginLogoutBtnsContainer>
+                            <LoginLogoutBtnsWrapper onClick = {() => {
+                            props.userDetails.uid ? onLogoutClick() : setLoginModalVisible(true)
+                            }}>
+                                {
+                                    props.userDetails.uid 
+                                    ? 
+                                    <AuthBtn 
+                                    src = {logoutIcon}
+                                    />
+                                    :
+                                    <AuthBtn
+                                    src = {loginIcon}
+                                    />
+                                }
+                                
+                            </LoginLogoutBtnsWrapper>
+                        </LoginLogoutBtnsContainer>
+                        :
+                        null 
+                    }
+
+                </StatsContainer>
             </ProfileImgFiguresViewMore>
         </UserStatsContainer>
     )
@@ -81,6 +167,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { LogoutAction, getUserRecord })(
-  UserStatsBox
-);
+export default connect(mapStateToProps, {getUserRecord})(UserStatsBox)

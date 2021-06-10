@@ -1,18 +1,28 @@
 import React from 'react'
-import {BettingSectionheaderContainer,HeaderSection1,HeaderSection2,HeaderChildSection} from './bettingSectionHeaderStyles'
-import moment from 'moment-timezone'
-const BettingSectionheader=()=>{
-    let date = new Date
-    let easternStandardTimeBasedDate = moment(date).tz('America/New_York').format('MM/DD/YYYY')
+import { 
+    BettingSectionheaderContainer,
+    HeaderSection1Wrapper,
+    HeaderSection1,
+    HeaderSection2Wrapper,
+    HeaderSection2,
+    HeaderChildSection
+} from './bettingSectionHeaderStyles'
+
+const BettingSectionheader = (props) => {
     return(
         <BettingSectionheaderContainer>
-            <HeaderSection1>{easternStandardTimeBasedDate}</HeaderSection1>
-            <HeaderSection2>
-                <HeaderChildSection>Spread</HeaderChildSection>
-                <HeaderChildSection>Money Line</HeaderChildSection>
-                <HeaderChildSection>Over & Under</HeaderChildSection>
-            </HeaderSection2>
+            <HeaderSection1Wrapper>
+                <HeaderSection1>{props.gameStartTime} EST</HeaderSection1>
+            </HeaderSection1Wrapper>
+            <HeaderSection2Wrapper>
+                <HeaderSection2>
+                    <HeaderChildSection>Spread</HeaderChildSection>
+                    <HeaderChildSection>Money Line</HeaderChildSection>
+                    <HeaderChildSection>Over & Under</HeaderChildSection>
+                </HeaderSection2>
+            </HeaderSection2Wrapper>
         </BettingSectionheaderContainer>
     )
 }
+
 export default BettingSectionheader
