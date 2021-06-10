@@ -458,16 +458,18 @@ const Betting=(props)=>{
                                         </div>
                                         :
                                         <BettingPointsAndTeamsContainer>
-                                            {gameInfo.map((element, index)=>{
+                                            {gameInfo.map((element, index) => {
+
                                                 let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
                                                 let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
                                                 let gameStartDate = element.gameDetails.gameDate +  " " + element.gameDetails.gameStartTime
                                                 let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
+
                                                 return(
-                                                    <BettingPointsAndTeamsWrapper key = {index}>
+                                                    <BettingPointsAndTeamsWrapper key={index}>
                                                         <div>
                                                             <BettingSectionheader
-                                                            gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
+                                                             gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
                                                             />
                                                         </div>
                                                         <RowC>

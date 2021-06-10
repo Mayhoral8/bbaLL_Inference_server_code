@@ -42,7 +42,7 @@ const PointsBox = ({
     pointsSpinner
 }) => {
     return(
-        <PointsBoxContainer 
+        <PointsBoxContainer
          selected = {
              gameInfo[index][selectedClass] === colIndex
             } 

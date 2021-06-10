@@ -52,7 +52,7 @@ const Games = Loadable({
   });
 
   const Betting = Loadable({
-    loader: () => import("../betting/index"),
+    loader: () => import("../Betting/index"),
     loading() {
       return <Spinner />;
     },
@@ -103,7 +103,6 @@ const Routes=(props)=>{
     )
 }
 const mapStateToProps=(state)=>{
-    console.log(state)
     return{
       userDetails:state.authReducer.userDetails
     }

@@ -1,4 +1,3 @@
-import {fbFirestore} from '../../App/config'
 import {fbFirestoreSpigameBet} from '../../App/spigamebetFirebase'
 
 export const getUserRecord = (userId) => {
