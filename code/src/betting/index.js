@@ -46,8 +46,9 @@ import {
     ContentHeader,
     DisplayGamesBtnContainer,
     BettingSectionColumn,
-    BetSectionWrapper,
-    BetSectionPointsContainer,
+    BettingSectionContainer,
+    BettingPointsAndTeamsContainer,
+    BettingPointsAndTeamsWrapper,
     TodayBtnContainer,
     RowC,
     TeamNameContainer,
@@ -81,7 +82,6 @@ const Betting=(props)=>{
     const [loginModalVisible, setLoginModalVisible] = useState(false);
     const [pointsSpinner, setPointsSpinner] = useState(true);
     const [bettingPageSpinner, setBettingPageSpinner] = useState(false);
-    const [loadingBetPoints, setLoadingBetPoints] = useState(true);
     const [numberOfGamesExceedingTimeLimit, setnumberOfGamesExceedingTimeLimit] = useState(0);
 
 
@@ -110,7 +110,6 @@ const Betting=(props)=>{
             }
             else if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
                 setGameInfo(props.futureGamesInfo.games)
-                setLoadingBetPoints(false)
                 setPointsSpinner(false)
                 setBettingPageSpinner(false)
             }
@@ -138,7 +137,6 @@ const Betting=(props)=>{
         if(props.userBetsDetails.bets[0] && !props.userBetsDetails.loading){
             let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.futureGamesInfo.games)
             setPointsSpinner(false)
-            setLoadingBetPoints(false)
             setGameInfo(computedArray)
 
         } else if(!props.userBetsDetails.loading){
@@ -253,7 +251,6 @@ const Betting=(props)=>{
         }
         else if(params === 'Bet time limit exceeded'){
             setExceedingTimeLimitPopup({isVisible: false})
-            setLoadingBetPoints(true)
             setPointsSpinner(true)
             let response = props.getFutureGamesInfo();
             if(response.isError){
@@ -267,7 +264,7 @@ const Betting=(props)=>{
         setLoginModalVisible(false)
     };
 
-    const onLoginClick = async(params) => {
+    const onLoginClick = (params) => {
         let localStorageObj = {}
         if(params === 'google'){
             const provider = new firebase.auth.GoogleAuthProvider()
@@ -294,20 +291,18 @@ const Betting=(props)=>{
 
             firebaseInstanceSpigamebet.auth().signInWithPopup(provider)
             .then(async(res)=>{
-                console.log(res)
-                // const {uid,displayName,email} = res.user
-                // setBettingPageSpinner(true)
-                // setLoginModalVisible(false)
-                // localStorageObj.uid = uid
-                // localStorageObj.displayName = displayName
-                // localStorageObj.email = email
-                // localStorageObj.type = 'google'
-                // localStorage.setItem('User', JSON.stringify(localStorageObj))
-                // await props.checkUserRecordCollectionExists(localStorageObj)
-                // setBettingPageSpinner(false)
+                const {uid, displayName, email} = res.user
+                setBettingPageSpinner(true)
+                setLoginModalVisible(false)
+                localStorageObj.uid = uid
+                localStorageObj.displayName = displayName
+                localStorageObj.email = email
+                localStorageObj.type = 'facebook'
+                localStorage.setItem('User', JSON.stringify(localStorageObj))
+                await props.checkUserRecordCollectionExists(localStorageObj)
+                setBettingPageSpinner(false)
             })
-            .catch((e)=>{
-                console.log(e)
+            .catch(()=>{
                 setError({status: null, message: 'Facebook login error', isError:true})
             })
         } 
@@ -328,7 +323,7 @@ const Betting=(props)=>{
                 await props.checkUserRecordCollectionExists(localStorageObj)
                 setBettingPageSpinner(false)
             })
-            .catch((e)=>{
+            .catch(()=>{
                 setError({status: null, message: 'Twitter login error', isError:true})
             })
         }
@@ -337,10 +332,10 @@ const Betting=(props)=>{
     const onLogoutClick = async() => {
         setLoginModalVisible(false)
         setBettingPageSpinner(true)
-        setLoadingBetPoints(true)
         setPointsSpinner(true)
         let response = await props.logoutAction()
         if(response.processed){
+            setSelectedValues({})
             let response = props.getFutureGamesInfo();
             if(response.isError){
                 setError({status: response.status, message: response.message, isError:true})
@@ -449,13 +444,12 @@ const Betting=(props)=>{
 
                                 <ContentHeader>
                                     <h1>NBA Betting</h1>
-                                    <div style = {{textAlign: 'center'}}>Display Games</div>
                                     <DisplayGamesBtnContainer>
                                         <TodayBtnContainer>Today</TodayBtnContainer>
                                     </DisplayGamesBtnContainer>
                                 </ContentHeader>
 
-                                <BetSectionWrapper>
+                                <BettingSectionContainer>
                                     {
                                         error.message === 'No games today'
                                         ?
@@ -463,18 +457,17 @@ const Betting=(props)=>{
                                             <h1>No games today</h1>
                                         </div>
                                         :
-                                        <>
-                                            <BetSectionPointsContainer>
-                                                {gameInfo.map((element,index)=>{
-                                                    let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
-                                                    let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
-                                                    let gameStartDate = element.gameDetails.gameDate +  " " + element.gameDetails.gameStartTime
-                                                    let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
-                                                    return(
-                                                        <>
+                                        <BettingPointsAndTeamsContainer>
+                                            {gameInfo.map((element, index)=>{
+                                                let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
+                                                let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
+                                                let gameStartDate = element.gameDetails.gameDate +  " " + element.gameDetails.gameStartTime
+                                                let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
+                                                return(
+                                                    <BettingPointsAndTeamsWrapper key = {index}>
                                                         <div>
                                                             <BettingSectionheader
-                                                             gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
+                                                            gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
                                                             />
                                                         </div>
                                                         <RowC>
@@ -586,14 +579,13 @@ const Betting=(props)=>{
 
                                                             </Section2>
                                                         </RowC> 
-                                                        </>
-                                                    )
-                                                })
-                                                }
-                                            </BetSectionPointsContainer>
-                                        </>
+                                                    </BettingPointsAndTeamsWrapper>
+                                                )
+                                            })
+                                            }
+                                        </BettingPointsAndTeamsContainer>
                                     }
-                                </BetSectionWrapper>
+                                </BettingSectionContainer>
                             </BettingSectionColumn>
 
                             <BetPointsSummaryColumn>

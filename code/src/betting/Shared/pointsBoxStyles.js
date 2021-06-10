@@ -12,8 +12,8 @@ const media = {
 export const PointsBoxContainer = styled.div`
     height: 80px;
     width: 90px;
-    border:${props => props.selected ? '4px solid black' : ''};
-    box-shadow: ${props => props.selected ? '' : '0px 0px 4px rgba(0, 0, 0, 0.25)'};
+    border:${props => props.selected ? '4px solid #7500DE' : ''};
+    box-shadow: ${props => props.selected ? '' : '0px 0px 15px rgba(0, 0, 0, 0.25)'};
     border-radius: 5px;
     cursor: pointer;
     margin:0px 5px;
@@ -22,11 +22,8 @@ export const PointsBoxContainer = styled.div`
     ${media.deskMD}{
         height: 50px;
         width: 70px;
-        border:${props => props.selected ? '2px solid black' : ''};
-    }
-    ${media.tablet}{
+        border:${props => props.selected ? '2px solid #7500DE' : ''};
         margin: 10px 0px;
-        border:${props => props.selected ? '1px solid black' : ''};
     }
     ${media.phoneMD}{
         height: 50px;
@@ -68,50 +65,69 @@ export const LockIcon = styled.img`
 
 export const OddsValueContainer = styled.div`
     text-align: center;
-    font-weight: 500;
+    font-weight: 900;
+    color: #002B5C;
     ${media.deskMD}{
         font-size: 14px;
     }
     ${media.tablet}{
-        font-size: 12px;
+        font-size: 18px;
+    }
+    ${media.phoneMD}{
+        font-size: 15px;
     }
 `
 
 export const PointsValueContainer = styled.div`
     width: 100%;
     text-align: center;
-    background: #002B5C;
-    color: white;
+    /* background: #39204F; */
+    color: black;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 14px;
     ${media.tablet}{
-        font-size: 10px;
+        margin-top: 3px;
+        font-size: 15px;
+    }
+    ${media.phoneMD}{
+        margin-top: 7px;
+        font-size: 12px;
     }
 `
 
 export const TotalScoreValueContainer = styled.div`
     width: 100%;
     text-align: center;
-    background: #002B5C;
-    color: white;
+    /* background: #39204F; */
+    color: black;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 14px;
     ${media.tablet}{
-        font-size: 10px;
+        margin-top: 3px;
+        font-size: 15px;
+    }
+    ${media.phoneMD}{
+        margin-top: 7px;
+        font-size: 12px;
     }
 `
 
 export const MoneyLineOddsContainer = styled.div`
     height: 100%;
     display: flex;
+    font-weight: 900;
     flex-direction: column;
     justify-content: center;
+    color: #002B5C;
     align-items: center;
     ${media.deskMD}{
         font-size: 14px;
     }
     ${media.tablet}{
-        font-size: 12px;
+        font-size: 18px;
+    }
+    ${media.phoneMD}{
+        font-size: 15px;
     }
 `
 
@@ -121,6 +137,9 @@ export const TeamIconOddsContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    ${media.phoneMD}{
+        height: calc(100% - 26px);
+    }
 `
 
 export const TeamIconContainer = styled.div`

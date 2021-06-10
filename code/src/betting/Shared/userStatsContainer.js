@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 
 //Actions
-import {LogoutAction} from '../../redux/actions/authActions'
 import {getUserRecord} from '../../redux/actions/recordActions'
 
 //Components
@@ -10,16 +9,26 @@ import {
     ProfileImgFiguresViewMore, 
     ProfileImg, 
     UserName, 
-    Points,
-    Rank,
-    Level,
-    WinningRate, 
-    FiguresViewMore,
-    ViewMoreLink
+    PointsRank,
+    LevelWinRate,
+    Stats,
+    StatsContainer,
+    ViewMoreLink,
+    IconFigure,
+    Icon,
+    Figure,
+    LoginLogoutBtnsContainer,
+    LoginLogoutBtnsWrapper,
+    AuthBtn
 } from './userStatsContainerStyles'
 
 //Images
 import Img from '../../assets/images/avatar.jpg'
+import starIcon from '../../assets/images/star.svg'
+import levelIcon from '../../assets/images/level.svg'
+import rankIcon from '../../assets/images/rank.svg'
+import winRateIcon from '../../assets/images/winRate.svg'
+import loginIcon from '../../assets/images/loginIcon.png'
 import logoutIcon from '../../assets/images/logoutIcon.png'
 
 //Functions and libraries
@@ -49,31 +58,99 @@ const UserStatsBox = (props) => {
             <UserName>{props.userDetails.displayName}</UserName>
             <ProfileImgFiguresViewMore>
                 <ProfileImg src={Img}/>
-                <FiguresViewMore>
+                <StatsContainer>
                     {
                         props.userRecord.level
                         ?
                         <>
-                            <Points>Points: {props.userRecord.totalPoints}</Points>
-                            <Rank>Rank: {props.userRecord.rank}</Rank>
-                            <Level>Level: {props.userRecord.level}</Level>
-                            <WinningRate>Win Rate: {" "}
-                                {
-                                    winningRate.toFixed(2)
-                                }
-                            </WinningRate>
-                            <ViewMoreLink>
-                                <Link
-                                to = '/profile'
-                                >
-                                    View More...
-                                </Link>
-                            </ViewMoreLink>
+                            <PointsRank>
+                                <Stats>
+                                    Points
+                                    <IconFigure>
+                                        <Icon src = {starIcon}/>
+                                        <Figure>
+                                            {props.userRecord.totalPoints}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+
+                                <Stats>
+                                    Rank
+                                    <IconFigure>
+                                        <Icon src = {rankIcon}/>
+                                        <Figure>
+                                            {props.userRecord.rank}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+                            </PointsRank>
+
+                            <LevelWinRate>
+                                <Stats>
+                                    Level
+                                    <IconFigure>
+                                        <Icon src = {levelIcon}/>
+                                        <Figure>
+                                            {props.userRecord.level}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+
+                                <Stats>
+                                    Win Rate
+                                    <IconFigure>
+                                        <Icon src = {winRateIcon}/>
+                                        <Figure>
+                                            {winningRate.toFixed(2)}
+                                        </Figure>
+                                    </IconFigure>
+                                </Stats>
+                            </LevelWinRate>
                         </>
                         :
                         <ClipLoader color = '#C4C4C4' size = '' loading = {statsSpinner}/>
                     }
-                </FiguresViewMore>
+
+                    {
+                        props.userRecord.level 
+                        ? 
+                        <ViewMoreLink>
+                            <Link
+                            to = '/profile'
+                            >
+                                View More...
+                            </Link>
+                        </ViewMoreLink>
+                        :
+                        null
+                    }
+
+                    {
+                        props.userDetails.displayName
+                        ?
+                        <LoginLogoutBtnsContainer>
+                            <LoginLogoutBtnsWrapper onClick = {() => {
+                            props.userDetails.uid ? onLogoutClick() : setLoginModalVisible(true)
+                            }}>
+                                {
+                                    props.userDetails.uid 
+                                    ? 
+                                    <AuthBtn 
+                                    src = {logoutIcon}
+                                    />
+                                    :
+                                    <AuthBtn
+                                    src = {loginIcon}
+                                    />
+                                }
+                                
+                            </LoginLogoutBtnsWrapper>
+                        </LoginLogoutBtnsContainer>
+                        :
+                        null 
+                    }
+
+                </StatsContainer>
             </ProfileImgFiguresViewMore>
         </UserStatsContainer>
     )
@@ -86,4 +163,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {LogoutAction, getUserRecord})(UserStatsBox)
+export default connect(mapStateToProps, {getUserRecord})(UserStatsBox)

@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect} from 'react'
 import {RoutesContainer} from './app-style'
 import { MainContainerDiv } from "./app-style";
 import { GlobalStyle } from "../globalStyles";
@@ -14,44 +14,50 @@ import Spinner from "../Shared/Spinner/Spinner";
 import {connect} from 'react-redux'
 import {compose} from 'redux'
 import 'firebase/auth';
-import {firebaseInstanceSpigamebet} from './spigamebetFirebase'
 import {checkLoginStatus} from '../redux/actions/authActions'
+
 const Games = Loadable({
     loader: () => import("../GameStats/GamePageContainer"),
     loading() {
       return <Spinner />;
     },
   });
+
   const Leaderboard = Loadable({
     loader: () => import("../Leaderboard/LeaderPageContainer"),
     loading() {
       return <Spinner />;
     },
   });
+
   const Stats = Loadable({
     loader: () => import("../Stats/StatsPageContainer.js"),
     loading() {
       return <Spinner />;
     },
   });
+
   const Indiv = Loadable({
     loader: () => import("../Individual/IndivContainer"),
     loading() {
       return <Spinner />;
     },
   });
+
   const Comparsion = Loadable({
     loader: () => import("../Comparison/ComparisonPage"),
     loading() {
       return <Spinner />;
     },
   });
+
   const Betting = Loadable({
     loader: () => import("../betting/index"),
     loading() {
       return <Spinner />;
     },
   });
+  
   const ProfilePage = Loadable({
     loader: () => import("../Profilepage/index"),
     loading() {

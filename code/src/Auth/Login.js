@@ -4,7 +4,6 @@ import GoogleLogo from '../assets/images/googleLogo.svg'
 import TwitterLogo from '../assets/images/twitterLogo.svg'
 import FacebookLogo from '../assets/images/facebookLogo.svg'
 import {connect} from 'react-redux'
-import {googleLogin} from '../redux/actions/authActions'
 const Login =(props)=>{
     
     const buttonArray = [
@@ -57,4 +56,4 @@ const mapStateToProps=(state)=>{
         state
     }
 }
-export default connect(mapStateToProps,{googleLogin})(Login)
+export default connect(mapStateToProps)(Login)

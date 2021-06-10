@@ -16,7 +16,7 @@ export const UsersRankContainer = styled.div`
     height: 400px;
     ${media.deskLG}{
         margin: 0px 10px;
-        height: 300px;
+        height: 397px;
     }
     ${media.phone}{
         display: none;

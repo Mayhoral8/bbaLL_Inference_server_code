@@ -38,12 +38,11 @@ export const BettingPageSpinnerContainer = styled.div`
 
 export const ContentC = styled.div`
     width:100%;
-    height: calc(100% - 40px);
+    height: 100%;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding-top:40px;
-    padding-bottom: 40px;
+    padding: 20px 0px;
 `
 
 export const ContentW = styled.div`
@@ -71,40 +70,43 @@ export const TodayBtnContainer = styled.div`
 `
 
 export const BettingSectionColumn = styled.div`
-    width: 67%;
+    width: 64%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     ${media.deskLLG} {
-        width: 84%;
+        width: 81%;
     }
     ${media.deskLG}{
         width: 100%;
     }
 `
 
-export const BetSectionWrapper = styled.div`
+export const BettingSectionContainer = styled.div`
     width: 100%;
     height: calc(100% - 103px);
+    overflow-y: auto;
     box-shadow: 0px 0px 5px rgb(57 32 79 / 25%);
     border-radius: 5px;
 `
 
-export const BetSectionPointsContainer = styled.div`
-    overflow-y: auto;
-    border-bottom-left-radius: 5px;
-    height: calc(100% - 58px);
+export const BettingPointsAndTeamsContainer = styled.div`
+    border-radius: 5px;
+`
+
+export const BettingPointsAndTeamsWrapper = styled.div`
+    
 `
 
 export const RowC = styled.div`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding: 30px 10px;
+    padding: 15px 10px;
     margin: 10px 0px;
-    ${media.phoneMD} {
-        padding: 5px 10px;
+    ${media.tablet} {
+        padding: 0px 10px;
     }
 `
 
@@ -151,7 +153,7 @@ export const PointsBoxColumn = styled.div`
     display:flex;
     justify-content:center;
     width:33.33%;
-    ${media.tablet}{
+    ${media.deskMD}{
         flex-direction: column;
         align-items: center;
     }
@@ -171,6 +173,7 @@ export const CommonChild = styled.li`
 
 export const BetPointsSummaryColumn = styled.div`
     width: 18%;
+    background: #39204F;
     border: 0.5px solid rgba(57, 32, 79, 0.25);
     box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
     border-radius: 5px;
@@ -192,17 +195,20 @@ export const BetSubmitPointsContainer = styled.div`
     ${media.deskLLG} {
         width: 100%;
         margin-left: 0px;
-        margin-top: 30px;
         flex-direction: row;
         overflow-x: auto;
     }
 `
 
 export const OverviewHeader = styled.h3`
-    padding:20px;
+    padding: 5px;
+    font-size: 22px;
+    text-align: center;
+    color: white;
     ${media.deskLLG} {
         width: 100%;
         text-align: center;
+        padding: 5px;
     }
 `
 
@@ -217,7 +223,6 @@ export const SubmitPointsBtn = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
-    margin-top:30px;
     transition:0.3s;
     &:hover{
         transition:0.3s;
@@ -244,10 +249,10 @@ export const PopupWrapper = styled.div`
 `
 
 export const UserStatsAndRankColumn = styled.div`
-    width: 13%;
+    width: 16%;
     margin-right: 10px;
     ${media.deskLLG} {
-        width: 15%;
+        width: 18%;
     }
     ${media.deskLG} {
         width: 100%;
@@ -287,12 +292,7 @@ export const LoginLogoutBtnsContainer = styled.div`
     border-radius: 5px;
     cursor: pointer;
     ${media.deskLG}{
-        width: 50px;
-        margin-left: 10px;
-    }
-    ${media.phone}{
-        margin: 0px;
-        margin-bottom: 10px;
+        display: none;
     }
 `
 
