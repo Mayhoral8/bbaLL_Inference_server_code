@@ -53,11 +53,11 @@ export const structureData = (futureGamesInfo) => {
 
         if(pointsKeysArray.length === 0){
             pointsTargetObj = {
-                awayTeamOdds: {
+                awayTeam: {
                     odds: '',
                     bettingSide: ''
                 },
-                homeTeamOdds: {
+                homeTeam: {
                     odds: '',
                     bettingSide: ''
                 }
@@ -69,11 +69,11 @@ export const structureData = (futureGamesInfo) => {
             let pointsLastIndex = pointsKeysArray.length-1
             let pointsTargetKey = pointsKeysArray[pointsLastIndex]
             pointsTargetObj = {
-                awayTeamOdds: {
+                awayTeam: {
                     odds: docData['Game Odds'].General[pointsTargetKey][awayTeam],
                     bettingSide: awayTeam,
                 }, 
-                homeTeamOdds: {
+                homeTeam: {
                     odds: docData['Game Odds'].General[pointsTargetKey][homeTeam],
                     bettingSide: homeTeam
                 }
@@ -178,6 +178,7 @@ export const structureData = (futureGamesInfo) => {
     return targetArray
 }
 
+//This function runs when the user clicks on the point box to select the game odds for initiating the bet.
 export const pointBoxClickHandler = (e, params, index, gameId,  selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo) => {
 
     if(props.userDetails){
@@ -411,6 +412,8 @@ export const setTeamIcons = (homeTeam, awayTeam) => {
     return {homeTeamIcon, awayTeamIcon}
 }
 
+//As the function receives the bet history (userBets) and the existing games (gameInfo), it compares and sees which of the games
+//did user submit the bets on and the returns the computed array which is then looped over and displayed on the betting page.
 export const compareUserBetsAndGameInfo = (userBets, gameInfo) => {
     let gameInfoArray = [...gameInfo]
     let userBetsArray = [...userBets]
@@ -435,6 +438,7 @@ export const compareUserBetsAndGameInfo = (userBets, gameInfo) => {
     return gameInfoArray
 }
 
+//When the user clicks on the point box the selected class is enabled, this function is to diminish the selected class so that the css styles are removed.
 export const removeBtnSelectionClass = (gameInfo) => {
     for (let i = 0; i < gameInfo.length; i++){
         gameInfo[i].handicapSelected = null
@@ -444,6 +448,7 @@ export const removeBtnSelectionClass = (gameInfo) => {
     return gameInfo
 }
 
+//This function checks if the game has started on bet submission or not, in case the game has started the bet won't be submitted as the request gets cancelled.
 export const checkGameTimings = (selectedGames) => {
     let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
     let keysArray = Object.keys(selectedGames)

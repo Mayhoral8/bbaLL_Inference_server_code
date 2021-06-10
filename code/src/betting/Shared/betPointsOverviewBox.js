@@ -6,7 +6,8 @@ import {
     PointsC,
     Points,
     CloseIcon,
-    Type
+    Type,
+    Span
 } from './betPointsOverviewBoxStyles'
 import closeIcon from '../../assets/images/closeIcon.svg'
 
@@ -26,8 +27,8 @@ const overviewBox = ( props ) => {
                 {
                     selectedValues[gameId].moneyLine.odds ?
                     <Points>
-                        <Type>Money Line</Type> 
-                        <span>{selectedValues[gameId].moneyLine.odds} 
+                        <Type>Money Line: </Type> 
+                        <Span>{selectedValues[gameId].moneyLine.odds} 
                             <CloseIcon 
                              src={closeIcon} 
                              alt=''
@@ -35,14 +36,14 @@ const overviewBox = ( props ) => {
                                 onRemovePoints( e, 'moneyLine' ,gameId )
                              }}
                             />
-                        </span>
+                        </Span>
                     </Points>
                     :null
                 }
                 {
                     selectedValues[gameId].handicap.odds ?
                     <Points>
-                        <Type>Spread</Type> 
+                        <Type>Spread: </Type> 
                         <span>{selectedValues[gameId].handicap.odds} 
                             <CloseIcon 
                              src={closeIcon} 
@@ -58,7 +59,7 @@ const overviewBox = ( props ) => {
                 {
                     selectedValues[gameId].overAndUnder.type === 'over' ? 
                     <Points>
-                        <Type>Over</Type> 
+                        <Type>Over: </Type> 
                         <span>{selectedValues[gameId].overAndUnder.odds}
                             <CloseIcon 
                              src={closeIcon} 

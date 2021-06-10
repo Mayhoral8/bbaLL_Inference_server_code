@@ -1,16 +1,23 @@
 import styled from 'styled-components'
 
 const media = {
-    deskLLG: `@media(max-width: 1350px)`
+    deskLLG: `@media(max-width: 1350px)`,
+    phoneSM: `@media(max-width: 480px)`,
+    phoneMD: `@media(max-width: 440px)`,
 }
 
 export const OverviewBoxC=styled.div`
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background: white;
     margin: 10px 0px;
-    border-radius: 5px;
+    border-radius: 20px;
     ${media.deskLLG} {
         margin: 10px 10px;
-        min-width: 225px;
+        min-width: 240px;
+    }
+    ${media.phoneSM} {
+        margin: 10px 10px;
+        min-width: 200px;
     }
 `
 
@@ -27,18 +34,31 @@ export const PointsC=styled.div`
 `
 export const Type = styled.span`
     font-weight: 900;
+    ${media.phoneMD}{
+        font-size: 14px;
+    }
 `
 
 export const HeaderC=styled.div`
-    background:#7500DE;
+    background: white;
+    border: 2px solid #7500DE;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 1px 4px rgba(57, 32, 79, 0.25);
     padding:10px 20px;
-    border-radius: 5px;
+    border-radius: 20px;
 `
 
 export const TeamNameC=styled.div`
-    margin:10px 0px;
+    margin: 5px 0px;
     color: white;
     font-weight: 900;
+    color: black;
+    ${media.phoneMD}{
+        font-size: 14px;
+    }
 `
 
 export const Points=styled.div`
@@ -51,4 +71,10 @@ export const Points=styled.div`
 export const CloseIcon=styled.img`
     margin-left:15px;
     cursor: pointer;
+`
+
+export const Span = styled.span`
+    ${media.phoneMD}{
+        font-size: 11.5px;
+    }
 `
