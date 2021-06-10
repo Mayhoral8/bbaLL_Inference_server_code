@@ -8,7 +8,7 @@ export const FutureGameListBox = styled.div`
   min-width: 300px;
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
+  padding: 0.25rem;
   overflow-y: scroll;
   overflow-x: hidden;
   position: relative;
