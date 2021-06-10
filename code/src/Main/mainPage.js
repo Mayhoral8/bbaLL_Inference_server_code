@@ -12,6 +12,17 @@ import MemeCard from "./memeCard";
 import TeamScoreTable from "./TeamScoreTable";
 import styled from "styled-components";
 import FutureGameList from "./futuregamelist";
+import {
+  FutureGameListBox,
+  FutureGameTitle,
+  PlayerRankingPlaceholderBox,
+  PlayerRankingsPlaceholderTitle,
+  FutureGameListRow,
+  TeamRankingsTitle,
+  TeamRankingsContainer,
+  RowContainer,
+  MainPageContainer,
+} from "./mainpage-style";
 
 const GamePageContainer = () => {
   const [data, setData] = useState([{}, {}, {}]);
@@ -147,37 +158,12 @@ const GamePageContainer = () => {
         <MainPageContainer>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {useWindowSize() < 1400 && games.length > 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  backgroundColor: "white",
-                  boxShadow: "0px 1px 6px rgba(0, 0, 0, 0.08)",
-                  width: "100%",
-                }}
-              >
+              <FutureGameListBox>
                 <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                <div
-                  style={{
-                    zIndex: 0,
-                    marginTop: "0rem",
-                    marginLeft: "0rem",
-                    marginRight: "0rem",
-                    height: "100%",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "row",
-                    padding: "0.5rem",
-                    overflowX: "scroll",
-                    overflowY: "hidden",
-                    scrollbarWidth: "thin" /* "auto" or "thin" */,
-                    // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
-                  }}
-                >
+                <FutureGameListRow>
                   <FutureGameList games={games} />
-                </div>
-              </div>
+                </FutureGameListRow>
+              </FutureGameListBox>
             )}
 
             <RowContainer>
@@ -217,109 +203,5 @@ const GamePageContainer = () => {
     </>
   );
 };
-
-const FutureGameListBox = styled.div`
-  background-color: white;
-  margin-top: 0rem;
-  margin-left: 3rem;
-  height: 100%;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  position: relative;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-  height: 1043px;
-  scrollbar-width: thin; /* "auto" or "thin" */
-`;
-
-const PlayerRankingsPlaceholderTitle = styled.div`
-  font-size: 1.5rem;
-  padding: 1.5rem;
-`;
-
-const PlayerRankingPlaceholderBox = styled.div`
-  background: white;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-  height: 100%;
-  width: 100%;
-  margin: 0rem 3rem 3rem 0rem;
-  min-width: 400px;
-`;
-
-const TeamRankingsTitle = styled.div`
-  font-size: 1.5rem;
-`;
-
-const FutureGameTitle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  font-size: 1.5rem;
-  @media (max-width: 1400px) {
-    margin: 1rem 0rem 0rem 0rem;
-  }
-  margin: 1rem 0rem 1rem 0rem;
-`;
-
-const TeamRankingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  @media (max-width: 1400px) {
-    margin: 0rem 0rem 0rem 0rem;
-  }
-  margin: 3rem 0rem 0rem 0rem;
-  background-color: white;
-
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
-`;
-
-const futureGameList = styled.div`
-  background-color: white;
-  margin-top: 0rem;
-  margin-left: 3rem;
-  height: 100%;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  overflow-y: scroll;
-  position: relative;
-  border: solid gray 1px;
-  height: 885px;
-  scrollbar-width: thin;
-  // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
-`;
-
-const MainPageContainer = styled.div`
-  @media (max-width: 1400px) {
-    flex-direction: column;
-  }
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 100%;
-  width: 100%;
-  max-width: 1640px;
-  justify-content: center;
-
-  @media screen and (min-width: 996px) {
-    margin: 4rem auto 0rem auto;
-  }
-  margin: 2.2rem auto 0rem auto;
-`;
-
-const RowContainer = styled.div`
-  @media (max-width: 643px) {
-    flex-direction: column;
-  }
-  display: flex;
-  flex-direction: row;
-`;
 
 export default GamePageContainer;
