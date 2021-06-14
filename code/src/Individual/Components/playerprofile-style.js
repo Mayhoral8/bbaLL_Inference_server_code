@@ -118,7 +118,7 @@ export const BasicInfoDiv = styled.div`
     }
   }
   @media (max-width: 996px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))
     .player__info {
       flex-wrap: wrap;
       > div {
@@ -155,6 +155,6 @@ export const PlayerStatWrapper = styled.div`
   grid-gap: 1rem;
   margin-bottom: 2rem;
   @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 `;

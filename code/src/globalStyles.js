@@ -71,7 +71,7 @@ export const CenteredMain = styled.div`
   max-width: 1440px;
   width: 100%;
   @media screen and (min-width: 996px) {
-    padding: 0 3rem;
+    padding: 0 0.5rem;
     margin: ${({ games }) => games ? '3rem auto' : '7rem auto 4rem'};
   }
   @media screen and (min-width: 1440px) {
@@ -145,10 +145,11 @@ export const BadgeButton = styled.button`
 `
 
 export const GraphTitle = styled.h3`
-  margin: 2rem 1rem;
+  margin: 0.5rem 1rem;
   color: var(--lighter-black);
   font-size: 1.3rem;
   text-align: center;
+  padding-top: 0.5rem;
   @media(max-width: 600px) {
     font-size: 1rem;
   } 

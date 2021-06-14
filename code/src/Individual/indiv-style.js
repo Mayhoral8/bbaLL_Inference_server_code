@@ -46,6 +46,21 @@ export const PlotDiv = styled.div`
   grid-template-columns: 1fr;
   grid-gap: 2rem;
   @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   }
+  @media only screen and (min-width: 1024px) and (max-height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (hover: none) {
+    width: 100%
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
+`;
+export const Footer = styled.div`
+  grid-row: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background: none;
+  border-radius: 8px;
+  border: 4px solid white;
+  font-weight: bold;
 `;
