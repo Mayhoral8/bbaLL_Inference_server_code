@@ -34,14 +34,8 @@ export const StyleButton = styled.div`
   }
 `
 
-export const StyledTable = styled.div`
-  .HeaderStyle{
-    background-color: #552A9F;
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    color: white;
-    
-  }
+export const TablesContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `

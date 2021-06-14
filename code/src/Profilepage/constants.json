@@ -1,8 +1,12 @@
 {
-    "spreadTableColumns": [
+    "COLUMNS": [
         {
-            "Header": "Game Date",
-            "accessor": "gameDate"
+            "Header": "Date",
+            "accessor": "gameDateTime"
+        },
+        {
+            "Header": "Betting Type",
+            "accessor": "BettingType"
         },
         {
             "Header": "Home Team vs Away Team",
@@ -17,71 +21,7 @@
             "accessor": "betOdds"
         },
         {
-            "Header": "Bet Side",
-            "accessor": "betSide"
-        },
-        {
-            "Header": "Spread",
-            "accessor": "spread"
-        },
-        {
-            "Header": "Game Finished",
-            "accessor": "gameFinished"
-        }
-    ],
-    "moneyLineTableColumns":[
-        {
-            "Header": "Game Date",
-            "accessor": "gameDate"
-        },
-        {
-            "Header": "Home Team vs Away Team",
-            "accessor": "vs"
-        },
-        {
-            "Header": "Score",
-            "accessor": "score"
-        },
-        {
-            "Header": "Bet Odds",
-            "accessor": "betOdds"
-        },
-        {
-            "Header": "Bet Side",
-            "accessor": "betSide"
-        },
-        {
-            "Header": "Game Finished",
-            "accessor": "gameFinished"
-        }
-    ],
-    "overUnderTableColumns":[
-        {
-            "Header": "Game Date",
-            "accessor": "gameDate"
-        },
-        {
-            "Header": "Home Team vs Away Team",
-            "accessor": "vs"
-        },
-        {
-            "Header": "Score",
-            "accessor": "score"
-        },
-        {
-            "Header": "Bet Odds",
-            "accessor": "betOdds"
-        },
-        {
-            "Header": "Bet Side",
-            "accessor": "betSide"
-        },
-        {
-            "Header": "Total",
-            "accessor": "total"
-        },
-        {
-            "Header": "Game Finished",
+            "Header": "Status",
             "accessor": "gameFinished"
         }
     ]

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const TableContainer = styled.table`
-    margin: 100px 0px;
     width: 700px;
 `
 

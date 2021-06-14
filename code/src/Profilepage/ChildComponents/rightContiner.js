@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import { Continer, 
         StyledButtonsContiner, 
         StyleButton,
-        StyledTable} from '../Styles/rightContiner-style';
+        TablesContainer} from '../Styles/rightContiner-style';
+import constants from '../constants.json';
+import Table from './table.js';
 
 const MONEY_LINE = 'moneyLine';
 const SPREAD = 'spread';
@@ -14,38 +16,37 @@ const RightContiner = (props) => {
   const [dataType, setDataType] = useState('all bet data')
   let historyData = props.userHistory;
   let allBetsActive, onGoingActive,finishedActive;
-  let dataArray = [];
-  let headerTitle = ['No.', 'Date', 'Betting type', 'Home Vs Away', 'Score', 'Bet odds', 'Bid $', 'Status']
-  const headerTitleObjct = headerTitle.map((eachTitle, i) => ({id: i, title: eachTitle}));
+  //let dataArray = [];
+
   
   // console.log(Object.values(historyData[MONEY_LINE]));
   // console.log(Object.values(historyData[SPREAD]));
   // console.log(Object.values(historyData[OVER_UNDER]));
  
   
-  if (historyData[MONEY_LINE].length != 0) {
-    for (let index = 0; index < historyData[MONEY_LINE].length; index++) {
-      dataArray.push(Object.values(historyData[MONEY_LINE][index]));
-      //console.log(JSON.stringify(historyData[MONEY_LINE][index]) + " " + typeof(historyData[MONEY_LINE][index]));
-    }
-  }
+  // if (historyData[MONEY_LINE].length != 0) {
+  //   for (let index = 0; index < historyData[MONEY_LINE].length; index++) {
+  //     dataArray.push(Object.values(historyData[MONEY_LINE][index]));
+  //     console.log(JSON.stringify(historyData[MONEY_LINE][index]) + " " + typeof(historyData[MONEY_LINE][index]));
+  //   }
+  // }
 
-  if (historyData[SPREAD].length != 0) {
-    for (let index = 0; index < historyData[SPREAD].length; index++) {
-      dataArray.push(Object.values(historyData[SPREAD][index]));
-      //console.log(JSON.stringify(historyData[SPREAD][index]) + " " + typeof(historyData[SPREAD][index]));
-    }
-  }
+  // if (historyData[SPREAD].length != 0) {
+  //   for (let index = 0; index < historyData[SPREAD].length; index++) {
+  //     dataArray.push(Object.values(historyData[SPREAD][index]));
+  //     console.log(JSON.stringify(historyData[SPREAD][index]) + " " + typeof(historyData[SPREAD][index]));
+  //   }
+  // }
 
-  if (historyData[OVER_UNDER].length != 0) {
-    for (let index = 0; index < historyData[OVER_UNDER].length; index++) {
-      dataArray.push(Object.values(historyData[OVER_UNDER][index]));
-      //console.log(JSON.stringify(historyData[OVER_UNDER][index]) + " " + typeof(historyData[OVER_UNDER][index]));
-    }
-  }
+  // if (historyData[OVER_UNDER].length != 0) {
+  //   for (let index = 0; index < historyData[OVER_UNDER].length; index++) {
+  //     dataArray.push(Object.values(historyData[OVER_UNDER][index]));
+  //     console.log(JSON.stringify(historyData[OVER_UNDER][index]) + " " + typeof(historyData[OVER_UNDER][index]));
+  //   }
+  // }
 
 
-  console.log(dataArray)
+  //console.log(dataArray)
   useEffect(()=>{
     switch(currentDisplay) {
       case 'allBets':
@@ -64,14 +65,18 @@ const RightContiner = (props) => {
     setCurrentDisplay(newState);
   }
 
-  function renderTableHeader() {
-    return headerTitleObjct.map((eachTitle) => {
-      return <th key={eachTitle.id} className="HeaderStyle">{eachTitle.title}</th>
-   })
-  }
+  // function renderTableHeader() {
+  //   return headerTitleObjct.map((eachTitle) => {
+  //     return <th key={eachTitle.id} className="HeaderStyle">{eachTitle.title}</th>
+  //  })
+  // }
+  // console.log("current state 1: " + JSON.stringify(props.userHistory));
+  //  console.log("current state: " + JSON.stringify(props.userHistory.moneyLine));
+  //  console.log("current state: " + JSON.stringify(props.userHistory.spread));
+  //  console.log("current state: " + JSON.stringify(props.userHistory.overUnder));
 
-  console.log("current state: " + currentDisplay);
-
+  const testCombined = props.userHistory.moneyLine + props.userHistory.spread + props.userHistory.overUnder;
+  // console.log(JSON.stringify(testCombined));
   switch (currentDisplay) {
     case 'allBets':
       allBetsActive = true;
@@ -113,13 +118,14 @@ const RightContiner = (props) => {
       </StyledButtonsContiner>
 
         {dataType}
-        <StyledTable>
-          <table>
-            <tbody>
-              <tr>{renderTableHeader()}</tr>
-            </tbody>
-          </table>
-        </StyledTable>
+
+        <TablesContainer>
+          <Table
+            columns = {constants.COLUMNS}
+            data = {historyData.data}
+          />
+        </TablesContainer>
+
     </Continer>
   )
 }

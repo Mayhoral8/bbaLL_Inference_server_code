@@ -50,7 +50,7 @@ const Table = (props) => {
                             <TableRow {...row.getRowProps()} key = {parentIndex}>
                                 {
                                     row.cells.map((cell, childIndex) => {
-                                        if(childIndex === 1){
+                                        if(childIndex === 2){
                                             let teamNamesArray = cell.render('Cell').props.cell.value.split('vs')
                                             let homeTeam = teamNamesArray[0].split(' ')
                                             let awayTeam = teamNamesArray[1].split(' ')

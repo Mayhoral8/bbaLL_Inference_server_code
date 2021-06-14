@@ -32,7 +32,7 @@ export const getUserBettingHistory = (userId) => {
                 }
                 
             }
-            
+
             let bettingHistory = []
             if(betDates.length > 0){
                 for (let i = 0; i < betDates.length; i++){
@@ -50,14 +50,22 @@ export const getUserBettingHistory = (userId) => {
                         for (let j = 0; j < recordsArray.length; j++){
                             bettingHistory.push(recordsArray[j].docData)
                         }
-    
-                        let structuredBettingHistoryMoneyLine = structureUserGameHistory(bettingHistory, 'moneyLine')
-                        let structuredBettingHistorySpread = structureUserGameHistory(bettingHistory, 'handicap')
-                        let structuredBettingHistoryOverUnder = structureUserGameHistory(bettingHistory, 'overAndUnder')
+                        
+                        let structuredData = structureUserGameHistory(bettingHistory); 
+                        // let structuredBettingHistoryMoneyLine = structureUserGameHistory(bettingHistory)
+                        // let structuredBettingHistorySpread = structureUserGameHistory(bettingHistory)
+                        // let structuredBettingHistoryOverUnder = structureUserGameHistory(bettingHistory)
+
+                    
+                        // let bettingHistoryTargetObj = {
+                        //     moneyLine: structuredBettingHistoryMoneyLine,
+                        //     spread: structuredBettingHistorySpread,
+                        //     overUnder: structuredBettingHistoryOverUnder,
+                        //     isLoading: false
+                        // }
+
                         let bettingHistoryTargetObj = {
-                            moneyLine: structuredBettingHistoryMoneyLine,
-                            spread: structuredBettingHistorySpread,
-                            overUnder: structuredBettingHistoryOverUnder,
+                            data: structuredData,
                             isLoading: false
                         }
                         dispatch({
@@ -76,11 +84,15 @@ export const getUserBettingHistory = (userId) => {
                 dispatch({
                     type: 'BettingHistory',
                     payload: {
-                        moneyLine: [],
-                        spread: [],
-                        overUnder: [],
+                        data: [],
                         isLoading: false
                     }
+                    // payload: {
+                    //     moneyLine: [],
+                    //     spread: [],
+                    //     overUnder: [],
+                    //     isLoading: false
+                    // }
                 })
                 return {success: true}
             }
