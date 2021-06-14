@@ -164,9 +164,13 @@ class PlotContainer extends PureComponent {
           }
         }
         // Win percentage top 100 plot label change to add "%"
-        if(trace.split("_")[0] === "W"){
-          data.dataset.label = "League Avg "
-          console.log(data.dataset)
+        if (trace.split("_")[0] === "W") {
+          data.dataset.label = "League Avg ";
+          console.log(data.dataset);
+        }
+        // years.includes("1996-97")
+        if (years.includes("1996") || years.includes("1997")) {
+          data.dataset.hidden = "true"
         }
 
         plotdata.push(data);
@@ -260,8 +264,6 @@ class PlotContainer extends PureComponent {
         // percentage data type change from bar to line
         if (sortino === 1) {
           if ("PCT" === trace.slice(-3)) {
-
-
             data = {
               ...data,
               y: removeNullFromArr,
@@ -274,7 +276,7 @@ class PlotContainer extends PureComponent {
         if (data.type === "bar") {
           data.dataset.borderWidth = 0;
         }
-        
+
         //plot data option change here
         const { isTeam } = this.props;
         if (trace.split("_")[0] === "DOWN") {
@@ -319,7 +321,10 @@ class PlotContainer extends PureComponent {
           let plotStat = this.props.categoryData[stat];
           const title = plotStat[PlotTitle];
           //Data ending with "%" should inlcude "Rating" in the title
-          if (page === "Shots") {
+          if (
+            (page === "Shots" && plot.name.slice(-1) === "M") ||
+            (page === "Shots" && plot.name.slice(-1) === "A")
+          ) {
             preprocessTitles.push(``);
           } else {
             preprocessTitles.push(title);
@@ -392,14 +397,21 @@ class PlotContainer extends PureComponent {
       });
 
     const plotJsx = (plot, barData, plotTitle, labels, i) => {
-      // Hard code to swap titles(error) for shot page.
-      if (plotTitle === "Free Throws") plotTitle = "Field Goals";
-      else if (plotTitle === "Field Goals") plotTitle = "Free Throws";
-
+      //Change plot titles
+      if (plotTitle === "Free Throws") plotTitle = "3 Points";
+      else if (plotTitle === "3 Points") plotTitle = "Free Throws";
+      if (this.props.isTeam && plotTitle === "Salary") {
+        plotTitle = "Estimated Total Salary";
+      }
       return (
         <ContainerCard key={i} style={{ margin: "0" }}>
           <GraphTitle>{plotTitle}</GraphTitle>
-          <IndivPlots data={plot} barData={barData} labels={labels} page={page}/>
+          <IndivPlots
+            data={plot}
+            barData={barData}
+            labels={labels}
+            page={page}
+          />
         </ContainerCard>
       );
     };
@@ -417,12 +429,10 @@ class PlotContainer extends PureComponent {
         .map((p) => p.dataset);
     };
 
-    //for plotting leged players without issues
+    //for plotting old players without issues
     return years.includes("1996-97")
       ? preprocessData
-          .map((plots) =>
-            plots.filter((data) => data.name.slice(-10) !== "Plus/minus")
-          )
+          .map((plots) => plots.filter((data) => data.name.slice(-10) !== "Plus/minus"))
           .map((plot, i) => {
             return plotJsx(
               lineData(plot),

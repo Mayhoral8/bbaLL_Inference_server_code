@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router";
-import { IndivPageDiv } from "./indiv-style";
+import { IndivPageDiv, Footer, TitleDiv, TitleContainer } from "./indiv-style";
 import * as individualConstants from "./individualConstants";
 import PlotContainer from "./Components/PlotContainer";
 import TeamProfile from "./Components/TeamProfile";
@@ -11,7 +11,6 @@ import { MobileFilterDiv } from "../Leaderboard/leader-style";
 import StatSelect from "../Shared/SmallSelect/StatSelect";
 import { fbFirestore } from "../App/config";
 import Spinner from "../Shared/Spinner/Spinner";
-import { Footer } from "./indiv-style"
 
 const IndivPage = ({ indivStat, location }) => {
   const history = useHistory();
@@ -61,6 +60,7 @@ const IndivPage = ({ indivStat, location }) => {
     setYears(years);
     setCareerStats(careerStats);
   };
+  console.log("this.props.indivStat", indivStat);
   return (
     <>
       <ScrollToTopOnMount />
@@ -89,7 +89,12 @@ const IndivPage = ({ indivStat, location }) => {
           isTeam={location.pathname.split("/")[1] === "team"}
           years={years}
         />
-        <Footer><div>Top 100 players are chosen based on plus-minus scores for years greater than 1996, otherwise they are chosen based on points</div></Footer>
+        {!(location.pathname.split("/")[1] === "team") && (
+          <Footer>
+            Top 100 players are chosen based on plus-minus scores for years
+            greater than 1996, otherwise they are chosen based on points
+          </Footer>
+        )}
       </IndivPageDiv>
     </>
   );

@@ -45,6 +45,8 @@ export const PlotDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 2rem;
+  position: relative;
+  z-index: 1;
   @media (min-width: 768px) {
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   }
@@ -59,8 +61,28 @@ export const Footer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  margin-top: 2rem;
   background: none;
   border-radius: 8px;
   border: 4px solid white;
-  font-weight: bold;
+  font-family: Open Sans;
+  font-weight: 300;
+  font-size: 14px;
+`;
+export const TitleDiv = styled.div`
+border-radius: 50%;
+height: 200px;
+width: 200px;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+
+`;
+export const TitleContainer = styled.div`
+display: flex;
+align-items: center;
+flex-direction: column;
+justify-content: center;
+min-height: 350px;
 `;
