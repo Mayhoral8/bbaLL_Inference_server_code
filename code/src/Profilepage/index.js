@@ -36,6 +36,7 @@ const ProfilePage = (props) => {
         }
     }, [props.bettingHistory])
 
+   // console.log(props.bettingHistory)
     return(
         spinner ? 
             <Spinner/>

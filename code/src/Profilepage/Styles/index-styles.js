@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ProfilePageContainer = styled.div`
     margin-top: 64px;
-    height: calc(100vh - 64px);
+    height: auto;
     display: grid;
     grid-template-columns: 1fr 4fr;
 

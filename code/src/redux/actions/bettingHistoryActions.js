@@ -34,11 +34,12 @@ export const getUserBettingHistory = (userId) => {
             }
 
             let bettingHistory = []
+            //console.log("BetDates length: " + betDates.length);
             if(betDates.length > 0){
                 for (let i = 0; i < betDates.length; i++){
 
                     try{
-
+                        //console.log("Current index: " + i);
                         let userBettingHistory = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(betDates[i]).collection('gameId').get()
                         let recordsArray = []
                         userBettingHistory.forEach((doc) => {
@@ -64,20 +65,22 @@ export const getUserBettingHistory = (userId) => {
                         //     isLoading: false
                         // }
 
-                        let bettingHistoryTargetObj = {
-                            data: structuredData,
-                            isLoading: false
+                        if (i === betDates.length - 1) {
+                            let bettingHistoryTargetObj = {
+                                data: structuredData,
+                                isLoading: false
+                            }
+                            dispatch({
+                                type: 'BettingHistory',
+                                payload: bettingHistoryTargetObj
+                            })
                         }
-                        dispatch({
-                            type: 'BettingHistory',
-                            payload: bettingHistoryTargetObj
-                        })
-                        return {success: true}
                     }
                     catch(e){
                         throw e
                     }
                 }
+                return {success: true}
             }
 
             else{

@@ -1,21 +1,33 @@
-function createTargetObj(history, type) {
+function transformTime(time) {
+    let timeArray = time.split(' ');
+    if (timeArray[1] === 'PM') {
+        let hourAndMinute = timeArray[0].split(':');
+        let newHour = parseInt(hourAndMinute[0]) + 12;
+        let newTime = newHour + ':' + hourAndMinute[1];
+        return newTime;
+    }
+
+    return timeArray[0];
+}
+
+function createTargetObj(history, type) {    
     let targetObj = {
-        gameDateTime: history.gameDetails.gameDate + "   " + history.gameDetails.gameStartTime,
+        gameDateTime: history.gameDetails.gameDate + " " + transformTime(history.gameDetails.gameStartTime),
         vs: history.gameDetails.homeTeam + "  vs  " + history.gameDetails.awayTeam,
-        score: history.gameDetails.HomeScore + ":" + history.gameDetails.AwayScore,
+        score: history.gameDetails.HomeScore ? history.gameDetails.HomeScore + " : " + history.gameDetails.AwayScore : '--',
         betOdds:history[type] ? history[type].odds : '--',
-        gameFinished: history.gameFinished ? 'Ongoing' : 'Finished',
+        gameFinished: history.gameFinished ? 'Finished' : 'Ongoing',
     }
 
     switch (type) {
         case 'moneyLine':
-            targetObj.BettingType = 'Money Line \n ' + history[type].bettingSide;
+            targetObj.BettingType = 'Money Line (' + history[type].bettingSide  + ')';;
             break;
         case 'overAndUnder':
-            targetObj.BettingType = 'Over & Under \n (' + history[type].totalScore + ')';
+            targetObj.BettingType = 'Over & Under (' + history[type].totalScore + ')';
             break;
-        case 'spread':
-            targetObj.BettingType = 'Spread \n (' + history[type].spread + ')';
+        case 'handicap':
+            targetObj.BettingType = 'Spread (' + history[type].spread + ')';
             break;
         default:
             break;
@@ -30,14 +42,22 @@ export function structureUserGameHistory(gameHistory) {
     for (let i = 0; i < gameHistory.length; i++){
         let tempTargetObj = null
         if ('moneyLine' in gameHistory[i]) {
+            tempTargetObj = null
             tempTargetObj = createTargetObj(gameHistory[i], 'moneyLine');
-        } else if ('overAndUnder' in gameHistory[i], 'overAndUnder') {
-            tempTargetObj = createTargetObj(gameHistory[i]);
-        } else if ('spread' in gameHistory[i]) {
-            tempTargetObj = createTargetObj(gameHistory[i], 'spread');
+            structuredGameHistory.push(tempTargetObj);
+        } 
+        
+        if ('overAndUnder' in gameHistory[i]) {
+            tempTargetObj = null
+            tempTargetObj = createTargetObj(gameHistory[i], 'overAndUnder');
+            structuredGameHistory.push(tempTargetObj);
+        } 
+        
+        if ('handicap' in gameHistory[i]) {
+            tempTargetObj = null
+            tempTargetObj = createTargetObj(gameHistory[i], 'handicap');
+            structuredGameHistory.push(tempTargetObj);
         }
-
-        structuredGameHistory.push(tempTargetObj);
     }
 
     //     let targetObj = {

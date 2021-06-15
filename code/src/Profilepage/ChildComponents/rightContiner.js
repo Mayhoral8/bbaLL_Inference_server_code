@@ -5,16 +5,17 @@ import { Continer,
         TablesContainer} from '../Styles/rightContiner-style';
 import constants from '../constants.json';
 import Table from './table.js';
+import DatePicker from 'react-datepicker';
 
-const MONEY_LINE = 'moneyLine';
-const SPREAD = 'spread';
-const OVER_UNDER = 'overUnder';
-const NEVER_EXIST_VALUES = 'dummy';
+// const MONEY_LINE = 'moneyLine';
+// const SPREAD = 'spread';
+// const OVER_UNDER = 'overUnder';
+// const NEVER_EXIST_VALUES = 'dummy';
 
 const RightContiner = (props) => {
   const [currentDisplay, setCurrentDisplay] = useState('allBets');
-  const [dataType, setDataType] = useState('all bet data')
-  let historyData = props.userHistory;
+  const [historyData, setHistoryData] = useState(props.userHistory.data)
+  //let historyData = props.userHistory.data;
   let allBetsActive, onGoingActive,finishedActive;
   //let dataArray = [];
 
@@ -48,15 +49,18 @@ const RightContiner = (props) => {
 
   //console.log(dataArray)
   useEffect(()=>{
+    let tempData = props.userHistory.data;
     switch(currentDisplay) {
       case 'allBets':
-        setDataType('all betbdata');
+        setHistoryData(tempData);
         break;
       case 'onGoing':
-        setDataType('ongoing data');
+        const afterFilterOnGoing = tempData.filter(eachData => eachData['gameFinished'] === 'Ongoing');
+        setHistoryData(afterFilterOnGoing);
         break;
       case 'finished':
-        setDataType('finished data');
+        const afterFilterFinished = tempData.filter(eachData => eachData['gameFinished'] === 'Finished');
+        setHistoryData(afterFilterFinished);
         break;
     }
   },[currentDisplay])
@@ -75,7 +79,7 @@ const RightContiner = (props) => {
   //  console.log("current state: " + JSON.stringify(props.userHistory.spread));
   //  console.log("current state: " + JSON.stringify(props.userHistory.overUnder));
 
-  const testCombined = props.userHistory.moneyLine + props.userHistory.spread + props.userHistory.overUnder;
+  
   // console.log(JSON.stringify(testCombined));
   switch (currentDisplay) {
     case 'allBets':
@@ -102,6 +106,8 @@ const RightContiner = (props) => {
       break;
   }
 
+  //console.log(historyData);
+
   return (
     <Continer>
       <p className="titleStyle">My Bets</p>
@@ -117,14 +123,12 @@ const RightContiner = (props) => {
         </StyleButton>
       </StyledButtonsContiner>
 
-        {dataType}
-
-        <TablesContainer>
-          <Table
-            columns = {constants.COLUMNS}
-            data = {historyData.data}
-          />
-        </TablesContainer>
+      <TablesContainer>
+        <Table
+          columns = {constants.COLUMNS}
+          data = {historyData}
+        />
+      </TablesContainer>
 
     </Continer>
   )
