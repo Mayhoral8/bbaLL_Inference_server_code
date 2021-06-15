@@ -38,6 +38,7 @@
     "react-chartjs-2": "^2.11.1",
     "react-compound-slider": "^2.5.0",
     "react-content-loader": "^6.0.0",
+    "react-datepicker": "^4.1.1",
     "react-dom": "^16.13.1",
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
