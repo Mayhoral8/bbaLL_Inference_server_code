@@ -14,7 +14,7 @@
         },
         {
             "Header": "Score",
-            "accessor": "score"
+            "accessor": "score"  
         },
         {
             "Header": "Bet Odds",

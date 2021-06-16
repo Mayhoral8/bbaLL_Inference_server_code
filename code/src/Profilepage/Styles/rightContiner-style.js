@@ -14,7 +14,7 @@ export const Continer = styled.div`
     line-height: 30px;
   }
 
-  height: 900px;
+  height: 1500px;
 `
 export const StyledButtonsContiner = styled.div`
   padding-top: 30px;

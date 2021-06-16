@@ -6,81 +6,53 @@ import { Continer,
 import constants from '../constants.json';
 import Table from './table.js';
 import DatePicker from 'react-datepicker';
-
-// const MONEY_LINE = 'moneyLine';
-// const SPREAD = 'spread';
-// const OVER_UNDER = 'overUnder';
-// const NEVER_EXIST_VALUES = 'dummy';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment'
 
 const RightContiner = (props) => {
   const [currentDisplay, setCurrentDisplay] = useState('allBets');
+  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
+  const [startDate, endDate] = selectedDateRange;
   const [historyData, setHistoryData] = useState(props.userHistory.data)
-  //let historyData = props.userHistory.data;
   let allBetsActive, onGoingActive,finishedActive;
-  //let dataArray = [];
 
-  
-  // console.log(Object.values(historyData[MONEY_LINE]));
-  // console.log(Object.values(historyData[SPREAD]));
-  // console.log(Object.values(historyData[OVER_UNDER]));
- 
-  
-  // if (historyData[MONEY_LINE].length != 0) {
-  //   for (let index = 0; index < historyData[MONEY_LINE].length; index++) {
-  //     dataArray.push(Object.values(historyData[MONEY_LINE][index]));
-  //     console.log(JSON.stringify(historyData[MONEY_LINE][index]) + " " + typeof(historyData[MONEY_LINE][index]));
-  //   }
-  // }
-
-  // if (historyData[SPREAD].length != 0) {
-  //   for (let index = 0; index < historyData[SPREAD].length; index++) {
-  //     dataArray.push(Object.values(historyData[SPREAD][index]));
-  //     console.log(JSON.stringify(historyData[SPREAD][index]) + " " + typeof(historyData[SPREAD][index]));
-  //   }
-  // }
-
-  // if (historyData[OVER_UNDER].length != 0) {
-  //   for (let index = 0; index < historyData[OVER_UNDER].length; index++) {
-  //     dataArray.push(Object.values(historyData[OVER_UNDER][index]));
-  //     console.log(JSON.stringify(historyData[OVER_UNDER][index]) + " " + typeof(historyData[OVER_UNDER][index]));
-  //   }
-  // }
-
-
-  //console.log(dataArray)
-  useEffect(()=>{
-    let tempData = props.userHistory.data;
-    switch(currentDisplay) {
-      case 'allBets':
-        setHistoryData(tempData);
-        break;
-      case 'onGoing':
-        const afterFilterOnGoing = tempData.filter(eachData => eachData['gameFinished'] === 'Ongoing');
-        setHistoryData(afterFilterOnGoing);
-        break;
-      case 'finished':
-        const afterFilterFinished = tempData.filter(eachData => eachData['gameFinished'] === 'Finished');
-        setHistoryData(afterFilterFinished);
-        break;
-    }
-  },[currentDisplay])
+  console.log("render");
 
   function handleAction(newState) {
     setCurrentDisplay(newState);
   }
 
-  // function renderTableHeader() {
-  //   return headerTitleObjct.map((eachTitle) => {
-  //     return <th key={eachTitle.id} className="HeaderStyle">{eachTitle.title}</th>
-  //  })
-  // }
-  // console.log("current state 1: " + JSON.stringify(props.userHistory));
-  //  console.log("current state: " + JSON.stringify(props.userHistory.moneyLine));
-  //  console.log("current state: " + JSON.stringify(props.userHistory.spread));
-  //  console.log("current state: " + JSON.stringify(props.userHistory.overUnder));
+  function withinDateRange(data, startDateInput, endDateInput) {
+    let dataDate = data['gameDateTime'].split(' ')[0];
+    //console.log(dataDate + " " + startDateInput + " " + endDateInput)
+    if (startDateInput <= dataDate && dataDate <= endDateInput) {
+      return true;
+    }
+    return false;
+  }
 
-  
-  // console.log(JSON.stringify(testCombined));
+  useEffect(()=>{
+    console.log("render from useEffect");
+    let tempData = props.userHistory.data;
+    switch(currentDisplay) {
+      case 'allBets':
+        break;
+      case 'onGoing':
+        tempData = tempData.filter(eachData => eachData['gameFinished'] === 'Ongoing');
+        break;
+      case 'finished':
+        tempData = tempData.filter(eachData => eachData['gameFinished'] === 'Finished');
+        break;
+    }
+
+    if (startDate != null && endDate != null) {
+      let newFormatStartDate = moment(startDate).format('YYYY-MM-DD');
+      let newFromateEndDate = moment(endDate).format('YYYY-MM-DD');
+      tempData = tempData.filter(eachData => withinDateRange(eachData, newFormatStartDate, newFromateEndDate));
+    }
+    setHistoryData(tempData); 
+  },[currentDisplay, selectedDateRange])
+
   switch (currentDisplay) {
     case 'allBets':
       allBetsActive = true;
@@ -122,6 +94,17 @@ const RightContiner = (props) => {
           <button className="eachButton" onClick={() => handleAction('finished')}>Finished</button>
         </StyleButton>
       </StyledButtonsContiner>
+      
+      <DatePicker 
+        selectsRange={true}
+        startDate={startDate} 
+        endDate={endDate}
+        onChange={(update) => {
+          setSelectedDateRange(update);
+        }}
+        isClearable={true}
+        monthsShown={2}
+        /> 
 
       <TablesContainer>
         <Table
