@@ -1,8 +1,8 @@
 import {fbFirestore} from '../../App/config'
 import {fbFirestoreSpigameBet} from '../../App/spigamebetFirebase'
-import {GET_FUTURE_GAMES_INFO, GETUSERBETS, SET_STRUCTURED_GAME_INFO} from './types'
+import {GET_FUTURE_GAMES_INFO, GETUSERBETS} from './types'
 import moment from 'moment-timezone'
-import {structureData} from '../../betting/functions'
+import {structureData} from '../../Betting/functions'
 
 export const getFutureGamesInfo=()=>{
     return async(dispatch)=>{

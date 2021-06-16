@@ -1,7 +1,7 @@
 import React, { useEffect, useState,} from "react";
 import Select from "react-select";
-import { fbFirestore } from "../App/config";
-import { StyledDropdownRed, StyledDropdownBule } from "./comparison-style";
+import { fbFirestore } from "../../App/config";
+import { StyledDropdown } from "../comparison-style";
 
 const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, colorSchem}) => {
   const [years, setYears] = useState([]);
@@ -35,35 +35,20 @@ const ComparisonYearSelection = ({ isTeam, name, onChange, setRef, prompt, color
       onChange(selectedOption.value);
     }
   };
-  if (colorSchem == "blue") {
-    return (
-      <StyledDropdownBule>
-        <Select
-          ref={ref => setRef(ref)}
-          classNamePrefix={"select"}
-          isSearchable={false}
-          closeMenuOnSelect={true}
-          options={years}
-          onChange={handleChange}
-          placeholder={prompt}
-        />
-      </StyledDropdownBule>
-    );
-  } else {
-    return (
-      <StyledDropdownRed>
-        <Select
-          ref={ref => setRef(ref)}
-          classNamePrefix={"select"}
-          isSearchable={false}
-          closeMenuOnSelect={true}
-          options={years}
-          onChange={handleChange}
-          placeholder={prompt}
-        />
-      </StyledDropdownRed>
-    );
-  }
+  
+  return (
+    <StyledDropdown color={colorSchem}>
+      <Select
+        ref={ref => setRef(ref)}
+        classNamePrefix={"select"}
+        isSearchable={false}
+        closeMenuOnSelect={true}
+        options={years}
+        onChange={handleChange}
+        placeholder={prompt}
+      />
+    </StyledDropdown>
+  );
 };
 
 export default ComparisonYearSelection;
