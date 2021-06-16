@@ -11,7 +11,6 @@ const capitalizeFirstLetter = (string) => {
 const PlayerRankingsCard = ({ data, rankingTypes }) => {
   //const [JSON, setJSON] = useState(data);
   const [imgs, setImgs] = useState({});
-  console.log(rankingTypes);
 
   try {
     if (data == null) {

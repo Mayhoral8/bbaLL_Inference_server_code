@@ -37,7 +37,6 @@ const GamePageContainer = () => {
         let gamesFound = [];
         snapshot.docs.map((doc) => {
           const obj = doc.data();
-          console.log(obj);
           if (Object.keys(obj).length !== 0) {
             gamesFound.push(obj);
           }
@@ -62,7 +61,6 @@ const GamePageContainer = () => {
   }, []);
 
   let test = [{}];
-  console.log(games);
   let hasDataLoaded = Object.keys(data).length === 4;
 
   const currentYear = "2020-21";
