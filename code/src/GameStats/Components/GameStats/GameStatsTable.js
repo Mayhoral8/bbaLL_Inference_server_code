@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import HomeVsAwayTitle from '../HomeVsAwayTitle/HomeVsAwayTitle';
 import StatsBarPlot from './StatsBarPlot';
 import { GameSummaryTableWrapper } from "./GameStats-styles";
@@ -6,9 +6,9 @@ import { GameSummaryTableWrapper } from "./GameStats-styles";
 const GameStatsTable = ({ info }) => {
   const y = ['effective_field_goal_percentage', 'field_goal_percentage', 'three_point_attempt_rate', 'turnovers', 'steals', 'blocks', 'offensive_rebounds', 'total_rebounds', 'assists', 'play_score'];
   const modifiedY = ['PLAY', 'AST', 'REB', 'OREB', 'BLK', 'STL', 'TO', '3P%', 'FG%', 'eFG%'];
-
+  const statsRef = useRef(null)
   return (
-    <GameSummaryTableWrapper>
+    <GameSummaryTableWrapper ref = {statsRef}>
       <HomeVsAwayTitle home={info.Home.Team} away={info.Away.Team} />
 
       <div className='bar-graph-container' >

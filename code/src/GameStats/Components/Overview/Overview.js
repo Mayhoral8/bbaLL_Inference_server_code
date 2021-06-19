@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import getYouTubeID from "get-youtube-id";
 import {
   OverviewWrapper,
@@ -11,9 +11,10 @@ import {
 const Overview = ({ highlights, YoutubeHighlight }) => {
   const highlightsText = highlights;
   const id = getYouTubeID(YoutubeHighlight);
+  const overviewRef = useRef(null)
   return (
     <>
-      <OverviewWrapper>
+      <OverviewWrapper ref = {overviewRef}>
         {id === undefined ? (
           <StyledHighlightWrapper>
             <VideoNotFoundContiner>
