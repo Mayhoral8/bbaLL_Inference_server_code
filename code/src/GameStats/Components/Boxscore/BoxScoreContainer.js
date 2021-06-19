@@ -1,27 +1,37 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import BoxScore from './BoxScore';
 import TeamTitle from '../GameSummary/TeamTitle';
-import { BoxScoreContainerWrapper } from "./BoxScore-style";
+import { BoxScoreContainerWrapper, HomeTeamBoxScore, AwayTeamBoxScore } from "./BoxScore-style";
 
 const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info }) => {
-
+  const homeTeamBoxScoreRef = useRef(null)
+  const awayTeamBoxScoreRef = useRef(null)
   return (
     <>
     <BoxScoreContainerWrapper>
-      {/* Away team */}
-      <TeamTitle name={info.Away.Team} />
-      <BoxScore
-        data={gamePlayers}
-        selectedGameIndex={selectedGameIndex}
-        info={info.Away} />
-      {/* Home team */}
-      <TeamTitle name={info.Home.Team} customStyle={{ marginTop: '3rem' }} />
-      <BoxScore
-        home
-        data={gamePlayers}
-        selectedGameIndex={selectedGameIndex}
-        info={info.Home}
-      />
+
+      <HomeTeamBoxScore ref = {homeTeamBoxScoreRef}>
+
+        <TeamTitle name={info.Away.Team} />
+        <BoxScore
+          data={gamePlayers}
+          selectedGameIndex={selectedGameIndex}
+          info={info.Away} />
+
+      </HomeTeamBoxScore>
+
+      <AwayTeamBoxScore ref = {awayTeamBoxScoreRef}>
+
+        <TeamTitle name={info.Home.Team} customStyle={{ marginTop: '3rem' }} />
+        <BoxScore
+          home
+          data={gamePlayers}
+          selectedGameIndex={selectedGameIndex}
+          info={info.Home}
+        />
+
+      </AwayTeamBoxScore>
+
       </BoxScoreContainerWrapper>
     </>
   )
