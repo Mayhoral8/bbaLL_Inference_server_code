@@ -7,7 +7,8 @@ import constants from '../constants.json';
 import Table from './table.js';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment'
+import moment from 'moment';
+import "../Styles/customDatePickerWidth.css";
 
 const RightContiner = (props) => {
   const [currentDisplay, setCurrentDisplay] = useState('allBets');
@@ -16,7 +17,6 @@ const RightContiner = (props) => {
   const [historyData, setHistoryData] = useState(props.userHistory.data)
   let allBetsActive, onGoingActive,finishedActive;
 
-  console.log("render");
 
   function handleAction(newState) {
     setCurrentDisplay(newState);
@@ -24,7 +24,6 @@ const RightContiner = (props) => {
 
   function withinDateRange(data, startDateInput, endDateInput) {
     let dataDate = data['gameDateTime'].split(' ')[0];
-    //console.log(dataDate + " " + startDateInput + " " + endDateInput)
     if (startDateInput <= dataDate && dataDate <= endDateInput) {
       return true;
     }
@@ -32,7 +31,7 @@ const RightContiner = (props) => {
   }
 
   useEffect(()=>{
-    console.log("render from useEffect");
+    //console.log("render from useEffect");
     let tempData = props.userHistory.data;
     switch(currentDisplay) {
       case 'allBets':
@@ -78,8 +77,6 @@ const RightContiner = (props) => {
       break;
   }
 
-  //console.log(historyData);
-
   return (
     <Continer>
       <p className="titleStyle">My Bets</p>
@@ -94,17 +91,20 @@ const RightContiner = (props) => {
           <button className="eachButton" onClick={() => handleAction('finished')}>Finished</button>
         </StyleButton>
       </StyledButtonsContiner>
+
+      <div className="customDatePickerWidth">
+        <DatePicker 
+          selectsRange={true}
+          startDate={startDate} 
+          endDate={endDate}
+          onChange={(update) => {
+            setSelectedDateRange(update);
+          }}
+          isClearable
+          monthsShown={2}
+          />
+      </div>
       
-      <DatePicker 
-        selectsRange={true}
-        startDate={startDate} 
-        endDate={endDate}
-        onChange={(update) => {
-          setSelectedDateRange(update);
-        }}
-        isClearable={true}
-        monthsShown={2}
-        /> 
 
       <TablesContainer>
         <Table

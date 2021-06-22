@@ -14,10 +14,20 @@ function createTargetObj(history, type) {
     let targetObj = {
         gameDateTime: history.gameDetails.gameDate + " " + transformTime(history.gameDetails.gameStartTime),
         vs: history.gameDetails.homeTeam + "  vs  " + history.gameDetails.awayTeam,
-        score: history.gameDetails.HomeScore ? history.gameDetails.HomeScore + " : " + history.gameDetails.AwayScore : '--',
+        score: history.gameDetails.HomeScore ? Math.trunc(history.gameDetails.HomeScore) + 
+                        " : " + Math.trunc(history.gameDetails.AwayScore) : '--',
         betOdds:history[type] ? history[type].odds : '--',
         gameFinished: history.gameFinished ? 'Finished' : 'Ongoing',
     }
+    
+    let winTeam = "null";
+
+    if (history.gameFinished) {
+        winTeam = Math.trunc(history.gameDetails.HomeScore) > Math.trunc(history.gameDetails.AwayScore) ? 
+                        history.gameDetails.homeTeam : history.gameDetails.awayTeam
+    }
+
+    targetObj.vs = targetObj.vs + "--" + winTeam;
 
     switch (type) {
         case 'moneyLine':
@@ -41,44 +51,24 @@ export function structureUserGameHistory(gameHistory) {
 
     for (let i = 0; i < gameHistory.length; i++){
         let tempTargetObj = null
-        if ('moneyLine' in gameHistory[i]) {
+        if ('moneyLine' in gameHistory[i] && gameHistory[i].moneyLine.odds !== "") {
             tempTargetObj = null
             tempTargetObj = createTargetObj(gameHistory[i], 'moneyLine');
             structuredGameHistory.push(tempTargetObj);
         } 
         
-        if ('overAndUnder' in gameHistory[i]) {
+        if ('overAndUnder' in gameHistory[i] && gameHistory[i].overAndUnder.odds !== "") {
             tempTargetObj = null
             tempTargetObj = createTargetObj(gameHistory[i], 'overAndUnder');
             structuredGameHistory.push(tempTargetObj);
         } 
         
-        if ('handicap' in gameHistory[i]) {
+        if ('handicap' in gameHistory[i] && gameHistory[i].handicap.odds !== "") {
             tempTargetObj = null
             tempTargetObj = createTargetObj(gameHistory[i], 'handicap');
             structuredGameHistory.push(tempTargetObj);
         }
     }
-
-    //     let targetObj = {
-    //         gameDate: gameHistory[i].gameDetails.gameDate,
-    //         gameTime: gameHistory[i].gameDetails.gameStartTime,
-    //         vs: gameHistory[i].gameDetails.homeTeam + "  vs  " + gameHistory[i].gameDetails.awayTeam,
-    //         score: gameHistory[i][type] ? gameHistory[i][type].odds : '--',
-    //         betOdds: gameHistory[i][type] ? gameHistory[i][type].odds : '--',
-    //         bettingSide: type === 'overAndUnder' && gameHistory[i][type] ? '' : gameHistory[i][type] ? gameHistory[i][type].bettingSide : '--',
-    //         gameFinished: gameHistory[i].gameFinished ? 1 : 0
-    //     }
-
-    //     if(type === 'handicap'){
-    //         targetObj.spread = gameHistory[i][type] ? gameHistory[i][type].spread : '--'
-    //     }
-    //     else if(type === 'overAndUnder'){
-    //         targetObj.total = gameHistory[i][type].totalScore ? gameHistory[i][type].totalScore : '--'
-    //         delete targetObj.bettingSide
-    //     }
-    //     structuredGameHistory.push(targetObj)
-    // }
 
     return structuredGameHistory
 }

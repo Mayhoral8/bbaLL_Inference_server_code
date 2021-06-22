@@ -44,5 +44,5 @@ export const DataCell = styled.td`
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
-    height:120px;
+    height:80px;
 `

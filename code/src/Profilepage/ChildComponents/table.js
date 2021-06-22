@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react'
-import {useTable} from 'react-table'
+import {useTable, useSortBy} from 'react-table'
 import {
     TableContainer,
     TableHead,
@@ -14,12 +14,23 @@ const Table = (props) => {
 
     const columns = useMemo(() => props.columns)
     const data = useMemo(() => props.data)
-    const tableInstance = useTable({
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable({
         columns,
         data,
-    })
-    let {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = tableInstance
-   
+        initialState:{ sortBy: [
+            {
+                id: 'gameDateTime',
+                desc: false
+            }
+        ]}
+    }, useSortBy);
+
     return(
         <Continer>
         <TableContainer {...getTableProps()}>
@@ -72,14 +83,33 @@ const Table = (props) => {
                                                 )
                                             case 2:
                                                 let teamNamesArray = cell.render('Cell').props.cell.value.split('vs')
-                                                let homeTeam = teamNamesArray[0].split(' ')
-                                                let awayTeam = teamNamesArray[1].split(' ')
-                                                return(
-                                                    <DataCell {...cell.getCellProps} key = {childIndex}>
-                                                        <p>{homeTeam[0] + " " + homeTeam[1] + " vs"}</p>
-                                                        <p>&emsp;&emsp;&emsp;&emsp;{awayTeam[2] + " " + awayTeam[3]} </p>
-                                                    </DataCell>
-                                                )
+                                                let homeTeam = teamNamesArray[0];
+                                                let awayTeam = teamNamesArray[1].split('--')
+
+                                                if (homeTeam.includes(awayTeam[1])) {
+                                                    return(
+                                                        <DataCell {...cell.getCellProps} key = {childIndex}>
+                                                            <p><b>{homeTeam}</b> VS </p>
+                                                            <p>&emsp;&emsp;&emsp;&emsp;{awayTeam[0]} </p>
+                                                        </DataCell>
+                                                    )
+                                                } else if (awayTeam[0].includes(awayTeam[1])){
+                                                    return(
+                                                        <DataCell {...cell.getCellProps} key = {childIndex}>
+                                                            <p>{homeTeam} VS </p>
+                                                            <p>&emsp;&emsp;&emsp;&emsp;<b>{awayTeam[0]}</b></p>
+                                                        </DataCell>
+                                                    )
+                                                } else {
+                                                    return(
+                                                        <DataCell {...cell.getCellProps} key = {childIndex}>
+                                                            <p>{homeTeam} VS </p>
+                                                            <p>&emsp;&emsp;&emsp;&emsp;{awayTeam[0]}</p>
+                                                        </DataCell>
+
+                                                    )
+                                                }
+
                                             case 5:
                                                 let isGameFinished = cell.render('Cell').props.cell.value;
                                                 if (isGameFinished === 'Ongoing') {

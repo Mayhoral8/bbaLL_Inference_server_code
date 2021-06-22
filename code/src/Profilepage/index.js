@@ -9,6 +9,7 @@ import Spinner from '../Shared/Spinner/Spinner'
 import {connect} from 'react-redux'
 import {getUserBettingHistory} from '../redux/actions/bettingHistoryActions'
 import RightContiner from './ChildComponents/rightContiner'
+import LeftUserProfile from './ChildComponents/sideProfile'
 
 const ProfilePage = (props) => {
     const [spinner, setSpinner] = useState(true)
@@ -42,7 +43,7 @@ const ProfilePage = (props) => {
             <Spinner/>
             :
             <ProfilePageContainer>
-                <div>left</div>
+                <LeftUserProfile />
                 <RightContiner userHistory = {props.bettingHistory}/>
             </ProfilePageContainer>
     )
