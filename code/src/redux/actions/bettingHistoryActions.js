@@ -53,17 +53,6 @@ export const getUserBettingHistory = (userId) => {
                         }
                         
                         let structuredData = structureUserGameHistory(bettingHistory); 
-                        // let structuredBettingHistoryMoneyLine = structureUserGameHistory(bettingHistory)
-                        // let structuredBettingHistorySpread = structureUserGameHistory(bettingHistory)
-                        // let structuredBettingHistoryOverUnder = structureUserGameHistory(bettingHistory)
-
-                    
-                        // let bettingHistoryTargetObj = {
-                        //     moneyLine: structuredBettingHistoryMoneyLine,
-                        //     spread: structuredBettingHistorySpread,
-                        //     overUnder: structuredBettingHistoryOverUnder,
-                        //     isLoading: false
-                        // }
 
                         if (i === betDates.length - 1) {
                             let bettingHistoryTargetObj = {
