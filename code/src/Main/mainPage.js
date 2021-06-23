@@ -10,7 +10,6 @@ import useWindowSize from "Shared/hooks/useWindowSize";
 import PlayerRankingsCard from "./playerRankingsCard";
 import MemeCard from "./memeCard";
 import TeamScoreTable from "./TeamScoreTable";
-import styled from "styled-components";
 import FutureGameList from "./futuregamelist";
 import {
   FutureGameListBox,
@@ -47,6 +46,7 @@ const GamePageContainer = () => {
       .catch((error) => {
         console.log(error);
       });
+      
     fbFirestore
       .collection("landing_page_Video")
       .get()
@@ -169,6 +169,7 @@ const GamePageContainer = () => {
                 <PlayerRankingsCard
                   data={[data[0], data[1], data[2]]}
                   rankingTypes={playerRankingTypes}
+                  timeOut = {5000}
                 />
               ) : (
                 <PlayerRankingPlaceholderBox>

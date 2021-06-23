@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as teamColours from "../constants/teamColours";
 import { fbStorage } from "../App/config";
-import GetPlayerImage from "../Individual/Components/GetPlayerImage";
+import { exportComponentAsJPEG } from 'react-component-export-image';
 import Select from "react-select";
 import { CardContainer, OutsideContainer } from "./playerrankingscard-style";
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const PlayerRankingsCard = ({ data, rankingTypes }) => {
-  //const [JSON, setJSON] = useState(data);
+const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
   const [imgs, setImgs] = useState({});
 
   try {
@@ -35,8 +34,6 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
         data[i][prop] = arr;
       }
   }, []);
-
-  //  const rankingTypes = ["Daily", "Weekly", "Seasonal"];
 
   const units = {
     Points: "PTS",
@@ -64,7 +61,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
 
   // for cycling through daily, weekly and seasonal rankings
   const [isCycling, setIsCycling] = useState(true);
-  const [cycleInterval, setCycleInterval] = useState(5000); // 5 seconds between transition
+  const [cycleInterval, setCycleInterval] = useState(timeOut); // 5 seconds between transition: ;
 
   const useInterval = (callback, delay) => {
     const savedCallback = useRef();
@@ -87,8 +84,10 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
   };
 
   const hasDataLoaded = Object.entries(data[0]).length !== 0;
-  if (hasDataLoaded) {
-    useEffect(() => {
+
+  useEffect(() => {
+
+    if(hasDataLoaded){
       setTopPlayers(
         data[rankingTypeIndex][scoreType.current]
           .sort((a, b) => {
@@ -98,8 +97,12 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
           })
           .slice(0, 4)
       );
-    }, []);
-  }
+    }
+
+
+
+  }, []);
+
   if (isCycling) {
     useInterval(() => {
       if (rankingTypeIndex >= rankingTypes.length - 1) {
@@ -113,14 +116,13 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
   useEffect(() => {
     let names = [];
     Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
-
     getPic(names);
   }, [topPlayers]);
 
-  const InitialLabels = ["Points", "Points", "Num_DD"];
-
   useEffect(() => {
+    const InitialLabels = ["Points", "Points", "Num_DD"];
     scoreType.current = InitialLabels[rankingTypeIndex];
+
     setTopPlayers(
       data[rankingTypeIndex][scoreType.current]
         .sort((a, b) => {
@@ -130,6 +132,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
         })
         .slice(0, 4)
     );
+
   }, [rankingTypeIndex]);
 
   const getPic = async (playerNames) => {
@@ -171,6 +174,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
   Object.keys(data[rankingTypeIndex]).map((value) => {
     selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
   });
+
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       const playerRankingsCardRef = useRef(null)
@@ -194,6 +198,16 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
             />
           </button>
+
+
+
+
+
+
+
+
+
+
           <CardContainer ref = {playerRankingsCardRef}>
             <div className="top">
               <div className="title">
@@ -277,6 +291,15 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
               })}
             </div>
           </CardContainer>
+
+
+
+
+
+
+
+
+
 
           <button
             className="right-arrow"
