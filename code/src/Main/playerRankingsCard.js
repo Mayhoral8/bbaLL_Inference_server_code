@@ -173,6 +173,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
   });
   const renderComponent = () => {
     if (hasDataLoaded == true) {
+      const playerRankingsCardRef = useRef(null)
       return (
         <OutsideContainer>
           <button
@@ -193,7 +194,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
             />
           </button>
-          <CardContainer>
+          <CardContainer ref = {playerRankingsCardRef}>
             <div className="top">
               <div className="title">
                 {rankingTypes[rankingTypeIndex]} Player Rankings
