@@ -28,12 +28,14 @@ export const Header = styled.h4`
 `
 
 export const ColContainer = styled.div`
-    display: flex;
     width: 100%;
 `
 
 export const Col = styled.div`
-    width: 50%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    margin: 5px 0px;
+    
 `
 
 export const ColHeading = styled.div`

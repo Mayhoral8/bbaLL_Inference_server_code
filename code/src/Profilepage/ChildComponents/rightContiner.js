@@ -5,18 +5,19 @@ import { Continer,
         TablesContainer} from '../Styles/rightContiner-style';
 import constants from '../constants.json';
 import Table from './table.js';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import DatePicker from 'react-modern-calendar-datepicker';
 import "../Styles/customDatePickerWidth.css";
 
 const RightContiner = (props) => {
   const [currentDisplay, setCurrentDisplay] = useState('allBets');
-  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
-  const [startDate, endDate] = selectedDateRange;
+  const [selectedDayRange, setSelectedDayRange] = useState({
+    from: null,
+    to: null
+  });
   const [historyData, setHistoryData] = useState(props.userHistory.data)
   let allBetsActive, onGoingActive,finishedActive;
-
+  let newFormatStartDate, newFromateEndDate
 
   function handleAction(newState) {
     setCurrentDisplay(newState);
@@ -28,6 +29,19 @@ const RightContiner = (props) => {
       return true;
     }
     return false;
+  }
+
+  function getDateFormat(dateObject) {
+    let returnString = null;
+    if (dateObject == null) {
+      return;
+    }
+    let year = dateObject['year'];
+    let month = (dateObject['month'] < 10) ? '0' + dateObject['month'] : dateObject['month'];
+    let day = (dateObject['day'] < 10) ? '0' + dateObject['day'] : dateObject['day'];
+    returnString = year + '-' + month + '-' + day;
+
+    return returnString;
   }
 
   useEffect(()=>{
@@ -44,13 +58,13 @@ const RightContiner = (props) => {
         break;
     }
 
-    if (startDate != null && endDate != null) {
-      let newFormatStartDate = moment(startDate).format('YYYY-MM-DD');
-      let newFromateEndDate = moment(endDate).format('YYYY-MM-DD');
+    if (selectedDayRange.from != null && selectedDayRange.to != null) {
+      newFormatStartDate = getDateFormat(selectedDayRange.from);
+      newFromateEndDate = getDateFormat(selectedDayRange.to);
       tempData = tempData.filter(eachData => withinDateRange(eachData, newFormatStartDate, newFromateEndDate));
     }
     setHistoryData(tempData); 
-  },[currentDisplay, selectedDateRange])
+  },[currentDisplay, selectedDayRange])
 
   switch (currentDisplay) {
     case 'allBets':
@@ -77,6 +91,27 @@ const RightContiner = (props) => {
       break;
   }
 
+  const renderCustomInput = ({ ref }) => (
+    <input
+      readOnly
+      ref={ref}
+      placeholder="Select A Range"
+      value={selectedDayRange.from && selectedDayRange.to ? 
+            `${getDateFormat(selectedDayRange.from)} - ${getDateFormat(selectedDayRange.to)}`: ''}
+      style={{
+        textAlign: 'center',
+        padding: '1rem 1.5rem',
+        fontSize: '18px',
+        border: '1px solid #9c88ff',
+        borderRadius: '20px',
+        width: '400px',
+        boxShadow: '0 1.5rem 2rem rgba(156, 136, 255, 0.2)',
+        color: '#9c88ff',
+        outline: 'none',
+      }}
+    />
+  )
+
   return (
     <Continer>
       <p className="titleStyle">My Bets</p>
@@ -93,16 +128,36 @@ const RightContiner = (props) => {
       </StyledButtonsContiner>
 
       <div className="customDatePickerWidth">
-        <DatePicker 
-          selectsRange={true}
-          startDate={startDate} 
-          endDate={endDate}
-          onChange={(update) => {
-            setSelectedDateRange(update);
-          }}
-          isClearable
-          monthsShown={2}
-          />
+        <DatePicker
+          value={selectedDayRange}
+          onChange={setSelectedDayRange}
+          shouldHighlightWeekends
+          colorPrimary="#552A9F"
+          colorPrimaryLight="rgba(85, 42, 159, 0.4)"
+          renderInput={renderCustomInput}
+          renderFooter={() => (
+            <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '40px'}}>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedDayRange({
+                    from: null,
+                    to: null
+                  })
+                }}
+                style={{
+                  border: '#0fbcf9',
+                  color: '#fff',
+                  borderRadius: '0.5rem',
+                  padding: '12px 7px',
+                  backgroundColor: '#552A9F'
+                }}
+              >
+                Reset Value!
+              </button>
+            </div>
+          )}
+        />
       </div>
       
 

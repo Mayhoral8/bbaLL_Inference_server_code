@@ -15,5 +15,5 @@ export const TablesContainer = styled.div`
 `
 
 export const leftContiner = styled.div`
-    background-color: lightblue;
+   
 `

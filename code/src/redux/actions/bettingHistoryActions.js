@@ -79,12 +79,6 @@ export const getUserBettingHistory = (userId) => {
                         data: [],
                         isLoading: false
                     }
-                    // payload: {
-                    //     moneyLine: [],
-                    //     spread: [],
-                    //     overUnder: [],
-                    //     isLoading: false
-                    // }
                 })
                 return {success: true}
             }
