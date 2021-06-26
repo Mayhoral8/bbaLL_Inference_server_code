@@ -64,8 +64,30 @@ const Home = Loadable({
     return <Spinner />;
   },
 });
+
 const ProfilePage = Loadable({
   loader: () => import("../Profilepage/index"),
+  loading() {
+    return <Spinner />;
+  },
+});
+
+const ScreenCaptureHomePage = Loadable({
+  loader: () => import("../ScreenCapture/homePage/homePage"),
+  loading() {
+    return <Spinner />;
+  },
+});
+
+const ScreenCaptureGamesPage = Loadable({
+  loader: () => import("../ScreenCapture/gamesPage"),
+  loading() {
+    return <Spinner />;
+  },
+});
+
+const ScreenCaptureStatsPage = Loadable({
+  loader: () => import("../ScreenCapture/statsPage"),
   loading() {
     return <Spinner />;
   },
@@ -100,6 +122,9 @@ const Routes = (props) => {
               <Route path="/login" component={Login} />
               <Route path="/betting" component={Betting} />
               <Route path="/profile" component={ProfilePage} />
+              <Route path="/screen-capture/home-page" component={ScreenCaptureHomePage} />
+              <Route path="/screen-capture/games-page" component={ScreenCaptureGamesPage} />
+              <Route path="/screen-capture/stats-page" component={ScreenCaptureStatsPage} />
               <Footer />
             </MainContainerDiv>
           </Layout>
