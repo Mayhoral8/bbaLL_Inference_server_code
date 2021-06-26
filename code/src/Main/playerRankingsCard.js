@@ -8,7 +8,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
+const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankingIndex, isScreenCapture, selectAttrIndex }) => {
   const [imgs, setImgs] = useState({});
 
   try {
@@ -21,20 +21,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
   for (let i = 0; i < rankingTypes.length; i++) {
     rankingTypes[i] = capitalizeFirstLetter(rankingTypes[i]);
   }
-
-  useEffect(() => {
-    for (let i = 0; i < data.length; i++)
-      for (const prop in data[i]) {
-        let arr = [];
-
-        for (const name in data[i][prop]) {
-          arr.push({ [name]: data[i][prop][name] });
-        }
-
-        data[i][prop] = arr;
-      }
-  }, []);
-
   const units = {
     Points: "PTS",
     Assist: "AST",
@@ -46,7 +32,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
     PointsPerPoss: "PTS/POSS",
   };
 
-  const scoreType = useRef("Points");
   const valueType = {
     FantasyScore: "Fantasy",
     Points: "Points",
@@ -55,12 +40,23 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
     Num_DD: "Num_DD",
     Num_TD: "Num_TD",
   };
-  const [rankingTypeIndex, setRankingTypeIndex] = useState(0);
 
+  const labelsForDropdown = {
+    FantasyScore: "Fantasy Score",
+    Points: "Points",
+    PointsPerPoss: "Possession",
+    "Three-Pointers": "Three-pointers",
+    Num_DD: "Double-Double",
+    Num_TD: "Triple-Double",
+  };
+
+  const hasDataLoaded = Object.entries(data[0]).length !== 0;
+  const scoreType = useRef("Points");
+
+  const [rankingTypeIndex, setRankingTypeIndex] = useState(selectRankingIndex);
   const [topPlayers, setTopPlayers] = useState({});
-
-  // for cycling through daily, weekly and seasonal rankings
-  const [isCycling, setIsCycling] = useState(true);
+  // For cycling through daily, weekly and seasonal rankings
+  const [isCycling, setIsCycling] = useState(cycling);
   const [cycleInterval, setCycleInterval] = useState(timeOut); // 5 seconds between transition: ;
 
   const useInterval = (callback, delay) => {
@@ -83,11 +79,22 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
     }, [delay]);
   };
 
-  const hasDataLoaded = Object.entries(data[0]).length !== 0;
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++)
+      for (const prop in data[i]) {
+        let arr = [];
+
+        for (const name in data[i][prop]) {
+          arr.push({ [name]: data[i][prop][name] });
+        }
+
+        data[i][prop] = arr;
+      }
+  }, []);
 
   useEffect(() => {
-
     if(hasDataLoaded){
+
       setTopPlayers(
         data[rankingTypeIndex][scoreType.current]
           .sort((a, b) => {
@@ -97,11 +104,40 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
           })
           .slice(0, 4)
       );
+
     }
-
-
-
   }, []);
+
+  useEffect(() => {
+    if(isScreenCapture){
+      setRankingTypeIndex(selectRankingIndex)
+    }
+  }, [selectRankingIndex])
+
+  useEffect(() => {
+    let names = [];
+    Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
+    getPic(names);
+  }, [topPlayers]);
+
+  let selectOptions = [];
+  const InitialLabels = ["Points", "Points", "Num_DD"];
+  Object.keys(data[rankingTypeIndex]).map((value) => {
+    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
+  });
+
+  useEffect(() => {
+    scoreType.current = selectOptions[0] && selectAttrIndex ? selectOptions[selectAttrIndex].value[0] : InitialLabels[rankingTypeIndex]; 
+    setTopPlayers(
+      data[rankingTypeIndex][scoreType.current]
+        .sort((a, b) => {
+          const aName = Object.keys(a)[0];
+          const bName = Object.keys(b)[0];
+          return a[aName]["Rank"] - b[bName]["Rank"];
+        })
+        .slice(0, 4)
+    );
+  }, [rankingTypeIndex, selectAttrIndex]);
 
   if (isCycling) {
     useInterval(() => {
@@ -113,27 +149,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
     }, cycleInterval);
   }
 
-  useEffect(() => {
-    let names = [];
-    Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
-    getPic(names);
-  }, [topPlayers]);
-
-  useEffect(() => {
-    const InitialLabels = ["Points", "Points", "Num_DD"];
-    scoreType.current = InitialLabels[rankingTypeIndex];
-
-    setTopPlayers(
-      data[rankingTypeIndex][scoreType.current]
-        .sort((a, b) => {
-          const aName = Object.keys(a)[0];
-          const bName = Object.keys(b)[0];
-          return a[aName]["Rank"] - b[bName]["Rank"];
-        })
-        .slice(0, 4)
-    );
-
-  }, [rankingTypeIndex]);
 
   const getPic = async (playerNames) => {
     playerNames.map((name) => {
@@ -161,20 +176,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
     });
   };
 
-  const labelsForDropdown = {
-    FantasyScore: "Fantasy Score",
-    Points: "Points",
-    PointsPerPoss: "Possession",
-    "Three-Pointers": "Three-pointers",
-    Num_DD: "Double-Double",
-    Num_TD: "Triple-Double",
-  };
-
-  let selectOptions = [];
-  Object.keys(data[rankingTypeIndex]).map((value) => {
-    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
-  });
-
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       const playerRankingsCardRef = useRef(null)
@@ -199,15 +200,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
             />
           </button>
 
-
-
-
-
-
-
-
-
-
           <CardContainer ref = {playerRankingsCardRef}>
             <div className="top">
               <div className="title">
@@ -219,20 +211,22 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
                   value={scoreType.current}
                   styles={{ width: `${8 * scoreType.current.length + 100}px` }}
                   onChange={(selected) => {
-                    // stops rankings from cycling when component is clicked
-                    if (cycleInterval !== null) {
-                      setCycleInterval(null);
+                    if(!isScreenCapture){
+                      // stops rankings from cycling when component is clicked
+                      if (cycleInterval !== null) {
+                        setCycleInterval(null);
+                      }
+                      scoreType.current = selected.value[0];
+                      setTopPlayers(
+                        data[rankingTypeIndex][scoreType.current]
+                          .sort((a, b) => {
+                            const aName = Object.keys(a)[0];
+                            const bName = Object.keys(b)[0];
+                            return a[aName]["Rank"] - b[bName]["Rank"];
+                          })
+                          .slice(0, 4)
+                      );
                     }
-                    scoreType.current = selected.value[0];
-                    setTopPlayers(
-                      data[rankingTypeIndex][scoreType.current]
-                        .sort((a, b) => {
-                          const aName = Object.keys(a)[0];
-                          const bName = Object.keys(b)[0];
-                          return a[aName]["Rank"] - b[bName]["Rank"];
-                        })
-                        .slice(0, 4)
-                    );
                   }}
                   options={selectOptions}
                   className="select"
@@ -291,15 +285,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut }) => {
               })}
             </div>
           </CardContainer>
-
-
-
-
-
-
-
-
-
 
           <button
             className="right-arrow"

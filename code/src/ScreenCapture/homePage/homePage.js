@@ -21,21 +21,66 @@ const HomePage = () => {
     const [playerRankings, setPlayerRankings] = useState([{}, {}, {}])
     const [futureGames, setFutureGames] = useState([])
     const [rankingTypes, setRankingTypes] = useState([])
+    const [rankingTypeIndex, setRankingTypeIndex] = useState(0)
+    const [selectAttrIndex, setSelectAttrIndex] = useState(0)
+
+
+    const playerRankRef = useRef(null)
+    const futureGameListRef = useRef(null)
+
 
     useEffect(() => {
         setPlayerRankings(getPlayerRankings())
         setFutureGames(getFutureGames())
-        setTimeout(() => {
-          // exportPlayerRankingImage()
+
+        setTimeout(async() => {
+          
+            // await exportPlayerRankingImage('BidailyPlayerRankings')
+            setSelectAttrIndex(1)
         }, 10000)
+
     }, [])
 
     useEffect(() => {
         if(playerRankings[0] && rankingTypes[0] && futureGames[0]){
             setLoading(false)
         }
-
     }, [playerRankings, rankingTypes, futureGames])
+
+    useEffect(() => {
+      if(rankingTypeIndex === 0){
+        if(selectAttrIndex < 3){
+          setTimeout(() => {
+            setSelectAttrIndex((prevState) => prevState + 1)
+          }, 2000)
+        }
+
+        else{
+          setSelectAttrIndex(0)
+          setRankingTypeIndex(1)
+        }
+      }
+      else if(rankingTypeIndex === 1){
+        if(selectAttrIndex < 3){
+
+          setTimeout(() => {
+            setSelectAttrIndex((prevState) => prevState+ 1)
+          }, 2000)
+        }
+
+        else{
+          setSelectAttrIndex(0)
+          setRankingTypeIndex(2)
+        }
+      }
+      else if(rankingTypeIndex === 2){
+        if(selectAttrIndex < 1){
+          setTimeout(() => {
+            setSelectAttrIndex(prevState => prevState + 1)
+          }, 2000)
+        }
+      }
+    }, [rankingTypeIndex, selectAttrIndex])
 
     const getPlayerRankings = () => {
       let data = [];
@@ -82,16 +127,11 @@ const HomePage = () => {
       return gamesFound
     }
 
-    const exportPlayerRankingImage = () => {
-      exportComponentAsJPEG(futureGameListRef)
-    }
-
-    const playerRankRef = useRef(null)
-    const futureGameListRef = useRef(null)
-
-
-    const onButtonClick = () => {
-      exportComponentAsJPEG(futureGameListRef)
+    const exportPlayerRankingImage = async(fileName, captureFutureGamesCard) => {
+      await exportComponentAsJPEG(playerRankRef, {fileName})
+      if(captureFutureGamesCard){
+        exportComponentAsJPEG(futureGameListRef, {fileName: 'futureGameCard'})
+      }
     }
 
     return(
@@ -103,7 +143,12 @@ const HomePage = () => {
               <PlayerRankingCard
                data = {[playerRankings[0], playerRankings[1], playerRankings[2]]}
                rankingTypes = {rankingTypes}
+               selectedRankingType = {null}
                timeOut = {null}
+               cycling  = {false}
+               selectRankingIndex = {rankingTypeIndex}
+               isScreenCapture = {true}
+               selectAttrIndex = {selectAttrIndex}
               />
             </PlayerRanks>
 
@@ -120,7 +165,6 @@ const HomePage = () => {
                 </FutureGameListRow>
               </FutureGameListBox>
             </FutureGames>
-            <button onClick = {() => { onButtonClick() }}>Click Me!</button>
         </HomePageContainer>
     )
 }

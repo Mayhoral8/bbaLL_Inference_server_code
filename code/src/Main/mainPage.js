@@ -170,6 +170,8 @@ const GamePageContainer = () => {
                   data={[data[0], data[1], data[2]]}
                   rankingTypes={playerRankingTypes}
                   timeOut = {5000}
+                  cycling = {true}
+                  selectRankingIndex = {0}
                 />
               ) : (
                 <PlayerRankingPlaceholderBox>
