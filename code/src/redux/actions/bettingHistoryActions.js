@@ -24,7 +24,6 @@ export const getUserBettingHistory = (userId) => {
 
             for (let i = 0; i < data.length; i++){
                 let betDatesKeys = Object.keys(data[i].docData)
-
                 for (let j = 0; j < betDatesKeys.length; j++){
                     let gameMonth = moment(betDatesKeys[j]).format('M')
                     if(gameMonth === currentMonth){
@@ -33,13 +32,14 @@ export const getUserBettingHistory = (userId) => {
                 }
                 
             }
-            
+
             let bettingHistory = []
+            //console.log("BetDates length: " + betDates.length);
             if(betDates.length > 0){
                 for (let i = 0; i < betDates.length; i++){
 
                     try{
-
+                        //console.log("Current index: " + i);
                         let userBettingHistory = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(betDates[i]).collection('gameId').get()
                         let recordsArray = []
                         userBettingHistory.forEach((doc) => {
@@ -51,35 +51,32 @@ export const getUserBettingHistory = (userId) => {
                         for (let j = 0; j < recordsArray.length; j++){
                             bettingHistory.push(recordsArray[j].docData)
                         }
-    
-                        let structuredBettingHistoryMoneyLine = structureUserGameHistory(bettingHistory, 'moneyLine')
-                        let structuredBettingHistorySpread = structureUserGameHistory(bettingHistory, 'handicap')
-                        let structuredBettingHistoryOverUnder = structureUserGameHistory(bettingHistory, 'overAndUnder')
-                        let bettingHistoryTargetObj = {
-                            moneyLine: structuredBettingHistoryMoneyLine,
-                            spread: structuredBettingHistorySpread,
-                            overUnder: structuredBettingHistoryOverUnder,
-                            isLoading: false
+                        
+                        let structuredData = structureUserGameHistory(bettingHistory); 
+
+                        if (i === betDates.length - 1) {
+                            let bettingHistoryTargetObj = {
+                                data: structuredData,
+                                isLoading: false
+                            }
+                            dispatch({
+                                type: 'BettingHistory',
+                                payload: bettingHistoryTargetObj
+                            })
                         }
-                        dispatch({
-                            type: 'BettingHistory',
-                            payload: bettingHistoryTargetObj
-                        })
-                        return {success: true}
                     }
                     catch(e){
                         throw e
                     }
                 }
+                return {success: true}
             }
 
             else{
                 dispatch({
                     type: 'BettingHistory',
                     payload: {
-                        moneyLine: [],
-                        spread: [],
-                        overUnder: [],
+                        data: [],
                         isLoading: false
                     }
                 })
