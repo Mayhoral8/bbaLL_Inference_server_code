@@ -169,9 +169,9 @@ class PlotContainer extends PureComponent {
           console.log(data.dataset);
         }
         // years.includes("1996-97")
-        if (years.includes("1996") || years.includes("1997")) {
-          data.dataset.hidden = "true"
-        }
+        // if (years.includes("1996") || years.includes("1997")) {
+        //   data.dataset.hidden = "true"
+        // }
 
         plotdata.push(data);
       });
@@ -429,20 +429,24 @@ class PlotContainer extends PureComponent {
         .map((p) => p.dataset);
     };
 
-    //for plotting old players without issues
+    //for plotting legend players including years of 1996-97
     return years.includes("1996-97")
       ? preprocessData
-          .map((plots) => plots.filter((data) => data.name.slice(-10) !== "Plus/minus"))
+          .map((plots) => plots.filter((data) => data.name.slice(-10) !== "Plus/Minus" ))
           .map((plot, i) => {
-            return plotJsx(
-              lineData(plot),
-              barData(plot),
-              this.getPlotTitle(plot).filter(
-                (title) => !title.match(/Plus\/minus/g)
-              )[i],
-              this.state.indivStat.years,
-              i
-            );
+            if(plot.length > 1){
+              console.log(plot)
+              return plotJsx(
+                lineData(plot),
+                barData(plot),
+                this.getPlotTitle(plot).filter(
+                  (title) => !title.match(/Plus\/minus/g)
+                )[i],
+                this.state.indivStat.years,
+                i
+              );
+            }
+            
           })
       : preprocessData.map((plot, i) => {
           return plotJsx(
@@ -461,7 +465,3 @@ class PlotContainer extends PureComponent {
 }
 export default withRouter(PlotContainer);
 
-/* 
-
-
-*/

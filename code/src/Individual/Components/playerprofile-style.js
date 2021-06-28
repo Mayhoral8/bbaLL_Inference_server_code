@@ -39,7 +39,13 @@ export const BasicInfoDiv = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   align-items: center;
-
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
+  @media only screen and (min-width: 1024px) and (max-height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (hover: none) {
+    width: 100%
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
   .player__img-name {
     display: flex;
     align-items: center;

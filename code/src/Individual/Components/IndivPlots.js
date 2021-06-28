@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import useWindowSize from "../../Shared/hooks/useWindowSize";
 import { Bar, Line } from "react-chartjs-2";
 import "chartjs-plugin-datalabels";
-import { Footer } from "../indiv-style"
 export const IndivPlots = ({ data, labels, barData, page }) => {
  
   // salary format for Y-Axis on Salary plot and datalabels
   const salaryOption = (value) => {
     if (parseInt(value) >= 10000) {
-      return "$" + value / 1e6 + "M";
+      return "$" + value / 1e6;
     } else {
       return value;
     }

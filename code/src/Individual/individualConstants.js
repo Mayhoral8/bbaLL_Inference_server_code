@@ -14,7 +14,7 @@ export const plotStats = {
     ],
     plus_minus: [
       [["AVG_PLUS_MINUS", "DOWN_PLUS_MINUS", "UP_PLUS_MINUS"]],
-      [["Plus/Minus", "Down Plus/minus", "Up Plus/minus"]],
+      [["Plus/Minus", "Down Plus/Minus", "Up Plus/Minus"]],
       ["Plus/Minus"],
       "Plus/Minus",
       ["scatterline", "scatterline"],

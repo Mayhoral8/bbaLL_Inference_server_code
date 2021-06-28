@@ -60,7 +60,6 @@ const IndivPage = ({ indivStat, location }) => {
     setYears(years);
     setCareerStats(careerStats);
   };
-  console.log("this.props.indivStat", indivStat);
   return (
     <>
       <ScrollToTopOnMount />

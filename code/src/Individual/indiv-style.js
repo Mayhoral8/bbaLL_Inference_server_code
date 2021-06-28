@@ -43,17 +43,10 @@ export const CareerTableDiv = styled.div`
 
 export const PlotDiv = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 1.5rem;
   position: relative;
   z-index: 1;
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  }
-  @media only screen and (min-width: 1024px) and (max-height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (hover: none) {
-    width: 100%
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  }
 `;
 export const Footer = styled.div`
   grid-row: 3;
