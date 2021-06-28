@@ -26,11 +26,11 @@ const EachColum = (
     let number = array[1].replace(/[{()}]/g, '');
     let winTeamArray = winTeam.split(' ');
     let newWinTeamString = winTeamArray[winTeamArray.length - 1];
-    displayInformation = newWinTeamString + " wins with a handicap of " + number;
+    displayInformation = newWinTeamString + " wins with " + number + " spread ";
   } else if (bettingType.includes('Over & Under')) {
     let array = bettingType.split(' ');
     let number = array[3].replace(/[{()}]/g, '');
-    displayInformation = "Total over " + number;
+    displayInformation = "Total score over " + number;
     bettingType = array[0] + ' ' + array[1] + ' ' + array[2];
   }
     

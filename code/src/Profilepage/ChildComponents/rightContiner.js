@@ -22,7 +22,7 @@ const RightContiner = (props) => {
   const screenWidth = useWindowSize();
   let allBetsActive, onGoingActive,finishedActive;
   let newFormatStartDate, newFromateEndDate;
-  let maxDate = props.minDate, minDate = props.maxDate;
+  let maxDate = props.maxDate, minDate = props.minDate;
 
   function handleAction(newState) {
     setCurrentDisplay(newState);
