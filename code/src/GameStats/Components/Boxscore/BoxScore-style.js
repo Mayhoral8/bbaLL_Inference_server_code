@@ -6,6 +6,15 @@ export const BoxScoreContainerWrapper = styled.div`
   margin-bottom: 2rem;
   padding-bottom: 2rem;
 `
+
+export const HomeTeamBoxScore = styled.div`
+
+`
+
+export const AwayTeamBoxScore = styled.div`
+  
+`
+
 // used in BoxScoreTable.js
 export const BoxScoreTableWrapper = styled.div`
   display: flex;

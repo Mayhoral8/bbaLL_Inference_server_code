@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { RoutesContainer } from "./app-style";
 import { MainContainerDiv } from "./app-style";
 import { GlobalStyle } from "../globalStyles";
@@ -14,52 +14,80 @@ import Spinner from "../Shared/Spinner/Spinner";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import "firebase/auth";
-import { firebaseInstanceSpigamebet } from "./spigamebetFirebase";
 import { checkLoginStatus } from "../redux/actions/authActions";
+
 const Games = Loadable({
   loader: () => import("../GameStats/GamePageContainer"),
   loading() {
     return <Spinner />;
   },
 });
+
 const Leaderboard = Loadable({
   loader: () => import("../Leaderboard/LeaderPageContainer"),
   loading() {
     return <Spinner />;
   },
 });
+
 const Stats = Loadable({
   loader: () => import("../Stats/StatsPageContainer.js"),
   loading() {
     return <Spinner />;
   },
 });
+
 const Indiv = Loadable({
   loader: () => import("../Individual/IndivContainer"),
   loading() {
     return <Spinner />;
   },
 });
+
 const Comparsion = Loadable({
   loader: () => import("../Comparison/ComparisonPage"),
   loading() {
     return <Spinner />;
   },
 });
+
 const Betting = Loadable({
-  loader: () => import("../betting/index"),
+  loader: () => import("../Betting/index"),
   loading() {
     return <Spinner />;
   },
 });
+
+const Home = Loadable({
+  loader: () => import("../Main/mainPage"),
+  loading() {
+    return <Spinner />;
+  },
+});
+
 const ProfilePage = Loadable({
   loader: () => import("../Profilepage/index"),
   loading() {
     return <Spinner />;
   },
 });
-const Home = Loadable({
-  loader: () => import("../Main/mainPage"),
+
+const ScreenCaptureHomePage = Loadable({
+  loader: () => import("../ScreenCapture/homePage/homePage"),
+  loading() {
+    return <Spinner />;
+  },
+});
+
+const ScreenCaptureGamesPage = Loadable({
+  loader: () => import("../ScreenCapture/gamesPage"),
+  loading() {
+    return <Spinner />;
+  },
+});
+
+const ScreenCaptureStatsPage = Loadable({
+  loader: () => import("../ScreenCapture/statsPage"),
   loading() {
     return <Spinner />;
   },
@@ -72,6 +100,7 @@ const Routes = (props) => {
       //Error handeling
     }
   }, []);
+
   return (
     <>
       <RoutesContainer>
@@ -93,6 +122,9 @@ const Routes = (props) => {
               <Route path="/login" component={Login} />
               <Route path="/betting" component={Betting} />
               <Route path="/profile" component={ProfilePage} />
+              <Route path="/screen-capture/home-page" component={ScreenCaptureHomePage} />
+              <Route path="/screen-capture/games-page" component={ScreenCaptureGamesPage} />
+              <Route path="/screen-capture/stats-page" component={ScreenCaptureStatsPage} />
               <Footer />
             </MainContainerDiv>
           </Layout>
@@ -102,7 +134,7 @@ const Routes = (props) => {
   );
 };
 const mapStateToProps = (state) => {
-  //console.log(state);
+  console.log(state)
   return {
     userDetails: state.authReducer.userDetails,
   };

@@ -1,21 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as teamColours from "../constants/teamColours";
 import { fbStorage } from "../App/config";
-import GetPlayerImage from "../Individual/Components/GetPlayerImage";
+import { exportComponentAsJPEG } from 'react-component-export-image';
 import Select from "react-select";
-import {
-  CardContainer,
-  OutsideContainer,
-  selectContainer,
-} from "./playerrankingscard-style";
+import { CardContainer, OutsideContainer } from "./playerrankingscard-style";
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const PlayerRankingsCard = ({ data, rankingTypes }) => {
-  //const [JSON, setJSON] = useState(data);
+const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankingIndex, isScreenCapture, selectAttrIndex }) => {
   const [imgs, setImgs] = useState({});
-  console.log(rankingTypes);
 
   try {
     if (data == null) {
@@ -27,22 +21,6 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
   for (let i = 0; i < rankingTypes.length; i++) {
     rankingTypes[i] = capitalizeFirstLetter(rankingTypes[i]);
   }
-
-  useEffect(() => {
-    for (let i = 0; i < data.length; i++)
-      for (const prop in data[i]) {
-        let arr = [];
-
-        for (const name in data[i][prop]) {
-          arr.push({ [name]: data[i][prop][name] });
-        }
-
-        data[i][prop] = arr;
-      }
-  }, []);
-
-  //  const rankingTypes = ["Daily", "Weekly", "Seasonal"];
-
   const units = {
     Points: "PTS",
     Assist: "AST",
@@ -54,7 +32,6 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
     PointsPerPoss: "PTS/POSS",
   };
 
-  const scoreType = useRef("Points");
   const valueType = {
     FantasyScore: "Fantasy",
     Points: "Points",
@@ -63,13 +40,24 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
     Num_DD: "Num_DD",
     Num_TD: "Num_TD",
   };
-  const [rankingTypeIndex, setRankingTypeIndex] = useState(0);
 
+  const labelsForDropdown = {
+    FantasyScore: "Fantasy Score",
+    Points: "Points",
+    PointsPerPoss: "Possession",
+    "Three-Pointers": "Three-pointers",
+    Num_DD: "Double-Double",
+    Num_TD: "Triple-Double",
+  };
+
+  const hasDataLoaded = Object.entries(data[0]).length !== 0;
+  const scoreType = useRef("Points");
+
+  const [rankingTypeIndex, setRankingTypeIndex] = useState(selectRankingIndex);
   const [topPlayers, setTopPlayers] = useState({});
-
-  // for cycling through daily, weekly and seasonal rankings
-  const [isCycling, setIsCycling] = useState(true);
-  const [cycleInterval, setCycleInterval] = useState(5000); // 5 seconds between transition
+  // For cycling through daily, weekly and seasonal rankings
+  const [isCycling, setIsCycling] = useState(cycling);
+  const [cycleInterval, setCycleInterval] = useState(timeOut); // 5 seconds between transition: ;
 
   const useInterval = (callback, delay) => {
     const savedCallback = useRef();
@@ -91,9 +79,22 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
     }, [delay]);
   };
 
-  const hasDataLoaded = Object.entries(data[0]).length !== 0;
-  if (hasDataLoaded) {
-    useEffect(() => {
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++)
+      for (const prop in data[i]) {
+        let arr = [];
+
+        for (const name in data[i][prop]) {
+          arr.push({ [name]: data[i][prop][name] });
+        }
+
+        data[i][prop] = arr;
+      }
+  }, []);
+
+  useEffect(() => {
+    if(hasDataLoaded){
+
       setTopPlayers(
         data[rankingTypeIndex][scoreType.current]
           .sort((a, b) => {
@@ -103,8 +104,41 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
           })
           .slice(0, 4)
       );
-    }, []);
-  }
+
+    }
+  }, []);
+
+  useEffect(() => {
+    if(isScreenCapture){
+      setRankingTypeIndex(selectRankingIndex)
+    }
+  }, [selectRankingIndex])
+
+  useEffect(() => {
+    let names = [];
+    Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
+    getPic(names);
+  }, [topPlayers]);
+
+  let selectOptions = [];
+  const InitialLabels = ["Points", "Points", "Num_DD"];
+  Object.keys(data[rankingTypeIndex]).map((value) => {
+    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
+  });
+
+  useEffect(() => {
+    scoreType.current = selectOptions[0] && selectAttrIndex ? selectOptions[selectAttrIndex].value[0] : InitialLabels[rankingTypeIndex]; 
+    setTopPlayers(
+      data[rankingTypeIndex][scoreType.current]
+        .sort((a, b) => {
+          const aName = Object.keys(a)[0];
+          const bName = Object.keys(b)[0];
+          return a[aName]["Rank"] - b[bName]["Rank"];
+        })
+        .slice(0, 4)
+    );
+  }, [rankingTypeIndex, selectAttrIndex]);
+
   if (isCycling) {
     useInterval(() => {
       if (rankingTypeIndex >= rankingTypes.length - 1) {
@@ -115,27 +149,6 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
     }, cycleInterval);
   }
 
-  useEffect(() => {
-    let names = [];
-    Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
-
-    getPic(names);
-  }, [topPlayers]);
-
-  const InitialLabels = ["Points", "Points", "Num_DD"];
-
-  useEffect(() => {
-    scoreType.current = InitialLabels[rankingTypeIndex];
-    setTopPlayers(
-      data[rankingTypeIndex][scoreType.current]
-        .sort((a, b) => {
-          const aName = Object.keys(a)[0];
-          const bName = Object.keys(b)[0];
-          return a[aName]["Rank"] - b[bName]["Rank"];
-        })
-        .slice(0, 4)
-    );
-  }, [rankingTypeIndex]);
 
   const getPic = async (playerNames) => {
     playerNames.map((name) => {
@@ -163,21 +176,9 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
     });
   };
 
-  const labelsForDropdown = {
-    FantasyScore: "Fantasy Score",
-    Points: "Points",
-    PointsPerPoss: "Possession",
-    "Three-Pointers": "Three-pointers",
-    Num_DD: "Double-Double",
-    Num_TD: "Triple-Double",
-  };
-
-  let selectOptions = [];
-  Object.keys(data[rankingTypeIndex]).map((value) => {
-    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
-  });
   const renderComponent = () => {
     if (hasDataLoaded == true) {
+      const playerRankingsCardRef = useRef(null)
       return (
         <OutsideContainer>
           <button
@@ -198,7 +199,8 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
             />
           </button>
-          <CardContainer>
+
+          <CardContainer ref = {playerRankingsCardRef}>
             <div className="top">
               <div className="title">
                 {rankingTypes[rankingTypeIndex]} Player Rankings
@@ -209,20 +211,22 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
                   value={scoreType.current}
                   styles={{ width: `${8 * scoreType.current.length + 100}px` }}
                   onChange={(selected) => {
-                    // stops rankings from cycling when component is clicked
-                    if (cycleInterval !== null) {
-                      setCycleInterval(null);
+                    if(!isScreenCapture){
+                      // stops rankings from cycling when component is clicked
+                      if (cycleInterval !== null) {
+                        setCycleInterval(null);
+                      }
+                      scoreType.current = selected.value[0];
+                      setTopPlayers(
+                        data[rankingTypeIndex][scoreType.current]
+                          .sort((a, b) => {
+                            const aName = Object.keys(a)[0];
+                            const bName = Object.keys(b)[0];
+                            return a[aName]["Rank"] - b[bName]["Rank"];
+                          })
+                          .slice(0, 4)
+                      );
                     }
-                    scoreType.current = selected.value[0];
-                    setTopPlayers(
-                      data[rankingTypeIndex][scoreType.current]
-                        .sort((a, b) => {
-                          const aName = Object.keys(a)[0];
-                          const bName = Object.keys(b)[0];
-                          return a[aName]["Rank"] - b[bName]["Rank"];
-                        })
-                        .slice(0, 4)
-                    );
                   }}
                   options={selectOptions}
                   className="select"

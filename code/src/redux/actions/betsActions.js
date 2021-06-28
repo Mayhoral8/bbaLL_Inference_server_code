@@ -1,8 +1,8 @@
 import {fbFirestore} from '../../App/config'
 import {fbFirestoreSpigameBet} from '../../App/spigamebetFirebase'
-import {GET_FUTURE_GAMES_INFO, GETUSERBETS, SET_STRUCTURED_GAME_INFO} from './types'
+import {GET_FUTURE_GAMES_INFO, GETUSERBETS} from './types'
 import moment from 'moment-timezone'
-import {structureData} from '../../betting/functions'
+import {structureData} from '../../Betting/functions'
 
 export const getFutureGamesInfo=()=>{
     return async(dispatch)=>{
@@ -124,14 +124,13 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                                 let datekeys = Object.keys(betHistoryTargetObj)
                                 datekeys.sort()
                                 let lastIndex = datekeys.length - 1
-
                                 if(datekeys[lastIndex] === today){
-                                    betHistoryTargetObj[datekeys[lastIndex]][gameIdKeys[j]] = ''
                                     await fbFirestoreSpigameBet.collection('userBettingHistoryTracker').doc(userId).collection('year').doc(year).collection('month').doc(month).update({
                                         [datekeys[lastIndex]]: {
+                                            ...betHistoryTargetObj[today],
                                             [gameIdKeys[j]]: ''
                                         }
-                                    })
+                                    }, {merge: true})
                                 }
                                 else{
                                     await fbFirestoreSpigameBet.collection('userBettingHistoryTracker').doc(userId).collection('year').doc(year).collection('month').doc(month).update({
