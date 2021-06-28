@@ -142,8 +142,8 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                                 
                             }
 
-                            // await fbFirestoreSpigameBet.collection('userTrackList').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(userListTargetObj)
-                            // await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(targetObj)
+                            await fbFirestoreSpigameBet.collection('userTrackList').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(userListTargetObj)
+                            await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).set(targetObj)
                         }
                         catch(e){
                             error.isError = true
