@@ -124,14 +124,13 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                                 let datekeys = Object.keys(betHistoryTargetObj)
                                 datekeys.sort()
                                 let lastIndex = datekeys.length - 1
-
                                 if(datekeys[lastIndex] === today){
-                                    betHistoryTargetObj[datekeys[lastIndex]][gameIdKeys[j]] = ''
                                     await fbFirestoreSpigameBet.collection('userBettingHistoryTracker').doc(userId).collection('year').doc(year).collection('month').doc(month).update({
                                         [datekeys[lastIndex]]: {
+                                            ...betHistoryTargetObj[today],
                                             [gameIdKeys[j]]: ''
                                         }
-                                    })
+                                    }, {merge: true})
                                 }
                                 else{
                                     await fbFirestoreSpigameBet.collection('userBettingHistoryTracker').doc(userId).collection('year').doc(year).collection('month').doc(month).update({

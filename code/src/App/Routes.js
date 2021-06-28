@@ -134,6 +134,7 @@ const Routes = (props) => {
   );
 };
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
     userDetails: state.authReducer.userDetails,
   };
