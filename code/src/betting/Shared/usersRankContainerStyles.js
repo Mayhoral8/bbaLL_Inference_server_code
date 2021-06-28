@@ -29,13 +29,17 @@ export const Header = styled.h4`
 
 export const ColContainer = styled.div`
     width: 100%;
+    height: 90%;
+    overflow: auto;
 `
 
 export const Col = styled.div`
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    margin: 5px 0px;
-    
+    grid-template-columns: 1fr 1fr;
+    border: 0.5px solid black;
+    border-top: ${props => props.header == 'false' && "0"};
+    background-color: ${props => props.header == 'false' && "rgba(220, 220, 214, 1)"};
+    padding: 10px 0px;
 `
 
 export const ColHeading = styled.div`

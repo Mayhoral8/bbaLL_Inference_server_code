@@ -8,7 +8,7 @@ import {UsersRankContainer,
 
 async function getUserId(){
     let dataInform = await fbFirestoreSpigameBet.collection('userRecords').get();
-    //console.log(dataInform)
+    let tempObject = "";
     let data=[]
     let playerInfo = [];
     let rank = [];
@@ -35,19 +35,16 @@ async function getUserId(){
     for ( let index = 0; index < sorted.length; index++) {
         sortedPlayerInfo.push(playerInfo[sorted[index]]);
     }
-
     return sortedPlayerInfo;
 }
 
 const UserRankContainer = () => {
     const [dataArray, setDataArray] = useState("");
-
     useEffect(() => {
         getUserId()
           .then(link => setDataArray(() => link))
           .catch(() => setDataArray(""));
       }, []);
-    //console.log(dataArray.length);
 
     return(
         <>
@@ -55,16 +52,16 @@ const UserRankContainer = () => {
             <UsersRankContainer>
                 <Header>Users Ranking</Header>
                 <ColContainer>
-                    <Col>
-                        <div>Name</div>
-                        <div>Odd</div>
+                    <Col header="true">
+                        <div style = {{textAlign: 'center'}}>Name</div>
+                        <div style = {{textAlign: 'center'}}>Points</div>
                     </Col>
-                    {
-                        dataArray.map((element) => {
+                    {   
+                        dataArray.map((element, id) => {
                             return(
-                                <Col>
-                                    <div>{element['name']}</div>
-                                    <div>{element['odd']}</div>
+                                <Col key={id} header="false">
+                                    <div style = {{textAlign: 'center'}}>{element['name']}</div>
+                                    <div style = {{textAlign: 'center'}}>{element['odd']}</div>
                                 </Col>
                             )
                         })
