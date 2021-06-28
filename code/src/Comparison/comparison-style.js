@@ -254,6 +254,7 @@ export const EachRandomSetWrapper = styled.div`
   }
   .continer {
     text-align: center;
+    padding-top: 10px;
   }
   .nameTag{
     text-align: center;
