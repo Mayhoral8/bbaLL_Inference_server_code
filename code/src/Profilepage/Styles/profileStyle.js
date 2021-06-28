@@ -4,6 +4,7 @@ const media = {
   deskLLG: `@media(max-width: 1350px)`,
   deskLG: `@media(max-width: 1100px)`,
   deskMD: `@media(max-width: 930px)`,
+  tabletLG: `@media(max-width: 1024px)`,
   tablet: `@media(max-width: 768px)`,
   phone: `@media(max-width: 550px)`,
 }
@@ -13,18 +14,9 @@ export const UserStatsContainer = styled.div`
   box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
   border-radius: 5px;
   padding:20px;
+  margin: 0 5px;
+  width: auto;
   text-align:center; 
-  ${media.deskLG}{
-      width: 500px;
-      margin: 0px 10px;
-  }
-  ${media.deskLG}{
-      margin: 0px 10px;
-  }
-  ${media.phone}{
-      width: 100%;
-      margin: 0px;
-  }
   .styledButton{
     color: white;
     background-color: #65AE24;
@@ -34,9 +26,10 @@ export const UserStatsContainer = styled.div`
     font-weight: 500;
     font-size: 14px;
     padding: 15px 80px;
-    
+    ${media.tablet}{
+      padding: 15px 40px;
+    }
   }
-
   .styledDiv {
       margin-top: 40px;
   }
@@ -61,9 +54,12 @@ export const ProfileImgFigures = styled.div`
   align-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* ${media.deskLG}{
-      flex-direction: row;
-  } */
+  @media screen and (max-width: 290px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0px 2px;
+    font-size: 10px;
+  }
 `
 
 export const StatsContainer = styled.div`
@@ -73,26 +69,28 @@ export const StatsContainer = styled.div`
   text-align:start;
   width: 100%;
   margin-top:20px;
+  ${media.tablet} {
+    margin-top: 10px;
+  }
 `
 
 export const ProfileImg = styled.img`
-  height: 150px;
-  width: 150px;
-  border-radius: 10px;
-`
-
-export const ViewMoreLink = styled.div`
-  font-weight:900;
-  margin-top: 20px;
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.4s;
-  &:hover{
-      text-decoration: underline;
-      transition: 0.4s;
+  ${media.phone}{
+    height: auto;
+    width: 90%;
+    border-radius: 10px;
   }
-`
+
+  ${media.tablet} {
+    width: 90px;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+  `
 
 export const PointsRank = styled.div`
     width: 100%;
@@ -110,8 +108,16 @@ export const LevelWinRate = styled.div`
 `
 
 export const Stats = styled.div`
-    color: rgb(0,0,0,0.5);
-    margin: 0px 20px;
+  color: rgb(0,0,0,0.5);
+  margin: 0px 20px;
+  ${media.tablet}{
+    margin: 0px 5px;
+  }
+
+  @media screen and (max-width: 280px) {
+    margin: 0px 2px;
+    font-size: 10px;
+  }
 `
 
 export const IconFigure = styled.div`
@@ -141,41 +147,4 @@ export const Level = styled.div`
     ${media.deskLG}{
         display: none;
     }
-`
-
-export const LogoutImgContainer = styled.div`
-    text-align: center;
-    margin-top: 20px;
-`
-
-export const LogoutImg = styled.img`
-    height: 50px;
-    width: 50px;
-    cursor: pointer;
-`
-
-export const LoginLogoutBtnsContainer = styled.div`
-    display: none;
-    ${media.deskLG}{
-        display: flex;
-        width: 100%;
-        margin-top: 10px;
-        justify-content: center;
-        align-items: center;
-    }
-`
-
-export const LoginLogoutBtnsWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    border: 0.5px solid rgba(57, 32, 79, 0.25);
-    box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
-    border-radius: 5px;
-    cursor: pointer;
-`
-
-export const AuthBtn = styled.img`
-    height: 35px;
-    width: 35px;
-    cursor: pointer;
 `

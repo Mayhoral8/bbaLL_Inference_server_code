@@ -32,8 +32,9 @@ const Table = (props) => {
     }, useSortBy);
 
     return(
+        rows.length > 0 ?
         <Continer>
-        <TableContainer {...getTableProps()}>
+            <TableContainer {...getTableProps()}>
             <TableHead>
                 {
                     headerGroups.map((headerGroup, parentIndex) => {
@@ -140,6 +141,12 @@ const Table = (props) => {
                 }
             </TableBody>
         </TableContainer>
+        </Continer>
+        :
+        <Continer>
+            <div className="message">
+                No Data Available
+            </div>
         </Continer>
     )
 }

@@ -3,7 +3,20 @@
 .customDatePickerWidth > div > div.react-datepicker__input-container
 .customDatePickerWidth > div > div.react-datepicker__input-container input {
    margin-top: 10px;
-   margin-left: 10px;
+   margin-left: 20px;
    display: block;
    width: 180px;
+   height: auto;
+}
+
+@media screen and (max-width: 610px) {
+   .customDatePickerWidth, 
+   .customDatePickerWidth > div.react-datepicker-wrapper, 
+   .customDatePickerWidth > div > div.react-datepicker__input-container
+   .customDatePickerWidth > div > div.react-datepicker__input-container input {
+      margin: 10px auto 0px;
+      display: block;
+      width: 180px;
+      height: auto;
+   }
 }

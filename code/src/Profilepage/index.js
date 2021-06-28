@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import constants from './constants.json'
-import Table from './ChildComponents/table' //Child Components
 import {
     ProfilePageContainer,
-    TablesContainer
 } from './Styles/index-styles'
 import Spinner from '../Shared/Spinner/Spinner'
 import {connect} from 'react-redux'

@@ -5,9 +5,12 @@ import { Continer,
         TablesContainer} from '../Styles/rightContiner-style';
 import constants from '../constants.json';
 import Table from './table.js';
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import DatePicker from 'react-modern-calendar-datepicker';
+import useWindowSize from '../../Shared/hooks/useWindowSize';
+import MobileTable from '../ChildComponents/MobileTable';
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import "../Styles/customDatePickerWidth.css";
+import "../Styles/datePicker.css";
 
 const RightContiner = (props) => {
   const [currentDisplay, setCurrentDisplay] = useState('allBets');
@@ -16,8 +19,30 @@ const RightContiner = (props) => {
     to: null
   });
   const [historyData, setHistoryData] = useState(props.userHistory.data)
+  const screenWidth = useWindowSize();
   let allBetsActive, onGoingActive,finishedActive;
-  let newFormatStartDate, newFromateEndDate
+  let newFormatStartDate, newFromateEndDate;
+  let maxDate = null, minDate = null;
+
+  // get the min and max date from the data array
+  for (let index = 0; index < historyData.length; index++) {
+    if (maxDate == null) {
+      maxDate = historyData[index]['gameDateTime'];
+    }
+
+    if (minDate == null) {
+      minDate = historyData[index]['gameDateTime'];
+    }
+
+    if (minDate > historyData[index]['gameDateTime']) {
+      minDate = historyData[index]['gameDateTime'];
+    }
+
+    if (maxDate < historyData[index]['gameDateTime']) {
+      maxDate = historyData[index]['gameDateTime'];
+    }
+  }
+
 
   function handleAction(newState) {
     setCurrentDisplay(newState);
@@ -42,6 +67,18 @@ const RightContiner = (props) => {
     returnString = year + '-' + month + '-' + day;
 
     return returnString;
+  }
+
+  function getPlaceHolder(){
+    let tempOne, tempTwo;
+
+    if (minDate && maxDate) {
+      tempOne = minDate.split(' ');
+      tempTwo = maxDate.split(' ');
+      return tempOne[0] + ' - ' + tempTwo[0];
+    }
+
+    return "No data available";
   }
 
   useEffect(()=>{
@@ -94,24 +131,14 @@ const RightContiner = (props) => {
   const renderCustomInput = ({ ref }) => (
     <input
       readOnly
-      ref={ref}
-      placeholder="Select A Range"
-      value={selectedDayRange.from && selectedDayRange.to ? 
+      ref = {ref}
+      placeholder = {getPlaceHolder()} 
+      value = {selectedDayRange.from && selectedDayRange.to ? 
             `${getDateFormat(selectedDayRange.from)} - ${getDateFormat(selectedDayRange.to)}`: ''}
-      style={{
-        textAlign: 'center',
-        padding: '1rem 1.5rem',
-        fontSize: '18px',
-        border: '1px solid #9c88ff',
-        borderRadius: '20px',
-        width: '400px',
-        boxShadow: '0 1.5rem 2rem rgba(156, 136, 255, 0.2)',
-        color: '#9c88ff',
-        outline: 'none',
-      }}
+      className="datePicker input"
     />
   )
-
+  
   return (
     <Continer>
       <p className="titleStyle">My Bets</p>
@@ -160,12 +187,16 @@ const RightContiner = (props) => {
         />
       </div>
       
-
+                
       <TablesContainer>
-        <Table
-          columns = {constants.COLUMNS}
-          data = {historyData}
-        />
+        {  screenWidth <= 610 ? (
+            <MobileTable data = {historyData}/>
+          ) : (
+            <Table
+              columns = {constants.COLUMNS}
+              data = {historyData}
+            />
+          )}
       </TablesContainer>
 
     </Continer>

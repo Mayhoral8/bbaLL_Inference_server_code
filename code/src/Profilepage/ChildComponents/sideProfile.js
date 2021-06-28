@@ -16,9 +16,6 @@ import {
   IconFigure,
   Icon,
   Figure,
-  LoginLogoutBtnsContainer,
-  LoginLogoutBtnsWrapper,
-  AuthBtn,
 } from "../Styles/profileStyle";
 
 //Images
@@ -27,8 +24,6 @@ import starIcon from "../../assets/images/star.svg";
 import levelIcon from "../../assets/images/level.svg";
 import rankIcon from "../../assets/images/rank.svg";
 import winRateIcon from "../../assets/images/winRate.svg";
-import loginIcon from "../../assets/images/loginIcon.png";
-import logoutIcon from "../../assets/images/logoutIcon.png";
 
 //Functions and libraries
 import { connect } from "react-redux";
@@ -102,24 +97,6 @@ const UserStatsBox = (props) => {
           ) : (
             <ClipLoader color="#C4C4C4" size="" loading={statsSpinner} />
           )}
-
-          {props.userDetails.displayName ? (
-            <LoginLogoutBtnsContainer>
-              <LoginLogoutBtnsWrapper
-                onClick={() => {
-                  props.userDetails.uid
-                    ? onLogoutClick()
-                    : setLoginModalVisible(true);
-                }}
-              >
-                {props.userDetails.uid ? (
-                  <AuthBtn src={logoutIcon} />
-                ) : (
-                  <AuthBtn src={loginIcon} />
-                )}
-              </LoginLogoutBtnsWrapper>
-            </LoginLogoutBtnsContainer>
-          ) : null}
         </StatsContainer>
       </ProfileImgFigures>
       <div className="styledDiv">
