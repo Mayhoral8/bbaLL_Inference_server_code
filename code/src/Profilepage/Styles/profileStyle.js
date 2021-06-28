@@ -16,7 +16,6 @@ export const UserStatsContainer = styled.div`
   padding:20px;
   margin: 0 5px;
   width: auto;
-  text-align:center; 
   .styledButton{
     color: white;
     background-color: #65AE24;
@@ -32,6 +31,11 @@ export const UserStatsContainer = styled.div`
   }
   .styledDiv {
       margin-top: 40px;
+  }
+
+  .lastTenday{
+    padding-top: 30px;
+    padding-bottom: 10px;
   }
 `
 
@@ -82,7 +86,7 @@ export const ProfileImg = styled.img`
   }
 
   ${media.tablet} {
-    width: 90px;
+    width: 95px;
     height: auto;
     border-radius: 10px;
   }
@@ -147,4 +151,8 @@ export const Level = styled.div`
     ${media.deskLG}{
         display: none;
     }
+`
+
+export const LastTenGameWrapper = styled.div`
+    display: inline-block;
 `

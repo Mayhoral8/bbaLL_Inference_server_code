@@ -22,27 +22,7 @@ const RightContiner = (props) => {
   const screenWidth = useWindowSize();
   let allBetsActive, onGoingActive,finishedActive;
   let newFormatStartDate, newFromateEndDate;
-  let maxDate = null, minDate = null;
-
-  // get the min and max date from the data array
-  for (let index = 0; index < historyData.length; index++) {
-    if (maxDate == null) {
-      maxDate = historyData[index]['gameDateTime'];
-    }
-
-    if (minDate == null) {
-      minDate = historyData[index]['gameDateTime'];
-    }
-
-    if (minDate > historyData[index]['gameDateTime']) {
-      minDate = historyData[index]['gameDateTime'];
-    }
-
-    if (maxDate < historyData[index]['gameDateTime']) {
-      maxDate = historyData[index]['gameDateTime'];
-    }
-  }
-
+  let maxDate = props.minDate, minDate = props.maxDate;
 
   function handleAction(newState) {
     setCurrentDisplay(newState);

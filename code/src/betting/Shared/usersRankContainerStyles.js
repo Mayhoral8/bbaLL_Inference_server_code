@@ -38,7 +38,7 @@ export const Col = styled.div`
     grid-template-columns: 1fr 1fr;
     border: 0.5px solid black;
     border-top: ${props => props.header == 'false' && "0"};
-    background-color: ${props => props.header == 'false' && "rgba(220, 220, 214, 1)"};
+    background-color: ${props => props.header == 'false' && "rgba(220, 220, 214, 0.4)"};
     padding: 10px 0px;
 `
 

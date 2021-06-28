@@ -16,6 +16,7 @@ import {
   IconFigure,
   Icon,
   Figure,
+  LastTenGameWrapper
 } from "../Styles/profileStyle";
 
 //Images
@@ -24,11 +25,25 @@ import starIcon from "../../assets/images/star.svg";
 import levelIcon from "../../assets/images/level.svg";
 import rankIcon from "../../assets/images/rank.svg";
 import winRateIcon from "../../assets/images/winRate.svg";
+import checkIcon from "../../assets/images/checkIcon.jpg";
+import noCheckIcon from "../../assets/images/noCheckIcon.jpg";
 
 //Functions and libraries
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+
+const LastTenGame = (props) => {
+  return(
+    (props.data).map((eachData, id) => {
+      return(
+        <LastTenGameWrapper key={id}>
+          {eachData == 1 ?  <Icon src={checkIcon} /> :  <Icon src={noCheckIcon} />}
+        </LastTenGameWrapper>
+      )
+    }
+  ))
+};
 
 const UserStatsBox = (props) => {
   const [statsSpinner, setStatsSpinner] = useState(true);
@@ -48,61 +63,68 @@ const UserStatsBox = (props) => {
     }
   }, [props.userRecord]);
 
-
-
   return (
-    <UserStatsContainer>
-      <UserName>{props.userDetails.displayName}</UserName>
-      <ProfileImgFigures>
-        <ProfileImg src={Img} />
-        <StatsContainer>
-          {props.userRecord.level ? (
-            <>
-              <PointsRank>
-                <Stats>
-                  Points
-                  <IconFigure>
-                    <Icon src={starIcon} />
-                    <Figure>{props.userRecord.totalPoints.toFixed(3)}</Figure>
-                  </IconFigure>
-                </Stats>
+    <>
+      <UserStatsContainer>
+        <UserName>{props.userDetails.displayName}</UserName>
+        <ProfileImgFigures>
+          <ProfileImg src={Img} />
+          <StatsContainer>
+            {props.userRecord.level ? (
+              <>
+                <PointsRank>
+                  <Stats>
+                    Points
+                    <IconFigure>
+                      <Icon src={starIcon} />
+                      <Figure>{props.userRecord.totalPoints.toFixed(3)}</Figure>
+                    </IconFigure>
+                  </Stats>
 
-                <Stats>
-                  Rank
-                  <IconFigure>
-                    <Icon src={rankIcon} />
-                    <Figure>{props.userRecord.rank}</Figure>
-                  </IconFigure>
-                </Stats>
-              </PointsRank>
+                  <Stats>
+                    Rank
+                    <IconFigure>
+                      <Icon src={rankIcon} />
+                      <Figure>{props.userRecord.rank}</Figure>
+                    </IconFigure>
+                  </Stats>
+                </PointsRank>
 
-              <LevelWinRate>
-                <Stats>
-                  Level
-                  <IconFigure>
-                    <Icon src={levelIcon} />
-                    <Figure>{props.userRecord.level}</Figure>
-                  </IconFigure>
-                </Stats>
+                <LevelWinRate>
+                  <Stats>
+                    Level
+                    <IconFigure>
+                      <Icon src={levelIcon} />
+                      <Figure>{props.userRecord.level}</Figure>
+                    </IconFigure>
+                  </Stats>
 
-                <Stats>
-                  Win Rate
-                  <IconFigure>
-                    <Icon src={winRateIcon} />
-                    <Figure>{winningRate.toFixed(2)}</Figure>
-                  </IconFigure>
-                </Stats>
-              </LevelWinRate>
-            </>
-          ) : (
-            <ClipLoader color="#C4C4C4" size="" loading={statsSpinner} />
-          )}
-        </StatsContainer>
-      </ProfileImgFigures>
-      <div className="styledDiv">
-        <Link to="/betting" className="styledButton">Bet Now</Link>
-      </div>
-    </UserStatsContainer>
+                  <Stats>
+                    Win Rate
+                    <IconFigure>
+                      <Icon src={winRateIcon} />
+                      <Figure>{winningRate.toFixed(2)}</Figure>
+                    </IconFigure>
+                  </Stats>
+                </LevelWinRate>
+              </>
+            ) : (
+              <ClipLoader color="#C4C4C4" size="" loading={statsSpinner} />
+            )}
+          </StatsContainer>
+        </ProfileImgFigures>
+        <div className="styledDiv">
+          <Link to="/betting" className="styledButton">Bet Now</Link>
+        </div>
+        <div className="lastTenday">
+          Last 10 fixtures:
+        </div>
+        {props.userRecord.last10Games != undefined ?
+          <LastTenGame  data={props.userRecord.last10Games}/> :
+          <div>No Data available</div>
+        }
+      </UserStatsContainer>
+    </>
   );
 };
 
@@ -112,5 +134,6 @@ const mapStateToProps = (state) => {
     userRecord: state.recordReducer.userRecord,
   };
 };
+
 
 export default connect(mapStateToProps, { getUserRecord })(UserStatsBox);
