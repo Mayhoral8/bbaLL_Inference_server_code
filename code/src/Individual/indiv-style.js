@@ -40,11 +40,16 @@ export const CareerTableDiv = styled.div`
     font-weight: 300;
   }
 `;
-
-export const PlotDiv = styled.div`
-  display: grid;
+/*   
+display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-gap: 1.5rem;
+  */
+export const PlotDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
   position: relative;
   z-index: 1;
 `;
@@ -63,19 +68,18 @@ export const Footer = styled.div`
   font-size: 14px;
 `;
 export const TitleDiv = styled.div`
-border-radius: 50%;
-height: 200px;
-width: 200px;
-display: flex;
-align-items: center;
-justify-content: center;
-text-align: center;
-
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
 export const TitleContainer = styled.div`
-display: flex;
-align-items: center;
-flex-direction: column;
-justify-content: center;
-min-height: 350px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 350px;
 `;

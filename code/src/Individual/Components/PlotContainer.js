@@ -106,36 +106,53 @@ class PlotContainer extends PureComponent {
       let plotTop100 = plot[0];
       plotTop100.map((trace, j) => {
         trace = trace[0];
+
         let indivStatData = [...plotStats[stat][trace]];
+        // if (this.state.top100YearIndices.includes(-1)) {
+        //   indivStatData.unshift(null)
+        //   this.state.top100YearIndices.splice(0, 1, null)
+        // }
+        // console.log("indivSTat", indivStatData)
+        // console.log("this.state.top100YearIndices", this.state.top100YearIndices)
+
+        let newIndivStatData = [];
         let years = plotStats.years.map((year) => year.substring(0, 4));
+        years.unshift("1984");
+        console.log("prev years", years);
         if (isTop100) {
-          indivStatData = indivStatData.filter((data, i) => {
-            if (this.state.top100YearIndices.includes(i)) {
-              return data;
+          for (let i = 0; i < this.state.top100YearIndices.length; i++) {
+            const yearIndices = this.state.top100YearIndices[i];
+            if (yearIndices === -1) {
+              newIndivStatData.push(null);
+            } else {
+              newIndivStatData.push(indivStatData[yearIndices]);
             }
-          });
+          }
           years = years.filter((year, i) => {
             if (this.state.top100YearIndices.includes(i)) {
               return year.substring(0, 4);
             }
           });
         }
+
+        console.log("years", years);
         let name;
         if (isTop100 && this.props.isTeam) {
           name = "League Avg";
         } else if (isTop100) {
           name = "Top100 Avg.";
         }
-        const removeNullFromArr = indivStatData.filter(
+        const removeNullFromArr = newIndivStatData.filter(
           (value) => value !== -10000
         );
 
         const removeNullFromYears = [];
-        indivStatData.forEach((val, i) => {
+        newIndivStatData.forEach((val, i) => {
           if (val !== -10000) {
             removeNullFromYears.push(years[i]);
           }
         });
+
         let data = {
           name,
           x: removeNullFromYears,
@@ -166,13 +183,12 @@ class PlotContainer extends PureComponent {
         // Win percentage top 100 plot label change to add "%"
         if (trace.split("_")[0] === "W") {
           data.dataset.label = "League Avg ";
-          console.log(data.dataset);
+          // console.log(data.dataset);
         }
         // years.includes("1996-97")
         // if (years.includes("1996") || years.includes("1997")) {
         //   data.dataset.hidden = "true"
         // }
-
         plotdata.push(data);
       });
       return sortino === 1 ? sortinoplotdata : plotdata;
@@ -278,7 +294,6 @@ class PlotContainer extends PureComponent {
         }
 
         //plot data option change here
-        const { isTeam } = this.props;
         if (trace.split("_")[0] === "DOWN") {
           data.dataset.fill = 0;
           data.dataset.backgroundColor = individualConstants.colours[2][1];
@@ -404,15 +419,29 @@ class PlotContainer extends PureComponent {
         plotTitle = "Estimated Total Salary";
       }
       return (
-        <ContainerCard key={i} style={{ margin: "0" }}>
+        <>
           <GraphTitle>{plotTitle}</GraphTitle>
-          <IndivPlots
-            data={plot}
-            barData={barData}
-            labels={labels}
-            page={page}
-          />
-        </ContainerCard>
+          <ContainerCard
+            key={i}
+            style={{
+              margin: "0",
+              flex: "0 0 33.3333%"
+              // display: "flex",
+              // flexWrap: "wrap"
+            }}
+          >
+            <IndivPlots
+              data={plot}
+              barData={barData}
+              labels={labels}
+              page={page}
+              isTeam={this.props.isTeam}
+              style={{
+
+              }}
+            />
+          </ContainerCard>
+        </>
       );
     };
 
@@ -428,25 +457,26 @@ class PlotContainer extends PureComponent {
         .filter((plot) => plot.type === "bar")
         .map((p) => p.dataset);
     };
-
+    // console.log(this.state.indivStat.years);
     //for plotting legend players including years of 1996-97
-    return years.includes("1996-97")
+    return years.includes("1992-93")
       ? preprocessData
-          .map((plots) => plots.filter((data) => data.name.slice(-10) !== "Plus/Minus" ))
+          .map((plots) =>
+            plots.filter((data) => data.name.slice(-10) !== "Plus/Minus")
+          )
           .map((plot, i) => {
-            if(plot.length > 1){
-              console.log(plot)
+            if (plot.length > 1) {
               return plotJsx(
                 lineData(plot),
                 barData(plot),
                 this.getPlotTitle(plot).filter(
                   (title) => !title.match(/Plus\/minus/g)
                 )[i],
+                // slice used to limit the # of data points
                 this.state.indivStat.years,
                 i
               );
             }
-            
           })
       : preprocessData.map((plot, i) => {
           return plotJsx(
@@ -464,4 +494,3 @@ class PlotContainer extends PureComponent {
   }
 }
 export default withRouter(PlotContainer);
-

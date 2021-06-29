@@ -80,7 +80,7 @@ export const CenteredMain = styled.div`
 `
 
 export const ContainerCard = styled.div`
-  background: var(--white);
+background: var(--white);
   box-shadow: 0px 1px 6px rgba(0,0,0,0.08);
   /* margin: 1rem 0; */
   width: 100%;

@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import useWindowSize from "../../Shared/hooks/useWindowSize";
 import { Bar, Line } from "react-chartjs-2";
 import "chartjs-plugin-datalabels";
-export const IndivPlots = ({ data, labels, barData, page }) => {
- 
+export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
   // salary format for Y-Axis on Salary plot and datalabels
   const salaryOption = (value) => {
     if (parseInt(value) >= 10000) {
@@ -15,27 +14,32 @@ export const IndivPlots = ({ data, labels, barData, page }) => {
   //options for line plotdata
   const lineOptions = {
     responsive: true,
+    spanGaps: true,
+
     scales: {
       yAxes: [
         {
           ticks: {
             callback: function (value) {
-              return salaryOption(value);
+              if(value > 10000) return salaryOption(value);
+              else if(page === "Shots") return Math.round(value * 100) + "%"
+              else if(page === "Overall" && isTeam && value <= 1) return Math.round(value * 100) + "%"
+              else return value
             },
-
             autoSkip: true,
             // maxTicksLimit: 10,
             // beginAtZero: true,
             fontSize: 14,
           },
+          
         },
       ],
       xAxes: [
         {
           ticks: {
+            display: true,
             autoSkip: true,
-            maxTicksLimit: 10,
-            beginAtZero: true,
+            // beginAtZero: true,
             fontSize: 14,
           },
           gridLines: {
@@ -44,6 +48,7 @@ export const IndivPlots = ({ data, labels, barData, page }) => {
         },
       ],
     },
+    
     plugins: {
       //data labels on each plot
       datalabels: {
@@ -75,7 +80,8 @@ export const IndivPlots = ({ data, labels, barData, page }) => {
               context.dataset.label.split(" ")[0] === "Top100") ||
             (page === "Shots" &&
               context.dataset.label.split(" ")[0] === "League") ||
-            context.dataset.label.split(" ")[0] === "Win" || context.dataset.label === "League Avg "
+            context.dataset.label.split(" ")[0] === "Win" ||
+            context.dataset.label === "League Avg "
           ) {
             return Math.round(value * 100) + "%";
           }
@@ -182,7 +188,6 @@ export const IndivPlots = ({ data, labels, barData, page }) => {
     labels,
     datasets: barData,
   };
-
   return (
     <div>
       {barData.length ? (
