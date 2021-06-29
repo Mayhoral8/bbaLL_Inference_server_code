@@ -19,17 +19,18 @@ const Table = (props) => {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({
+} = useTable({
     columns,
     data,
-  });
-  let {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
+    initialState:{ sortBy: [
+        {
+            id: 'gameDateTime',
+            desc: false
+        }
+    ]}
+}, useSortBy);
+
+  
   return rows.length > 0 ? (
     <Continer>
       <TableContainer {...getTableProps()}>

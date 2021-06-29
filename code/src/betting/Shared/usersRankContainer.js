@@ -50,7 +50,7 @@ const UserRankContainer = () => {
         <>
         { dataArray.length != 0 &&
             <UsersRankContainer>
-                <Header>Users Ranking</Header>
+                <Header>User Ranking</Header>
                 <ColContainer>
                     <Col header="true">
                         <div style = {{textAlign: 'center'}}>Name</div>
