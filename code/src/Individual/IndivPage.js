@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router";
-import { IndivPageDiv, Footer, TitleDiv, TitleContainer } from "./indiv-style";
+import {
+  IndivPageDiv,
+  Footer,
+  TitleDiv,
+  TitleContainer,
+  ShotsTitle,
+} from "./indiv-style";
 import * as individualConstants from "./individualConstants";
 import PlotContainer from "./Components/PlotContainer";
 import TeamProfile from "./Components/TeamProfile";

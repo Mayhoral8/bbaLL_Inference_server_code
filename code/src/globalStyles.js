@@ -1,5 +1,5 @@
-import styled, { createGlobalStyle } from 'styled-components';
-import './fonts.css';
+import styled, { createGlobalStyle } from "styled-components";
+import "./fonts.css";
 
 // global styles
 export const GlobalStyle = createGlobalStyle`
@@ -54,7 +54,7 @@ export const GlobalStyle = createGlobalStyle`
   .m-1 {
     margin: 1rem 0;
   }
-`
+`;
 
 export const FullWidthMain = styled.div`
   margin: 2.2rem auto;
@@ -63,28 +63,29 @@ export const FullWidthMain = styled.div`
   @media screen and (min-width: 996px) {
     margin: 4rem auto;
   }
-`
+`;
 
 export const CenteredMain = styled.div`
-  padding: ${({ games }) => games ? '0rem' : '0 1rem'};
+  padding: ${({ games }) => (games ? "0rem" : "0 1rem")};
   margin: 2.2rem auto;
   max-width: 1440px;
   width: 100%;
   @media screen and (min-width: 996px) {
     padding: 0 0.5rem;
-    margin: ${({ games }) => games ? '3rem auto' : '7rem auto 4rem'};
+    margin: ${({ games }) => (games ? "3rem auto" : "7rem auto 4rem")};
   }
   @media screen and (min-width: 1440px) {
     padding: 0;
   }
-`
+  overflow-x: hidden;
+`;
 
 export const ContainerCard = styled.div`
-background: var(--white);
-  box-shadow: 0px 1px 6px rgba(0,0,0,0.08);
+  background: var(--white);
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
   /* margin: 1rem 0; */
   width: 100%;
-  padding: ${({ graph }) => graph ? '1rem' : 0};
+  padding: ${({ graph }) => (graph ? "1rem" : 0)};
 
   .card-title {
     text-align: center;
@@ -93,7 +94,7 @@ background: var(--white);
     text-transform: uppercase;
     margin-bottom: 0.5rem;
   }
-`
+`;
 
 export const BadgeButton = styled.button`
   background: white;
@@ -101,12 +102,13 @@ export const BadgeButton = styled.button`
   font-style: normal;
   font-weight: 300;
   font-size: 15px;
-  justtify-content:center;
+  justtify-content: center;
   text-align: center;
-  color: #080A1E;
+  color: #080a1e;
   border: no;
   display: flex;
-  &:disabled, &:disabled:hover {
+  &:disabled,
+  &:disabled:hover {
     cursor: not-allowed;
   }
   &:hover {
@@ -119,7 +121,7 @@ export const BadgeButton = styled.button`
       border-bottom: 7px solid #F8DF5E;
       `;
     }
-    return underLine
+    return underLine;
   }}
 
   ${(props) => {
@@ -129,7 +131,7 @@ export const BadgeButton = styled.button`
         font-weight: bold;
       `;
     }
-    return size
+    return size;
   }}
 
   a, span {
@@ -137,12 +139,13 @@ export const BadgeButton = styled.button`
     padding: 7px;
   }
 
-  @media(min-width: 996px) {
-    a, span {
+  @media (min-width: 996px) {
+    a,
+    span {
       padding: 10px 10px;
     }
   }
-`
+`;
 
 export const GraphTitle = styled.h3`
   margin: 0.5rem 1rem;
@@ -150,17 +153,23 @@ export const GraphTitle = styled.h3`
   font-size: 1.3rem;
   text-align: center;
   padding-top: 0.5rem;
-  @media(max-width: 600px) {
+  @media (max-width: 1054px){
+    justify-content: center !important;
+    margin: 0.5rem 1rem !important; 
+  }
+  @media (max-width: 600px) {
     font-size: 1rem;
-  } 
-`
+  }
+
+`;
 
 export const MobileYAxisTitle = styled.p`
   color: #7f7f7f;
-  z-index:1;
-  font-size: ${({ leaderboard }) => leaderboard ? '' : '12px'};
-  transform: ${({ leaderboard }) => leaderboard ? 'translateY(3rem)' : 'translate(0.5rem, 0rem)'};
-  margin-top: ${({ leaderboard }) => leaderboard ? '0' : '1rem'};
+  z-index: 1;
+  font-size: ${({ leaderboard }) => (leaderboard ? "" : "12px")};
+  transform: ${({ leaderboard }) =>
+    leaderboard ? "translateY(3rem)" : "translate(0.5rem, 0rem)"};
+  margin-top: ${({ leaderboard }) => (leaderboard ? "0" : "1rem")};
 `;
 
 export const ButtonPillsContainer = styled.div`
@@ -168,19 +177,19 @@ export const ButtonPillsContainer = styled.div`
   justify-content: center;
   height: fit-content;
   width: 100%;
-`
+`;
 
 export const StyledMatchPlotsContainer = styled.div`
-  width: ${({ doughnut }) => doughnut ? '10vw' : '17vw'};
+  width: ${({ doughnut }) => (doughnut ? "10vw" : "17vw")};
   max-width: 270px;
   height: 30vh;
   position: relative;
-  @media(max-width: 1024px) {
+  @media (max-width: 1024px) {
     height: 18vh;
-    width: ${({ doughnut }) => doughnut ? '15vw' : '17vw'};
+    width: ${({ doughnut }) => (doughnut ? "15vw" : "17vw")};
   }
-  @media(max-width: 500px) {
+  @media (max-width: 500px) {
     width: 46vw;
-    height: ${({ doughnut }) => doughnut ? '25vh' : '32vh'};
+    height: ${({ doughnut }) => (doughnut ? "25vh" : "32vh")};
   }
-`
+`;

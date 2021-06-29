@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { PlotDiv } from "../indiv-style";
+import { PlotDiv, ShotsTitle } from "../indiv-style";
 import { FormatYearAddEnding } from "Functions/YearFormat";
 import { fbFirestore } from "Firebase";
 import { ContainerCard, GraphTitle } from "../../globalStyles";
@@ -7,6 +7,7 @@ import IndivPlots from "./IndivPlots";
 import * as individualConstants from "../individualConstants";
 import { withRouter } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
+import { important } from "polished";
 //props: name, categoryData, indivStat
 const LegendEntries = 2;
 const PlotTitle = 3;
@@ -118,7 +119,7 @@ class PlotContainer extends PureComponent {
         let newIndivStatData = [];
         let years = plotStats.years.map((year) => year.substring(0, 4));
         years.unshift("1984");
-        console.log("prev years", years);
+
         if (isTop100) {
           for (let i = 0; i < this.state.top100YearIndices.length; i++) {
             const yearIndices = this.state.top100YearIndices[i];
@@ -135,7 +136,6 @@ class PlotContainer extends PureComponent {
           });
         }
 
-        console.log("years", years);
         let name;
         if (isTop100 && this.props.isTeam) {
           name = "League Avg";
@@ -420,25 +420,35 @@ class PlotContainer extends PureComponent {
       }
       return (
         <>
-          <GraphTitle>{plotTitle}</GraphTitle>
           <ContainerCard
             key={i}
             style={{
               margin: "0",
-              flex: "0 0 33.3333%"
-              // display: "flex",
-              // flexWrap: "wrap"
             }}
           >
+            {page === "Shots" ? (
+              <GraphTitle
+                style={{
+                  display: "flex",
+                  flexFlow: "row wrap",
+                  justifyContent: "flex-end",
+                  position: "relative",
+                  zIndex: "2",
+                  margin: "-2rem -4.4rem",
+                }}
+              >
+                {plotTitle}
+              </GraphTitle>
+            ) : (
+              <GraphTitle>{plotTitle}</GraphTitle>
+            )}
             <IndivPlots
               data={plot}
               barData={barData}
               labels={labels}
               page={page}
               isTeam={this.props.isTeam}
-              style={{
-
-              }}
+    
             />
           </ContainerCard>
         </>

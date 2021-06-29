@@ -40,19 +40,16 @@ export const CareerTableDiv = styled.div`
     font-weight: 300;
   }
 `;
-/*   
-display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  grid-gap: 1.5rem;
-  */
-export const PlotDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
 
+export const PlotDiv = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 3rem;
   position: relative;
+  margin-top: 2.5rem;
   z-index: 1;
 `;
+
 export const Footer = styled.div`
   grid-row: 3;
   display: flex;
