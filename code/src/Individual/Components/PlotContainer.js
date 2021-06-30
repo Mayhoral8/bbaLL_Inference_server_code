@@ -113,7 +113,7 @@ class PlotContainer extends PureComponent {
           trace = "DOWN_PTS";
         } else if (this.props.isTeam && trace === "UP_AVG") {
           trace = "UP_PTS";
-          // trace changed here again to generate inndivStatData with no errors
+          // trace changed here to generate inndivStatData with no errors
         } else if (this.props.isTeam && trace === "AVG_AST") {
           trace = "AST";
         } else if (this.props.isTeam && trace === "AVG_STL") {
@@ -128,15 +128,18 @@ class PlotContainer extends PureComponent {
       let newIndivStatData = [];
       let years = plotStats.years.map((year) => year.substring(0, 4));
 
-      //top100Year indices for loop to plot top100
+      //pushed y axis values to newIndivStatdata for top100 
       for (let i = 0; i < this.state.top100YearIndices.length; i++) {
         const yearIndices = this.state.top100YearIndices[i];
         if (yearIndices === -1) {
           newIndivStatData.push(null);
         } else {
+          if (isNaN(indivStatData[yearIndices]))
+            indivStatData[yearIndices] = null;
           newIndivStatData.push(indivStatData[yearIndices]);
         }
       }
+      //year formatting
       years = years.filter((year, i) => {
         if (this.state.top100YearIndices.includes(i)) {
           return year.substring(0, 4);
@@ -306,7 +309,7 @@ class PlotContainer extends PureComponent {
         );
 
         if (page === "Shots") {
-          //  plot Data
+          //  plot Data for Shots page
           let shotplotdata = this.getData(
             plot,
             stat,
@@ -339,27 +342,25 @@ class PlotContainer extends PureComponent {
         plotTitle = "Estimated Total Salary";
       }
       return (
-        <>
-          <ContainerCard
-            key={i}
-            style={{
-              margin: "0",
-            }}
-          >
-            {page === "Shots" ? (
-              <ShotsTitle>{plotTitle}</ShotsTitle>
-            ) : (
-              <GraphTitle>{plotTitle}</GraphTitle>
-            )}
-            <IndivPlots
-              data={plot}
-              barData={barData}
-              labels={labels}
-              page={page}
-              isTeam={this.props.isTeam}
-            />
-          </ContainerCard>
-        </>
+        <ContainerCard
+          key={i}
+          style={{
+            margin: "0",
+          }}
+        >
+          {page === "Shots" ? (
+            <ShotsTitle>{plotTitle}</ShotsTitle>
+          ) : (
+            <GraphTitle>{plotTitle}</GraphTitle>
+          )}
+          <IndivPlots
+            data={plot}
+            barData={barData}
+            labels={labels}
+            page={page}
+            isTeam={this.props.isTeam}
+          />
+        </ContainerCard>
       );
     };
 
@@ -375,8 +376,7 @@ class PlotContainer extends PureComponent {
         .filter((plot) => plot.type === "bar")
         .map((p) => p.dataset);
     };
-    // console.log(this.state.indivStat.years);
-    //for plotting legend players including years of 1996-97
+    //for plotting legend players including years of 1992-93
     return years.includes("1992-93")
       ? preprocessData
           .map((plots) =>
@@ -390,7 +390,7 @@ class PlotContainer extends PureComponent {
                 this.getPlotTitle(plot).filter(
                   (title) => !title.match(/Plus\/minus/g)
                 )[i],
-                // slice used to limit the # of data points
+                // slice can be used here to limit the # of data points
                 this.state.indivStat.years,
                 i
               );

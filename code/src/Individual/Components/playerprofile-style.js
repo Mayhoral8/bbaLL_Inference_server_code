@@ -159,7 +159,7 @@ export const PlayerStatWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 4.3rem;
   @media (min-width: 768px) {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
