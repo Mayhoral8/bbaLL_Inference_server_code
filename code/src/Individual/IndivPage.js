@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router";
-import { IndivPageDiv } from "./indiv-style";
+import {
+  IndivPageDiv,
+  Footer,
+  TitleDiv,
+  TitleContainer,
+  ShotsTitle,
+} from "./indiv-style";
 import * as individualConstants from "./individualConstants";
 import PlotContainer from "./Components/PlotContainer";
 import TeamProfile from "./Components/TeamProfile";
@@ -60,7 +66,6 @@ const IndivPage = ({ indivStat, location }) => {
     setYears(years);
     setCareerStats(careerStats);
   };
-
   return (
     <>
       <ScrollToTopOnMount />
@@ -82,6 +87,7 @@ const IndivPage = ({ indivStat, location }) => {
         <MobileFilterDiv>
           <StatSelect stats={STATS} indiv />
         </MobileFilterDiv>
+        <>
         <PlotContainer
           name={name}
           categoryData={categoryData}
@@ -89,6 +95,13 @@ const IndivPage = ({ indivStat, location }) => {
           isTeam={location.pathname.split("/")[1] === "team"}
           years={years}
         />
+        {!(location.pathname.split("/")[1] === "team") && (
+          <Footer>
+            Top 100 players are chosen based on plus-minus scores for years
+            greater than 1996, otherwise they are chosen based on points
+          </Footer>
+        )}
+        </>
       </IndivPageDiv>
     </>
   );
