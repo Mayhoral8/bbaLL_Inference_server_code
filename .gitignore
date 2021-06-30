@@ -14,6 +14,7 @@ build
 *.json
 *.csv
 *.DS_Store
+*.zip
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
