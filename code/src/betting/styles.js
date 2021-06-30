@@ -55,6 +55,12 @@ export const ContentW = styled.div`
 
 export const ContentHeader = styled.div`
     padding: 20px 0px;
+    text-align: center;
+    font-family: Poppins;
+    .information {
+        padding: 0 60px;
+        font-size: 20px;
+    }
 `
 
 export const DisplayGamesBtnContainer = styled.div`
@@ -72,6 +78,7 @@ export const TodayBtnContainer = styled.div`
 
 export const BettingSectionColumn = styled.div`
     width: 64%;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -81,6 +88,11 @@ export const BettingSectionColumn = styled.div`
     }
     ${media.deskLG}{
         width: 100%;
+    }
+    .instruction {
+        padding: 5px 40px;
+        font-size: 20px;
+        font-family: Poppins; 
     }
 `
 

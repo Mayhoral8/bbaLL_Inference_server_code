@@ -444,6 +444,10 @@ const Betting=(props)=>{
 
                                 <ContentHeader>
                                     <h1>NBA Betting</h1>
+                                    <p className="information">Get your own NBA intelligence rating by making the game outcome predictions. 
+                                    The concept is the same as sports betting except that you win/lose points instead 
+                                        (meaning no real money is involved).
+                                    </p>
                                     <DisplayGamesBtnContainer>
                                         <TodayBtnContainer>Today</TodayBtnContainer>
                                     </DisplayGamesBtnContainer>
@@ -588,8 +592,24 @@ const Betting=(props)=>{
                                         </BettingPointsAndTeamsContainer>
                                     }
                                 </BettingSectionContainer>
+                                <div className = "instruction">
+                                    <h3>Instruction:</h3>
+                                    <p>You can bet any of three types: Moneyline, spread, and over & under.
+                                    If you predict correctly, then you earn points based on the displayed betting odds. 
+                                    If you predict incorrectly, you lose 1 point.
+                                    Say you bet on “LAC” for 1.95 betting odds. If the Clippers win, then you will earn 0.95 points. 
+                                    If the Clippers lose then you lose -1. This is equivalent to having a stake size of $1.</p>
+                                    <p>Notes:</p>
+                                    <ul style={{paddingLeft: '30px'}}>
+                                        <li>
+                                            The results will be updated every morning at 8am.
+                                        </li>
+                                        <li>
+                                            You cannot change your bet once you submit the result.
+                                        </li>
+                                    </ul>
+                                </div>
                             </BettingSectionColumn>
-
                             <BetPointsSummaryColumn>
                                 <OverviewHeader>Summary</OverviewHeader>
 
