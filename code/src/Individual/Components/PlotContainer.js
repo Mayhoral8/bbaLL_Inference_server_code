@@ -92,111 +92,23 @@ class PlotContainer extends PureComponent {
         console.log(error);
       });
   }
+
   // Generate data using given props and individualConstants
-  getData(plot, stat, plotStats, isTop100, sortino, plotType) {
+  getData(plot, stat, plotStats, isTop100, isShots, plotType) {
     if (plotStats[stat] === undefined) {
       return;
     }
     let plotdata = [],
-      sortinoplotdata = [];
-    const textlabelA = [],
-      textlabelM = [];
+      shotplotdata = [];
 
-    // top100 plotting
-    if (isTop100) {
-      let plotTop100 = plot[0];
-      plotTop100.map((trace, j) => {
+    //plotting top100 and regular game data points
+    let plotMap = plot[0][isShots];
+    if (isTop100) plotMap = plot[0];
+
+    plotMap.map((trace, j) => {
+      if (isTop100) {
         trace = trace[0];
-
-        let indivStatData = [...plotStats[stat][trace]];
-        // if (this.state.top100YearIndices.includes(-1)) {
-        //   indivStatData.unshift(null)
-        //   this.state.top100YearIndices.splice(0, 1, null)
-        // }
-        // console.log("indivSTat", indivStatData)
-        // console.log("this.state.top100YearIndices", this.state.top100YearIndices)
-
-        let newIndivStatData = [];
-        let years = plotStats.years.map((year) => year.substring(0, 4));
-        years.unshift("1984");
-
-        if (isTop100) {
-          for (let i = 0; i < this.state.top100YearIndices.length; i++) {
-            const yearIndices = this.state.top100YearIndices[i];
-            if (yearIndices === -1) {
-              newIndivStatData.push(null);
-            } else {
-              newIndivStatData.push(indivStatData[yearIndices]);
-            }
-          }
-          years = years.filter((year, i) => {
-            if (this.state.top100YearIndices.includes(i)) {
-              return year.substring(0, 4);
-            }
-          });
-        }
-
-        let name;
-        if (isTop100 && this.props.isTeam) {
-          name = "League Avg";
-        } else if (isTop100) {
-          name = "Top100 Avg.";
-        }
-        const removeNullFromArr = newIndivStatData.filter(
-          (value) => value !== -10000
-        );
-
-        const removeNullFromYears = [];
-        newIndivStatData.forEach((val, i) => {
-          if (val !== -10000) {
-            removeNullFromYears.push(years[i]);
-          }
-        });
-
-        let data = {
-          name,
-          x: removeNullFromYears,
-          y: removeNullFromArr,
-          type: plotType[0],
-          dataset: {
-            type: plotType[0],
-            label: name,
-            data: removeNullFromArr,
-            backgroundColor: "rgb(128,128,128)",
-            borderColor: "rgb(128,128,128)",
-            fill: false,
-            radius: 2,
-            borderWidth: 4,
-          },
-        };
-        if (sortino === 1) {
-          if (trace.slice(-3) === "PCT") {
-            data = {
-              ...data,
-              y: removeNullFromArr,
-            };
-            data.dataset.type = "line";
-            data.type = "line";
-            sortinoplotdata.push(data);
-          }
-        }
-        // Win percentage top 100 plot label change to add "%"
-        if (trace.split("_")[0] === "W") {
-          data.dataset.label = "League Avg ";
-          // console.log(data.dataset);
-        }
-        // years.includes("1996-97")
-        // if (years.includes("1996") || years.includes("1997")) {
-        //   data.dataset.hidden = "true"
-        // }
-        plotdata.push(data);
-      });
-      return sortino === 1 ? sortinoplotdata : plotdata;
-    } else {
-      // Generate individual player plots
-      plot[0][sortino].map((trace, j) => {
-        // "/team" page
-        // Some traces changed here to match player_ind_page_v2 avg_tot property names
+      } else {
         if (this.props.isTeam && trace === "DOWN_AVG") {
           trace = "DOWN_PTS";
         } else if (this.props.isTeam && trace === "UP_AVG") {
@@ -211,101 +123,113 @@ class PlotContainer extends PureComponent {
         } else if (this.props.isTeam && trace === "AVG_TOV") {
           trace = "TOV";
         }
+      }
+      let indivStatData = [...plotStats[stat][trace]];
+      let newIndivStatData = [];
+      // arr of individual year genereated
+      let years = plotStats.years.map((year) => year.substring(0, 4));
 
-        let indivStatData = [...plotStats[stat][trace]];
-        // arr of individual year genereated
-        let years = plotStats.years.map((year) => year.substring(0, 4));
-        if (isTop100) {
-          indivStatData = indivStatData.filter((data, i) => {
-            if (this.state.top100YearIndices.includes(i)) {
-              return data;
-            }
-          });
-          years = years.filter((year, i) => {
-            if (this.state.top100YearIndices.includes(i)) {
-              return year.substring(0, 4);
-            }
-          });
-        }
-        //basic data format
-        let name;
-        if (isTop100 && this.props.isTeam) {
-          name = "League Avg";
-        } else if (isTop100) {
-          name = "Top 100";
+      //basic data format
+      for (let i = 0; i < this.state.top100YearIndices.length; i++) {
+        const yearIndices = this.state.top100YearIndices[i];
+        console.log(this.state.top100YearIndices)
+        console.log(yearIndices)
+        if (yearIndices === -1) {
+          newIndivStatData.push(null);
         } else {
-          name = plot[1][sortino][j];
+          newIndivStatData.push(indivStatData[yearIndices]);
         }
-        // to avoid NaN values
-        const removeNullFromArr = indivStatData.filter(
-          (value) => value !== -10000
-        );
-        const removeNullFromYears = [];
-        indivStatData.forEach((val, i) => {
-          if (val !== -10000) {
-            removeNullFromYears.push(years[i]);
-          }
-        });
+      }
+      years = years.filter((year, i) => {
+        if (this.state.top100YearIndices.includes(i)) {
+          return year.substring(0, 4);
+        }
+      });
 
-        //data format for chart.js
-        let data = {
-          name,
-          x: removeNullFromYears,
-          y: removeNullFromArr,
-          type: plotType[0],
-          dataset: {
-            type: plotType[0],
-            label: name,
-            data: removeNullFromArr,
-            backgroundColor: individualConstants.colours[2][0],
-            borderColor: individualConstants.colours[2][0],
-            fill: false,
-            radius: 2,
-            borderWidth: 4,
-            hidden: false,
-          },
-        };
-        //fills between stat attempted and stat made
-        if (
-          ["A", "M"].includes(trace.slice(-1)) &&
-          !isTop100 &&
-          sortino === 0
-        ) {
-          if (["A"].includes(trace.slice(-1))) {
-            data["text"] = textlabelA;
-          } else if (["M"].includes(trace.slice(-1))) {
-            data["text"] = textlabelM;
-          }
+      let name;
+      if (isTop100 && this.props.isTeam) {
+        name = "League Avg";
+        indivStatData = newIndivStatData
+      } else if (isTop100) {
+        name = "Top100 Avg.";
+        indivStatData = newIndivStatData
+      } else {
+        name = plot[1][isShots][j];
+      }
+      // // to avoid NaN values
+      const removeNullFromArr = indivStatData.filter(
+        (value) => value !== -10000
+      );
+      const removeNullFromYears = [];
+      indivStatData.forEach((val, i) => {
+        if (val !== -10000) {
+          removeNullFromYears.push(years[i]);
         }
-        // percentage data type change from bar to line
-        if (sortino === 1) {
-          if ("PCT" === trace.slice(-3)) {
+      });
+
+      let data = {
+        name,
+        x: removeNullFromYears,
+        y: removeNullFromArr,
+        type: plotType[0],
+        dataset: {
+          type: plotType[0],
+          label: name,
+          data: removeNullFromArr,
+          backgroundColor: isTop100
+            ? "rgb(128,128,128)"
+            : individualConstants.colours[2][0],
+          borderColor: isTop100
+            ? "rgb(128,128,128)"
+            : individualConstants.colours[2][0],
+          fill: false,
+          radius: 2,
+          borderWidth: 4,
+          hidden: false,
+        },
+      };
+      // Win percentage top 100 plot label change to add "%"
+      if (trace.split("_")[0] === "W") {
+        data.dataset.label = "League Avg ";
+        // console.log(data.dataset);
+      }
+      // percentage data type change from bar to line
+      if (isTop100) {
+        if (isShots === 1) {
+          if (trace.slice(-3) === "PCT") {
             data = {
               ...data,
               y: removeNullFromArr,
             };
             data.dataset.type = "line";
             data.type = "line";
-            sortinoplotdata.push(data);
+            shotplotdata.push(data);
           }
+        }
+        plotdata.push(data);
+      } else {
+        if (isShots === 1 && "PCT" === trace.slice(-3)) {
+          data = {
+            ...data,
+            y: removeNullFromArr,
+          };
+          data.dataset.type = "line";
+          data.type = "line";
+          shotplotdata.push(data);
         }
         if (data.type === "bar") {
           data.dataset.borderWidth = 0;
         }
-
-        //plot data option change here
         if (trace.split("_")[0] === "DOWN") {
           data.dataset.fill = 0;
           data.dataset.backgroundColor = individualConstants.colours[2][1];
           data.dataset.borderColor = false;
           data.dataset.radius = 0;
-          // data.dataset.hidden = isTeam && true;
         } else if (trace.split("_")[0] === "UP") {
           data.dataset.fill = 1;
           data.dataset.backgroundColor = individualConstants.colours[2][2];
           data.dataset.borderColor = false;
           data.dataset.radius = 0;
-          // data.dataset.hidden = isTeam && true;
         } else if (trace.slice(-1) === "A" || trace.split("_")[1] === "DREB") {
           data.dataset.backgroundColor = individualConstants.colours[2][1];
         } else {
@@ -313,9 +237,9 @@ class PlotContainer extends PureComponent {
           data.dataset.backgroundColor = individualConstants.colours[2][0];
         }
         plotdata.push(data);
-      });
-      return sortino === 1 ? sortinoplotdata : plotdata;
-    }
+      }
+    });
+    return isShots === 1 ? shotplotdata : plotdata;
   }
   // get plot title.
   getPlotTitle(plotdata) {
@@ -387,7 +311,7 @@ class PlotContainer extends PureComponent {
 
         if (page === "Shots") {
           //  plot Data
-          let sortinoplotdata = this.getData(
+          let shotplotdata = this.getData(
             plot,
             stat,
             this.state.indivStat,
@@ -396,12 +320,12 @@ class PlotContainer extends PureComponent {
             plotType
           );
           // to generate top 100 data for rating charts on Shots page
-          if (sortinoplotdata[0].name.slice(-1) === "%") {
-            sortinoplotdata = sortinoplotdata.concat(
+          if (shotplotdata[0].name.slice(-1) === "%") {
+            shotplotdata = shotplotdata.concat(
               this.getData(plot, stat, this.state.top100Stat, true, 1, plotType)
             );
           }
-          preprocessData.push(sortinoplotdata);
+          preprocessData.push(shotplotdata);
         }
         if (plotType[0] !== "bar") {
           plotdata = plotdata.concat(
@@ -434,7 +358,7 @@ class PlotContainer extends PureComponent {
                   justifyContent: "flex-end",
                   position: "relative",
                   zIndex: "2",
-                  margin: "-2rem -4.4rem",
+                  margin: "0rem -4.4rem",
                 }}
               >
                 {plotTitle}
@@ -448,7 +372,6 @@ class PlotContainer extends PureComponent {
               labels={labels}
               page={page}
               isTeam={this.props.isTeam}
-    
             />
           </ContainerCard>
         </>
