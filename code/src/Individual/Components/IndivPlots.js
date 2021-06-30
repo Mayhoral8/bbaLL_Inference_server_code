@@ -21,17 +21,17 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
         {
           ticks: {
             callback: function (value) {
-              if(value > 10000) return salaryOption(value);
-              else if(page === "Shots") return Math.round(value * 100) + "%"
-              else if(page === "Overall" && isTeam && value <= 1) return Math.round(value * 100) + "%"
-              else return value
+              if (value > 10000) return salaryOption(value);
+              else if (page === "Shots") return Math.round(value * 100) + "%";
+              else if (page === "Overall" && isTeam && value <= 1)
+                return Math.round(value * 100) + "%";
+              else return value;
             },
             autoSkip: true,
             // maxTicksLimit: 10,
             // beginAtZero: true,
             fontSize: 14,
           },
-          
         },
       ],
       xAxes: [
@@ -48,7 +48,7 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
         },
       ],
     },
-    
+
     plugins: {
       //data labels on each plot
       datalabels: {
@@ -83,7 +83,7 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
             context.dataset.label.split(" ")[0] === "Win" ||
             context.dataset.label === "League Avg "
           ) {
-            return Math.round(value * 1000)/10 + "%";
+            return Math.round(value * 1000) / 10 + "%";
           }
           if (
             (page === "Assists & Rebounds" &&

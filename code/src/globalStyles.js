@@ -153,14 +153,9 @@ export const GraphTitle = styled.h3`
   font-size: 1.3rem;
   text-align: center;
   padding-top: 0.5rem;
-  @media (max-width: 1054px){
-    justify-content: center !important;
-    margin: 0.5rem 1rem !important; 
-  }
   @media (max-width: 600px) {
     font-size: 1rem;
   }
-
 `;
 
 export const MobileYAxisTitle = styled.p`

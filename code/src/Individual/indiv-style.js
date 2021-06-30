@@ -80,3 +80,23 @@ export const TitleContainer = styled.div`
   justify-content: center;
   min-height: 350px;
 `;
+
+export const ShotsTitle = styled.h3`
+margin: -2.6rem -3.8rem;
+color: var(--lighter-black);
+font-size: 1.2rem;
+text-align: center;
+padding-top: 0.5rem;
+float: right;
+
+@media (max-width: 1054px){
+  justify-content: center !important;
+  margin: 0.5rem 1rem !important;
+  float: none;
+ 
+}
+@media (max-width: 600px) {
+  font-size: 1rem;
+  float: none;
+}
+`

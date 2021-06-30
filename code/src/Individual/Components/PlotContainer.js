@@ -126,14 +126,11 @@ class PlotContainer extends PureComponent {
       }
       let indivStatData = [...plotStats[stat][trace]];
       let newIndivStatData = [];
-      // arr of individual year genereated
       let years = plotStats.years.map((year) => year.substring(0, 4));
 
-      //basic data format
+      //top100Year indices for loop to plot top100
       for (let i = 0; i < this.state.top100YearIndices.length; i++) {
         const yearIndices = this.state.top100YearIndices[i];
-        console.log(this.state.top100YearIndices)
-        console.log(yearIndices)
         if (yearIndices === -1) {
           newIndivStatData.push(null);
         } else {
@@ -145,14 +142,14 @@ class PlotContainer extends PureComponent {
           return year.substring(0, 4);
         }
       });
-
+      //label name based on data type
       let name;
       if (isTop100 && this.props.isTeam) {
         name = "League Avg";
-        indivStatData = newIndivStatData
+        indivStatData = newIndivStatData;
       } else if (isTop100) {
         name = "Top100 Avg.";
-        indivStatData = newIndivStatData
+        indivStatData = newIndivStatData;
       } else {
         name = plot[1][isShots][j];
       }
@@ -191,7 +188,6 @@ class PlotContainer extends PureComponent {
       // Win percentage top 100 plot label change to add "%"
       if (trace.split("_")[0] === "W") {
         data.dataset.label = "League Avg ";
-        // console.log(data.dataset);
       }
       // percentage data type change from bar to line
       if (isTop100) {
@@ -351,18 +347,7 @@ class PlotContainer extends PureComponent {
             }}
           >
             {page === "Shots" ? (
-              <GraphTitle
-                style={{
-                  display: "flex",
-                  flexFlow: "row wrap",
-                  justifyContent: "flex-end",
-                  position: "relative",
-                  zIndex: "2",
-                  margin: "0rem -4.4rem",
-                }}
-              >
-                {plotTitle}
-              </GraphTitle>
+              <ShotsTitle>{plotTitle}</ShotsTitle>
             ) : (
               <GraphTitle>{plotTitle}</GraphTitle>
             )}

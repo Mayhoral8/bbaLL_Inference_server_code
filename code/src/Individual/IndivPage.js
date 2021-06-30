@@ -87,6 +87,7 @@ const IndivPage = ({ indivStat, location }) => {
         <MobileFilterDiv>
           <StatSelect stats={STATS} indiv />
         </MobileFilterDiv>
+        <>
         <PlotContainer
           name={name}
           categoryData={categoryData}
@@ -100,6 +101,7 @@ const IndivPage = ({ indivStat, location }) => {
             greater than 1996, otherwise they are chosen based on points
           </Footer>
         )}
+        </>
       </IndivPageDiv>
     </>
   );
