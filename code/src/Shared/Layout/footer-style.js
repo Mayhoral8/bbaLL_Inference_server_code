@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { darken } from 'polished';
 
 export const FooterDiv = styled.div`
-  background: var(--penblue);
+  background: var(--main-purple);
   color: var(--faint-purple);
   padding: 4rem 3rem 0;
   .footer-width {
