@@ -16,7 +16,10 @@ import {
   IconFigure,
   Icon,
   Figure,
-  LastTenGameWrapper
+  LastTenGameWrapper,
+  GameBadges,
+  BettingTypeWinRate,
+  BettingTypeStats
 } from "../Styles/profileStyle";
 
 //Images
@@ -38,31 +41,57 @@ const LastTenGame = (props) => {
     (props.data).map((eachData, id) => {
       return(
         <LastTenGameWrapper key={id}>
-          {eachData == 1 ?  <Icon src={checkIcon} /> :  <Icon src={noCheckIcon} />}
+          {eachData == 1 ?  <GameBadges src={checkIcon} /> :  <GameBadges src={noCheckIcon} />}
         </LastTenGameWrapper>
       )
     }
   ))
 };
 
+function calWinRate(numWins, numBettings) {
+  return numWins / numBettings;
+}
+
 const UserStatsBox = (props) => {
   const [statsSpinner, setStatsSpinner] = useState(true);
-  const [winningRate, setWinningRate] = useState(0);
+  const [winningRate, setWinningRate] = useState([0,0,0,0]);
   useEffect(() => {
     props.getUserRecord(props.userDetails.uid);
   }, []);
 
   useEffect(() => {
     if (props.userRecord.level) {
+      let winningRateArray = [];
       let calWinningRate =
         props.userRecord.numBettings === 0
           ? 0
-          : props.userRecord.numWins / props.userRecord.numBettings;
-      setWinningRate(calWinningRate);
+          : calWinRate(props.userRecord.numWins, props.userRecord.numBettings)
+      let calMoneLineWinningRate =
+        props.userRecord.numMoneyLineBettings === 0
+          ? 0
+          : calWinRate(props.userRecord.numMoneyLineWins, props.userRecord.numMoneyLineBettings)
+
+      let calSpreadWinningRate =
+        props.userRecord.numSpreadBettings === 0
+          ? 0
+          : calWinRate(props.userRecord.numSpreadWins, props.userRecord.numSpreadBettings)
+
+      let calOUWinningRate =
+        props.userRecord.numOUBettings === 0
+          ? 0
+          : calWinRate(props.userRecord.numOUWins, props.userRecord.numOUBettings)
+      
+      winningRateArray.push(calWinningRate * 100)
+      winningRateArray.push(calMoneLineWinningRate * 100)
+      winningRateArray.push(calSpreadWinningRate * 100)
+      winningRateArray.push(calOUWinningRate * 100)
+
+      setWinningRate(winningRateArray);
       setStatsSpinner(false);
     }
   }, [props.userRecord]);
 
+  console.log(winningRate)
   return (
     <>
       <UserStatsContainer>
@@ -103,7 +132,7 @@ const UserStatsBox = (props) => {
                     Win Rate
                     <IconFigure>
                       <Icon src={winRateIcon} />
-                      <Figure>{winningRate.toFixed(2)}</Figure>
+                      <Figure>{winningRate[0].toFixed(1)}%</Figure>
                     </IconFigure>
                   </Stats>
                 </LevelWinRate>
@@ -113,9 +142,33 @@ const UserStatsBox = (props) => {
             )}
           </StatsContainer>
         </ProfileImgFigures>
-        <div className="styledDiv">
-          <Link to="/betting" className="styledButton">Bet Now</Link>
-        </div>
+
+        <BettingTypeWinRate>
+            <BettingTypeStats>
+              Money Line
+              <IconFigure>
+              <Icon src={winRateIcon} />
+                <Figure>{winningRate[1].toFixed(1)}%</Figure>
+              </IconFigure>
+            </BettingTypeStats>
+
+            <BettingTypeStats>
+              Over Under
+              <IconFigure>
+                <Icon src={winRateIcon} />
+                <Figure>{winningRate[2].toFixed(1)}%</Figure>
+              </IconFigure>
+            </BettingTypeStats>
+
+            <BettingTypeStats>
+              Speard
+              <IconFigure>
+                <Icon src={winRateIcon} />
+                <Figure>{winningRate[3].toFixed(1)}%</Figure>
+              </IconFigure>
+            </BettingTypeStats>
+          </BettingTypeWinRate>
+
         <div className="lastTenday">
           Last 10 fixtures:
         </div>
@@ -123,6 +176,9 @@ const UserStatsBox = (props) => {
           <LastTenGame  data={props.userRecord.last10Games}/> :
           <div>No Data available</div>
         }
+        <div className="styledDiv">
+          <Link to="/betting" className="styledButton">Bet Now</Link>
+        </div>
       </UserStatsContainer>
     </>
   );
