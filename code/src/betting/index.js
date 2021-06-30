@@ -36,6 +36,7 @@ import OutsideClickHandler from 'react-outside-click-handler'
 //Images
 import loginIcon from '../assets/images/loginIcon.png'
 import logoutIcon from '../assets/images/logoutIcon.png'
+import instruction from '../assets/images/instruction.png'
 
 //Styled Components
 import {
@@ -596,8 +597,16 @@ const Betting=(props)=>{
                                     <h3>Instruction:</h3>
                                     <p>You can bet any of three types: Moneyline, spread, and over & under.
                                     If you predict correctly, then you earn points based on the displayed betting odds. 
-                                    If you predict incorrectly, you lose 1 point.
-                                    Say you bet on “LAC” for 1.95 betting odds. If the Clippers win, then you will earn 0.95 points. 
+                                    If you predict incorrectly, you lose 1 point. For example:</p>
+                                    <figure style = {{textAlign: 'center', paddingBottom: '10px', paddingTop: '10px'}}>
+                                        <img  style={{display: 'block', 
+                                                marginLeft: 'auto', 
+                                                marginRight: 'auto', 
+                                                paddingTop: '10px',
+                                                paddingBottom: '10px'}} src={instruction}/>
+                                        <figcaption style={{fontSize: '15px'}}>Money Line example</figcaption>
+                                    </figure>
+                                    <p>Say you bet on “LAC” for 1.95 betting odds. If the Clippers win, then you will earn 0.95 points. 
                                     If the Clippers lose then you lose -1. This is equivalent to having a stake size of $1.</p>
                                     <p>Notes:</p>
                                     <ul style={{paddingLeft: '30px'}}>
