@@ -41,10 +41,9 @@ import momentTimezone from "moment-timezone";
 import OutsideClickHandler from "react-outside-click-handler";
 
 //Images
-import loginIcon from '../assets/images/loginIcon.png'
-import logoutIcon from '../assets/images/logoutIcon.png'
-import instruction from '../assets/images/instruction.png'
-
+import loginIcon from "../assets/images/loginIcon.png";
+import logoutIcon from "../assets/images/logoutIcon.png";
+import instruction from "../assets/images/instruction.png";
 
 //Styled Components
 import {
@@ -672,58 +671,22 @@ const Betting = (props) => {
                                     isGameStartTimeBeforeTheCurrentTime={
                                       isGameStartTimeBeforeTheCurrentTime
                                     }
-                                </BettingSectionContainer>
-                                <div className = "instruction">
-                                    <h3>Instruction:</h3>
-                                    <p>You can bet any of three types: Moneyline, spread, and over & under.
-                                    If you predict correctly, then you earn points based on the displayed betting odds. 
-                                    If you predict incorrectly, you lose 1 point. For example:</p>
-                                    <figure style = {{textAlign: 'center', paddingBottom: '10px', paddingTop: '10px'}}>
-                                        <img  style={{display: 'block', 
-                                                marginLeft: 'auto', 
-                                                marginRight: 'auto', 
-                                                paddingTop: '10px',
-                                                paddingBottom: '10px'}} src={instruction}/>
-                                        <figcaption style={{fontSize: '15px'}}>Money Line example</figcaption>
-                                    </figure>
-                                    <p>Say you bet on “LAC” for 1.95 betting odds. If the Clippers win, then you will earn 0.95 points. 
-                                    If the Clippers lose then you lose -1. This is equivalent to having a stake size of $1.</p>
-                                    <p style={{ paddingTop: "30px" }}>Notes:</p>
-                                    <ul style={{paddingLeft: '30px'}}>
-                                        <li>
-                                            The results will be updated every morning at 8am.
-                                        </li>
-                                        <li>
-                                            You cannot change your bet once you submit the result.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </BettingSectionColumn>
-                            <BetPointsSummaryColumn>
-                                <OverviewHeader>Summary</OverviewHeader>
-
-                                <BetSubmitPointsContainer>
-                                    {overviewKeysArray.map((gameId,index)=>{
-                                        return(
-                                            <BetPointsOverviewBox 
-                                             selectedValues={selectedValues} 
-                                             gameId={gameId}
-                                             key={index}
-                                             onRemovePoints={onRemovePoints}
-                                            />
-                                        )
-                                    })}
-                                </BetSubmitPointsContainer>
-                                    {
-                                    isIndexSelected ?
-                                        <SubmitPointsBtn
-                                        onClick={()=>{
-                                            onSubmit()
-                                        }}
-                                        >
-                                            <span>Submit</span>
-                                        </SubmitPointsBtn>
-                                    :null
+                                    onPointBoxClick={onPointBoxClick}
+                                    teamIconsObj={teamIconsObj}
+                                    pointsSpinner={pointsSpinner}
+                                  />
+                                  <PointsBox
+                                    type="overUnder"
+                                    overOrUnder="under"
+                                    overOrUnderTotalScore="underTotalScore"
+                                    overOrUnderOddsValue="underOddsValue"
+                                    index={index}
+                                    gameInfo={gameInfo}
+                                    selectedClass="overUnderSelected"
+                                    element={element}
+                                    colIndex={1}
+                                    isGameStartTimeBeforeTheCurrentTime={
+                                      isGameStartTimeBeforeTheCurrentTime
                                     }
                                     onPointBoxClick={onPointBoxClick}
                                     teamIconsObj={teamIconsObj}
@@ -744,12 +707,36 @@ const Betting = (props) => {
                     You can bet any of three types: Moneyline, spread, and over
                     & under. If you predict correctly, then you earn points
                     based on the displayed betting odds. If you predict
-                    incorrectly, you lose 1 point. Say you bet on “LAC” for 1.95
-                    betting odds. If the Clippers win, then you will earn 0.95
-                    points. If the Clippers lose then you lose -1. This is
-                    equivalent to having a stake size of $1.
+                    incorrectly, you lose 1 point. For example:
                   </p>
-                  <p style={{ paddingTop: "30px" }}>Notes:</p>
+                  <figure
+                    style={{
+                      textAlign: "center",
+                      paddingBottom: "10px",
+                      paddingTop: "10px",
+                    }}
+                  >
+                    <img
+                      style={{
+                        display: "block",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        paddingTop: "10px",
+                        paddingBottom: "10px",
+                      }}
+                      src={instruction}
+                    />
+                    <figcaption style={{ fontSize: "15px" }}>
+                      Money Line example
+                    </figcaption>
+                  </figure>
+                  <p>
+                    Say you bet on “LAC” for 1.95 betting odds. If the Clippers
+                    win, then you will earn 0.95 points. If the Clippers lose
+                    then you lose -1. This is equivalent to having a stake size
+                    of $1.
+                  </p>
+                  <p style={{ paddingLeft: "30px" }}>Notes:</p>
                   <ul style={{ paddingLeft: "30px" }}>
                     <li>The results will be updated every morning at 8am.</li>
                     <li>
