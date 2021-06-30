@@ -83,7 +83,7 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
             context.dataset.label.split(" ")[0] === "Win" ||
             context.dataset.label === "League Avg "
           ) {
-            return Math.round(value * 100) + "%";
+            return Math.round(value * 1000)/10 + "%";
           }
           if (
             (page === "Assists & Rebounds" &&
