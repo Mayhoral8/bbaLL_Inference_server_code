@@ -12,7 +12,6 @@ const media = {
 
 export const Continer = styled.div`
   padding-top: 20px;
-
   .titleStyle {
     padding-left: 60px;
     font-family: Poppins;

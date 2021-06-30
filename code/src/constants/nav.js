@@ -25,7 +25,7 @@ export const navConstants = [
     parentUrl: "comparison",
   },
   {
-    name: "Betting",
+    name: "Virtual Betting",
     url: '/betting',
     parentUrl:'betting'
   }

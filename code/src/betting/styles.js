@@ -43,6 +43,7 @@ export const ContentC = styled.div`
     justify-content:center;
     align-items:center;
     padding: 20px 0px;
+    
 `
 
 export const ContentW = styled.div`
