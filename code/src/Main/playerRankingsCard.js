@@ -3,11 +3,7 @@ import * as teamColours from "../constants/teamColours";
 import { fbStorage } from "../App/config";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 import Select from "react-select";
-import {
-  CardContainer,
-  OutsideContainer,
-  selectContainer,
-} from "./playerrankingscard-style";
+import { CardContainer, OutsideContainer } from "./playerrankingscard-style";
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
@@ -15,7 +11,6 @@ const capitalizeFirstLetter = (string) => {
 const PlayerRankingsCard = ({ data, rankingTypes }) => {
   //const [JSON, setJSON] = useState(data);
   const [imgs, setImgs] = useState({});
-  console.log(rankingTypes);
 
   try {
     if (data == null) {
@@ -178,6 +173,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
   });
   const renderComponent = () => {
     if (hasDataLoaded == true) {
+      const playerRankingsCardRef = useRef(null)
       return (
         <OutsideContainer>
           <button
@@ -198,7 +194,7 @@ const PlayerRankingsCard = ({ data, rankingTypes }) => {
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
             />
           </button>
-          <CardContainer>
+          <CardContainer ref = {playerRankingsCardRef}>
             <div className="top">
               <div className="title">
                 {rankingTypes[rankingTypeIndex]} Player Rankings

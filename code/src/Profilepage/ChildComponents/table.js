@@ -19,7 +19,6 @@ const Table = (props) => {
         data
     })
     let {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = tableInstance
-    console.log(data)
     return(
         <TableContainer {...getTableProps()}>
             <TableHead>

@@ -4,7 +4,7 @@ import {
   StyledBar,
   StyledBarContainer,
   StyledBarText,
-} from "./comparison-style";
+} from "../comparison-style";
 
 const ComparisonBars = ({ listGroup, getTeamColour, list, bcg, dataType }) => {
   const {

@@ -37,6 +37,7 @@
     "polished": "^4.0.5",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.11.1",
+    "react-component-export-image": "^1.0.6",
     "react-compound-slider": "^2.5.0",
     "react-content-loader": "^6.0.0",
     "react-dom": "^16.13.1",

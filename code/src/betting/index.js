@@ -22,24 +22,18 @@ import Spinner from '../Shared/Spinner/Spinner'
 import WarningPopup from '../Shared/Popups/popup'
 import UserRankContainer from './Shared/usersRankContainer'
 import LoginModal from '../Auth/Login'
-
+import PointsBox from './Shared/pointsBox'
 
 //Libraries and Functions
-import {connect} from 'react-redux'
-import {ClipLoader} from 'react-spinners'
-import OutsideClickHandler from 'react-outside-click-handler'
-import firebase from "firebase/app"
 import 'firebase/auth';
+import firebase from "firebase/app"
 import {firebaseInstanceSpigamebet} from '../App/spigamebetFirebase'
+import {connect} from 'react-redux'
 import moment from 'moment'
 import momentTimezone from 'moment-timezone'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 //Images
-import lockIcon from '../assets/images/lockIcon.jpg'
-import yellowLock from '../assets/images/yellowLock.png'
-import redLock from '../assets/images/redLock.jpg'
-import overIcon from '../assets/images/overIcon.png'
-import underIcon from '../assets/images/underIcon.png'
 import loginIcon from '../assets/images/loginIcon.png'
 import logoutIcon from '../assets/images/logoutIcon.png'
 
@@ -51,39 +45,26 @@ import {
     ContentW,
     ContentHeader,
     DisplayGamesBtnContainer,
-    BetSectionContainer,
-    BetSectionWrapper,
-    BetSectionPointsContainer,
+    BettingSectionColumn,
+    BettingSectionContainer,
+    BettingPointsAndTeamsContainer,
+    BettingPointsAndTeamsWrapper,
     TodayBtnContainer,
     RowC,
     TeamNameContainer,
     TeamName,
-    TimeContainer,
     VS,
-    Col,
+    PointsBoxColumn,
     Section1,
     Section2,
-    PointsContainer,
-    PointsWrapper,
-    PointsSpinnerContainer,
-    LockIconContainer,
-    LockIcon,
-    PointsValueContainer,
-    OddsValueContainer,
-    TotalScoreValueContainer,
-    BetSubmitFormC,
+    BetPointsSummaryColumn,
     BetSubmitPointsContainer,
     OverviewHeader,
     SubmitPointsBtn,
     PopupContainer,
     PopupWrapper,
+    UserStatsAndRankColumn,
     UserStatsRankWrapper,
-    MoneyLineOddsContainer,
-    TeamIconOddsContainer,
-    TeamIconContainer,
-    ArrowIconContainer,
-    ArrowIcon,
-    TeamIcon,
     LoginModalContainer,
     LoginLogoutBtnsContainer,
     AuthBtn
@@ -101,10 +82,10 @@ const Betting=(props)=>{
     const [loginModalVisible, setLoginModalVisible] = useState(false);
     const [pointsSpinner, setPointsSpinner] = useState(true);
     const [bettingPageSpinner, setBettingPageSpinner] = useState(false);
-    const [loadingBetPoints, setLoadingBetPoints] = useState(true);
     const [numberOfGamesExceedingTimeLimit, setnumberOfGamesExceedingTimeLimit] = useState(0);
 
 
+    //Component did mount, it gets all the future games info from the firebase api
     useEffect(() => {
         let response = props.getFutureGamesInfo();
         if(response.isError){
@@ -119,6 +100,8 @@ const Betting=(props)=>{
         },300000);
     },[]);
 
+    //The function updates when we get the futureGamesInfo and userDetails from the firebase api.
+    //This checks if the user is logged in also if the games are present and then shows results based on the scenario
     useEffect(() => {
 
         if(props.futureGamesInfo.games.length > 0 && !props.futureGamesInfo.isLoading){
@@ -127,7 +110,6 @@ const Betting=(props)=>{
             }
             else if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
                 setGameInfo(props.futureGamesInfo.games)
-                setLoadingBetPoints(false)
                 setPointsSpinner(false)
                 setBettingPageSpinner(false)
             }
@@ -150,12 +132,11 @@ const Betting=(props)=>{
 
     },[props.futureGamesInfo, props.userDetails]);
 
-
+    //The function checks for the user bets history from the firebase api and runs different functions based on scenarios given in conditionals.
     useEffect(() => {
         if(props.userBetsDetails.bets[0] && !props.userBetsDetails.loading){
             let computedArray = compareUserBetsAndGameInfo(props.userBetsDetails.bets, props.futureGamesInfo.games)
             setPointsSpinner(false)
-            setLoadingBetPoints(false)
             setGameInfo(computedArray)
 
         } else if(!props.userBetsDetails.loading){
@@ -165,13 +146,18 @@ const Betting=(props)=>{
     },[props.userBetsDetails]);
 
 
+    //The function runs when the user clicks on the pointbox to submit the bet for a game or multiple games at once.
     const onPointBoxClick = ( e, params, index, gameId ,selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, onScreenSelection, betSubmitted, isGameStartTimeBeforeTheCurrentTime ) => {
+        //If the user has already submit a bet on any of the moneyline, overUnder or handicap and the the odds value are present
+        //(sometimes odds values aren't available and the firebase api does not return them)
+        //in this case the bet cannot be initiated and the conditional below runs.
         if(!betSubmitted && oddsValue){
             if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
                 setLoginModalVisible(true);
             }
-            else if(props.userDetails.user.displayName && !props.userDetails.isLoading){
-
+            //If the is logged in, the bet points aren't loading from the api and the 
+            //game hasn't started yet then the function runs in with the conditional statement below.
+            else if(props.userDetails.user.displayName && !props.userDetails.isLoading && isGameStartTimeBeforeTheCurrentTime){
                 const returnedObj = pointBoxClickHandler( e, params, index, gameId, selectedType, bettingSide, colIndex, oddsValue, pointsValue, scoreValue, props, selectedValues, gameInfo, onScreenSelection);
                 setGameInfo( returnedObj.gameInfoUpdated );
                 setSelectedValues( returnedObj.targetObj );
@@ -182,6 +168,8 @@ const Betting=(props)=>{
         }
     };
 
+    //This function removes the selected bet points whether that be moneyline, handicap or overUnder values,
+    //When the user clicks the cross on each game's points, the function runs to remove those values.
     const onRemovePoints = (e, params, gameId) => {
         let targetObj = selectedValues;
         let selectedKey = params === 'moneyLine' ? 'moneyLineSelected' : params === 'handicap' ? 'handicapSelected' : 'overUnderSelected';
@@ -218,10 +206,13 @@ const Betting=(props)=>{
 
     };
 
+    //The function runs when the user clicks the submit button on the summary container. This then shows the warning pop to
+    //alert the user that the bet submission cannot be undone.
     const onSubmit = async() => {
         setBetSubmitPopup({isVisible: true});
     };
 
+    //If the user after bet submission clicks the submit button on the popup, the function runs and submits the bet into the firebase api.
     const submitConfirmation = async() => {
         setBettingPageSpinner(true)
         onPopupClose('Submit bet warning')
@@ -253,13 +244,13 @@ const Betting=(props)=>{
         }
     };
 
+    //A global function for any pop to be closed within the betting page.
     const onPopupClose = (params) => {
         if(params === 'Submit bet warning'){
             setBetSubmitPopup({isVisible: false})
         }
         else if(params === 'Bet time limit exceeded'){
             setExceedingTimeLimitPopup({isVisible: false})
-            setLoadingBetPoints(true)
             setPointsSpinner(true)
             let response = props.getFutureGamesInfo();
             if(response.isError){
@@ -268,11 +259,12 @@ const Betting=(props)=>{
         }
     };
 
+    //The function runs when the user click outside the login popup.
     const onOutsideClick = () => {
         setLoginModalVisible(false)
     };
 
-    const onLoginClick = async(params) => {
+    const onLoginClick = (params) => {
         let localStorageObj = {}
         if(params === 'google'){
             const provider = new firebase.auth.GoogleAuthProvider()
@@ -299,10 +291,19 @@ const Betting=(props)=>{
 
             firebaseInstanceSpigamebet.auth().signInWithPopup(provider)
             .then(async(res)=>{
-                //Needs to configures
+                const {uid, displayName, email} = res.user
+                setBettingPageSpinner(true)
+                setLoginModalVisible(false)
+                localStorageObj.uid = uid
+                localStorageObj.displayName = displayName
+                localStorageObj.email = email
+                localStorageObj.type = 'facebook'
+                localStorage.setItem('User', JSON.stringify(localStorageObj))
+                await props.checkUserRecordCollectionExists(localStorageObj)
+                setBettingPageSpinner(false)
             })
-            .catch((e)=>{
-                console.log(e)//error handeling
+            .catch(()=>{
+                setError({status: null, message: 'Facebook login error', isError:true})
             })
         } 
         else{
@@ -322,7 +323,7 @@ const Betting=(props)=>{
                 await props.checkUserRecordCollectionExists(localStorageObj)
                 setBettingPageSpinner(false)
             })
-            .catch((e)=>{
+            .catch(()=>{
                 setError({status: null, message: 'Twitter login error', isError:true})
             })
         }
@@ -331,10 +332,10 @@ const Betting=(props)=>{
     const onLogoutClick = async() => {
         setLoginModalVisible(false)
         setBettingPageSpinner(true)
-        setLoadingBetPoints(true)
         setPointsSpinner(true)
         let response = await props.logoutAction()
         if(response.processed){
+            setSelectedValues({})
             let response = props.getFutureGamesInfo();
             if(response.isError){
                 setError({status: response.status, message: response.message, isError:true})
@@ -344,12 +345,12 @@ const Betting=(props)=>{
             setError({status: response.status, message: response.message, isError:true})
         }
     };
-
     
     return(
         <> 
             {
-                !gameInfo[0] ?
+                !gameInfo[0] 
+                ?
                 <Spinner/>
                 :
                 <BettingPageContainer className='bettingPageContainer'>
@@ -384,7 +385,7 @@ const Betting=(props)=>{
                     }
                     {
                         betSubmitPopup.isVisible ? 
-                        <PopupContainer>
+                            <PopupContainer>
                             <PopupWrapper>
                                 <WarningPopup
                                  type = 'Submit bet warning'
@@ -395,7 +396,7 @@ const Betting=(props)=>{
                         </PopupContainer>
                         :
                         exceedingTimeLimitPopup.isVisible ? 
-                        <PopupContainer>
+                            <PopupContainer>
                             <PopupWrapper>
                                 <WarningPopup
                                  type = ''
@@ -409,7 +410,7 @@ const Betting=(props)=>{
                     
                     <ContentC>
                         <ContentW>
-                            <UserStatsRankWrapper>
+                            <UserStatsAndRankColumn>
 
                                 <LoginLogoutBtnsContainer onClick = {() => {
                                     props.userDetails.user.uid ? onLogoutClick() : setLoginModalVisible(true)
@@ -426,28 +427,29 @@ const Betting=(props)=>{
                                     }
                                 </LoginLogoutBtnsContainer>
 
-                                {
-                                    props.userDetails.user.uid && props.userRecord ? 
-                                    <UserStatsContainer/>
-                                    :
-                                    null
-                                }
-                                
-                                <UserRankContainer/>
+                                <UserStatsRankWrapper>
+                                    {
+                                        props.userDetails.user.uid && props.userRecord ? 
+                                        <UserStatsContainer/>
+                                        :
+                                        null
+                                    }
+                                    
+                                    <UserRankContainer/>
+                                </UserStatsRankWrapper>
 
-                            </UserStatsRankWrapper>
+                            </UserStatsAndRankColumn>
 
-                            <BetSectionContainer>
+                            <BettingSectionColumn>
 
                                 <ContentHeader>
                                     <h1>NBA Betting</h1>
                                     <DisplayGamesBtnContainer>
-                                        <div>Display Games</div>
                                         <TodayBtnContainer>Today</TodayBtnContainer>
                                     </DisplayGamesBtnContainer>
                                 </ContentHeader>
 
-                                <BetSectionWrapper>
+                                <BettingSectionContainer>
                                     {
                                         error.message === 'No games today'
                                         ?
@@ -455,25 +457,24 @@ const Betting=(props)=>{
                                             <h1>No games today</h1>
                                         </div>
                                         :
-                                        <>
-                                            <div>
-                                                <BettingSectionheader/>
-                                            </div>
+                                        <BettingPointsAndTeamsContainer>
+                                            {gameInfo.map((element, index) => {
 
-                                            <BetSectionPointsContainer>
-                                                {gameInfo.map((element,index)=>{
-                                                    let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
-                                                    let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
-                                                    let gameStartDate = element.gameDetails.gameDate +  " " + element.gameDetails.gameStartTime
-                                                    let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
-                                                    return(
-                                                        <RowC key={index*12}>
+                                                let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
+                                                let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
+                                                let gameStartDate = element.gameDetails.gameDate +  " " + element.gameDetails.gameStartTime
+                                                let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
+
+                                                return(
+                                                    <BettingPointsAndTeamsWrapper key={index}>
+                                                        <div>
+                                                            <BettingSectionheader
+                                                             gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
+                                                            />
+                                                        </div>
+                                                        <RowC>
+                                                            
                                                             <Section1>
-
-                                                                <TimeContainer>
-                                                                    {element.gameDetails.gameStartTime.split(' PM')}
-                                                                </TimeContainer>
-
                                                                 <TeamNameContainer>
                                                                     <TeamName>
                                                                         {element.gameDetails.homeTeam}
@@ -483,376 +484,113 @@ const Betting=(props)=>{
                                                                         {element.gameDetails.awayTeam}
                                                                     </TeamName>
                                                                 </TeamNameContainer>
-
                                                             </Section1>
 
                                                             <Section2>
-                                                                <Col>
-                                                                    <PointsContainer 
-                                                                    selected={gameInfo[index].handicapSelected === 0} 
-                                                                    onClick={(e)=>{
-                                                                        onPointBoxClick(
-                                                                            e,
-                                                                            'handicap',
-                                                                            index,
-                                                                            gameInfo[index].gameId,
-                                                                            'handicapSelected',
-                                                                            element.handicap.homeTeam.bettingSide,
-                                                                            0,
-                                                                            gameInfo[index].handicap.homeTeam.odds,
-                                                                            gameInfo[index].handicap.homeTeam.points,
-                                                                            null,
-                                                                            element.handicapSelected,
-                                                                            element.handicap.selected,
-                                                                            isGameStartTimeBeforeTheCurrentTime
-                                                                        )
-                                                                    }}
-                                                                    >
-                                                                        {
-                                                                            pointsSpinner ?
-                                                                            <PointsSpinnerContainer>
-                                                                                <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
-                                                                            </PointsSpinnerContainer>
-                                                                            :
-                                                                            <PointsWrapper>
-                                                                                <PointsValueContainer>{element.handicap.homeTeam.points}</PointsValueContainer>
-                                                                                <TeamIconOddsContainer>
-                                                                                    <TeamIconContainer>
-                                                                                        <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
-                                                                                    </TeamIconContainer>
-                                                                                    <OddsValueContainer>{element.handicap.homeTeam.odds}</OddsValueContainer>
-                                                                                </TeamIconOddsContainer>
-                                                                                {
-                                                                                    element.handicap.selected ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={lockIcon}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !element.handicap.homeTeam.odds
-                                                                                    ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={yellowLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !isGameStartTimeBeforeTheCurrentTime?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={redLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </PointsWrapper>
-                                                                        }
 
-                                                                    </PointsContainer>
+                                                                <PointsBoxColumn>
+                                                                    <PointsBox
+                                                                     type = 'handicap'
+                                                                     homeOrAway = 'homeTeam'
+                                                                     element = {element}
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'handicapSelected'
+                                                                     colIndex = {0}
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                    <PointsBox
+                                                                     type = 'handicap'
+                                                                     homeOrAway = 'awayTeam'
+                                                                     element = {element}
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'handicapSelected'
+                                                                     colIndex = {1}
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                </PointsBoxColumn>
 
-                                                                    <PointsContainer 
-                                                                    selected={gameInfo[index].handicapSelected === 1} 
-                                                                    onClick={(e)=>{
-                                                                        onPointBoxClick(
-                                                                            e,
-                                                                            'handicap',
-                                                                            index,
-                                                                            gameInfo[index].gameId,
-                                                                            'handicapSelected',
-                                                                            element.handicap.awayTeam.bettingSide,
-                                                                            1,
-                                                                            gameInfo[index].handicap.awayTeam.odds,
-                                                                            gameInfo[index].handicap.awayTeam.points,
-                                                                            null,
-                                                                            element.handicapSelected,
-                                                                            element.handicap.selected,
-                                                                            isGameStartTimeBeforeTheCurrentTime
-                                                                        )
-                                                                    }}
-                                                                    >
-                                                                        {   
-                                                                            pointsSpinner ?
-                                                                            <PointsSpinnerContainer>
-                                                                                <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
-                                                                            </PointsSpinnerContainer>
-                                                                            :
-                                                                            <PointsWrapper>
-                                                                                <PointsValueContainer>{element.handicap.awayTeam.points}</PointsValueContainer>
-                                                                            
-                                                                                <TeamIconOddsContainer>
-                                                                                    <TeamIconContainer>
-                                                                                        <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
-                                                                                    </TeamIconContainer>
-                                                                                    <OddsValueContainer>{element.handicap.awayTeam.odds}</OddsValueContainer>
-                                                                                </TeamIconOddsContainer>
-                                                                                {
-                                                                                    element.handicap.selected ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={lockIcon}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !element.handicap.awayTeam.odds
-                                                                                    ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={yellowLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !isGameStartTimeBeforeTheCurrentTime?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={redLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </PointsWrapper>
-                                                                        }
+                                                                <PointsBoxColumn>
+                                                                    <PointsBox
+                                                                     type = 'moneyLine'
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'moneyLineSelected'
+                                                                     element = {element}
+                                                                     colIndex = {0}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     homeOrAway = 'homeTeam'
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                    <PointsBox
+                                                                     type = 'moneyLine'
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'moneyLineSelected'
+                                                                     element = {element}
+                                                                     colIndex = {1}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     homeOrAway = 'awayTeam'
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                </PointsBoxColumn>
 
-                                                                    </PointsContainer>
-                                                                </Col>
+                                                                <PointsBoxColumn>
+                                                                    <PointsBox
+                                                                     type = 'overUnder'
+                                                                     overOrUnder = 'over'
+                                                                     overOrUnderTotalScore = 'overTotalScore'
+                                                                     overOrUnderOddsValue = 'overOddsValue'
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'overUnderSelected'
+                                                                     element = {element}
+                                                                     colIndex = {0}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                    <PointsBox
+                                                                     type = 'overUnder'
+                                                                     overOrUnder = 'under'
+                                                                     overOrUnderTotalScore = 'underTotalScore'
+                                                                     overOrUnderOddsValue = 'underOddsValue'
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'overUnderSelected'
+                                                                     element = {element}
+                                                                     colIndex = {1}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                </PointsBoxColumn>
 
-                                                                <Col>
-                                                                    <PointsContainer 
-                                                                    selected={gameInfo[index].moneyLineSelected === 0} 
-                                                                    onClick={(e)=>{
-                                                                        onPointBoxClick(
-                                                                            e,
-                                                                            'moneyLine',
-                                                                            index,
-                                                                            gameInfo[index].gameId,
-                                                                            'moneyLineSelected',
-                                                                            element.moneyLine.homeTeamOdds.bettingSide,
-                                                                            0,
-                                                                            gameInfo[index].moneyLine.homeTeamOdds.odds,
-                                                                            null,
-                                                                            null,
-                                                                            element.moneyLineSelected,
-                                                                            element.moneyLine.selected,
-                                                                            isGameStartTimeBeforeTheCurrentTime
-                                                                        )
-                                                                    }}
-                                                                    >
-                                                                        {
-                                                                            pointsSpinner ? 
-                                                                            <PointsSpinnerContainer>
-                                                                                <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
-                                                                            </PointsSpinnerContainer>
-                                                                            :
-                                                                            <PointsWrapper>
-                                                                                <MoneyLineOddsContainer>
-                                                                                <TeamIconContainer>
-                                                                                    <TeamIcon src = {teamIconsObj.homeTeamIcon}/>
-                                                                                </TeamIconContainer>
-                                                                                    {element.moneyLine.homeTeamOdds.odds}
-                                                                                </MoneyLineOddsContainer>
-                                                                                {
-                                                                                    element.moneyLine.selected ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={lockIcon}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !element.moneyLine.homeTeamOdds.odds
-                                                                                    ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={yellowLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !isGameStartTimeBeforeTheCurrentTime?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={redLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </PointsWrapper>
-                                                                        }
-
-                                                                    </PointsContainer>
-
-                                                                    <PointsContainer 
-                                                                    selected={gameInfo[index].moneyLineSelected === 1} 
-                                                                    onClick={(e)=>{
-                                                                        onPointBoxClick(
-                                                                            e,
-                                                                            'moneyLine',
-                                                                            index,
-                                                                            gameInfo[index].gameId,
-                                                                            'moneyLineSelected',
-                                                                            element.moneyLine.awayTeamOdds.bettingSide,
-                                                                            1,
-                                                                            gameInfo[index].moneyLine.awayTeamOdds.odds,
-                                                                            null,
-                                                                            null,
-                                                                            element.moneyLineSelected,
-                                                                            element.moneyLine.selected,
-                                                                            isGameStartTimeBeforeTheCurrentTime
-                                                                        )
-                                                                    }}
-                                                                    >
-                                                                        {   
-                                                                            pointsSpinner ?
-                                                                            <PointsSpinnerContainer>
-                                                                                <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
-                                                                            </PointsSpinnerContainer>
-                                                                            :
-                                                                            <PointsWrapper>
-                                                                                <MoneyLineOddsContainer>
-                                                                                <TeamIconContainer>
-                                                                                    <TeamIcon src = {teamIconsObj.awayTeamIcon}/>
-                                                                                </TeamIconContainer>
-                                                                                    {element.moneyLine.awayTeamOdds.odds}
-                                                                                </MoneyLineOddsContainer>
-                                                                                {
-                                                                                    element.moneyLine.selected ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={lockIcon}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !element.moneyLine.awayTeamOdds.odds
-                                                                                    ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={yellowLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !isGameStartTimeBeforeTheCurrentTime?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={redLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </PointsWrapper>
-                                                                        }
-
-                                                                    </PointsContainer>
-                                                                </Col>
-
-                                                                <Col>
-                                                                    <PointsContainer 
-                                                                    selected={gameInfo[index].overUnderSelected === 0} 
-                                                                    onClick={(e)=>{
-                                                                        onPointBoxClick(
-                                                                            e,
-                                                                            'over',
-                                                                            index,
-                                                                            gameInfo[index].gameId,
-                                                                            'overUnderSelected',
-                                                                            null,
-                                                                            0,
-                                                                            gameInfo[index].overUnder.overOddsValue,
-                                                                            null,
-                                                                            gameInfo[index].overUnder.overTotalScore,
-                                                                            element.overUnderSelected,
-                                                                            element.overUnder.selected,
-                                                                            isGameStartTimeBeforeTheCurrentTime
-                                                                        )
-                                                                    }}
-                                                                    >
-                                                                        { 
-                                                                            pointsSpinner ?
-                                                                            <PointsSpinnerContainer>
-                                                                                <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
-                                                                            </PointsSpinnerContainer>
-                                                                            :
-                                                                            <PointsWrapper>
-                                                                                <TotalScoreValueContainer>{element.overUnder.overTotalScore}</TotalScoreValueContainer>
-
-                                                                                <TeamIconOddsContainer>
-                                                                                    <ArrowIconContainer>
-                                                                                        <ArrowIcon src = {overIcon}/>
-                                                                                    </ArrowIconContainer>
-                                                                                    <OddsValueContainer>{element.overUnder.overOddsValue}</OddsValueContainer>
-                                                                                </TeamIconOddsContainer>
-                                                                                {
-                                                                                    element.overUnder.selected ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={lockIcon}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !element.overUnder.overOddsValue
-                                                                                    ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={yellowLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !isGameStartTimeBeforeTheCurrentTime?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={redLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </PointsWrapper>
-                                                                        }
-
-                                                                    </PointsContainer>
-
-                                                                    <PointsContainer
-                                                                    selected={gameInfo[index].overUnderSelected === 1} 
-                                                                    onClick={(e)=>{
-                                                                        onPointBoxClick(
-                                                                            e,
-                                                                            'under',
-                                                                            index,
-                                                                            gameInfo[index].gameId,
-                                                                            'overUnderSelected',
-                                                                            null,
-                                                                            1,
-                                                                            gameInfo[index].overUnder.underOddsValue,
-                                                                            null,
-                                                                            gameInfo[index].overUnder.underTotalScore,
-                                                                            element.overUnderSelected,
-                                                                            element.overUnder.selected,
-                                                                            isGameStartTimeBeforeTheCurrentTime
-                                                                        )
-                                                                    }}
-                                                                    >
-                                                                        {
-                                                                            pointsSpinner ?
-                                                                            <PointsSpinnerContainer>
-                                                                                <ClipLoader color = '#C4C4C4' size = '' loading = {pointsSpinner}/>
-                                                                            </PointsSpinnerContainer>
-                                                                            :
-                                                                            <PointsWrapper>
-                                                                                <TotalScoreValueContainer>{element.overUnder.underTotalScore}</TotalScoreValueContainer>
-
-                                                                                <TeamIconOddsContainer>
-                                                                                    <ArrowIconContainer>
-                                                                                        <ArrowIcon src = {underIcon}/>
-                                                                                    </ArrowIconContainer>
-                                                                                    <OddsValueContainer>{element.overUnder.underOddsValue}</OddsValueContainer>
-                                                                                </TeamIconOddsContainer>
-                                                                                {
-                                                                                    element.overUnder.selected ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={lockIcon}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !element.overUnder.underOddsValue
-                                                                                    ?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={yellowLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    !isGameStartTimeBeforeTheCurrentTime?
-                                                                                    <LockIconContainer>
-                                                                                        <LockIcon src={redLock}/>
-                                                                                    </LockIconContainer>
-                                                                                    :
-                                                                                    null
-                                                                                }
-                                                                            </PointsWrapper>
-                                                                        }
-                                                                        
-                                                                    </PointsContainer>
-                                                                </Col>
                                                             </Section2>
-                                                        </RowC>
-                                                    )
-                                                })
-                                                }
-                                            </BetSectionPointsContainer>
-                                        </>
+                                                        </RowC> 
+                                                    </BettingPointsAndTeamsWrapper>
+                                                )
+                                            })
+                                            }
+                                        </BettingPointsAndTeamsContainer>
                                     }
-                                </BetSectionWrapper>
-                            </BetSectionContainer>
+                                </BettingSectionContainer>
+                            </BettingSectionColumn>
 
-                            <BetSubmitFormC>
+                            <BetPointsSummaryColumn>
                                 <OverviewHeader>Summary</OverviewHeader>
 
                                 <BetSubmitPointsContainer>
@@ -878,7 +616,7 @@ const Betting=(props)=>{
                                         </SubmitPointsBtn>
                                     :null
                                     }
-                            </BetSubmitFormC>
+                            </BetPointsSummaryColumn>
                         </ContentW>
                     </ContentC>
                 </BettingPageContainer>
