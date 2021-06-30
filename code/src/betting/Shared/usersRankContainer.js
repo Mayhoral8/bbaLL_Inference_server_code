@@ -8,7 +8,6 @@ import {UsersRankContainer,
 
 async function getUserId(){
     let dataInform = await fbFirestoreSpigameBet.collection('userRecords').get();
-    let tempObject = "";
     let data=[]
     let playerInfo = [];
     let rank = [];
@@ -50,10 +49,11 @@ const UserRankContainer = () => {
         <>
         { dataArray.length != 0 &&
             <UsersRankContainer>
-                <Header>User Ranking</Header>
+                <Header>Rank Ranking</Header>
                 <ColContainer>
                     <Col header="true">
-                        <div style = {{textAlign: 'center'}}>Name</div>
+                        <div 
+                        style = {{textAlign: 'center'}}>Name</div>
                         <div style = {{textAlign: 'center'}}>Points</div>
                     </Col>
                     {   
