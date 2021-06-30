@@ -77,7 +77,6 @@ export const CenteredMain = styled.div`
   @media screen and (min-width: 1440px) {
     padding: 0;
   }
-  overflow-x: hidden;
 `;
 
 export const ContainerCard = styled.div`

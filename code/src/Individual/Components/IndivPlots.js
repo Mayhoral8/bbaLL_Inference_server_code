@@ -15,7 +15,6 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
   const lineOptions = {
     responsive: true,
     spanGaps: true,
-
     scales: {
       yAxes: [
         {
@@ -48,7 +47,6 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
         },
       ],
     },
-
     plugins: {
       //data labels on each plot
       datalabels: {
@@ -97,7 +95,6 @@ export const IndivPlots = ({ data, labels, barData, page, isTeam }) => {
         padding: 3,
       },
     },
-
     // Core options
     aspectRatio: 5 / 3,
     layout: {
