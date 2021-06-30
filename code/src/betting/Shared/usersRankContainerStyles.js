@@ -25,15 +25,23 @@ export const UsersRankContainer = styled.div`
 
 export const Header = styled.h4`
     margin-bottom: 20px;
+    text-align: center;
 `
 
 export const ColContainer = styled.div`
-    display: flex;
     width: 100%;
+    height: 80%;
+    overflow: auto;
 `
 
 export const Col = styled.div`
-    width: 50%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid #ddd;
+    border-top: ${props => props.header == 'false' && "0"};
+    background-color: ${props => props.header == 'true' && "#552A9F"};
+    color: ${props => props.header == 'true' && "white"};
+    padding: 10px 0px;
 `
 
 export const ColHeading = styled.div`

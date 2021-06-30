@@ -1,0 +1,23 @@
+.input {
+  text-align: center;
+  padding: 5px;
+  font-size: 18px;
+  border: 1px solid #9c88ff;
+  border-radius: 20px;
+  width: 350px;
+  box-shadow: 0 1.5rem 2rem rgba(156, 136, 255, 0.2);
+  color: #9c88ff;
+}
+
+@media screen and (max-width: 1100px){
+  .input {
+    text-align: center;
+    padding: 5px;
+    font-size: 10px;
+    border: 1px solid #9c88ff;
+    border-radius: 20px;
+    width: 200px;
+    box-shadow: 0 1.5rem 2rem rgba(156, 136, 255, 0.2);
+    color: #9c88ff;
+  }
+}

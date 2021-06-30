@@ -43,9 +43,59 @@ export const CareerTableDiv = styled.div`
 
 export const PlotDiv = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 2rem;
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 3rem;
+  position: relative;
+  margin-top: 2.5rem;
+  z-index: 1;
 `;
+
+export const Footer = styled.div`
+  grid-row: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  background: none;
+  border-radius: 8px;
+  border: 4px solid white;
+  font-family: Open Sans;
+  font-weight: 300;
+  font-size: 14px;
+`;
+export const TitleDiv = styled.div`
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`;
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 350px;
+`;
+
+export const ShotsTitle = styled.h3`
+margin: -2.7rem -4rem;
+color: var(--lighter-black);
+font-size: 1.2rem;
+text-align: center;
+padding-top: 0.5rem;
+float: right;
+
+@media (max-width: 1054px){
+  justify-content: center !important;
+  margin: 0.5rem 1rem !important;
+  float: none;
+}
+@media (max-width: 600px) {
+  font-size: 1rem;
+  float: none;
+}
+`

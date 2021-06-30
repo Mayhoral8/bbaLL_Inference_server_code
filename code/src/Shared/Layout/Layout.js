@@ -25,7 +25,7 @@ const Layout = ({ children, location }) => {
 
       ].includes(location.pathname.split("/")[1]) ? (
         ""
-      ) : location.pathname != '/betting' && location.pathname != '/profile' ? (
+      ) : location.pathname != '/betting' && location.pathname != '/profile' && location.pathname != '/screen-capture/home-page' && location.pathname != '/screen-capture/games-page' ? (
             <Sidebar />
       ) : null
       }

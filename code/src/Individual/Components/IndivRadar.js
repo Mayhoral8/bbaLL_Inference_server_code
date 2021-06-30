@@ -3,107 +3,86 @@ import Plot from "react-plotly.js";
 import logo from "Assets/images/new-logo-square.png";
 import { radarStats } from "../individualConstants";
 import useWindowSize from "../../Shared/hooks/useWindowSize";
+import { Radar } from "react-chartjs-2";
+import { rgba } from "polished";
+import "chartjs-plugin-datalabels";
 
-export const IndivRadar = ({ rotation, stats, text, maxYearly }) => {
-  const windowSize = useWindowSize();
-  const breakpoint = 500;
-  
-  let margin,
-    legendY,
-    legendFontSize = 14,
-    radialFontSize = 14,
-    yearStats = radarStats.map((categoryName, i) => {
-      if (Object.keys(maxYearly).includes(categoryName)) {
-        return stats[i] / maxYearly[categoryName].value;
-      } else return parseFloat(stats[i]);
-    });
+export const IndivRadar = ({ stats, text, maxYearly }) => {
 
-  const data = [
-    {
-      type: "scatterpolar",
-      mode: "markers+lines+text",
-      //r: stats,
-      r: yearStats,
-      theta: text,
-      fill: "toself",
-      text: yearStats.map((stat) => stat.toFixed(1) + "%"), //stats -> yearStats
-      textposition: [
-        "top right",
-        "top right",
-        "top center",
-        "top center",
-        "center left",
-        "bottom center",
-        "center right",
-        "top right",
-      ],
-      textfont: { color: "#1122ff" },
-      name: text,
+  const lightBuleHover = rgba(197, 239, 247, 1);
+  const lightBule = "#207EEC";
+
+  const yearStats = radarStats.map((categoryName, i) => {
+    if (Object.keys(maxYearly).includes(categoryName)) {
+      return stats[i] / maxYearly[categoryName].value;
+    } else return parseFloat(stats[i]);
+  });
+
+  // data format for Radar chart.js
+  const chartData = {
+    labels: text,
+    datasets: [
+      {
+        borderColor: lightBule,
+        pointBackgroundColor: lightBule,
+        pointBorderColor: "#fff",
+        pointRadius: 5,
+        pointHoverBackgroundColor: lightBuleHover,
+        pointHoverBorderColor: lightBule,
+        fillColor: "rgba(151,187,205,0.2)",
+        strokeColor: "rgba(151,187,205,1)",
+        pointColor: "rgba(151,187,205,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(151,187,205,0.8)",
+        data: yearStats.map((stat) => stat.toFixed(2)),
+      },
+    ],
+  };
+  //options for Radar chart.js
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    aspectRatio: 1,
+    scale: {
+      pointLabels: { fontSize: 12 },
+      ticks: {
+        suggestedMin: 0,
+        suggestedMax: 100,
+        showLabelBackdrop: true,
+      },
     },
-  ];
-
-  legendY = 1.17;
-  margin = {
-    l: 50,
-    r: 55,
-    b: 50,
-    t: 50,
+    legend: {
+      display: false,
+    },
+    plugins: {
+      //Radar data labels format go here
+      datalabels: {
+        backgroundColor: function (context) {
+          return context.dataset.borderColor;
+        },
+        color: "white",
+        font: {
+          weight: "bold",
+        },
+        formatter: function (value, context) {
+          return Math.round(value) + "%";
+        },
+        padding: 2,
+      },
+      aspectRatio: 4 / 3,
+      elements: {
+        point: {
+          hoverRadius: 7,
+          radius: 5,
+        },
+      },
+    },
   };
 
   return (
     <Fragment>
-      <Plot
-        useResizeHandler
-        style={{ width: "100%", height: "100%" }}
-        data={data}
-        config={{
-          displayModeBar: false,
-          responsive: true,
-          staticPlot: windowSize < breakpoint ? true : false,
-        }}
-        layout={{
-          images: [
-            {
-              source: logo,
-              xref: "paper",
-              yref: "paper",
-              x: 0.5,
-              y: 0.3,
-              sizex: 0.5,
-              sizey: 0.3,
-              sizing: "stretch",
-              opacity: 0.05,
-              layer: "below",
-            },
-          ],
-          autosize: true,
-          height: "350",
-          polar: {
-            radialaxis: {
-              visible: false,
-              range: [0, 100],
-            },
-
-            angularaxis: {
-              rotation: rotation,
-              direction: "counterclockwise",
-              tickfont: { size: radialFontSize },
-            },
-            bgcolor: "rgba(0,0,0,0)",
-          },
-          showlegend: false,
-          legend: {
-            x: 0.2,
-            y: legendY,
-            orientation: "h",
-            bgcolor: "rgba(0,0,0,0)",
-            font: {
-              size: legendFontSize,
-            },
-          },
-          margin: margin,
-        }}
-      />
+      <Radar data={chartData} options={options} />
     </Fragment>
   );
 };

@@ -1,28 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import constants from './constants.json'
-
-//Child Components
-import Table from './ChildComponents/table'
-
-//Styled Components
 import {
     ProfilePageContainer,
-    TablesContainer
-} from './indexStyles'
-
-//Shared Components
+} from './Styles/index-styles'
 import Spinner from '../Shared/Spinner/Spinner'
-
-//Functions and Libraries
 import {connect} from 'react-redux'
-
-//Actions
 import {getUserBettingHistory} from '../redux/actions/bettingHistoryActions'
+import RightContiner from './ChildComponents/rightContiner'
+import LeftUserProfile from './ChildComponents/sideProfile'
 
 const ProfilePage = (props) => {
-    const [spinner, setSpinner] = useState(true)
-    const [error, setError] = useState({isError: false, status:'', message: ''})
-
+    const [spinner, setSpinner] = useState(true);
+    const [error, setError] = useState({isError: false, status:'', message: ''});
+    let maxDate = null, minDate = null;
+ 
     useEffect(() => {
         let response = props.getUserBettingHistory(props.userDetails.user.uid)
         if(response.isError){
@@ -45,25 +35,34 @@ const ProfilePage = (props) => {
         }
     }, [props.bettingHistory])
 
+   //console.log(props.bettingHistory);
+    if (props.bettingHistory.data != undefined) {
+        for (let index = 0; index < props.bettingHistory.data.length; index++) {
+            if (maxDate == null) {
+                maxDate = props.bettingHistory.data[index]['gameDateTime'];
+            }
+        
+            if (minDate == null) {
+                minDate = props.bettingHistory.data[index]['gameDateTime'];
+            }
+        
+            if (minDate > props.bettingHistory.data[index]['gameDateTime']) {
+                minDate = props.bettingHistory.data[index]['gameDateTime'];
+            }
+        
+            if (maxDate < props.bettingHistory.data[index]['gameDateTime']) {
+                maxDate = props.bettingHistory.data[index]['gameDateTime'];
+            }
+        }
+    }
+
     return(
         spinner ? 
             <Spinner/>
             :
             <ProfilePageContainer>
-                <TablesContainer>
-                    <Table
-                     columns = {constants.moneyLineTableColumns}
-                     data = {props.bettingHistory.moneyLine}
-                    />
-                    <Table
-                     columns = {constants.spreadTableColumns}
-                     data = {props.bettingHistory.spread}
-                    />
-                    <Table
-                     columns = {constants.overUnderTableColumns}
-                     data = {props.bettingHistory.overUnder}
-                    />
-                </TablesContainer>
+                <LeftUserProfile />
+                <RightContiner userHistory = {props.bettingHistory} minDate = {minDate} maxDate = {maxDate}/>
             </ProfilePageContainer>
     )
 }
