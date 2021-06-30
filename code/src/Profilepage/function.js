@@ -18,6 +18,7 @@ function createTargetObj(history, type) {
                         " : " + Math.trunc(history.gameDetails.AwayScore) : '--',
         betOdds:history[type] ? history[type].odds : '--',
         gameFinished: history.gameFinished ? 'Finished' : 'Ongoing',
+        result: history[type].result
     }
     
     let winTeam = "null";
@@ -47,8 +48,7 @@ function createTargetObj(history, type) {
 }
 
 export function structureUserGameHistory(gameHistory) {
-    let structuredGameHistory = []
-
+    let structuredGameHistory = [];
     for (let i = 0; i < gameHistory.length; i++){
         let tempTargetObj = null
         if ('moneyLine' in gameHistory[i] && gameHistory[i].moneyLine.odds !== "") {

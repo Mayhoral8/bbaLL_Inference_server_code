@@ -1,6 +1,10 @@
 {
     "COLUMNS": [
         {
+            "Header": "Result",
+            "accessor": "result"
+        },
+        {
             "Header": "Date",
             "accessor": "gameDateTime"
         },

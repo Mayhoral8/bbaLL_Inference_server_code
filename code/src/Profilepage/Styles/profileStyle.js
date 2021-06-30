@@ -30,7 +30,9 @@ export const UserStatsContainer = styled.div`
     }
   }
   .styledDiv {
-      margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
   }
 
   .lastTenday{
@@ -105,10 +107,30 @@ export const PointsRank = styled.div`
 `
 
 export const LevelWinRate = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+export const BettingTypeWinRate = styled.div`
+  width: 100%;
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+`
+
+export const BettingTypeStats = styled.div`
+  color: rgb(0,0,0,0.5);
+  font-size: 16px;
+  margin: 0 1px;
+  ${media.tablet}{
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: 280px) {
+    font-size: 10px;
+  }
 `
 
 export const Stats = styled.div`
@@ -155,4 +177,10 @@ export const Level = styled.div`
 
 export const LastTenGameWrapper = styled.div`
     display: inline-block;
+`
+
+export const GameBadges = styled.img`
+    width: 27px;
+    height: auto;
+    padding: 0px 2px;
 `

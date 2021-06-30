@@ -9,6 +9,8 @@ import {
   DataCell,
   Continer,
 } from "../Styles/tableStyles";
+import checkIcon from "../../assets/images/checkIcon.jpg";
+import noCheckIcon from "../../assets/images/noCheckIcon.jpg";
 
 const Table = (props) => {
   const columns = useMemo(() => props.columns);
@@ -30,7 +32,6 @@ const Table = (props) => {
     ]}
 }, useSortBy);
 
-  
   return rows.length > 0 ? (
     <Continer>
       <TableContainer {...getTableProps()}>
@@ -61,6 +62,12 @@ const Table = (props) => {
                 {row.cells.map((cell, childIndex) => {
                   switch (childIndex) {
                     case 0:
+                      return (
+                        <DataCell {...cell.getCellProps} key={childIndex}>
+                          {cell.render("Cell").props.cell.value == '1' ? <img src={checkIcon}/> : <img src={noCheckIcon}/>}
+                        </DataCell>
+                      );
+                    case 1:
                       let DateArray = cell
                         .render("Cell")
                         .props.cell.value.split(" ");
@@ -72,7 +79,7 @@ const Table = (props) => {
                           <p>{time}</p>
                         </DataCell>
                       );
-                    case 1:
+                    case 2:
                       let bettingTypeArray = cell
                         .render("Cell")
                         .props.cell.value.split("(");
@@ -82,7 +89,7 @@ const Table = (props) => {
                           <p>{"(" + bettingTypeArray[1]}</p>
                         </DataCell>
                       );
-                    case 2:
+                    case 3:
                       let teamNamesArray = cell
                         .render("Cell")
                         .props.cell.value.split("vs");
@@ -107,7 +114,7 @@ const Table = (props) => {
                             </p>
                           </DataCell>
                         );
-                      } else {
+                      } else { 
                         return (
                           <DataCell {...cell.getCellProps} key={childIndex}>
                             <p>{homeTeam} VS </p>
