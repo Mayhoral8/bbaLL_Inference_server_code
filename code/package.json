@@ -24,6 +24,7 @@
     "@fortawesome/fontawesome-free": "^5.13.1",
     "@react-icons/all-files": "^4.1.0",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-annotation": "^1.0.2",
     "chartjs-plugin-datalabels": "^0.7.0",
     "chartjs-plugin-watermark": "^1.0.3",
     "clean-webpack-plugin": "^3.0.0",

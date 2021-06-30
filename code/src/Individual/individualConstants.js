@@ -6,20 +6,20 @@ export const plotStats = {
   //[4] bar or scatterline [non-adjusted, adjusted]
   Overall: {
     avg_tot: [
-      [["AVG", "TOT"], ["SORT_AVG"]],
-      [["Average", "Total"], ["Average"]],
+      [["AVG_PTS", "DOWN_AVG", "UP_AVG"]],
+      [["Player Avg.", "Down Average", "Up Average"]],
       ["Average", "Total"],
-      "Average/Total Points",
+      "Average",
       ["scatterline", "scatterline"],
     ],
     plus_minus: [
-      [["PLUS_MINUS"], ["SORT_PLUS_MINUS"]],
-      [["Plus/Minus"], ["Plus/Minus"]],
+      [["AVG_PLUS_MINUS", "DOWN_PLUS_MINUS", "UP_PLUS_MINUS"]],
+      [["Plus/Minus", "Down Plus/Minus", "Up Plus/Minus"]],
       ["Plus/Minus"],
       "Plus/Minus",
       ["scatterline", "scatterline"],
     ],
-    salary: [[["SALARY"]], [["Salary"]], ["Salary"], "Salary", ["scatterline"]],
+    salary: [[["SALARY"]], [["Player Avg."]], ["Salary"], "Salary", ["scatterline"]],
     poss: [
       [["POSS"]],
       [["Possessions"]],
@@ -37,60 +37,51 @@ export const plotStats = {
   },
   Shots: {
     field_goals: [
+      [["AVG_FGM", "AVG_FGA"], ["AVG_FG_PCT","DOWN_FG_PCT","UP_FG_PCT"]],
       [
         ["FGM", "FGA"],
-        ["FG_PCT", "SORT_FG_PCT"],
-      ],
-      [
-        ["FGM", "FGA"],
-        ["FG%", "Adjusted FG Rating"],
+        ["FG%", "Down FG Rating", "Up FG Rating"],
       ],
       ["Field Goals", "Field Goal %"],
       "Field Goals",
       ["bar", "scatterline"],
     ],
     free_throws: [
+      [["AVG_FTM", "AVG_FTA"], ["AVG_FT_PCT", "DOWN_FT_PCT", "UP_FT_PCT"]],
       [
         ["FTM", "FTA"],
-        ["FT_PCT", "SORT_FT_PCT"],
-      ],
-      [
-        ["FTM", "FTA"],
-        ["FT%", "Adjusted FT Rating"],
+        ["FT%", "Down FT Rating", "Up FT Rating"],
       ],
       ["Free Throws", "Free Throw %"],
       "Free Throws",
       ["bar", "scatterline"],
     ],
     three_points: [
+      [["AVG_FG3M", "AVG_FG3A"], ["AVG_FG3_PCT", "DOWN_FG3_PCT", "UP_FG3_PCT"]],
       [
         ["FG3M", "FG3A"],
-        ["FG3_PCT", "SORT_FG3_PCT"],
+        ["3P%", "Down FG3 Rating", "Up FG3 Rating"],
       ],
-      [
-        ["3PM", "3PA"],
-        ["3P%", "Adjusted 3P Rating"],
-      ],
-      ["3-Points", "3-Points %"],
+      ["3_Points", "3_Points %"],
       "3 Points",
       ["bar", "scatterline"],
     ],
   },
   "Assists & Rebounds": {
     ast: [
-      [["AST"], ["SORT_AST"]],
-      [["Assists"], ["Adjusted Assists"]],
+      [["AVG_AST", "DOWN_AST", "UP_AST"]],
+      [["Avg. Assists", "Down Assits", "Up Assists"]],
       ["Assists"],
       "Assists",
       ["scatterline", "scatterline"],
     ],
     reb: [
       [
-        ["OREB", "DREB"],
-        ["SORT_REB", "SORT_DREB", "SORT_OREB"],
+        ["AVG_OREB", "AVG_DREB"],
+        ["AVG_REB", "DOWN_REB", "UP_REB"],
       ],
       [
-        ["O. Rebounds", "D. Rebounds"],
+        ["Offensive Rebounds", "Defensive Rebounds"],
         ["Adjusted Tot Reb", "Adjusted D. Reb", "Adjusted O. Reb"],
       ],
       ["Rebounds"],
@@ -100,22 +91,22 @@ export const plotStats = {
   },
   Defence: {
     stl: [
-      [["STL"], ["SORT_STL"]],
-      [["Steals"], ["Adjusted Steals"]],
+      [["AVG_STL", "DOWN_STL", "UP_STL"]],
+      [["Avg. Steals", "Down Steals", "Up Steals"]],
       ["Steals"],
       "Steals",
       ["scatterline", "scatterline"],
     ],
     blk: [
-      [["BLK"], ["SORT_BLK"]],
-      [["Blocks"], ["Adjusted Blocks"]],
+      [["AVG_BLK", "DOWN_BLK", "UP_BLK"]],
+      [["Avg. Blocks", "Down Blocks", "Up Blocks"]],
       ["Blocks"],
       "Blocks",
       ["scatterline", "scatterline"],
     ],
     tov: [
-      [["TOV"], ["SORT_TOV"]],
-      [["Turnovers"], ["Adjusted Turnovers"]],
+      [["AVG_TOV", "DOWN_TOV", "UP_TOV"]],
+      [["Avg. Turnovers", "Down Turnovers", "Up Turnovers"]],
       ["Turnovers"],
       "Turnovers",
       ["scatterline", "scatterline"],
@@ -126,8 +117,12 @@ export const plotStats = {
 export const colours = [
   ["#0313ff", "#f20000", "#04ff00"],
   ["#00098c", "#990000", "#028a00"],
-  //["#00098c", "#990000"],
-  ["rgba(50, 59, 255, 0.5)", "rgba(255, 50, 50, 0.5)"],
+  // AVERAGE(BLUE), DOWN(GREEN), UP(RED)
+  [
+    "rgba(50, 59, 255, 0.5)",
+    "rgba(134, 226, 213, 1)",
+    "rgba(255, 50, 50, 0.5)",
+  ],
 ];
 export const maxNumbers = {
   // // Per Season

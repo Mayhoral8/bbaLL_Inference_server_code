@@ -39,7 +39,13 @@ export const BasicInfoDiv = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   align-items: center;
-
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
+  @media only screen and (min-width: 1024px) and (max-height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (hover: none) {
+    width: 100%
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
   .player__img-name {
     display: flex;
     align-items: center;
@@ -118,7 +124,7 @@ export const BasicInfoDiv = styled.div`
     }
   }
   @media (max-width: 996px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))
     .player__info {
       flex-wrap: wrap;
       > div {
@@ -153,8 +159,8 @@ export const PlayerStatWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 4.3rem;
   @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 `;

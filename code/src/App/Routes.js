@@ -122,9 +122,18 @@ const Routes = (props) => {
               <Route path="/login" component={Login} />
               <Route path="/betting" component={Betting} />
               <Route path="/profile" component={ProfilePage} />
-              <Route path="/screen-capture/home-page" component={ScreenCaptureHomePage} />
-              <Route path="/screen-capture/games-page" component={ScreenCaptureGamesPage} />
-              <Route path="/screen-capture/stats-page" component={ScreenCaptureStatsPage} />
+              <Route
+                path="/screen-capture/home-page"
+                component={ScreenCaptureHomePage}
+              />
+              <Route
+                path="/screen-capture/games-page"
+                component={ScreenCaptureGamesPage}
+              />
+              <Route
+                path="/screen-capture/stats-page"
+                component={ScreenCaptureStatsPage}
+              />
               <Footer />
             </MainContainerDiv>
           </Layout>

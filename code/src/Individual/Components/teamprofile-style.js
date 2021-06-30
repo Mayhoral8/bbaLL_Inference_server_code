@@ -52,16 +52,10 @@ export const TeamFaceAndRadarRow = styled.div`
 export const TeamPlayerImageDiv = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-gap: 1rem;
   text-align: center;
   margin: 2rem 0;
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 600px) {
-    grid-template-columns: repeat(6, 1fr);
-  }
 `;
 
 export const TeamPlayerImage = styled.div`
@@ -100,7 +94,7 @@ export const TeamPlayerDivLink = styled(Link)`
 
 export const TeamStatWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
   grid-gap: 1rem;
   width: 100%;
   margin-top: 1rem;
