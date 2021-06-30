@@ -25,9 +25,10 @@ async function getUserId(){
             name: data[index].docData['displayName'],
             odd: (Math.round(data[index].docData['totalPoints'] * 100) / 100).toFixed(2)
         }
-
-        playerInfo.push(eachPlayerObject);
-        rank.push(data[index].docData['rank']);
+        if (data[index].docData['rank'] !== '-') {
+            playerInfo.push(eachPlayerObject);
+            rank.push(data[index].docData['rank']);
+        }
     }
     
     let sorted = Argsort(rank);
@@ -49,7 +50,7 @@ const UserRankContainer = () => {
         <>
         { dataArray.length != 0 &&
             <UsersRankContainer>
-                <Header>Rank Ranking</Header>
+                <Header>User Ranking</Header>
                 <ColContainer>
                     <Col header="true">
                         <div 
