@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { PlotDiv } from "../indiv-style";
+import { PlotDiv, ShotsTitle } from "../indiv-style";
 import { FormatYearAddEnding } from "Functions/YearFormat";
 import { fbFirestore } from "Firebase";
 import { ContainerCard, GraphTitle } from "../../globalStyles";
@@ -7,6 +7,7 @@ import IndivPlots from "./IndivPlots";
 import * as individualConstants from "../individualConstants";
 import { withRouter } from "react-router-dom";
 import Spinner from "../../Shared/Spinner/Spinner";
+import { important } from "polished";
 //props: name, categoryData, indivStat
 const LegendEntries = 2;
 const PlotTitle = 3;
@@ -15,12 +16,10 @@ const Left = 0;
 const Right = 1;
 
 class PlotContainer extends PureComponent {
-
   constructor(props) {
     super(props);
     this._isMounted = false;
     this.getData = this.getData.bind(this);
-    this.getLayout = this.getLayout.bind(this);
     this.plotData = this.plotData.bind(this);
     this.fetchFromFirestore = this.fetchFromFirestore.bind(this);
     this.state = {
@@ -29,18 +28,22 @@ class PlotContainer extends PureComponent {
       top100YearIndices: [],
       PlayerYearsUsed: this.props.isTeam,
       name: this.props.name,
-      width: window.innerWidth
+      width: window.innerWidth,
     };
   }
   componentDidMount() {
     this.fetchFromFirestore();
-    window.addEventListener('resize', () => this.setState({ width: window.innerWidth }));
+    window.addEventListener("resize", () =>
+      this.setState({ width: window.innerWidth })
+    );
     this._isMounted = true;
-  };
+  }
 
   componentWillUnmount() {
     this._isMounted = false;
-    window.removeEventListener('resize', () => this.setState({ width: window.innerWidth }));
+    window.removeEventListener("resize", () =>
+      this.setState({ width: window.innerWidth })
+    );
   }
 
   componentDidUpdate() {
@@ -56,7 +59,7 @@ class PlotContainer extends PureComponent {
   fetchFromFirestore() {
     let years;
     const indivCollection = fbFirestore.collection(
-      this.props.isTeam ? "team_ind_page" : "player_ind_page"
+      this.props.isTeam ? "team_ind_page_v2" : "player_ind_page_v2"
     );
     indivCollection
       .doc(this.props.name)
@@ -71,7 +74,6 @@ class PlotContainer extends PureComponent {
         // this.props.history.push('/404');
         console.log(error);
       });
-
     indivCollection
       .doc(this.props.isTeam ? "Team_Avg" : "top100")
       .get()
@@ -90,61 +92,74 @@ class PlotContainer extends PureComponent {
         console.log(error);
       });
   }
-  getData(plot, stat, plotStats, isTop100, sortino, plotType) {
+
+  // Generate data using given props and individualConstants
+  getData(plot, stat, plotStats, isTop100, isShots, plotType) {
     if (plotStats[stat] === undefined) {
       return;
     }
-    let sortinoplotdata = [],
-      plotdata = [];
+    let plotdata = [],
+      shotplotdata = [];
 
-    const textlabelA = [],
-      textlabelM = [];
-    plot[0][sortino].map((trace, j) => {
-      let indivStatData = [...plotStats[stat][trace]];
-      if (["A"].includes(trace.slice(-1))) {
-        let trace4made = trace.substring(0, trace.length - 1).concat("M");
-        for (let s = 0; s < indivStatData.length; s++) {
-          const subtracted_val =
-            plotStats[stat][trace][s] - plotStats[stat][trace4made][s];
-          indivStatData[s] = subtracted_val;
+    //plotting top100 and regular game data points
+    let plotMap = plot[0][isShots];
+    if (isTop100) plotMap = plot[0];
 
-          const attempdata =
-            plotStats[stat][trace][s] + plotStats[stat][trace4made][s];
-
-          textlabelA.push(attempdata.toString().substring(0, 3));
-        }
-      } else if (["M"].includes(trace.slice(-1))) {
-        indivStatData.map((val) => {
-          textlabelM.push(val.toString().substring(0, 3));
-        });
-      }
-
-      let years = plotStats.years.map((year) => year.substring(0, 4));
+    plotMap.map((trace, j) => {
       if (isTop100) {
-        indivStatData = indivStatData.filter((data, i) => {
-          if (this.state.top100YearIndices.includes(i)) {
-            return data;
-          }
-        });
-        years = years.filter((year, i) => {
-          if (this.state.top100YearIndices.includes(i)) {
-            return year.substring(0, 4);
-          }
-        });
+        trace = trace[0];
+      } else {
+        if (this.props.isTeam && trace === "DOWN_AVG") {
+          trace = "DOWN_PTS";
+        } else if (this.props.isTeam && trace === "UP_AVG") {
+          trace = "UP_PTS";
+          // trace changed here to generate inndivStatData with no errors
+        } else if (this.props.isTeam && trace === "AVG_AST") {
+          trace = "AST";
+        } else if (this.props.isTeam && trace === "AVG_STL") {
+          trace = "STL";
+        } else if (this.props.isTeam && trace === "AVG_BLK") {
+          trace = "BLK";
+        } else if (this.props.isTeam && trace === "AVG_TOV") {
+          trace = "TOV";
+        }
       }
+      let indivStatData = [...plotStats[stat][trace]];
+      let newIndivStatData = [];
+      let years = plotStats.years.map((year) => year.substring(0, 4));
 
-      //basic data format
+      //pushed y axis values to newIndivStatdata for top100 
+      for (let i = 0; i < this.state.top100YearIndices.length; i++) {
+        const yearIndices = this.state.top100YearIndices[i];
+        if (yearIndices === -1) {
+          newIndivStatData.push(null);
+        } else {
+          if (isNaN(indivStatData[yearIndices]))
+            indivStatData[yearIndices] = null;
+          newIndivStatData.push(indivStatData[yearIndices]);
+        }
+      }
+      //year formatting
+      years = years.filter((year, i) => {
+        if (this.state.top100YearIndices.includes(i)) {
+          return year.substring(0, 4);
+        }
+      });
+      //label name based on data type
       let name;
       if (isTop100 && this.props.isTeam) {
         name = "League Avg";
+        indivStatData = newIndivStatData;
       } else if (isTop100) {
-        name = "Top 100";
+        name = "Top100 Avg.";
+        indivStatData = newIndivStatData;
       } else {
-        name = plot[1][sortino][j];
+        name = plot[1][isShots][j];
       }
-
-      const removeNullFromArr = indivStatData.filter(value => value !== -10000);
-
+      // // to avoid NaN values
+      const removeNullFromArr = indivStatData.filter(
+        (value) => value !== -10000
+      );
       const removeNullFromYears = [];
       indivStatData.forEach((val, i) => {
         if (val !== -10000) {
@@ -153,158 +168,109 @@ class PlotContainer extends PureComponent {
       });
 
       let data = {
-        name: name,
+        name,
         x: removeNullFromYears,
         y: removeNullFromArr,
         type: plotType[0],
-        mode: plotType[1],
-        opacity: `${isTop100 ? 0.75 : 1}`,
-        line: {
-          dash: `${isTop100 ? "dash" : "solid"}`,
-          color: individualConstants.colours[isTop100 ? 1 : 0][j],
-        },
-        marker: {
-          color: individualConstants.colours[2][j],
+        dataset: {
+          type: plotType[0],
+          label: name,
+          data: removeNullFromArr,
+          backgroundColor: isTop100
+            ? "rgb(128,128,128)"
+            : individualConstants.colours[2][0],
+          borderColor: isTop100
+            ? "rgb(128,128,128)"
+            : individualConstants.colours[2][0],
+          fill: false,
+          radius: 2,
+          borderWidth: 4,
+          hidden: false,
         },
       };
-
-      //fills between stat attempted and stat made
-      if (["A", "M"].includes(trace.slice(-1)) && !isTop100 && sortino === 0) {
-        data = {
-          ...data,
-          fill: "tozeroy",
-          fillcolor: individualConstants.colours[1][j],
-          hoverinfo: "none",
-          textposition: "outside",
-        };
-        if (["A"].includes(trace.slice(-1))) {
-          data["text"] = textlabelA;
-        } else if (["M"].includes(trace.slice(-1))) {
-          data["text"] = textlabelM;
-        }
-      } else if ("PCT" === trace.slice(-3) && sortino === 0) {
-        data = {
-          ...data,
-          y: indivStatData.map((value) => value * 100),
-        };
+      // Win percentage top 100 plot label change to add "%"
+      if (trace.split("_")[0] === "W") {
+        data.dataset.label = "League Avg ";
       }
-      if (sortino === 1) {
-        if (["FG_PCT", "FT_PCT", "FG3_PCT"].includes(trace)) {
-          sortinoplotdata.push({
+      // percentage data type change from bar to line
+      if (isTop100) {
+        if (isShots === 1) {
+          if (trace.slice(-3) === "PCT") {
+            data = {
+              ...data,
+              y: removeNullFromArr,
+            };
+            data.dataset.type = "line";
+            data.type = "line";
+            shotplotdata.push(data);
+          }
+        }
+        plotdata.push(data);
+      } else {
+        if (isShots === 1 && "PCT" === trace.slice(-3)) {
+          data = {
             ...data,
             y: removeNullFromArr,
-            yaxis: "y2",
-          });
-        } else {
-          sortinoplotdata.push(
-            (data = {
-              ...data,
-              y: removeNullFromArr
-            })
-          );
+          };
+          data.dataset.type = "line";
+          data.type = "line";
+          shotplotdata.push(data);
         }
-      } else if ("TOT" === trace) {
-        plotdata.push({ ...data, yaxis: "y2" });
-      } else {
+        if (data.type === "bar") {
+          data.dataset.borderWidth = 0;
+        }
+        if (trace.split("_")[0] === "DOWN") {
+          data.dataset.fill = 0;
+          data.dataset.backgroundColor = individualConstants.colours[2][1];
+          data.dataset.borderColor = false;
+          data.dataset.radius = 0;
+        } else if (trace.split("_")[0] === "UP") {
+          data.dataset.fill = 1;
+          data.dataset.backgroundColor = individualConstants.colours[2][2];
+          data.dataset.borderColor = false;
+          data.dataset.radius = 0;
+        } else if (trace.slice(-1) === "A" || trace.split("_")[1] === "DREB") {
+          data.dataset.backgroundColor = individualConstants.colours[2][1];
+        } else {
+          data.dataset.fill = false;
+          data.dataset.backgroundColor = individualConstants.colours[2][0];
+        }
         plotdata.push(data);
       }
     });
-    return sortino === 1 ? sortinoplotdata : plotdata;
+    return isShots === 1 ? shotplotdata : plotdata;
   }
-
-  getLayout(data, title, yaxisTitle1, yaxisTitle2, plotType) {
-    let margin;
-    const breakpoint = 500;
-
-    if (this.state.width < breakpoint) {
-      margin = {
-        t: 0,
-        r: 60,
-        l: 60
-      }
-    } else {
-      margin = {
-        t: 0,
-        r: 60,
-        l: 60
-      }
-    }
-
-    const layout = {
-      autosize: true,
-      legend: {
-        xanchor: "right",
-        orientation: "h",
-        yanchor: "bottom",
-        x: 1,
-        y: 1.02,
-      },
-      font: {
-        family: 'Roboto Condensed'
-      },
-      margin,
-      yaxis: {
-        title: yaxisTitle1,
-        //rangemode: "tozero",
-        titlefont: { color: individualConstants.colours[0][0] },
-        tickfont: { color: individualConstants.colours[0][0] },
-      },
-
-      yaxis2: {
-        title: yaxisTitle2,
-        titlefont: { color: individualConstants.colours[0][1] },
-        tickfont: { color: individualConstants.colours[0][1] },
-        overlaying: "y",
-        side: "right",
-        //rangemode: "tozero",
-      },
-      xaxis: {
-        tickvals: data[0].x,
-        ticktext: data[0].x.map((year) => FormatYearAddEnding(year)),
-      }
-    };
-
-    if (plotType[0] === "bar") {
-      layout["barmode"] = "stack";
-    }
-    return layout;
-  }
-
-  // get graph data
-  getPlotTitle() {
+  // get plot title.
+  getPlotTitle(plotdata) {
+    const { indivStat: page } = this.props;
     let preprocessTitles = [];
-
-    Object.keys(this.props.categoryData)
-      .filter(category => {
-        if (
-          (this.props.isTeam && category !== "plus_minus") ||
-          (!this.props.isTeam && !["wpct", "poss"].includes(category))
-        ) {
-          return category;
-        }
-        return;
-      })
-      .forEach(stat => {
-        let plot = this.props.categoryData[stat];
-        const hasAdjustedRating = !["wpct", "poss", "salary"].includes(stat);
-
-        if (stat.split("_")[1] === "points") {
-          stat = "3pts";
-        }
-        //Normal Non-Adjusted Plot Data
-        let title = plot[PlotTitle];
-        //Adjusted Rating Plot Data
-        if (hasAdjustedRating) {
-          const adjustedTitle = plot[PlotTitle] + " Rating";
-          preprocessTitles.push(plot[PlotTitle], adjustedTitle);
-        } else {
-          preprocessTitles.push(title);
-        }
-      });
+    plotdata.forEach((plot) => {
+      Object.keys(this.props.categoryData)
+        .filter((category) => {
+          if (
+            (this.props.isTeam && category !== "plus_minus") ||
+            (!this.props.isTeam && !["wpct", "poss"].includes(category))
+          ) {
+            return category;
+          }
+          return;
+        })
+        .forEach((stat) => {
+          let plotStat = this.props.categoryData[stat];
+          const title = plotStat[PlotTitle];
+          //Data ending with "%" should inlcude "Rating" in the title
+          if (
+            (page === "Shots" && plot.name.slice(-1) === "M") ||
+            (page === "Shots" && plot.name.slice(-1) === "A")
+          ) {
+            preprocessTitles.push(``);
+          } else {
+            preprocessTitles.push(title);
+          }
+        });
+    });
     return preprocessTitles;
-  };
-
-
+  }
   // configure and plot data
   plotData(years) {
     if (
@@ -314,8 +280,8 @@ class PlotContainer extends PureComponent {
     ) {
       return;
     }
-    let preprocessData = [],
-      preprocessLayout = [];
+    let preprocessData = [];
+    const { indivStat: page } = this.props;
     Object.keys(this.props.categoryData)
       .filter((category) => {
         if (
@@ -328,19 +294,11 @@ class PlotContainer extends PureComponent {
       })
       .forEach((stat) => {
         let plot = this.props.categoryData[stat];
-        let plotType =
-          plot[PlotType][Left] === "bar"
-            ? ["bar", "stack"]
-            : ["scatter", "lines and markers"];
-        const hasAdjustedRating = !["wpct", "poss", "salary"].includes(stat);
+        let plotType = plot[PlotType][Left] === "bar" ? ["bar"] : ["line"];
         if (stat.split("_")[1] === "points") {
           stat = "3pts";
         }
         //Normal Non-Adjusted Plot Data
-
-        const yaxisTitle1 = plot[LegendEntries][0];
-        const yaxisTitle2 = plot[LegendEntries][1];
-        const title = plot[PlotTitle];
         let plotdata = this.getData(
           plot,
           stat,
@@ -350,29 +308,9 @@ class PlotContainer extends PureComponent {
           plotType
         );
 
-        if (plotType[0] !== "bar") {
-          plotdata = plotdata.concat(
-            this.getData(plot, stat, this.state.top100Stat, true, 0, plotType)
-          );
-        }
-
-        const layoutFig1 = this.getLayout(
-          plotdata,
-          title,
-          yaxisTitle1,
-          yaxisTitle2,
-          plotType
-        );
-        //Adjusted Rating Plot Data
-        if (hasAdjustedRating) {
-          const yaxisTitle1 = plot[LegendEntries][0];
-          const yaxisTitle2 = plot[LegendEntries][1];
-          plotType =
-            plot[PlotType][Right] === "bar"
-              ? ["bar", "stack"]
-              : ["scatter", "lines and markers"];
-          const title = "Adjusted " + plot[PlotTitle] + " Rating";
-          let sortinoplotdata = this.getData(
+        if (page === "Shots") {
+          //  plot Data for Shots page
+          let shotplotdata = this.getData(
             plot,
             stat,
             this.state.indivStat,
@@ -380,57 +318,97 @@ class PlotContainer extends PureComponent {
             1,
             plotType
           );
-          if (plotType[0] !== "bar") {
-            sortinoplotdata = sortinoplotdata.concat(
+          // to generate top 100 data for rating charts on Shots page
+          if (shotplotdata[0].name.slice(-1) === "%") {
+            shotplotdata = shotplotdata.concat(
               this.getData(plot, stat, this.state.top100Stat, true, 1, plotType)
             );
           }
-          const layoutFig2 = this.getLayout(
-            sortinoplotdata,
-            title,
-            yaxisTitle1,
-            yaxisTitle2,
-            plotType
-          );
-
-          preprocessData.push(plotdata);
-          preprocessData.push(sortinoplotdata);
-          preprocessLayout.push(layoutFig1);
-          preprocessLayout.push(layoutFig2);
-        } else {
-          preprocessData.push(plotdata);
-          preprocessLayout.push(layoutFig1);
+          preprocessData.push(shotplotdata);
         }
+        if (plotType[0] !== "bar") {
+          plotdata = plotdata.concat(
+            this.getData(plot, stat, this.state.top100Stat, true, 0, plotType)
+          );
+        }
+        preprocessData.push(plotdata);
       });
-    const plotJsx = (plot, plotTitle, i) => (
-      <ContainerCard key={i} style={{ margin: '0' }}>
-        <GraphTitle>{plotTitle}</GraphTitle>
-        <IndivPlots data={plot} layout={preprocessLayout[i]} />
-      </ContainerCard>
-    )
-    return years.includes('1996-97')
-      ? preprocessData
-        .filter((data) => data[0].name !== 'Plus/Minus')
-        .map((plot, i) => {
-          return (
-            plotJsx(plot, this.getPlotTitle().filter(title => !title.match(/Plus\/Minus/g))[i], i)
-          )
-        })
-      : preprocessData.map((plot, i) => {
-        return (
-          plotJsx(plot, this.getPlotTitle()[i], i)
-        )
-      })
 
+    const plotJsx = (plot, barData, plotTitle, labels, i) => {
+      //Change plot titles
+      if (plotTitle === "Free Throws") plotTitle = "3 Points";
+      else if (plotTitle === "3 Points") plotTitle = "Free Throws";
+      if (this.props.isTeam && plotTitle === "Salary") {
+        plotTitle = "Estimated Total Salary";
+      }
+      return (
+        <ContainerCard
+          key={i}
+          style={{
+            margin: "0",
+          }}
+        >
+          {page === "Shots" ? (
+            <ShotsTitle>{plotTitle}</ShotsTitle>
+          ) : (
+            <GraphTitle>{plotTitle}</GraphTitle>
+          )}
+          <IndivPlots
+            data={plot}
+            barData={barData}
+            labels={labels}
+            page={page}
+            isTeam={this.props.isTeam}
+          />
+        </ContainerCard>
+      );
+    };
+
+    // only line type plotdata
+    const lineData = (plotdata) => {
+      return plotdata
+        .filter((plot) => plot.type === "line")
+        .map((p) => p.dataset);
+    };
+    // only bar type plotdata
+    const barData = (plotdata) => {
+      return plotdata
+        .filter((plot) => plot.type === "bar")
+        .map((p) => p.dataset);
+    };
+    //for plotting legend players including years of 1992-93
+    return years.includes("1992-93")
+      ? preprocessData
+          .map((plots) =>
+            plots.filter((data) => data.name.slice(-10) !== "Plus/Minus")
+          )
+          .map((plot, i) => {
+            if (plot.length > 1) {
+              return plotJsx(
+                lineData(plot),
+                barData(plot),
+                this.getPlotTitle(plot).filter(
+                  (title) => !title.match(/Plus\/minus/g)
+                )[i],
+                // slice can be used here to limit the # of data points
+                this.state.indivStat.years,
+                i
+              );
+            }
+          })
+      : preprocessData.map((plot, i) => {
+          return plotJsx(
+            lineData(plot),
+            barData(plot),
+            this.getPlotTitle(plot)[i],
+            this.state.indivStat.years,
+            i
+          );
+        });
   }
 
-
   render() {
-    return (
-      <PlotDiv>
-        {this.plotData(this.props.years)}
-      </PlotDiv>
-    );
+    return <PlotDiv>{this.plotData(this.props.years)}</PlotDiv>;
   }
 }
 export default withRouter(PlotContainer);

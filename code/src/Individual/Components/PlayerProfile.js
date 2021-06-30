@@ -21,6 +21,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
     steals: { name: "", value: 1 },
     total_rebounds: { name: "", value: 1 },
   });
+
   useEffect(() => {
     getMaxYearly(activeYear.toString(), "players", setMaxYearly);
     handleYearDropdown(activeYear);
@@ -115,9 +116,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
         <ContainerCard style={{ textAlign: "center" }}>
           <IndivRadar
             stats={radarStats}
-            text={individualConstants.radarStatNames.map((text) =>
-              text.replace(/_/g, " ")
-            )}
+            text= {individualConstants.radarStatNames}
             maxYearly={maxYearly}
           />
         </ContainerCard>
@@ -126,4 +125,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
   );
 };
 
+
+// {individualConstants.radarStatNames.map((text) =>
+//   text.replace(/_/g, " ")
 export default PlayerProfile;

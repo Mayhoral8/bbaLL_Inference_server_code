@@ -121,6 +121,7 @@ const BasicPlayerInfo = ({ playerNameProp, setBasicInfo, activeYear, fullActiveY
   const removeCommaAndUnderscore = name => {
     return name.replace(/,/g, '.').replace(/_/g, ' ');
   }
+
   return (
     <BasicInfoDiv>
       <div className="player__img-name">
