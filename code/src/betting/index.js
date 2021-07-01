@@ -736,7 +736,7 @@ const Betting = (props) => {
                     then you lose -1. This is equivalent to having a stake size
                     of $1.
                   </p>
-                  <p style={{ paddingLeft: "30px" }}>Notes:</p>
+                  <p style={{ paddingTop: "30px" }}>Notes:</p>
                   <ul style={{ paddingLeft: "30px" }}>
                     <li>The results will be updated every morning at 8am.</li>
                     <li>
