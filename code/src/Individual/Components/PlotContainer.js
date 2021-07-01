@@ -149,7 +149,6 @@ class PlotContainer extends PureComponent {
       let name;
       if (isTop100 && this.props.isTeam) {
         name = "League Avg";
-        indivStatData = newIndivStatData;
       } else if (isTop100) {
         name = "Top100 Avg.";
         indivStatData = newIndivStatData;
