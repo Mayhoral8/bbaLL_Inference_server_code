@@ -86,7 +86,7 @@ export const TeamPlayerDivLink = styled(Link)`
     margin-bottom: 1rem;
     width: 120px;
     height: 150px;
-    img{
+    img {
       width: 100%;
     }
   }
@@ -106,7 +106,5 @@ export const TeamStatWrapper = styled.div`
     grid-gap: 1rem;
     width: 100%;
     margin-top: 1rem;
-
   }
-  
 `;

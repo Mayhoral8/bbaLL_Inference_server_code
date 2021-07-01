@@ -128,7 +128,7 @@ class PlotContainer extends PureComponent {
       let newIndivStatData = [];
       let years = plotStats.years.map((year) => year.substring(0, 4));
 
-      //pushed y axis values to newIndivStatdata for top100 
+      //pushed y axis values to newIndivStatdata for top100
       for (let i = 0; i < this.state.top100YearIndices.length; i++) {
         const yearIndices = this.state.top100YearIndices[i];
         if (yearIndices === -1) {
@@ -187,12 +187,14 @@ class PlotContainer extends PureComponent {
           hidden: false,
         },
       };
-      // Win percentage top 100 plot label change to add "%"
-      if (trace.split("_")[0] === "W") {
-        data.dataset.label = "League Avg ";
-      }
+
       // percentage data type change from bar to line
       if (isTop100) {
+        // Win percentage top 100 plot label change to add "%"
+
+        if (trace.split("_")[0] === "W") {
+          data.dataset.label = "League Avg ";
+        }
         if (isShots === 1) {
           if (trace.slice(-3) === "PCT") {
             data = {
