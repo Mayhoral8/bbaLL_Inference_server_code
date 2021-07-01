@@ -4,7 +4,7 @@ import { fbStorage } from "../App/config";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 //import firebasestorage from "firebase";
 import { Card } from "./futuregameoddscard-style";
-const FutureGameOddsCard = ({ data }) => {
+const FutureGameOddsCard = ({ data, reference }) => {
   const [JSON, setJSON] = useState(data);
 
   // urls for team logo images
@@ -172,7 +172,7 @@ const FutureGameOddsCard = ({ data }) => {
   awayTeamName = awayWords[awayWords.length - 1];
 
   return (
-    <Card homeColour={teamColours.colourOne} awayColour={teamColours.colourTwo}>
+    <Card homeColour={teamColours.colourOne} awayColour={teamColours.colourTwo} ref = { reference }>
       {vsImg(homeImg, awayImg)}
       <div className="team-names">
         <div className="team-name1">

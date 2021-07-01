@@ -15,6 +15,11 @@ import {
 import PlayerRankingCard from '../../Main/playerRankingsCard'
 import FutureGameOddsCard from '../../Main/futureGameOddsCard'
 
+import momentTimezone from 'moment-timezone'
+
+const { WebClient } = require('@slack/web-api');
+const slack = new WebClient(process.env.REACT_APP_SLACK_TOKEN);
+
 const HomePage = () => {
 
     const [loading, setLoading] = useState(true)
@@ -61,6 +66,7 @@ const HomePage = () => {
     useEffect(() => {
         setPlayerRankings(getPlayerRankings())
         setFutureGames(getFutureGames())
+        getLatestSlackTrigger()
     }, [])
 
     useEffect(() => {
@@ -77,7 +83,7 @@ const HomePage = () => {
 
         setRankingScreen()
 
-      }, 2000)
+      }, 10000)
       
     }, [ranking, startCapture])
 
@@ -85,7 +91,8 @@ const HomePage = () => {
       if(startCapture === 'start'){
         let stateObject = {...ranking}
         if(ranking.rankingTypeIndex === 0){
-
+          // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsBidaily${ranking.selectOptions[ranking.selectAttrIndex].label[0]}`})
+          // await triggerSlackMessage(`PlayerRankingsBidaily${ranking.selectOptions[ranking.selectAttrIndex].label[0]}`)
           if(ranking.selectAttrIndex < 3){
             setRanking({
               ...stateObject,
@@ -101,9 +108,12 @@ const HomePage = () => {
                 selectOptions: optionsArray
               })
           }
+          
         }
   
         else if(ranking.rankingTypeIndex === 1){
+          // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsWeekly${ranking.selectOptions[ranking.selectAttrIndex].label[0]}`})
+          // await triggerSlackMessage(`PlayerRankingsWeekly${ranking.selectOptions[ranking.selectAttrIndex].label[0]}`)
           if(ranking.selectAttrIndex < 3){
             setRanking({
               ...stateObject,
@@ -122,6 +132,8 @@ const HomePage = () => {
         }
         
         else if(ranking.rankingTypeIndex === 2){
+          // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsSeasonal${ranking.selectOptions[ranking.selectAttrIndex].label[0]}`})
+          // await triggerSlackMessage(`PlayerRankingsSeasonal${ranking.selectOptions[ranking.selectAttrIndex].label[0]}`)
           if(ranking.selectAttrIndex < 1){
             let index = ranking.selectAttrIndex
             let optionsArray = ranking.selectOptions
@@ -130,6 +142,11 @@ const HomePage = () => {
               selectAttrIndex: index + 1,
               selectOptions: optionsArray
             })
+          }
+
+          else{
+            // exportComponentAsJPEG(futureGameListRef, {fileName: 'FutureGame'})
+            // await triggerSlackMessage('FutureGame')
           }
         }
 
@@ -181,24 +198,32 @@ const HomePage = () => {
       return gamesFound
     }
 
-    const exportPlayerRankingImage = async(fileName, captureFutureGamesCard) => {
-      await exportComponentAsJPEG(playerRankRef, {fileName})
-      if(captureFutureGamesCard){
-        exportComponentAsJPEG(futureGameListRef, {fileName: 'futureGameCard'})
-      }
-    }
-
     const configureSelectOptions = (index) => {
       let optionsArray = [];
       let rankingData = [playerRankings[0], playerRankings[1], playerRankings[2]]
       Object.keys(rankingData[index]).map((value) => {
         optionsArray.push({ value: [value], label: [labelsForDropdown[value]] });
       })
-      // if(index === 2){
-      //   console.log("Options Array in Function: ", optionsArray)
-      // }
       return optionsArray
     }
+
+    const triggerSlackMessage = async(fileName) => {
+      const date = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
+      await slack.chat.postMessage({
+        text: `Home page image added: {${date}}  {${fileName}}`,
+        channel: process.env.REACT_APP_SLACK_CHANNEL_ID,
+      });
+    }
+
+    // const getLatestSlackTrigger = async() => {
+    //   const result = await slack.conversations.history({
+    //     token: process.env.REACT_APP_SLACK_TOKEN,
+    //     channel: process.env.REACT_APP_SLACK_CHANNEL_ID,
+    //     inclusive: true,
+    //     limit: 1
+    //   });
+    //   console.log(result)
+    // }
 
     return(
       
@@ -206,7 +231,7 @@ const HomePage = () => {
             <HomePageContainer>Loading</HomePageContainer>
         :
         <HomePageContainer>
-            <PlayerRanks ref = {playerRankRef}>
+            <PlayerRanks>
               <PlayerRankingCard
                data = {[playerRankings[0], playerRankings[1], playerRankings[2]]}
                rankingTypes = {rankingTypes}
@@ -217,16 +242,17 @@ const HomePage = () => {
                isScreenCapture = {true}
                selectAttrIndex = {ranking.selectAttrIndex}
                selectOptionsScreenCapture = {ranking.selectOptions}
+               reference = {playerRankRef}
               />
             </PlayerRanks>
 
             <FutureGames>
               <FutureGameListBox>
-                <FutureGameListRow ref = {futureGameListRef}>
+                <FutureGameListRow>
                   {
                     futureGames.map((element, index) => {
                       return(
-                        <FutureGameOddsCard data={element} key={index}/>
+                        <FutureGameOddsCard data={element} key={index} reference = {futureGameListRef}/>
                       )
                     })
                   }

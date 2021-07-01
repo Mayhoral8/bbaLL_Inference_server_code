@@ -8,7 +8,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankingIndex, isScreenCapture, selectAttrIndex, selectOptionsScreenCapture }) => {
+const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankingIndex, isScreenCapture, selectAttrIndex, selectOptionsScreenCapture,reference }) => {
   const [imgs, setImgs] = useState({});
   try {
     if (data == null) {
@@ -225,7 +225,7 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
             />
           </button>
 
-          <CardContainer ref = {playerRankingsCardRef}>
+          <CardContainer ref = {reference}>
             <div className="top">
               <div className="title">
                 {

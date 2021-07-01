@@ -22,6 +22,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@fortawesome/fontawesome-free": "^5.13.1",
+    "@slack/web-api": "^6.2.4",
     "chart.js": "^2.9.4",
     "chartjs-plugin-datalabels": "^0.7.0",
     "chartjs-plugin-watermark": "^1.0.3",
