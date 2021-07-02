@@ -731,8 +731,8 @@ const Betting = (props) => {
                     </figcaption>
                   </figure>
                   <p>
-                    Say you bet on “LAC” for 1.95 betting odds. If the Clippers
-                    win, then you will earn 0.95 points. If the Clippers lose
+                    Say you bet on “ATL” for 2.22 betting odds. If the Clippers
+                    win, then you will earn 1.22 points. If the Clippers lose
                     then you lose -1. This is equivalent to having a stake size
                     of $1.
                   </p>

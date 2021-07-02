@@ -65,8 +65,6 @@ class PlotContainer extends PureComponent {
       .doc(this.props.name)
       .get()
       .then((doc) => {
-        console.log("this.props.name=>", this.props.name)
-
         years = doc.data().Regular.years;
         this.setState({
           indivStat: doc.data().Regular,
