@@ -51,6 +51,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
       .get()
       .then((doc) => {
         // player stats in table
+        console.log(doc.data())
         const basicTableStats = individualConstants.tableStats.map((stat) => {
           if (doc.data()[stat][selectedYear]) {
             return doc.data()[stat][selectedYear].toFixed(2);

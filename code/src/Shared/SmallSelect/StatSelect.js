@@ -89,7 +89,11 @@ const StatSelect = ({
                   key={statValue}
                   onClick={() => handleChange(statValue)}
                 >
-                  <Link to={linkPath(statValue)}>
+                  <Link
+                    to={{
+                      pathname: linkPath(statValue),
+                    }}
+                  >
                     {statValue === "Plus Minus" ? "+/-" : statValue}
                   </Link>
                 </DropListItem>
