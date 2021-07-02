@@ -65,6 +65,8 @@ class PlotContainer extends PureComponent {
       .doc(this.props.name)
       .get()
       .then((doc) => {
+        console.log("this.props.name=>", this.props.name)
+
         years = doc.data().Regular.years;
         this.setState({
           indivStat: doc.data().Regular,
@@ -191,7 +193,6 @@ class PlotContainer extends PureComponent {
       // percentage data type change from bar to line
       if (isTop100) {
         // Win percentage top 100 plot label change to add "%"
-
         if (trace.split("_")[0] === "W") {
           data.dataset.label = "League Avg ";
         }
