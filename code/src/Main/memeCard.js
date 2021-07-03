@@ -4,27 +4,6 @@ import styled from "styled-components";
 const MemeCard = ({ urls }) => {
   const [currentVid, setCurrentVid] = useState(0);
 
-  // REMOVE THIS CODE ONCE URLS IN FIREBASE CONTAIN EMBEDDED LINKS
-  // =============================================================
-  const [urlsFormatted, setUrlsFormatted] = useState(false);
-  // Turns links into embedded links
-  if (!urlsFormatted && urls.length > 0) {
-    urls.forEach((element, index) => {
-      if (element.includes("youtube")) {
-        urls[index] = urls[index].replace(".com/", ".com/embed/");
-      } else if (element.includes("youtu.be")) {
-        urls[index] = urls[index].replace(".be/", "be.com/embed/");
-        if (!urls[index].includes("www")) {
-          urls[index] = urls[index].replace("youtube", "www.youtube");
-        }
-      } else if (element.includes("streamable")) {
-        urls[index] = urls[index].replace(".com/", ".com/e/");
-      }
-    });
-    setUrlsFormatted(true);
-  }
-  // ==============================================================
-
   const nextbuttonHandle = (event) => {
     if (currentVid < urls.length - 1) {
       setCurrentVid(currentVid + 1);
