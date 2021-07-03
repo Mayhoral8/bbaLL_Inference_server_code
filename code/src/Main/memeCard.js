@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ReactPlayer from "react-player";
 import styled from "styled-components";
 
 const MemeCard = ({ urls }) => {
@@ -57,22 +56,29 @@ const MemeCard = ({ urls }) => {
             Try again later.
           </div>
         ) : (
-          <VideoPlayer>
-            <div className="player-wrapper">
-              <ReactPlayer
-                className="react-player"
-                url={urls[currentVid]}
-                width="100%"
-                height="100%"
-                controls={true}
-              />
-            </div>
-          </VideoPlayer>
+          <VideoResonsiveWrapper>
+            <iframe frameBorder="0" src={urls[currentVid]} />
+          </VideoResonsiveWrapper>
         )}
       </div>
     </Card>
   );
 };
+
+const VideoResonsiveWrapper = styled.div`
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+  iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    max-height: 380px;
+  }
+`;
 
 export const Card = styled.div`
   display: flex;
@@ -189,20 +195,6 @@ export const Card = styled.div`
   .button:hover {
     background-color: #555555;
     color: white;
-  }
-`;
-
-const VideoPlayer = styled.div`
-  .player-wrapper {
-    position: relative;
-    padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
-  }
-
-  .react-player {
-    max-height: 380px;
-    position: absolute;
-    top: 0;
-    left: 0;
   }
 `;
 
