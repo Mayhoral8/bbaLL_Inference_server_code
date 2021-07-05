@@ -14,7 +14,7 @@ export const MobileWrapper = styled.div`
 export const Continer = styled.div`
   border-bottom: 0.4px solid rgba(0, 0, 0, 0.28);
   display: grid;
-  grid-template-columns: 5fr 2fr;
+  grid-template-columns: 1fr 5fr 2fr;
 `
 
 export const LeftInformation = styled.div`
