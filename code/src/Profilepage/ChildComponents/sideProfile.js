@@ -187,7 +187,7 @@ const UserStatsBox = (props) => {
           </BettingTypeWinRate>
 
         <div className="lastTenday">
-          Last 10 fixtures:
+          Last 10 bet results:
         </div>
         {props.userRecord.last10Games != undefined ?
           <LastTenGame  data={props.userRecord.last10Games}/> :

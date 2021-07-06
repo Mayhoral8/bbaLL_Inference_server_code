@@ -13,7 +13,7 @@ import momentTimeZone from 'moment-timezone';
 const ProfilePage = (props) => {
     const [spinner, setSpinner] = useState(true);
     const [error, setError] = useState({isError: false, status:'', message: ''});
-    const[selectedDayRange, setSelectedDayRange] = useState({from: null, to: null});
+    //const[selectedDayRange, setSelectedDayRange] = useState({from: null, to: null});
     let maxDate = null, minDate = null;
     let currentDate = new Date();
     let currentMonth = momentTimeZone(currentDate).tz('America/New_York').format('M');
@@ -73,6 +73,7 @@ const ProfilePage = (props) => {
             :
             <ProfilePageContainer>
                 <LeftUserProfile />
+
                 <RightContiner 
                     userHistory = {props.bettingHistory} 
                     minDate = {minDate} 

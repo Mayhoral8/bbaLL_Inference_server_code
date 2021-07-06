@@ -93,7 +93,7 @@ const Table = (props) => {
                       return (
                         <DataCell {...cell.getCellProps} key={childIndex}>
                           <p>{date}</p>
-                          <p>{time}</p>
+                          <p>{time} EST</p>
                         </DataCell>
                       );
                     case 2:
