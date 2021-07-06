@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import { Wrapper, 
-         GameDetail,
-         ButtonDiv} from './eachBet-style';
+import React, { useEffect, useState } from "react";
+import { Wrapper, GameDetail, ButtonDiv } from "./eachBet-style";
 
-import trophy from "../../assets/images/trophy.png"
+import trophy from "../../assets/images/trophy.png";
 import { Link } from "react-router-dom";
+
 const EachBet = ({data}) => {
   console.log(data);
   let bettingType = null;
@@ -33,8 +32,9 @@ const EachBet = ({data}) => {
   }
 
   return(
+
     <Wrapper>
-      <div className='title'>Offer</div>
+      <div className="title">Offer</div>
       <div className="info">
         <p className='date'>Date: {gameDate}</p>
         <p className='bettingName'>{bettingType}</p>
@@ -42,13 +42,16 @@ const EachBet = ({data}) => {
           <h2 className='name'>{homeTeam}<br/>{homeTeamOdd}</h2>
           <img src={trophy}/>
           <h2 className='name'>{awayTeam}<br/>{awayTeamOdd}</h2>
+
         </GameDetail>
       </div>
       <ButtonDiv>
-        <Link to="/betting" className="buttonStyle">Bet Now</Link>
+        <Link to="/betting" className="buttonStyle">
+          Bet Now
+        </Link>
       </ButtonDiv>
     </Wrapper>
-  )
+  );
 };
 
 export default EachBet;

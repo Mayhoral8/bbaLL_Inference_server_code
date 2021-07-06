@@ -1,4 +1,4 @@
-import style from 'styled-components';
+import style from "styled-components";
 
 export const Wrapper = style.div`
   border: 1px solid #552A9F;
@@ -17,7 +17,7 @@ export const Wrapper = style.div`
   }
 
   .info{
-    padding-top: 5px;
+    padding-top: 10px;
     color: #552A9F;
     font-size: 14px;
     font-weight: 600;
@@ -34,7 +34,7 @@ export const Wrapper = style.div`
     font-size: 18px;
     font-weight: 600;
   }
-`
+`;
 
 export const GameDetail = style.div`
   display: grid;
@@ -47,7 +47,7 @@ export const GameDetail = style.div`
     text-align: center;
     color: black;
   }
-`
+`;
 
 export const ButtonDiv = style.div`
   padding: 10px 0;
@@ -63,4 +63,4 @@ export const ButtonDiv = style.div`
     font-size: 14px;
     padding: 10px 20px;
   }
-`
+`;
