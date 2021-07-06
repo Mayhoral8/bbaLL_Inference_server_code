@@ -86,7 +86,7 @@ export const TeamPlayerDivLink = styled(Link)`
     margin-bottom: 1rem;
     width: 120px;
     height: 150px;
-    img{
+    img {
       width: 100%;
     }
   }
@@ -94,12 +94,17 @@ export const TeamPlayerDivLink = styled(Link)`
 
 export const TeamStatWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(375px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 1rem;
   width: 100%;
   margin-top: 1rem;
-  @media (min-width: 996px) {
-    grid-template-columns: 1fr 1fr;
-    margin-top: 0;
+
+  @media (max-width: 786px) {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
   }
 `;

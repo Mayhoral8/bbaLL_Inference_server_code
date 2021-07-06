@@ -11,7 +11,16 @@ import { FormatYearAddEnding } from "../../Shared/Functions/YearFormat";
 import YearDropdown from "./YearDropDown";
 import SEO from "../../Shared/SEO";
 
-const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, years, careerStats, setBasicInfo, setFullActiveYear }) => {
+const PlayerProfile = ({
+  playerName,
+  activeYear,
+  setActiveYear,
+  fullActiveYear,
+  years,
+  careerStats,
+  setBasicInfo,
+  setFullActiveYear,
+}) => {
   const [yearDropped, setYearDropped] = useState(false);
   const [radarStats, setRadarStats] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [tableStats, setTableStats] = useState([0, 0, 0, 0, 0, 0, 0]);
@@ -42,7 +51,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
   const handleYearDropdown = (year) => {
     const selectedYear = FormatYearAddEnding(year);
     setActiveYear(year);
-    setFullActiveYear(selectedYear)
+    setFullActiveYear(selectedYear);
 
     // fetch data from Firestore
     fbFirestore
@@ -73,10 +82,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
 
   return (
     <>
-      <SEO
-        title={playerName.replace('_', ' ')}
-        slug={`player/${playerName}`}
-      />
+      <SEO title={playerName.replace("_", " ")} slug={`player/${playerName}`} />
       <ContainerCard style={{ margin: "1rem 0" }}>
         <BasicPlayerInfo
           playerNameProp={playerName}
@@ -116,7 +122,7 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
         <ContainerCard style={{ textAlign: "center" }}>
           <IndivRadar
             stats={radarStats}
-            text= {individualConstants.radarStatNames}
+            text={individualConstants.radarStatNames}
             maxYearly={maxYearly}
           />
         </ContainerCard>
@@ -124,7 +130,6 @@ const PlayerProfile = ({ playerName, activeYear, setActiveYear, fullActiveYear, 
     </>
   );
 };
-
 
 // {individualConstants.radarStatNames.map((text) =>
 //   text.replace(/_/g, " ")
