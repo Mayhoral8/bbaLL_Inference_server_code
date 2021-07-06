@@ -432,6 +432,7 @@ const Betting = (props) => {
     setPointsSpinner(true);
     let response = await props.logoutAction();
     if (response.processed) {
+      setIsIndexSelected(false);
       setSelectedValues({});
       let response = props.getFutureGamesInfo();
       if (response.isError) {
@@ -517,7 +518,7 @@ const Betting = (props) => {
 
                 <UserStatsRankWrapper>
                   {props.userDetails.user.uid && props.userRecord ? (
-                    <UserStatsContainer />
+                    <UserStatsContainer onLogoutClick={onLogoutClick} />
                   ) : null}
 
                   <UserRankContainer />
@@ -731,12 +732,12 @@ const Betting = (props) => {
                     </figcaption>
                   </figure>
                   <p>
-                    Say you bet on “LAC” for 1.95 betting odds. If the Clippers
-                    win, then you will earn 0.95 points. If the Clippers lose
+                    Say you bet on “ATL” for 2.22 betting odds. If the Clippers
+                    win, then you will earn 1.22 points. If the Clippers lose
                     then you lose -1. This is equivalent to having a stake size
                     of $1.
                   </p>
-                  <p style={{ paddingLeft: "30px" }}>Notes:</p>
+                  <p style={{ paddingTop: "30px" }}>Notes:</p>
                   <ul style={{ paddingLeft: "30px" }}>
                     <li>The results will be updated every morning at 8am.</li>
                     <li>
@@ -745,21 +746,24 @@ const Betting = (props) => {
                   </ul>
                 </div>
               </BettingSectionColumn>
+
               <BetPointsSummaryColumn>
                 <OverviewHeader>Summary</OverviewHeader>
 
-                <BetSubmitPointsContainer>
-                  {overviewKeysArray.map((gameId, index) => {
-                    return (
-                      <BetPointsOverviewBox
-                        selectedValues={selectedValues}
-                        gameId={gameId}
-                        key={index}
-                        onRemovePoints={onRemovePoints}
-                      />
-                    );
-                  })}
-                </BetSubmitPointsContainer>
+                {isIndexSelected ? (
+                  <BetSubmitPointsContainer>
+                    {overviewKeysArray.map((gameId, index) => {
+                      return (
+                        <BetPointsOverviewBox
+                          selectedValues={selectedValues}
+                          gameId={gameId}
+                          key={index}
+                          onRemovePoints={onRemovePoints}
+                        />
+                      );
+                    })}
+                  </BetSubmitPointsContainer>
+                ) : null}
                 {isIndexSelected ? (
                   <SubmitPointsBtn
                     onClick={() => {

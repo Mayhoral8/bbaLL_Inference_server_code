@@ -3,11 +3,13 @@ import { Continer,
         LeftInformation,
         RightInformation,
         MobileWrapper } from '../Styles/mobileStyle';
+import checkIcon from "../../assets/images/checkIcon.jpg";
+import noCheckIcon from "../../assets/images/noCheckIcon.jpg";
 
 const EachColum = (
   { bettingType, 
     isGameFinish, 
-    score, 
+    result, 
     homeTeam, 
     awayTeam, 
     winTeam, 
@@ -33,9 +35,20 @@ const EachColum = (
     displayInformation = "Total score over " + number;
     bettingType = array[0] + ' ' + array[1] + ' ' + array[2];
   }
-    
+
   return(
     <Continer>
+      {result == 1 ? 
+        <div>
+          <img src={checkIcon}/>
+          <p style={{paddingLeft: '6px', fontSize: '12px'}}>{(parseFloat(betOdds) - 1).toFixed(2)}</p>
+        </div> 
+        : result == 0 ? 
+        <div>
+          <img src={noCheckIcon}/>
+          <p style={{paddingLeft: '7px', fontSize: '12px'}}>-1</p>
+        </div> : <div></div>}
+      
       <LeftInformation>
         <div className='dispalyInfo'>{displayInformation}</div>
         <div className='teamNames'>{homeTeam} - {awayTeam}</div>
@@ -64,6 +77,7 @@ const MobileTable = ({data}) => {
         let teamNamesArray = (eachBet.info['vs']).split('vs');
         let awayTeamAndWinteam = teamNamesArray[1].split('--');
         let DateArray = (eachBet.info['gameDateTime']).split(' ');
+        let result = eachBet.info['result'];
 
         let bettingType = eachBet.info['BettingType'];
         let isGameFinish = eachBet.info['gameFinished'];
@@ -74,7 +88,7 @@ const MobileTable = ({data}) => {
         let winTeam = awayTeamAndWinteam[1];
         let date = DateArray[0];
         let time = DateArray[1];
-
+        
         return(
           <EachColum 
             key={eachBet.id}
@@ -87,6 +101,7 @@ const MobileTable = ({data}) => {
             date = {date}
             time = {time}
             betOdds = {betOdds}
+            result = {result}
           /> 
         )
       })

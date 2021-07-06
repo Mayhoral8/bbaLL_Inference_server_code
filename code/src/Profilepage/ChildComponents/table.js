@@ -27,7 +27,7 @@ const Table = (props) => {
     initialState:{ sortBy: [
         {
             id: 'gameDateTime',
-            desc: false
+            desc: true
         }
     ]}
 }, useSortBy);
@@ -57,16 +57,33 @@ const Table = (props) => {
         <TableBody {...getTableBodyProps()}>
           {rows.map((row, parentIndex) => {
             prepareRow(row);
+
             return (
               <TableRow {...row.getRowProps()} key={parentIndex}>
                 {row.cells.map((cell, childIndex) => {
                   switch (childIndex) {
                     case 0:
-                      return (
-                        <DataCell {...cell.getCellProps} key={childIndex}>
-                          {cell.render("Cell").props.cell.value == '1' ? <img src={checkIcon}/> : <img src={noCheckIcon}/>}
-                        </DataCell>
-                      );
+                      if (cell.render("Cell").props.cell.value == '1') {
+                        return (
+                          <DataCell {...cell.getCellProps} key={childIndex}>
+                            <img src={checkIcon}/>
+                            <p>{(parseFloat(row.values['betOdds']) - 1).toFixed(2)}</p>
+                          </DataCell>
+                        );
+                      } else if (cell.render("Cell").props.cell.value == '0') {
+                        return (
+                          <DataCell {...cell.getCellProps} key={childIndex}>
+                            <img src={noCheckIcon}/>
+                            <p>-1</p>
+                          </DataCell>
+                        );
+                      } else {
+                        return (
+                          <DataCell {...cell.getCellProps} key={childIndex}>
+                           
+                          </DataCell>
+                        );
+                      }
                     case 1:
                       let DateArray = cell
                         .render("Cell")
@@ -76,7 +93,7 @@ const Table = (props) => {
                       return (
                         <DataCell {...cell.getCellProps} key={childIndex}>
                           <p>{date}</p>
-                          <p>{time}</p>
+                          <p>{time} EST</p>
                         </DataCell>
                       );
                     case 2:

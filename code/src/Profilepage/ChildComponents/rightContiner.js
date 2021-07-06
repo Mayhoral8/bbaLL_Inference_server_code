@@ -62,7 +62,7 @@ const RightContiner = (props) => {
   }
 
   useEffect(()=>{
-    //console.log("render from useEffect");
+
     let tempData = props.userHistory.data;
     switch(currentDisplay) {
       case 'allBets':
@@ -79,6 +79,8 @@ const RightContiner = (props) => {
       newFormatStartDate = getDateFormat(selectedDayRange.from);
       newFromateEndDate = getDateFormat(selectedDayRange.to);
       tempData = tempData.filter(eachData => withinDateRange(eachData, newFormatStartDate, newFromateEndDate));
+    } else if (maxDate != null && minDate != null){
+      tempData = tempData.filter(eachData => withinDateRange(eachData, minDate.split(' ')[0], maxDate.split(' ')[0]));
     }
     setHistoryData(tempData); 
   },[currentDisplay, selectedDayRange])
@@ -94,7 +96,6 @@ const RightContiner = (props) => {
       onGoingActive = true;
       finishedActive = false;
       break;
-    
     case 'finished':
       allBetsActive = false;
       onGoingActive = false;

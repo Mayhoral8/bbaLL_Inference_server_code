@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 //Actions
 import { getUserRecord } from "../../redux/actions/recordActions";
+import { getFutureGamesInfo } from '../../redux/actions/betsActions';
 
 //Components
 import {
@@ -35,6 +36,7 @@ import noCheckIcon from "../../assets/images/noCheckIcon.jpg";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import Advertisement from "../../Shared/bettingAdvertisement/index"
 
 const LastTenGame = (props) => {
   return(
@@ -55,6 +57,8 @@ function calWinRate(numWins, numBettings) {
 const UserStatsBox = (props) => {
   const [statsSpinner, setStatsSpinner] = useState(true);
   const [winningRate, setWinningRate] = useState([0,0,0,0]);
+  const [gameInfo, setGameInfo] = useState([]);
+
   useEffect(() => {
     props.getUserRecord(props.userDetails.uid);
   }, []);
@@ -91,7 +95,20 @@ const UserStatsBox = (props) => {
     }
   }, [props.userRecord]);
 
-  console.log(winningRate)
+  useEffect(() => {
+    let response = props.getFutureGamesInfo();
+    if(response.isError){
+        setError({status: response.status, message: response.message, isError:true})
+    }
+    window.setInterval(()=>{
+        let response = props.getFutureGamesInfo();
+        if(response.isError){
+            setError({status: response.status, message: response.message, isError:true})
+        }
+        
+    },300000);
+},[]);
+
   return (
     <>
       <UserStatsContainer>
@@ -170,7 +187,7 @@ const UserStatsBox = (props) => {
           </BettingTypeWinRate>
 
         <div className="lastTenday">
-          Last 10 fixtures:
+          Last 10 bet results:
         </div>
         {props.userRecord.last10Games != undefined ?
           <LastTenGame  data={props.userRecord.last10Games}/> :
@@ -179,6 +196,7 @@ const UserStatsBox = (props) => {
         <div className="styledDiv">
           <Link to="/betting" className="styledButton">Bet Now</Link>
         </div>
+        <Advertisement futureGames = {props.futureGamesInfo.games}/>
       </UserStatsContainer>
     </>
   );
@@ -186,10 +204,11 @@ const UserStatsBox = (props) => {
 
 const mapStateToProps = (state) => {
   return {
+    futureGamesInfo: state.betsReducer.futureGamesInfo,
     userDetails: state.authReducer.userDetails.user,
     userRecord: state.recordReducer.userRecord,
   };
 };
 
 
-export default connect(mapStateToProps, { getUserRecord })(UserStatsBox);
+export default connect(mapStateToProps, { getUserRecord, getFutureGamesInfo})(UserStatsBox);
