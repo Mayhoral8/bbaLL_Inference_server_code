@@ -432,7 +432,8 @@ const Betting = (props) => {
     setPointsSpinner(true);
     let response = await props.logoutAction();
     if (response.processed) {
-      setSelectedValues({});
+      setIsIndexSelected(false)
+      setSelectedValues({})
       let response = props.getFutureGamesInfo();
       if (response.isError) {
         setError({
@@ -517,7 +518,7 @@ const Betting = (props) => {
 
                 <UserStatsRankWrapper>
                   {props.userDetails.user.uid && props.userRecord ? (
-                    <UserStatsContainer />
+                    <UserStatsContainer onLogoutClick = {onLogoutClick}/>
                   ) : null}
 
                   <UserRankContainer />
@@ -745,10 +746,13 @@ const Betting = (props) => {
                   </ul>
                 </div>
               </BettingSectionColumn>
+              
               <BetPointsSummaryColumn>
                 <OverviewHeader>Summary</OverviewHeader>
 
-                <BetSubmitPointsContainer>
+                {
+                  isIndexSelected ? 
+                  <BetSubmitPointsContainer>
                   {overviewKeysArray.map((gameId, index) => {
                     return (
                       <BetPointsOverviewBox
@@ -757,9 +761,12 @@ const Betting = (props) => {
                         key={index}
                         onRemovePoints={onRemovePoints}
                       />
-                    );
+                    );  
                   })}
                 </BetSubmitPointsContainer>
+                :
+                null
+                }
                 {isIndexSelected ? (
                   <SubmitPointsBtn
                     onClick={() => {
