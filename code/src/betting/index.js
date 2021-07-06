@@ -700,7 +700,7 @@ const Betting = (props) => {
                         );
                       })}
                     </BettingPointsAndTeamsContainer>
-                  )}
+                }
                 </BettingSectionContainer>
                 <div className="instruction">
                   <h3>Instruction:</h3>
@@ -780,7 +780,7 @@ const Betting = (props) => {
             </ContentW>
           </ContentC>
         </BettingPageContainer>
-      )}
+      }
     </>
   );
 };
