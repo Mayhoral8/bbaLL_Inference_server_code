@@ -432,8 +432,8 @@ const Betting = (props) => {
     setPointsSpinner(true);
     let response = await props.logoutAction();
     if (response.processed) {
-      setIsIndexSelected(false)
-      setSelectedValues({})
+      setIsIndexSelected(false);
+      setSelectedValues({});
       let response = props.getFutureGamesInfo();
       if (response.isError) {
         setError({
@@ -518,7 +518,7 @@ const Betting = (props) => {
 
                 <UserStatsRankWrapper>
                   {props.userDetails.user.uid && props.userRecord ? (
-                    <UserStatsContainer onLogoutClick = {onLogoutClick}/>
+                    <UserStatsContainer onLogoutClick={onLogoutClick} />
                   ) : null}
 
                   <UserRankContainer />
@@ -700,7 +700,7 @@ const Betting = (props) => {
                         );
                       })}
                     </BettingPointsAndTeamsContainer>
-                }
+                  )}
                 </BettingSectionContainer>
                 <div className="instruction">
                   <h3>Instruction:</h3>
@@ -746,27 +746,24 @@ const Betting = (props) => {
                   </ul>
                 </div>
               </BettingSectionColumn>
-              
+
               <BetPointsSummaryColumn>
                 <OverviewHeader>Summary</OverviewHeader>
 
-                {
-                  isIndexSelected ? 
+                {isIndexSelected ? (
                   <BetSubmitPointsContainer>
-                  {overviewKeysArray.map((gameId, index) => {
-                    return (
-                      <BetPointsOverviewBox
-                        selectedValues={selectedValues}
-                        gameId={gameId}
-                        key={index}
-                        onRemovePoints={onRemovePoints}
-                      />
-                    );  
-                  })}
-                </BetSubmitPointsContainer>
-                :
-                null
-                }
+                    {overviewKeysArray.map((gameId, index) => {
+                      return (
+                        <BetPointsOverviewBox
+                          selectedValues={selectedValues}
+                          gameId={gameId}
+                          key={index}
+                          onRemovePoints={onRemovePoints}
+                        />
+                      );
+                    })}
+                  </BetSubmitPointsContainer>
+                ) : null}
                 {isIndexSelected ? (
                   <SubmitPointsBtn
                     onClick={() => {
@@ -780,7 +777,7 @@ const Betting = (props) => {
             </ContentW>
           </ContentC>
         </BettingPageContainer>
-      }
+      )}
     </>
   );
 };
