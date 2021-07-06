@@ -19,7 +19,7 @@ export const Wrapper = style.div`
   .info{
     padding-top: 5px;
     color: #552A9F;
-    font-size: 6px;
+    font-size: 14px;
     font-weight: 600;
   }
 
