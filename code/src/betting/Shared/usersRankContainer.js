@@ -27,14 +27,15 @@ async function getUserId(){
         }
         if (data[index].docData['rank'] !== '-') {
             playerInfo.push(eachPlayerObject);
-            rank.push(data[index].docData['rank']);
+            rank.push(parseInt(data[index].docData['rank']));
         }
     }
-    
+
     let sorted = Argsort(rank);
     for ( let index = 0; index < sorted.length; index++) {
         sortedPlayerInfo.push(playerInfo[sorted[index]]);
     }
+
     return sortedPlayerInfo;
 }
 
@@ -45,7 +46,7 @@ const UserRankContainer = () => {
           .then(link => setDataArray(() => link))
           .catch(() => setDataArray(""));
       }, []);
-
+    
     return(
         <>
         { dataArray.length != 0 &&
@@ -53,14 +54,15 @@ const UserRankContainer = () => {
                 <Header>User Ranking</Header>
                 <ColContainer>
                     <Col header="true">
-                        <div 
-                        style = {{textAlign: 'center'}}>Name</div>
+                        <div style = {{textAlign: 'center'}}>Rank</div>
+                        <div style = {{textAlign: 'center'}}>Name</div>
                         <div style = {{textAlign: 'center'}}>Points</div>
                     </Col>
                     {   
                         dataArray.map((element, id) => {
                             return(
                                 <Col key={id} header="false">
+                                    <div style = {{textAlign: 'center'}}>{id + 1}</div>
                                     <div style = {{textAlign: 'center'}}>{element['name']}</div>
                                     <div style = {{textAlign: 'center'}}>{element['odd']}</div>
                                 </Col>

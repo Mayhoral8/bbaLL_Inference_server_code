@@ -26,7 +26,8 @@ export const getUserBettingHistory = (userId) => {
                 let betDatesKeys = Object.keys(data[i].docData)
                 for (let j = 0; j < betDatesKeys.length; j++){
                     let gameMonth = moment(betDatesKeys[j]).format('M')
-                    if(gameMonth === currentMonth){
+
+                    if(gameMonth === currentMonth || gameMonth == (currentMonth - 1)){
                         betDates.push(betDatesKeys[j])
                     }
                 }

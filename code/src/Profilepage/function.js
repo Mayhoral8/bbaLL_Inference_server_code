@@ -21,23 +21,25 @@ function createTargetObj(history, type) {
         result: history[type].result
     }
     
-    let winTeam = "null";
+    // let winTeam = "null";
 
-    if (history.gameFinished) {
-        winTeam = Math.trunc(history.gameDetails.HomeScore) > Math.trunc(history.gameDetails.AwayScore) ? 
-                        history.gameDetails.homeTeam : history.gameDetails.awayTeam
-    }
+    // if (history.gameFinished) {
+    //     winTeam = Math.trunc(history.gameDetails.HomeScore) > Math.trunc(history.gameDetails.AwayScore) ? 
+    //                     history.gameDetails.homeTeam : history.gameDetails.awayTeam
+    // }
 
-    targetObj.vs = targetObj.vs + "--" + winTeam;
+    // targetObj.vs = targetObj.vs + "--" + winTeam;
 
     switch (type) {
         case 'moneyLine':
-            targetObj.BettingType = 'Money Line (' + history[type].bettingSide  + ')';;
+            targetObj.vs = targetObj.vs + '--' + history['moneyLine']['bettingSide'];
+            targetObj.BettingType = 'Money Line (' + history[type].bettingSide  + ')';
             break;
         case 'overAndUnder':
             targetObj.BettingType = 'Over & Under (' + history[type].totalScore + ')';
             break;
         case 'handicap':
+            targetObj.vs = targetObj.vs + '--' + history['handicap']['bettingSide'];
             targetObj.BettingType = 'Spread (' + history[type].spread + ')';
             break;
         default:
