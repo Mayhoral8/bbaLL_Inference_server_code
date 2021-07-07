@@ -8,9 +8,9 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankingIndex, isScreenCapture, selectAttrIndex }) => {
+const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps, isScreenCapture, reference }) => {
+  console.log(rankingProps)
   const [imgs, setImgs] = useState({});
-
   try {
     if (data == null) {
     }
@@ -53,11 +53,15 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
   const hasDataLoaded = Object.entries(data[0]).length !== 0;
   const scoreType = useRef("Points");
 
-  const [rankingTypeIndex, setRankingTypeIndex] = useState(selectRankingIndex);
+  const [rankingTypeIndex, setRankingTypeIndex] = useState(0);
   const [topPlayers, setTopPlayers] = useState({});
+
   // For cycling through daily, weekly and seasonal rankings
+  // If we intend to capture images, we pass cycle as a null value from the parent component or else it's given the amount of time that we would want this card to cycle through.
+  // If we capture the isScreenCapture prop will be true.
   const [isCycling, setIsCycling] = useState(cycling);
   const [cycleInterval, setCycleInterval] = useState(timeOut); // 5 seconds between transition: ;
+
 
   const useInterval = (callback, delay) => {
     const savedCallback = useRef();
@@ -109,27 +113,30 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
   }, []);
 
   useEffect(() => {
-    if(isScreenCapture){
-      setRankingTypeIndex(selectRankingIndex)
-    }
-  }, [selectRankingIndex])
-
-  useEffect(() => {
     let names = [];
     Object.values(topPlayers).map((obj) => names.push(Object.keys(obj)[0]));
     getPic(names);
   }, [topPlayers]);
 
+  // If 
   let selectOptions = [];
-  const InitialLabels = ["Points", "Points", "Num_DD"];
-  Object.keys(data[rankingTypeIndex]).map((value) => {
-    selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
-  });
-
+  if(isScreenCapture){
+    Object.keys(data[rankingProps.rankingTypeIndex]).map((value) => {
+      selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
+    })
+  }
+  else{
+    Object.keys(data[rankingTypeIndex]).map((value) => {
+      selectOptions.push({ value: [value], label: [labelsForDropdown[value]] });
+    })
+  }
+  
+  // This runs when the component is called from the ScreenCapture/homePage.
   useEffect(() => {
-    scoreType.current = selectOptions[0] && selectAttrIndex ? selectOptions[selectAttrIndex].value[0] : InitialLabels[rankingTypeIndex]; 
+   if(isScreenCapture){
+    scoreType.current = rankingProps.selectOptions[rankingProps.selectAttrIndex].value[0]
     setTopPlayers(
-      data[rankingTypeIndex][scoreType.current]
+      data[rankingProps.rankingTypeIndex][scoreType.current]
         .sort((a, b) => {
           const aName = Object.keys(a)[0];
           const bName = Object.keys(b)[0];
@@ -137,7 +144,26 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
         })
         .slice(0, 4)
     );
-  }, [rankingTypeIndex, selectAttrIndex]);
+   }
+  }, [rankingProps]);
+
+  // This runs when the component is called from the Main/mainPage.js
+  useEffect(() => {
+      if(!isScreenCapture){
+        const InitialLabels = ["Points", "Points", "Num_DD"];
+        scoreType.current = InitialLabels[rankingTypeIndex];
+        setTopPlayers(
+          data[rankingTypeIndex][scoreType.current]
+            .sort((a, b) => {
+              const aName = Object.keys(a)[0];
+              const bName = Object.keys(b)[0];
+              return a[aName]["Rank"] - b[bName]["Rank"];
+            })
+            .slice(0, 4)
+        );
+      }
+
+  }, [rankingTypeIndex])
 
   if (isCycling) {
     useInterval(() => {
@@ -178,7 +204,6 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
 
   const renderComponent = () => {
     if (hasDataLoaded == true) {
-      const playerRankingsCardRef = useRef(null)
       return (
         <OutsideContainer>
           <button
@@ -200,10 +225,15 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
             />
           </button>
 
-          <CardContainer ref = {playerRankingsCardRef}>
+          <CardContainer ref = {reference}>
             <div className="top">
               <div className="title">
-                {rankingTypes[rankingTypeIndex]} Player Rankings
+                {
+                  isScreenCapture ?
+                  rankingTypes[rankingProps.rankingTypeIndex]
+                  :
+                  rankingTypes[rankingTypeIndex]
+                } Player Rankings
               </div>
 
               <div className="dropdown">
@@ -228,7 +258,7 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, selectRankin
                       );
                     }
                   }}
-                  options={selectOptions}
+                  options={isScreenCapture ? rankingProps.selectOptions : selectOptions}
                   className="select"
                   placeholder={labelsForDropdown[scoreType.current]}
                 ></Select>

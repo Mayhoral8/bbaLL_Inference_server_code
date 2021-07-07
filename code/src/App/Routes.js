@@ -101,6 +101,8 @@ const Routes = (props) => {
     }
   }, []);
 
+  console.warn = () => {};
+
   return (
     <>
       <RoutesContainer>
@@ -143,7 +145,6 @@ const Routes = (props) => {
   );
 };
 const mapStateToProps = (state) => {
-  //console.log(state)
   return {
     userDetails: state.authReducer.userDetails,
   };
