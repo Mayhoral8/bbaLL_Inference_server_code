@@ -672,114 +672,239 @@ const Betting = (props) => {
                                     isGameStartTimeBeforeTheCurrentTime={
                                       isGameStartTimeBeforeTheCurrentTime
                                     }
-                                    onPointBoxClick={onPointBoxClick}
-                                    teamIconsObj={teamIconsObj}
-                                    pointsSpinner={pointsSpinner}
-                                  />
-                                  <PointsBox
-                                    type="overUnder"
-                                    overOrUnder="under"
-                                    overOrUnderTotalScore="underTotalScore"
-                                    overOrUnderOddsValue="underOddsValue"
-                                    index={index}
-                                    gameInfo={gameInfo}
-                                    selectedClass="overUnderSelected"
-                                    element={element}
-                                    colIndex={1}
-                                    isGameStartTimeBeforeTheCurrentTime={
-                                      isGameStartTimeBeforeTheCurrentTime
+                                    
+                                    <UserRankContainer/>
+                                </UserStatsRankWrapper>
+
+                            </UserStatsAndRankColumn>
+
+                            <BettingSectionColumn>
+
+                                <ContentHeader>
+                                    <h1>NBA Betting</h1>
+                                    <p className="information">Get your own NBA intelligence rating by making the game outcome predictions. 
+                                    The concept is the same as sports betting except that you win/lose points instead 
+                                        (meaning no real money is involved).
+                                    </p>
+                                    <DisplayGamesBtnContainer>
+                                        <TodayBtnContainer>Today</TodayBtnContainer>
+                                    </DisplayGamesBtnContainer>
+                                </ContentHeader>
+
+                                <BettingSectionContainer>
+                                    {
+                                        error.message === 'No games today'
+                                        ?
+                                        <div style = {{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+                                            <h1>No games today</h1>
+                                        </div>
+                                        :
+                                        <BettingPointsAndTeamsContainer>
+                                            {gameInfo.map((element, index) => {
+
+                                                let teamIconsObj = setTeamIcons(element.gameDetails.homeTeam, element.gameDetails.awayTeam)
+                                                let currentDate = momentTimezone(new Date()).tz("America/New_York").format('YYYY-MM-DD hh:mm A')
+                                                let gameStartDate = element.gameDetails.gameDate +  " " + element.gameDetails.gameStartTime
+                                                let isGameStartTimeBeforeTheCurrentTime = moment(gameStartDate).isAfter(moment(currentDate))
+
+                                                return(
+                                                    <BettingPointsAndTeamsWrapper key={index}>
+                                                        <div>
+                                                            <BettingSectionheader
+                                                             gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
+                                                            />
+                                                        </div>
+                                                        <RowC>
+                                                            
+                                                            <Section1>
+                                                                <TeamNameContainer>
+                                                                    <TeamName>
+                                                                        {element.gameDetails.homeTeam}
+                                                                    </TeamName>
+                                                                    <VS>VS</VS>
+                                                                    <TeamName>
+                                                                        {element.gameDetails.awayTeam}
+                                                                    </TeamName>
+                                                                </TeamNameContainer>
+                                                            </Section1>
+
+                                                            <Section2>
+
+                                                                <PointsBoxColumn>
+                                                                    <PointsBox
+                                                                     type = 'handicap'
+                                                                     homeOrAway = 'homeTeam'
+                                                                     element = {element}
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'handicapSelected'
+                                                                     colIndex = {0}
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                    <PointsBox
+                                                                     type = 'handicap'
+                                                                     homeOrAway = 'awayTeam'
+                                                                     element = {element}
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'handicapSelected'
+                                                                     colIndex = {1}
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                </PointsBoxColumn>
+
+                                                                <PointsBoxColumn>
+                                                                    <PointsBox
+                                                                     type = 'moneyLine'
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'moneyLineSelected'
+                                                                     element = {element}
+                                                                     colIndex = {0}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     homeOrAway = 'homeTeam'
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                    <PointsBox
+                                                                     type = 'moneyLine'
+                                                                     index = {index}
+                                                                     gameInfo = {gameInfo}
+                                                                     selectedClass = 'moneyLineSelected'
+                                                                     element = {element}
+                                                                     colIndex = {1}
+                                                                     isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                     homeOrAway = 'awayTeam'
+                                                                     onPointBoxClick = {onPointBoxClick}
+                                                                     teamIconsObj = {teamIconsObj}
+                                                                     pointsSpinner = {pointsSpinner}
+                                                                    />
+                                                                </PointsBoxColumn>
+
+                                                                <PointsBoxColumn>
+                                                                    <PointsBox
+                                                                        type = 'overUnder'
+                                                                        overOrUnder = 'over'
+                                                                        overOrUnderTotalScore = 'overTotalScore'
+                                                                        overOrUnderOddsValue = 'overOddsValue'
+                                                                        index = {index}
+                                                                        gameInfo = {gameInfo}
+                                                                        selectedClass = 'overUnderSelected'
+                                                                        element = {element}
+                                                                        colIndex = {0}
+                                                                        isGameStartTimeBeforeTheCurrentTime = {isGameStartTimeBeforeTheCurrentTime}
+                                                                        onPointBoxClick={onPointBoxClick}
+                                                                        teamIconsObj={teamIconsObj}
+                                                                        pointsSpinner={pointsSpinner}
+                                                                    />
+                                                                    <PointsBox
+                                                                        type="overUnder"
+                                                                        overOrUnder="under"
+                                                                        overOrUnderTotalScore="underTotalScore"
+                                                                        overOrUnderOddsValue="underOddsValue"
+                                                                        index={index}
+                                                                        gameInfo={gameInfo}
+                                                                        selectedClass="overUnderSelected"
+                                                                        element={element}
+                                                                        colIndex={1}
+                                                                        isGameStartTimeBeforeTheCurrentTime={
+                                                                        isGameStartTimeBeforeTheCurrentTime
+                                                                        }
+                                                                        onPointBoxClick={onPointBoxClick}
+                                                                        teamIconsObj={teamIconsObj}
+                                                                        pointsSpinner={pointsSpinner}
+                                                                    />
+                                                                </PointsBoxColumn>
+                                                            </Section2>
+                                                        </RowC>
+                                                    </BettingPointsAndTeamsWrapper>
+                                                );
+                                            })}
+                                        </BettingPointsAndTeamsContainer>
                                     }
-                                    onPointBoxClick={onPointBoxClick}
-                                    teamIconsObj={teamIconsObj}
-                                    pointsSpinner={pointsSpinner}
-                                  />
-                                </PointsBoxColumn>
-                              </Section2>
-                            </RowC>
-                          </BettingPointsAndTeamsWrapper>
-                        );
-                      })}
-                    </BettingPointsAndTeamsContainer>
-                  )}
-                </BettingSectionContainer>
-                <div className="instruction">
-                  <h3>Instruction:</h3>
-                  <p>
-                    You can bet any of three types: Moneyline, spread, and over
-                    & under. If you predict correctly, then you earn points
-                    based on the displayed betting odds. If you predict
-                    incorrectly, you lose 1 point. For example:
-                  </p>
-                  <figure
-                    style={{
-                      textAlign: "center",
-                      paddingBottom: "10px",
-                      paddingTop: "10px",
-                    }}
-                  >
-                    <img
-                      style={{
-                        display: "block",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        paddingTop: "10px",
-                        paddingBottom: "10px",
-                      }}
-                      src={instruction}
-                    />
-                    <figcaption style={{ fontSize: "15px" }}>
-                      Money Line example
-                    </figcaption>
-                  </figure>
-                  <p>
-                    Say you bet on “ATL” for 2.22 betting odds. If the Clippers
-                    win, then you will earn 1.22 points. If the Clippers lose
-                    then you lose -1. This is equivalent to having a stake size
-                    of $1.
-                  </p>
-                  <p style={{ paddingTop: "30px" }}>Notes:</p>
-                  <ul style={{ paddingLeft: "30px" }}>
-                    <li>The results will be updated every morning at 8am.</li>
-                    <li>
-                      You cannot change your bet once you submit the result.
-                    </li>
-                  </ul>
-                </div>
-              </BettingSectionColumn>
+                                </BettingSectionContainer>
+                                <div className="instruction">
+                                <h3>Instruction:</h3>
+                                <p>
+                                    You can bet any of three types: Moneyline, spread, and over
+                                    & under. If you predict correctly, then you earn points
+                                    based on the displayed betting odds. If you predict
+                                    incorrectly, you lose 1 point. For example:
+                                </p>
+                                <figure
+                                    style={{
+                                    textAlign: "center",
+                                    paddingBottom: "10px",
+                                    paddingTop: "10px",
+                                    }}
+                                >
+                                    <img
+                                    style={{
+                                        display: "block",
+                                        marginLeft: "auto",
+                                        marginRight: "auto",
+                                        paddingTop: "10px",
+                                        paddingBottom: "10px",
+                                    }}
+                                    src={instruction}
+                                    />
+                                    <figcaption style={{ fontSize: "15px" }}>
+                                    Money Line example
+                                    </figcaption>
+                                </figure>
+                                <p>
+                                    Say you bet on “ATL” for 2.22 betting odds. If the Clippers
+                                    win, then you will earn 1.22 points. If the Clippers lose
+                                    then you lose -1. This is equivalent to having a stake size
+                                    of $1.
+                                </p>
+                                <p style={{ paddingTop: "30px" }}>Notes:</p>
+                                <ul style={{ paddingLeft: "30px" }}>
+                                    <li>The results will be updated every morning at 8am.</li>
+                                    <li>
+                                    You cannot change your bet once you submit the result.
+                                    </li>
+                                </ul>
+                                </div>
+                            </BettingSectionColumn>
+                            <BetPointsSummaryColumn>
+                                <OverviewHeader>Summary</OverviewHeader>
 
-              <BetPointsSummaryColumn>
-                <OverviewHeader>Summary</OverviewHeader>
-
-                {isIndexSelected ? (
-                  <BetSubmitPointsContainer>
-                    {overviewKeysArray.map((gameId, index) => {
-                      return (
-                        <BetPointsOverviewBox
-                          selectedValues={selectedValues}
-                          gameId={gameId}
-                          key={index}
-                          onRemovePoints={onRemovePoints}
-                        />
-                      );
-                    })}
-                  </BetSubmitPointsContainer>
-                ) : null}
-                {isIndexSelected ? (
-                  <SubmitPointsBtn
-                    onClick={() => {
-                      onSubmit();
-                    }}
-                  >
-                    <span>Submit</span>
-                  </SubmitPointsBtn>
-                ) : null}
-              </BetPointsSummaryColumn>
-            </ContentW>
-          </ContentC>
-        </BettingPageContainer>
-      )}
-    </>
-  );
+                                <BetSubmitPointsContainer>
+                                {overviewKeysArray.map((gameId, index) => {
+                                    return (
+                                    <BetPointsOverviewBox
+                                        selectedValues={selectedValues}
+                                        gameId={gameId}
+                                        key={index}
+                                        onRemovePoints={onRemovePoints}
+                                    />
+                                    );
+                                })}
+                                </BetSubmitPointsContainer>
+                                {isIndexSelected ? (
+                                <SubmitPointsBtn
+                                    onClick={() => {
+                                    onSubmit();
+                                    }}
+                                >
+                                    <span>Submit</span>
+                                </SubmitPointsBtn>
+                                ) : null}
+                            </BetPointsSummaryColumn>
+                        </ContentW>
+                    </ContentC>
+                </BettingPageContainer>
+            }
+        </>
+    );
 };
 
 const mapStateToProps = (state) => {
