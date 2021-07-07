@@ -205,7 +205,7 @@ export const radarStats = [
 export const radarTeamStatNames = [
   "FG2 PCT",
   "FG3 PCT",
-  "FT OCT",
+  "FT PCT",
   "AST",
   "REB",
   "BLK",
