@@ -19,7 +19,13 @@ export const plotStats = {
       "Plus/Minus",
       ["scatterline", "scatterline"],
     ],
-    salary: [[["SALARY"]], [["Player Avg."]], ["Salary"], "Salary", ["scatterline"]],
+    salary: [
+      [["SALARY"]],
+      [["Player Avg."]],
+      ["Salary"],
+      "Salary",
+      ["scatterline"],
+    ],
     poss: [
       [["POSS"]],
       [["Possessions"]],
@@ -37,7 +43,10 @@ export const plotStats = {
   },
   Shots: {
     field_goals: [
-      [["AVG_FGM", "AVG_FGA"], ["AVG_FG_PCT","DOWN_FG_PCT","UP_FG_PCT"]],
+      [
+        ["AVG_FGM", "AVG_FGA"],
+        ["AVG_FG_PCT", "DOWN_FG_PCT", "UP_FG_PCT"],
+      ],
       [
         ["FGM", "FGA"],
         ["FG%", "Down FG Rating", "Up FG Rating"],
@@ -47,7 +56,10 @@ export const plotStats = {
       ["bar", "scatterline"],
     ],
     free_throws: [
-      [["AVG_FTM", "AVG_FTA"], ["AVG_FT_PCT", "DOWN_FT_PCT", "UP_FT_PCT"]],
+      [
+        ["AVG_FTM", "AVG_FTA"],
+        ["AVG_FT_PCT", "DOWN_FT_PCT", "UP_FT_PCT"],
+      ],
       [
         ["FTM", "FTA"],
         ["FT%", "Down FT Rating", "Up FT Rating"],
@@ -57,7 +69,10 @@ export const plotStats = {
       ["bar", "scatterline"],
     ],
     three_points: [
-      [["AVG_FG3M", "AVG_FG3A"], ["AVG_FG3_PCT", "DOWN_FG3_PCT", "UP_FG3_PCT"]],
+      [
+        ["AVG_FG3M", "AVG_FG3A"],
+        ["AVG_FG3_PCT", "DOWN_FG3_PCT", "UP_FG3_PCT"],
+      ],
       [
         ["FG3M", "FG3A"],
         ["3P%", "Down FG3 Rating", "Up FG3 Rating"],
@@ -169,7 +184,7 @@ export const tableTeamStats = [
 export const radarStatNames = [
   "TS PCT",
   "FG3 PCT",
-  "FT OCT",
+  "FT PCT",
   "AST",
   "REB",
   "BLK",
