@@ -39,7 +39,6 @@ export const structureData = (futureGamesInfo) => {
     let targetArray=[]
 
     futureGamesInfo.map(({docId, docData}, index) => {
-
         let pointsKeysArray=Object.keys(docData['Game Odds'].General)
         let awayTeam=docData['Game Info']['Away Team']
         let homeTeam=docData['Game Info']['Home Team']

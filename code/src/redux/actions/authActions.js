@@ -40,30 +40,30 @@ export const checkUserRecordCollectionExists = (user) => {
   };
 };
 
-export const checkLoginStatus = () => {
-  return async (dispatch) => {
-    try {
-      firebaseInstanceSpigamebet.auth().onAuthStateChanged(async (user) => {
-        if (user) {
-          let parsedUser = JSON.parse(localStorage.getItem("User"));
-          dispatch({
-            type: LOGIN,
-            payload: { user: parsedUser, isLoading: false },
-          });
-          return { requestSuccessful: true };
-        } else {
-          dispatch({
-            type: LOGIN,
-            payload: { user: {}, isLoading: false },
-          });
-          return { requestSuccessful: true };
-        }
-      });
-    } catch (e) {
-      throw e;
-    }
-  };
-};
+// export const checkLoginStatus = () => {
+//   return async (dispatch) => {
+//     try {
+//       firebaseInstanceSpigamebet.auth().onAuthStateChanged(async (user) => {
+//         if (user) {
+//           let parsedUser = JSON.parse(localStorage.getItem("User"));
+//           dispatch({
+//             type: LOGIN,
+//             payload: { user: parsedUser, isLoading: false },
+//           });
+//           return { requestSuccessful: true };
+//         } else {
+//           dispatch({
+//             type: LOGIN,
+//             payload: { user: {}, isLoading: false },
+//           });
+//           return { requestSuccessful: true };
+//         }
+//       });
+//     } catch (e) {
+//       throw e;
+//     }
+//   };
+// };
 
 export const logoutAction = () => {
   return async (dispatch) => {

@@ -107,15 +107,12 @@ const Betting=(props)=>{
     useEffect(() => {
 
         if(props.futureGamesInfo.games.length > 0 && !props.futureGamesInfo.isLoading){
-            if(props.userDetails.isLoading){
-                setGameInfo(props.futureGamesInfo.games)
-            }
-            else if(!props.userDetails.user.displayName && !props.userDetails.isLoading){
+            if(!props.userDetails.user.displayName){
                 setGameInfo(props.futureGamesInfo.games)
                 setPointsSpinner(false)
                 setBettingPageSpinner(false)
             }
-            else if(props.userDetails.user.displayName && !props.userDetails.isLoading){
+            else if(props.userDetails.user.displayName){
                 let response = props.getUserBets(props.userDetails.user.uid)
                 if(response.isError){
                     setError({status: response.status, message: response.message, isError:true})
@@ -347,7 +344,6 @@ const Betting=(props)=>{
             setError({status: response.status, message: response.message, isError:true})
         }
     };
-    
 
     return(
         <> 
@@ -477,6 +473,7 @@ const Betting=(props)=>{
                                                         <div>
                                                             <BettingSectionheader
                                                              gameStartTime = {element.gameDetails.gameStartTime.split(' PM')}
+                                                             gameDate = {element.gameDetails.gameDate}
                                                             />
                                                         </div>
                                                         <RowC>
@@ -639,6 +636,7 @@ const Betting=(props)=>{
                                 </ul>
                                 </div>
                             </BettingSectionColumn>
+                            
                             <BetPointsSummaryColumn>
                                 <OverviewHeader>Summary</OverviewHeader>
 
