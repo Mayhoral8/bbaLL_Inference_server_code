@@ -36,7 +36,7 @@ export const getFutureGamesInfo=()=>{
 }
 
 export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
-    return async(dispatch) => {
+    return async() => {
         let error = {}
         let gameIdKeys = Object.keys(selectedValues)
         let date = new Date
@@ -48,7 +48,9 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                 if(gameIdKeys[j] === gameInfo[i].gameId){
 
                     let gameDate = selectedValues[`${gameIdKeys[j]}`].gameDetails.gameDate ? selectedValues[`${gameIdKeys[j]}`].gameDetails.gameDate : ''
-
+                    // If the bet has already been submitted on that date.
+                    // This conditional checks for the values that have already been previously selected and submitted out of moneyLine, handicap and overUnder.
+                    // Based on the submitted values, it adds new values (money line or handicap or over under) to the firebase api.
                     if(gameInfo[i].overUnder.selected || gameInfo[i].moneyLine.selected || gameInfo[i].handicap.selected){
                         let targetObj = {}
                         if(
@@ -60,26 +62,35 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                         ){
                             if(gameInfo[i].overUnder.selected && gameInfo[i].moneyLine.selected){
                                 targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                                targetObj.handicap.submittedDate = today
                             }
                             else if(gameInfo[i].overUnder.selected && gameInfo[i].handicap.selected ){
                                 targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
+                                targetObj.moneyLine.submittedDate = today
                             }
                             else{
                                 targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
+                                targetObj.overAndUnder.submittedDate = today
                             }
                         }
                         else{
                             if(gameInfo[i].overUnder.selected){
                                 targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                                targetObj.handicap.submittedDate = selectedValues[gameIdKeys[j]].handicap.odds ? today : ''
                                 targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
+                                targetObj.moneyLine.submittedDate = selectedValues[gameIdKeys[j]].moneyLine.odds ? today : ''
                             }
                             if(gameInfo[i].moneyLine.selected){
                                 targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                                targetObj.handicap.submittedDate = selectedValues[gameIdKeys[j]].handicap.odds ? today : ''
                                 targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
+                                targetObj.overAndUnder.submittedDate = selectedValues[gameIdKeys[j]].overAndUnder.odds ? today : ''
                             }
                             if(gameInfo[i].handicap.selected){
                                 targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
+                                targetObj.moneyLine.submittedDate = selectedValues[gameIdKeys[j]].moneyLine.odds ? today : ''
                                 targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
+                                targetObj.overAndUnder.submittedDate = selectedValues[gameIdKeys[j]].overAndUnder.odds ? today : ''
                             }
                         }
 
@@ -93,15 +104,19 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
                             break
                         }
                     }
+                    //This would run if the user submits the best for the first time on that date.
                     else{
 
                         let targetObj = {}
+                        //Checks for the picked values on the intial bet and then adds submitDate prop to the object based on the conditional
                         targetObj.gameDetails = selectedValues[gameIdKeys[j]].gameDetails
                         targetObj.handicap = selectedValues[gameIdKeys[j]].handicap
+                        targetObj.handicap.submittedDate = selectedValues[gameIdKeys[j]].handicap.odds ? today : ''
                         targetObj.moneyLine = selectedValues[gameIdKeys[j]].moneyLine
+                        targetObj.moneyLine.submittedDate = selectedValues[gameIdKeys[j]].moneyLine.odds ? today : ''
                         targetObj.overAndUnder = selectedValues[gameIdKeys[j]].overAndUnder
+                        targetObj.overAndUnder.submittedDate = selectedValues[gameIdKeys[j]].overAndUnder.odds ? today : ''
                         targetObj.gameFinished = false
-                        targetObj.betSubmitDate = today
 
                         try{
                             let userList = await fbFirestoreSpigameBet.collection('userTrackList').doc(gameDate).collection('gameId').doc(gameIdKeys[j]).get()
@@ -177,9 +192,7 @@ export const submitBetPoints=(selectedValues, gameInfo, userId)=>{
 
             }
         }
-
         return error.isError ? error : {success: true}
-
     }
 }
 
@@ -189,7 +202,7 @@ export const getUserBets = (userId) => {
         let today = momentTimezone(date).tz("America/New_York").format('YYYY-MM-DD');
         let tomorrow = moment(today, "YYYY-MM-DD").add(1, 'days').format('YYYY-MM-DD');
         let dayAfter = moment(today, "YYYY-MM-DD").add(2, 'days').format('YYYY-MM-DD');
-        
+
         try{
             let todayGames = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(today).collection('gameId').get()
             let tomorrowGames = await fbFirestoreSpigameBet.collection('userBettingHistory').doc(userId).collection('gameDate').doc(tomorrow).collection('gameId').get()

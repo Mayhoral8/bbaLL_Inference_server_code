@@ -46,12 +46,10 @@ import {
     ContentC,
     ContentW,
     ContentHeader,
-    DisplayGamesBtnContainer,
     BettingSectionColumn,
     BettingSectionContainer,
     BettingPointsAndTeamsContainer,
     BettingPointsAndTeamsWrapper,
-    TodayBtnContainer,
     RowC,
     TeamNameContainer,
     TeamName,
@@ -447,9 +445,6 @@ const Betting=(props)=>{
                                     The concept is the same as sports betting except that you win/lose points instead 
                                         (meaning no real money is involved).
                                     </p>
-                                    <DisplayGamesBtnContainer>
-                                        <TodayBtnContainer>Today</TodayBtnContainer>
-                                    </DisplayGamesBtnContainer>
                                 </ContentHeader>
 
                                 <BettingSectionContainer>
@@ -671,6 +666,7 @@ const Betting=(props)=>{
 };
 
 const mapStateToProps=(state)=>{
+    console.log(state)
     return{
         futureGamesInfo: state.betsReducer.futureGamesInfo,
         userDetails: state.authReducer.userDetails,
