@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { RoutesContainer } from "./app-style";
 import { MainContainerDiv } from "./app-style";
 import { GlobalStyle } from "../globalStyles";
@@ -11,10 +11,8 @@ import Footer from "../Shared/Layout/Footer";
 import Login from "../Auth/Login";
 import Loadable from "react-loadable";
 import Spinner from "../Shared/Spinner/Spinner";
-import { connect } from "react-redux";
 import { compose } from "redux";
 import "firebase/auth";
-import { checkLoginStatus } from "../redux/actions/authActions";
 
 const Games = Loadable({
   loader: () => import("../GameStats/GamePageContainer"),
@@ -94,12 +92,6 @@ const ScreenCaptureStatsPage = Loadable({
 });
 
 const Routes = (props) => {
-  useEffect(() => {
-    let response = props.checkLoginStatus();
-    if (response.error) {
-      //Error handeling
-    }
-  }, []);
 
   return (
     <>
@@ -142,13 +134,7 @@ const Routes = (props) => {
     </>
   );
 };
-const mapStateToProps = (state) => {
-  //console.log(state)
-  return {
-    userDetails: state.authReducer.userDetails,
-  };
-};
+
 export default compose(
-  withRouter,
-  connect(mapStateToProps, { checkLoginStatus })
+  withRouter
 )(Routes);

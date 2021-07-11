@@ -63,19 +63,6 @@ export const ContentHeader = styled.div`
   }
 `;
 
-export const DisplayGamesBtnContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const TodayBtnContainer = styled.div`
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 6px 20px;
-`;
-
 export const BettingSectionColumn = styled.div`
   width: 64%;
   height: auto;

@@ -5,14 +5,19 @@ import {
     HeaderSection1,
     HeaderSection2Wrapper,
     HeaderSection2,
-    HeaderChildSection
+    HeaderChildSection,
+    GameDate,
+    GameTime
 } from './bettingSectionHeaderStyles'
 
 const BettingSectionheader = (props) => {
     return(
         <BettingSectionheaderContainer>
             <HeaderSection1Wrapper>
-                <HeaderSection1>{props.gameStartTime} EST</HeaderSection1>
+                <HeaderSection1>
+                    <GameDate>{props.gameDate}</GameDate>
+                    <GameTime>{props.gameStartTime} EST</GameTime>
+                </HeaderSection1>
             </HeaderSection1Wrapper>
             <HeaderSection2Wrapper>
                 <HeaderSection2>
