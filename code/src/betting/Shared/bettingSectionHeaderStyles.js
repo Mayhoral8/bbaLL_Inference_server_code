@@ -37,8 +37,6 @@ export const HeaderSection1Wrapper=styled.div`
 
 export const HeaderSection1=styled.div`
     width: 100%;
-    color: black;
-    font-weight: 900;
 `
 
 export const HeaderSection2Wrapper=styled.div`
@@ -47,6 +45,10 @@ export const HeaderSection2Wrapper=styled.div`
     padding:10px 0px;
     border: 2px solid skyblue;
     padding-right: 10px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center
 `
 
 export const HeaderSection2=styled.div`
@@ -61,4 +63,14 @@ export const HeaderChildSection=styled.div`
     width:33.33%;
     color: black;
     font-weight: 900;
+`
+
+export const GameDate = styled.div`
+    color: black;
+    font-weight: 900;
+`
+
+export const GameTime = styled.div`
+    color: gray;
+    font-size: 11px;
 `
