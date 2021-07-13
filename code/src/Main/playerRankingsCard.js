@@ -9,7 +9,6 @@ const capitalizeFirstLetter = (string) => {
 };
 
 const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps, isScreenCapture, reference }) => {
-  console.log(rankingProps)
   const [imgs, setImgs] = useState({});
   try {
     if (data == null) {
