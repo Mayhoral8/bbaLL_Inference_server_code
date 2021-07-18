@@ -1,26 +1,34 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { rgba } from "polished";
 
 // Used in Overview.js
 export const OverviewWrapper = styled.div`
-  display:grid;
-  grid-template-columns: 1fr;
-  margin-bottom: 2rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid silver;
-  grid-gap: 1rem;
-  @media (min-width: 996px) {
-    grid-template-columns: 1.5fr 1fr;
+  ${(props) => {
+    if(!props.screenCapture) return`
+      display:grid;
+      grid-template-columns: 1fr;
+      margin-bottom: 2rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid silver;
+      grid-gap: 1rem;
+      @media (min-width: 996px) {
+        grid-template-columns: 1.5fr 1fr;
+      }`
+    else return`
+      width: 100%;
+    `
+    }
   }
 `;
 
 // Used in Overview.js
 export const StyledHighlightWrapper = styled.div`
+  margin-top: ${props =>  props.screenCapture ? `10px` : `0px`};
+  padding-top: 1.5rem;
   border:0.5px solid #080A1E;
   box-shadow: 0 4px 2px 0px gray;
-  padding-top: 1.5rem;
   h3 {
     border-bottom:0.5px solid #080A1E;
     margin-left: 2rem;

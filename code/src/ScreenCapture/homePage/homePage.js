@@ -27,6 +27,7 @@ const HomePage = () => {
     const [futureGames, setFutureGames] = useState([])
     const [startCapture, setStartCapture] = useState('loading')
     const [rankingTypes, setRankingTypes] = useState([])
+    const [futureGamesRefs, setFutureGamesRefs] = useState([])
     const [rankingProps, setRankingProps] = useState({
       selectAttrIndex: 0,
       rankingTypeIndex: 0,
@@ -61,49 +62,51 @@ const HomePage = () => {
     
     const playerRankRef = useRef(null)
     const futureGameListRef = useRef(null)
+    const refsArray = useRef([])
 
     useEffect(() => {
         setPlayerRankings(getPlayerRankings())
         setFutureGames(getFutureGames())
-        getLatestSlackTrigger()
+        // getLatestSlackTrigger()
     }, [])
-
+    
     useEffect(() => {
         if(playerRankings[0] && rankingTypes[0] && futureGames[0]){
+            refsArray.current = new Array(futureGames.length)
             setLoading(false)
             setStartCapture('start')
         }
     }, [playerRankings, rankingTypes, futureGames])
 
-    useEffect(() => {
-      if(startCapture === 'await'){
-        setTimeout(() => {
-          setRankingProps({
-            selectAttrIndex: 0,
-            rankingTypeIndex: 0,
-            selectOptions: [
-              {
-                label: ['Points'],
-                value: ['Points'],
-              },
-              {
-                label: ['Fantasy Score'],
-                value: ['FantasyScore'],
-              },
-              {
-                label: ['Three-pointers'],
-                value: ['Three-Pointers'],
-              },
-              {
-                label: ['Possession'],
-                value: ['PointsPerPoss'],
-              }
-            ]
-          })
-          setStartCapture('start')
-        }, 60000);
-      }
-    }, [startCapture])
+    // useEffect(() => {
+    //   if(startCapture === 'await'){
+    //     setTimeout(() => {
+    //       setRankingProps({
+    //         selectAttrIndex: 0,
+    //         rankingTypeIndex: 0,
+    //         selectOptions: [
+    //           {
+    //             label: ['Points'],
+    //             value: ['Points'],
+    //           },
+    //           {
+    //             label: ['Fantasy Score'],
+    //             value: ['FantasyScore'],
+    //           },
+    //           {
+    //             label: ['Three-pointers'],
+    //             value: ['Three-Pointers'],
+    //           },
+    //           {
+    //             label: ['Possession'],
+    //             value: ['PointsPerPoss'],
+    //           }
+    //         ]
+    //       })
+    //       setStartCapture('start')
+    //     }, 60000);
+    //   }
+    // }, [startCapture])
 
     useEffect(() => {
         if(startCapture === 'start'){
@@ -116,8 +119,8 @@ const HomePage = () => {
     const setRankingScreen = async() => {
       let stateObject = rankingProps
       if(rankingProps.rankingTypeIndex === 0){
-        exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
-        await triggerSlackMessage(`PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
+        // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
+        // await triggerSlackMessage(`PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
         if(rankingProps.selectAttrIndex < 3){
           setRankingProps({
             ...stateObject,
@@ -137,8 +140,8 @@ const HomePage = () => {
       }
 
       else if(rankingProps.rankingTypeIndex === 1){
-        exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
-        await triggerSlackMessage(`PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
+        // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
+        // await triggerSlackMessage(`PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
         if(rankingProps.selectAttrIndex < 3){
           setRankingProps({
             ...stateObject,
@@ -157,8 +160,8 @@ const HomePage = () => {
       }
       
       else if(rankingProps.rankingTypeIndex === 2){
-        exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
-        await triggerSlackMessage(`PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
+        // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
+        // await triggerSlackMessage(`PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
         if(rankingProps.selectAttrIndex < 1){
           let index = rankingProps.selectAttrIndex
           let optionsArray = rankingProps.selectOptions
@@ -170,13 +173,13 @@ const HomePage = () => {
         }
 
         else{
-          exportComponentAsJPEG(futureGameListRef, {fileName: 'FutureGame'})
-          await triggerSlackMessage('FutureGame')
+          // exportComponentAsJPEG(futureGameListRef, {fileName: 'FutureGame'})
+          // await triggerSlackMessage('FutureGame')
           setStartCapture('await')
         }
       }
     }
-
+    console.log(refsArray)
     const getPlayerRankings = () => {
       let data = [];
       fbFirestore
@@ -263,7 +266,7 @@ const HomePage = () => {
                   {
                     futureGames.map((element, index) => {
                       return(
-                        <FutureGameOddsCard data={element} key={index} reference = {futureGameListRef}/>
+                        <FutureGameOddsCard data={element} key={index} reference = {referedEl => refsArray.current[index] = referedEl}/>
                       )
                     })
                   }

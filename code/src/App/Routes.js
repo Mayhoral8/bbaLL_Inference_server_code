@@ -80,7 +80,7 @@ const ScreenCaptureHomePage = Loadable({
 });
 
 const ScreenCaptureGamesPage = Loadable({
-  loader: () => import("../ScreenCapture/gamesPage"),
+  loader: () => import("../ScreenCapture/gamePage/gamePage"),
   loading() {
     return <Spinner />;
   },
