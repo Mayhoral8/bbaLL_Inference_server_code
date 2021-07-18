@@ -31,6 +31,7 @@ const HomePage = () => {
     const [rankingProps, setRankingProps] = useState({
       selectAttrIndex: 0,
       rankingTypeIndex: 0,
+      futureGamesTypeIndex: null,
       selectOptions: [
         {
           label: ['Points'],
@@ -67,7 +68,6 @@ const HomePage = () => {
     useEffect(() => {
         setPlayerRankings(getPlayerRankings())
         setFutureGames(getFutureGames())
-        // getLatestSlackTrigger()
     }, [])
     
     useEffect(() => {
@@ -78,49 +78,19 @@ const HomePage = () => {
         }
     }, [playerRankings, rankingTypes, futureGames])
 
-    // useEffect(() => {
-    //   if(startCapture === 'await'){
-    //     setTimeout(() => {
-    //       setRankingProps({
-    //         selectAttrIndex: 0,
-    //         rankingTypeIndex: 0,
-    //         selectOptions: [
-    //           {
-    //             label: ['Points'],
-    //             value: ['Points'],
-    //           },
-    //           {
-    //             label: ['Fantasy Score'],
-    //             value: ['FantasyScore'],
-    //           },
-    //           {
-    //             label: ['Three-pointers'],
-    //             value: ['Three-Pointers'],
-    //           },
-    //           {
-    //             label: ['Possession'],
-    //             value: ['PointsPerPoss'],
-    //           }
-    //         ]
-    //       })
-    //       setStartCapture('start')
-    //     }, 60000);
-    //   }
-    // }, [startCapture])
-
     useEffect(() => {
         if(startCapture === 'start'){
           setTimeout(() => {
             setRankingScreen()
-          }, 10000)
+          }, 3000)
         }
     }, [rankingProps, startCapture])
 
     const setRankingScreen = async() => {
       let stateObject = rankingProps
       if(rankingProps.rankingTypeIndex === 0){
-        // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
-        // await triggerSlackMessage(`PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
+        exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
+        await triggerSlackMessage(`PlayerRankingsBidaily${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
         if(rankingProps.selectAttrIndex < 3){
           setRankingProps({
             ...stateObject,
@@ -133,15 +103,16 @@ const HomePage = () => {
             setRankingProps({
               rankingTypeIndex: 1,
               selectAttrIndex: 0,
-              selectOptions: optionsArray
+              selectOptions: optionsArray,
+              futureGamesTypeIndex: null
             })
         }
         
       }
 
       else if(rankingProps.rankingTypeIndex === 1){
-        // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
-        // await triggerSlackMessage(`PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
+        exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
+        await triggerSlackMessage(`PlayerRankingsWeekly${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
         if(rankingProps.selectAttrIndex < 3){
           setRankingProps({
             ...stateObject,
@@ -154,32 +125,42 @@ const HomePage = () => {
           setRankingProps({
             rankingTypeIndex: 2,
             selectAttrIndex: 0,
-            selectOptions: optionsArray
+            selectOptions: optionsArray,
+            futureGamesTypeIndex: null
           })
         }
       }
       
       else if(rankingProps.rankingTypeIndex === 2){
-        // exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
-        // await triggerSlackMessage(`PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
+        exportComponentAsJPEG(playerRankRef, {fileName: `PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`})
+        await triggerSlackMessage(`PlayerRankingsSeasonal${rankingProps.selectOptions[rankingProps.selectAttrIndex].label[0]}`)
         if(rankingProps.selectAttrIndex < 1){
           let index = rankingProps.selectAttrIndex
           let optionsArray = rankingProps.selectOptions
           setRankingProps({
             rankingTypeIndex: 2,
             selectAttrIndex: index + 1,
-            selectOptions: optionsArray
+            selectOptions: optionsArray,
+            futureGamesTypeIndex: 0
           })
         }
 
         else{
-          // exportComponentAsJPEG(futureGameListRef, {fileName: 'FutureGame'})
-          // await triggerSlackMessage('FutureGame')
-          setStartCapture('await')
+          if(rankingProps.futureGamesTypeIndex < refsArray.current.length){
+            setRankingProps({
+              ...stateObject,
+              futureGamesTypeIndex: stateObject.futureGamesTypeIndex + 1
+            })
+            let refObject = {
+              current: refsArray.current[stateObject.futureGamesTypeIndex]
+            }
+            exportComponentAsJPEG(refObject, {fileName: `FutureGame | ${futureGames[stateObject.futureGamesTypeIndex]['Game Info']['Home Team']} vs ${futureGames[stateObject.futureGamesTypeIndex]['Game Info']['Away Team']}`})
+            await triggerSlackMessage(`FutureGame | ${futureGames[stateObject.futureGamesTypeIndex]['Game Info']['Home Team']} vs ${futureGames[stateObject.futureGamesTypeIndex]['Game Info']['Away Team']}`)
+          }
         }
       }
     }
-    console.log(refsArray)
+
     const getPlayerRankings = () => {
       let data = [];
       fbFirestore

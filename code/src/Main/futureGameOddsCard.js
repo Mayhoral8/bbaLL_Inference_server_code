@@ -78,7 +78,7 @@ const FutureGameOddsCard = ({ data, reference }) => {
       JSON["Game Prediction"]["ELO"][awayTeamName]["prob"] * 100
     );
   } catch (error) {
-    console.log("Missing data for future game Odds");
+    // console.log("Missing data for future game Odds");
   }
 
   try {
@@ -98,7 +98,7 @@ const FutureGameOddsCard = ({ data, reference }) => {
       JSON["Game Prediction"]["Massey"][awayTeamName]["prob"] * 100
     );
   } catch (error) {
-    console.log("Missing data for future game Odds");
+    // console.log("Missing data for future game Odds");
   }
 
   try {
