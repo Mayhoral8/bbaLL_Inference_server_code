@@ -5,10 +5,6 @@ import useWindowSize from '../../../Shared/hooks/useWindowSize';
 import { GameSummaryBannerWrapper } from './GameSummary-Styles';
 
 const GameSummaryBanner = ({ homeTeam, awayTeam, children, abbreviatedHomeTeam, abbreviatedAwayTeam }) => {
-  console.log(abbreviatedAwayTeam)
-  console.log(abbreviatedHomeTeam)
-  console.log(homeTeam)
-  console.log(awayTeam)
 
   const windowSize = useWindowSize();
 

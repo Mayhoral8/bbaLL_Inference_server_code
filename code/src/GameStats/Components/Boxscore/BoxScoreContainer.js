@@ -3,35 +3,36 @@ import BoxScore from './BoxScore';
 import TeamTitle from '../GameSummary/TeamTitle';
 import { BoxScoreContainerWrapper, HomeTeamBoxScore, AwayTeamBoxScore } from "./BoxScore-style";
 
-const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info, screenCapture, containerType, homeTeamBoxScoreReference, awayTeamBoxScoreReference }) => {
+const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info, screenCapture, containerType }) => {
 
   if(screenCapture){
     if(containerType === 'boxScoreHome'){
       return (
         <>
           <BoxScoreContainerWrapper>
-            <HomeTeamBoxScore ref = {homeTeamBoxScoreReference}>
-              <TeamTitle name={info.Away.Team} />
+            <HomeTeamBoxScore>
+              <TeamTitle name={info.Home.Team} />
               <BoxScore
+                home
                 data={gamePlayers}
                 selectedGameIndex={selectedGameIndex}
-                info={info.Away} />
+                info={info.Home} />
             </HomeTeamBoxScore>
           </BoxScoreContainerWrapper>
         </>
       )
     }
+    
     else{
       return (
         <>
           <BoxScoreContainerWrapper>
-            <AwayTeamBoxScore ref = {awayTeamBoxScoreReference}>
-              <TeamTitle name={info.Home.Team} customStyle={{ marginTop: '3rem' }} />
+            <AwayTeamBoxScore>
+              <TeamTitle name={info.Away.Team} customStyle={{ marginTop: '3rem' }} />
               <BoxScore
-                home
                 data={gamePlayers}
                 selectedGameIndex={selectedGameIndex}
-                info={info.Home}
+                info={info.Away}
               />
             </AwayTeamBoxScore>
           </BoxScoreContainerWrapper>
@@ -39,11 +40,12 @@ const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info, screenCapture
       )
     }
   }
+
   else{
     return (
       <>
         <BoxScoreContainerWrapper>
-          <HomeTeamBoxScore ref = {homeTeamBoxScoreReference}>
+          <HomeTeamBoxScore>
             <TeamTitle name={info.Away.Team} />
             <BoxScore
               data={gamePlayers}
@@ -51,7 +53,7 @@ const BoxScoreContainer = ({ selectedGameIndex, gamePlayers, info, screenCapture
               info={info.Away} />
           </HomeTeamBoxScore>
   
-          <AwayTeamBoxScore ref = {awayTeamBoxScoreReference}>
+          <AwayTeamBoxScore>
             <TeamTitle name={info.Home.Team} customStyle={{ marginTop: '3rem' }} />
             <BoxScore
               home

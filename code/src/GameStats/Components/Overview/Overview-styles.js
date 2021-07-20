@@ -28,7 +28,7 @@ export const StyledHighlightWrapper = styled.div`
   margin-top: ${props =>  props.screenCapture ? `10px` : `0px`};
   padding-top: 1.5rem;
   border:0.5px solid #080A1E;
-  box-shadow: 0 4px 2px 0px gray;
+  box-shadow: ${props => props.screenCapture ? '' : '0 4px 2px 0px gray'};
   h3 {
     border-bottom:0.5px solid #080A1E;
     margin-left: 2rem;

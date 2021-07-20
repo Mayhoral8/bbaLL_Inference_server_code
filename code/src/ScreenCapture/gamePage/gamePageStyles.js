@@ -2,10 +2,16 @@ import styled from "styled-components"
 import backgroundImage from "../../assets/images/court.jpg";
 export const GamePageContainer = styled.div`
     margin-top: 63.992px;
-    height: calc(100vh - 63.992px);
+    height: auto;
     padding: 20px 10px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    .boxScoreAway{
+      width: 435px;
+    }
+    .boxScoreHome{
+      width: 435px;
+    }
 `
 
 export const OverviewContainer = styled.div`
