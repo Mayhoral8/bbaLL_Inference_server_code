@@ -78,7 +78,7 @@ const ScreenCaptureHomePage = Loadable({
 });
 
 const ScreenCaptureGamesPage = Loadable({
-  loader: () => import("../ScreenCapture/gamesPage"),
+  loader: () => import("../ScreenCapture/gamePage/gamePage"),
   loading() {
     return <Spinner />;
   },
@@ -92,6 +92,8 @@ const ScreenCaptureStatsPage = Loadable({
 });
 
 const Routes = (props) => {
+
+  console.warn = () => {};
 
   return (
     <>
@@ -133,6 +135,12 @@ const Routes = (props) => {
       </RoutesContainer>
     </>
   );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    userDetails: state.authReducer.userDetails,
+  };
 };
 
 export default compose(

@@ -8,7 +8,7 @@ const GameStatsTable = ({ info }) => {
   const modifiedY = ['PLAY', 'AST', 'REB', 'OREB', 'BLK', 'STL', 'TO', '3P%', 'FG%', 'eFG%'];
   const statsRef = useRef(null)
   return (
-    <GameSummaryTableWrapper ref = {statsRef}>
+    <GameSummaryTableWrapper>
       <HomeVsAwayTitle home={info.Home.Team} away={info.Away.Team} />
 
       <div className='bar-graph-container' >
