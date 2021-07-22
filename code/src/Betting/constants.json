@@ -1,0 +1,11 @@
+{
+  "selectedValues": {
+    "moneyLine": { "odds": "", "bettingSide": "" },
+    "handicap": { "odds": "", "bettingSide": "", "spread": "" },
+    "overAndUnder": {
+      "type": "",
+      "totalScore": "",
+      "odds": ""
+    }
+  }
+}
