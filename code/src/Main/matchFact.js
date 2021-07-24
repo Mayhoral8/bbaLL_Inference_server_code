@@ -1,12 +1,10 @@
 import React from "react";
-import { Wrapper } from './RandomComparison-style';
+import { Wrapper } from "./RandomComparison-style";
 import { fbFirestore } from "../App/config";
 import Information from "./InformationContainer";
 
-const MatchFact = ({futureGames}) => {
-
-  console.log(futureGames);
-  return(
+const MatchFact = ({ futureGames }) => {
+  return (
     <Wrapper>
       <div
         className="title"
@@ -14,16 +12,17 @@ const MatchFact = ({futureGames}) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          fontSize: "1.5rem"
+          fontSize: "1.5rem",
         }}
       >
-          Match Fact
+        Match Fact
       </div>
-      <Information 
-        matchFact = {futureGames[1]['Match Facts']} 
-        gameInfo = {futureGames[1]['Game Info']}/>
+      <Information
+        matchFact={futureGames[0]["Match Facts"]}
+        gameInfo={futureGames[0]["Game Info"]}
+      />
     </Wrapper>
-  )
+  );
 };
 
 export default MatchFact;
