@@ -8,38 +8,43 @@ import {
   VideoNotFoundContiner,
 } from "./Overview-styles";
 
-const Overview = ({ highlights, YoutubeHighlight }) => {
+const Overview = ({ highlights, YoutubeHighlight, screenCapture, reference }) => {
   const highlightsText = highlights;
   const id = getYouTubeID(YoutubeHighlight);
-  const overviewRef = useRef(null)
   return (
     <>
-      <OverviewWrapper ref = {overviewRef}>
-        {id === undefined ? (
-          <StyledHighlightWrapper>
-            <VideoNotFoundContiner>
-              <Message>
-                <h1>OOPS!</h1>
-                <h2>Sorry, we can't find highlights for this game</h2>
-              </Message>
-            </VideoNotFoundContiner>
-          </StyledHighlightWrapper>
-        ) : (
-          <VideoResonsiveWrapper>
-            <iframe
-              width="853"
-              height="440"
-              src={`https://www.youtube.com/embed/${id}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="Embedded youtube"
-            />
-          </VideoResonsiveWrapper>
-        )}
+      <OverviewWrapper ref = {reference} screenCapture = {screenCapture}>
+        {
+          id === undefined  && !screenCapture ? (
+              <StyledHighlightWrapper>
+                <VideoNotFoundContiner>
+                  <Message>
+                    <h1>OOPS!</h1>
+                    <h2>Sorry, we can't find highlights for this game</h2>
+                  </Message>
+                </VideoNotFoundContiner>
+              </StyledHighlightWrapper>
+            ) 
+          : 
+            !screenCapture ? (
+              <VideoResonsiveWrapper>
+                <iframe
+                  width="853"
+                  height="440"
+                  src={`https://www.youtube.com/embed/${id}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title="Embedded youtube"
+                />
+              </VideoResonsiveWrapper>
+            )
+          :
+            null
+        }
 
         {highlightsText.length > 0 ? (
-          <StyledHighlightWrapper>
+          <StyledHighlightWrapper screenCapture = {screenCapture}>
             <h3>TOP HIGHLIGHTS</h3>
             <ul>
               {highlightsText.map((text, i) => (

@@ -8,7 +8,7 @@ import { fbFirestore } from "../../App/config";
 import { ContainerCard } from "../../globalStyles";
 import getMaxYearly from "./FireStoreGetMaxYearly";
 import { FormatYearAddEnding } from "../../Shared/Functions/YearFormat";
-import YearDropdown from "./YearDropDown";
+import YearDropdown from "./YearDropdown";
 import SEO from "../../Shared/SEO";
 
 const PlayerProfile = ({
