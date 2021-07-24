@@ -9,6 +9,7 @@ export const HomePageContainer = styled.div`
 `
 
 export const PlayerRanks = styled.div`
+  height: auto;
 `
 
 export const FutureGames = styled.div`

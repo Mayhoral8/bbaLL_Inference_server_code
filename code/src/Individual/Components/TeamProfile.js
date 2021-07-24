@@ -13,7 +13,7 @@ import { FormatYearAddEnding } from "Functions/YearFormat";
 import { FormatNumberToCash } from "Functions/MoneyFormat";
 import { ContainerCard } from "../../globalStyles";
 import * as individualConstants from "../individualConstants";
-import YearDropdown from "./YearDropDown";
+import YearDropdown from "./YearDropdown";
 import CareerTable from "./CareerTable";
 import IndivRadar from "./IndivRadar";
 import GetPlayerImage from "./GetPlayerImage";

@@ -60,8 +60,7 @@ export const FutureGameTitle = styled.div`
 `;
 
 export const TeamRankingsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+
 
   @media (max-width: 1400px) {
     margin: 0rem 0rem 0rem 0rem;
@@ -71,6 +70,7 @@ export const TeamRankingsContainer = styled.div`
 
   box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
+
 `;
 
 export const futureGameList = styled.div`

@@ -11,6 +11,10 @@ import PlayerRankingsCard from "./playerRankingsCard";
 import MemeCard from "./memeCard";
 import TeamScoreTable from "./TeamScoreTable";
 import FutureGameList from "./futuregamelist";
+import RandomComparison from "./RandomComparison"
+import candidates from "JSON/player_candidates_for_comparison.json";
+//import teamCandidates from "JSON/team_candidates_for_comparison.json";
+import MatchFact from './matchFact';
 import {
   FutureGameListBox,
   FutureGameTitle,
@@ -20,7 +24,7 @@ import {
   TeamRankingsTitle,
   TeamRankingsContainer,
   RowContainer,
-  MainPageContainer,
+  MainPageContainer
 } from "./mainpage-style";
 
 const GamePageContainer = () => {
@@ -28,6 +32,36 @@ const GamePageContainer = () => {
   const [games, setGames] = useState([]);
   const [memeUrls, setMemeUrls] = useState([]);
   const [playerRankingTypes, setPlayerRankingTypes] = useState([]);
+  const [randomSet, setRandomSet] = useState([]);
+
+  function loadRandomPlayers() {
+    let selectedForComparison = new Array();
+
+    let data = candidates;
+    let randRange = 59;
+    let nameObject;
+    let index;
+
+    nameObject = Object.values(data)['0'];
+
+    for (index = 0; index < 3; index++) {
+      var indexOne = Math.floor(Math.random() * randRange + 0);
+      var indexTwo = Math.floor(Math.random() * randRange + 0);
+      if (indexOne == indexTwo) {
+        indexTwo = Math.floor(Math.random() * randRange + 0);
+      }
+
+      let pair = {
+        nameOne: nameObject[indexOne],
+        nameTwo: nameObject[indexTwo]
+      }
+
+      selectedForComparison.push(pair);
+    }
+
+    setRandomSet(selectedForComparison)
+  }
+
   useEffect(() => {
     fbFirestore
       .collection("future_game_info")
@@ -58,6 +92,7 @@ const GamePageContainer = () => {
         console.log(error);
       });
     setData(getFirebaseData());
+    loadRandomPlayers();
   }, []);
 
   let test = [{}];
@@ -139,7 +174,7 @@ const GamePageContainer = () => {
       new Date(game2["Game Info"]["Game Time"])
     );
   });
-
+  
   return (
     <>
       <SEO
@@ -171,7 +206,6 @@ const GamePageContainer = () => {
                   rankingTypes={playerRankingTypes}
                   timeOut = {5000}
                   cycling = {true}
-                  selectRankingIndex = {0}
                 />
               ) : (
                 <PlayerRankingPlaceholderBox>
@@ -180,16 +214,22 @@ const GamePageContainer = () => {
                   </PlayerRankingsPlaceholderTitle>
                 </PlayerRankingPlaceholderBox>
               )}
-              <MemeCard urls={memeUrls} />
+              { games.length != 0 &&
+                <MatchFact futureGames = {games}/>
+              }
             </RowContainer>
 
             <TeamRankingsContainer>
               <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
-              {hasDataLoaded ? (
-                <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
-              ) : (
-                <div style={{ minHeight: "400px" }}></div>
-              )}
+
+                  {hasDataLoaded ? (
+                    <div style={{display: 'grid', gridTemplateColumns: '3fr 9fr'}}>
+                      <RandomComparison nameArray={randomSet} loadRandomPlayers={loadRandomPlayers}/>
+                      <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                    </div>
+                  ) : (
+                    <div style={{ minHeight: "400px" }}></div>
+                  )}
             </TeamRankingsContainer>
           </div>
 
