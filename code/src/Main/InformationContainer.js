@@ -53,8 +53,8 @@ const Information = ({matchFact, gameInfo}) => {
 
       <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto'}}>
         <p></p>
-        <p style={{textAlign: 'center', fontWeight: 'bold'}}>PHX(Away)</p>
-        <p style={{textAlign: 'center', fontWeight: 'bold'}}>MIL(Home)</p>
+        <p style={{textAlign: 'center', fontWeight: 'bold'}}>PHX (Away)</p>
+        <p style={{textAlign: 'center', fontWeight: 'bold'}}>MIL (Home)</p>
       </div>
       <CustomizeTable>
         <EachColumn>
@@ -70,8 +70,8 @@ const Information = ({matchFact, gameInfo}) => {
       </CustomizeTable>
       <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto', paddingTop: '30px'}}>
         <p></p>
-        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Total Match</p>
-        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Match @MIL</p>
+        <p style={{fontWeight: 'bold', textAlign: 'center'}}>All Matches</p>
+        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Matches @MIL ~PHX</p>
       </div>
       <CustomizeTable>
         <EachColumn>
