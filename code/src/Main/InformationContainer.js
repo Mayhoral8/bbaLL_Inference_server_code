@@ -63,7 +63,7 @@ const Information = ({matchFact, gameInfo}) => {
           <p style={{textAlign: 'center'}}>{HomeWinRate}%</p>
         </EachColumn>
         <EachColumn>
-          <p style={{fontWeight: 'bold'}}>Away Field Disadvantage | Home Field Advantage</p>
+          <p style={{fontWeight: 'bold'}}>Away Field Disadvantage & Home Field Advantage</p>
           <p style={{textAlign: 'center'}}>{AFD}%</p>
           <p style={{textAlign: 'center'}}>{HFA}%</p>
         </EachColumn>
@@ -71,7 +71,7 @@ const Information = ({matchFact, gameInfo}) => {
       <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto', paddingTop: '30px'}}>
         <p></p>
         <p style={{fontWeight: 'bold', textAlign: 'center'}}>All Matches</p>
-        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Matches @MIL ~PHX</p>
+        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Matches @MIL, ~PHX</p>
       </div>
       <CustomizeTable>
         <EachColumn>
