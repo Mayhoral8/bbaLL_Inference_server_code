@@ -38,7 +38,7 @@ export const TitleWrapper = styled.div`
     font-family: Roboto;
     font-size: 2.5rem;
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 4fr 1fr;
   }
   .awayTeam{
     color: ${(props) => props.awayTeamColor};

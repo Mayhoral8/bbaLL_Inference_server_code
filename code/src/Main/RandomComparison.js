@@ -17,7 +17,10 @@ const RandomComparison = ({nameArray, loadRandomPlayers}) => {
     <Wrapper> 
       {nameArray.map((eachPair, index)=> {
           return(
-            <div key={index} onClick={()=>routeChange(eachPair.nameOne, eachPair.nameTwo, '2020-21')}>
+            <div 
+              key={index} 
+              onClick={()=>routeChange(eachPair.nameOne, eachPair.nameTwo, '2020-21')}
+              className='eachRandomSetWrapper'>
               <EachRandomSet 
                 leftName={eachPair.nameOne}
                 rightName={eachPair.nameTwo}

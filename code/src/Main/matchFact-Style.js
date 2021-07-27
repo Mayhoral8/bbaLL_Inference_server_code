@@ -1,5 +1,23 @@
 import styled from "styled-components";
 
+export const MatchFactWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .left-arrow {
+    transform: rotate(180deg);
+    padding: 0.1rem;
+  }
+  .right-arrow {
+    padding: 0.1rem;
+  }
+  .hide {
+    display: none;
+  }
+`
+
 export const Wrapper = styled.div`
   margin: 0rem 0rem 2rem 0rem;
   min-width: 200px;

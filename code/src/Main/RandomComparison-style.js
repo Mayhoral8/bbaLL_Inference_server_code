@@ -3,6 +3,12 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   margin: 1.5rem 0 0 0rem;
+
+  .eachRandomSetWrapper{
+    cursor: pointer;
+    width: auto;
+  }
+  
   width: 100%;
   .centerButton{
     padding-left: 24px;
