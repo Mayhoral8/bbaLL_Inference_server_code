@@ -2,13 +2,18 @@ import React from "react"
 import { TitleWrapper,          
          EachColumn,
          CustomizeTable,
-         Wrapper } from "./InformationContainer-Style";
+         Wrapper,
+         TableHeader } from "./InformationContainer-Style";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
+import * as teamABB from '../constants/TeamABB';
 
 const Information = ({matchFact, gameInfo}) => {
   let awayTeam = gameInfo['Away Team'];
   let homeTeam = gameInfo['Home Team'];
+  let awayTeamABB = teamABB.TEAM2ABB[awayTeam];
+  let homeTeamABB = teamABB.TEAM2ABB[homeTeam];
+
   let AwayWinRate = (parseFloat(matchFact['Away_WinRate']) * 100).toFixed(2);
   let HomeWinRate = (parseFloat(matchFact['Home_WinRate']) * 100).toFixed(2);
   let AFD = (parseFloat(matchFact['AFD']) * 100).toFixed(2);
@@ -17,23 +22,26 @@ const Information = ({matchFact, gameInfo}) => {
   let expTotalScore = parseFloat(matchFact['Exp_Total_Score']).toFixed(1);
   let expSpreadHF = parseFloat(matchFact['Exp_Spread_HF']).toFixed(2);
   let totalScoreHF = parseFloat(matchFact["Total_Score_HF"]).toFixed(1);
+  let numHomeLoseAway = matchFact['Num_Home_Lose_Away'];
+  let numHomeWinAway = matchFact['Num_Home_Wins_Away'];
+  let numHomeLoseAwayHF = matchFact['Num_Home_Lose_Away_HF'];
+  let numHomeWinsAeayHF = matchFact['Num_Home_Wins_Away_HF'];
 
   const teamColours = avoidColourSets(
     // formats team names for function call
     homeTeam.replaceAll(" ", "").toUpperCase(),
     awayTeam.replaceAll(" ", "").toUpperCase()
   );
-  console.log(teamColours.colourOne)
   return(
     <Wrapper>
       <TitleWrapper 
         homeTeamColor = {teamColours.colourOne} 
         awayTeamColor = {teamColours.colourTwo}>
         <div className='awayTeam'>
-            <div>
-              <div className='img-container-side'>
-                <GetPlayerImage playerName={awayTeam.replace(/ /g, "_").replace(".", ",")} isTeam={true}/>
-              </div>
+          <div>
+            <div className='img-container-side'>
+              <GetPlayerImage playerName={awayTeam.replace(/ /g, "_").replace(".", ",")} isTeam={true}/>
+            </div>
             </div>
           <div>
             <p style={{paddingTop: '5px'}}>{awayTeam}</p>
@@ -41,7 +49,7 @@ const Information = ({matchFact, gameInfo}) => {
         </div>
         <div className='homeTeam'>
           <div>
-            <p style={{paddingTop: '5px'}}>{homeTeam}</p>
+            <p style={{paddingTop: '5px', textAlign: 'right'}}>{homeTeam}</p>
           </div>
           <div>
             <div className='img-container-side'>
@@ -51,10 +59,10 @@ const Information = ({matchFact, gameInfo}) => {
         </div>
       </TitleWrapper>
 
-      <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto'}}>
+      <div className='tableHeader'>
         <p></p>
-        <p style={{textAlign: 'center', fontWeight: 'bold'}}>PHX (Away)</p>
-        <p style={{textAlign: 'center', fontWeight: 'bold'}}>MIL (Home)</p>
+        <p style={{textAlign: 'center', fontWeight: 'bold'}}>{awayTeamABB} (Away)</p>
+        <p style={{textAlign: 'center', fontWeight: 'bold'}}>{homeTeamABB} (Home)</p>
       </div>
       <CustomizeTable>
         <EachColumn>
@@ -68,16 +76,16 @@ const Information = ({matchFact, gameInfo}) => {
           <p style={{textAlign: 'center'}}>{HFA}%</p>
         </EachColumn>
       </CustomizeTable>
-      <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto', paddingTop: '30px'}}>
+      <div className='tableHeader buttom'>
         <p></p>
-        <p style={{fontWeight: 'bold', textAlign: 'center'}}>All Matches</p>
-        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Matches @MIL ~PHX</p>
+        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Total Match</p>
+        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Match @{homeTeamABB} ~{awayTeamABB}</p>
       </div>
       <CustomizeTable>
         <EachColumn>
-          <p style={{fontWeight: 'bold'}}>PHX vs MIL matches</p>
-          <p style={{textAlign: 'center'}}>{matchFact['Num_Home_Lose_Away']}:{matchFact['Num_Home_Wins_Away']}</p>
-          <p style={{textAlign: 'center'}}>{matchFact['Num_Home_Lose_Away_HF']}:{matchFact['Num_Home_Wins_Away_HF']}</p>
+          <p style={{fontWeight: 'bold'}}>{awayTeamABB} vs {homeTeamABB} matches</p>
+          <p style={{textAlign: 'center'}}>{numHomeLoseAway}:{numHomeWinAway}</p>
+          <p style={{textAlign: 'center'}}>{numHomeLoseAwayHF}:{numHomeWinsAeayHF}</p>
         </EachColumn>
         <EachColumn>
           <p style={{fontWeight: 'bold'}}>Expected Spread</p>

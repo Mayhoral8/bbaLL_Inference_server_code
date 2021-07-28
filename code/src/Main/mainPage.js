@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 import { FullWidthMain } from "../globalStyles";
@@ -13,7 +13,6 @@ import TeamScoreTable from "./TeamScoreTable";
 import FutureGameList from "./futuregamelist";
 import RandomComparison from "./RandomComparison"
 import candidates from "JSON/player_candidates_for_comparison.json";
-//import teamCandidates from "JSON/team_candidates_for_comparison.json";
 import MatchFact from './matchFact';
 import {
   FutureGameListBox,
@@ -24,7 +23,8 @@ import {
   TeamRankingsTitle,
   TeamRankingsContainer,
   RowContainer,
-  MainPageContainer
+  MainPageContainer,
+  BettingButton
 } from "./mainpage-style";
 
 const GamePageContainer = () => {
@@ -196,6 +196,9 @@ const GamePageContainer = () => {
                 <FutureGameListRow>
                   <FutureGameList games={games} />
                 </FutureGameListRow>
+                <BettingButton>
+                  <Link to="/betting" className="styledButton">Virtual Bet Now!</Link>
+                </BettingButton>
               </FutureGameListBox>
             )}
 
@@ -214,30 +217,38 @@ const GamePageContainer = () => {
                   </PlayerRankingsPlaceholderTitle>
                 </PlayerRankingPlaceholderBox>
               )}
-              { games.length != 0 &&
+              { games.length != 0 ?
                 <MatchFact futureGames = {games}/>
+                :
+                <MemeCard urls={memeUrls} />
               }
             </RowContainer>
 
+           
+            
             <TeamRankingsContainer>
-              <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
-
-                  {hasDataLoaded ? (
-                    <div style={{display: 'grid', gridTemplateColumns: '3fr 9fr'}}>
-                      <RandomComparison nameArray={randomSet} loadRandomPlayers={loadRandomPlayers}/>
-                      <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
-                    </div>
-                  ) : (
-                    <div style={{ minHeight: "400px" }}></div>
-                  )}
+              <RandomComparison nameArray={randomSet} loadRandomPlayers={loadRandomPlayers}/>
+              <div style={{width: 'auto', margin: '0px 10px'}}>
+                <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
+                {hasDataLoaded ? (
+                  <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                ) : (
+                  <div style={{ minHeight: "400px" }}></div>
+                )}
+              </div>
             </TeamRankingsContainer>
           </div>
 
           {useWindowSize() > 1400 && games.length > 0 && (
-            <FutureGameListBox>
-              <FutureGameTitle>Upcoming Games</FutureGameTitle>
-              <FutureGameList games={games} />
-            </FutureGameListBox>
+            <div style={{marginLeft: '3rem'}}>
+              <FutureGameListBox>
+                <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                <BettingButton>
+                  <Link to="/betting" className="styledButton">Virtual Bet Now!</Link>
+                </BettingButton>
+                <FutureGameList games={games} />
+              </FutureGameListBox>
+            </div>
           )}
         </MainPageContainer>
       </FullWidthMain>
