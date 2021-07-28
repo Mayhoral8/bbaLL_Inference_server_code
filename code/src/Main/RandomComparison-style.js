@@ -2,10 +2,20 @@ import refresh from "../assets/images/refresh.png";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  margin: 1.5rem 0 0 0rem;
-  width: 100%;
+  @media (min-width: 280px) and (max-width: 767px){
+    padding-bottom: 30px;
+  } 
+  .eachRandomSetWrapper{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
   .centerButton{
-    padding-left: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .button{
@@ -17,5 +27,8 @@ export const Wrapper = styled.div`
     background-image: url(${refresh});
     background-repeat: no-repeat;
     background-position: center;
+    @media (min-width: 280px) and (max-width: 767px){
+      padding: 20px 80px;
+    } 
   }
 `

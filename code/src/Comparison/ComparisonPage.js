@@ -499,7 +499,7 @@ const ComparisonPage = () => {
                         isTeam={isTeam}
                         onChange={(val) => setTempPlayerNameOne(val)}
                         prompt={
-                          isTeam ? "Enter team name" : "Enter player name"
+                          setPromoteStringName(1)
                         }
                         length="longer"
                         setRef={setRefOne}
@@ -511,7 +511,7 @@ const ComparisonPage = () => {
                       <ComparisonYearSelection
                         isTeam={isTeam}
                         onChange={(val) => setTempYearOne(val)}
-                        prompt={"Select Year"}
+                        prompt={setPromoteStringYear(1)}
                         name={tempPlayerNameOne}
                         setRef={setRefYearOne}
                         colorSchem="blue"
@@ -530,7 +530,7 @@ const ComparisonPage = () => {
                         isTeam={isTeam}
                         onChange={(val) => setTempPlayerNameTwo(val)}
                         prompt={
-                          isTeam ? "Enter team name" : "Enter player name"
+                          setPromoteStringName(2)
                         }
                         length="longer"
                         setRef={setRefTwo}
@@ -542,7 +542,7 @@ const ComparisonPage = () => {
                       <ComparisonYearSelection
                         isTeam={isTeam}
                         onChange={(val) => setTempYearTwo(val)}
-                        prompt={"Select Year"}
+                        prompt={setPromoteStringYear(2)}
                         name={tempPlayerNameTwo}
                         setRef={setRefYearTwo}
                         colorSchem="red"
