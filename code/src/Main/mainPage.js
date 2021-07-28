@@ -197,7 +197,7 @@ const GamePageContainer = () => {
                   <FutureGameList games={games} />
                 </FutureGameListRow>
                 <BettingButton>
-                  <Link to="/betting" className="styledButton">Virtual Betting</Link>
+                  <Link to="/betting" className="styledButton">Virtual Bet Now!</Link>
                 </BettingButton>
               </FutureGameListBox>
             )}
@@ -245,7 +245,7 @@ const GamePageContainer = () => {
               <FutureGameListBox>
                 <FutureGameTitle>Upcoming Games</FutureGameTitle>
                 <BettingButton>
-                  <Link to="/betting" className="styledButton">Virtual Betting</Link>
+                  <Link to="/betting" className="styledButton">Virtual Bet Now!</Link>
                 </BettingButton>
                 <FutureGameList games={games} />
               </FutureGameListBox>
