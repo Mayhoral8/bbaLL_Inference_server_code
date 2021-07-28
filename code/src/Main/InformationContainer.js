@@ -8,6 +8,7 @@ import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 import * as teamABB from '../constants/TeamABB';
 
+
 const Information = ({matchFact, gameInfo}) => {
   let awayTeam = gameInfo['Away Team'];
   let homeTeam = gameInfo['Home Team'];
@@ -43,17 +44,21 @@ const Information = ({matchFact, gameInfo}) => {
               <GetPlayerImage playerName={awayTeam.replace(/ /g, "_").replace(".", ",")} isTeam={true}/>
             </div>
             </div>
+          </div>
           <div>
-            <p style={{paddingTop: '5px'}}>{awayTeam}</p>
+            <p style={{ paddingTop: "5px" }}>{awayTeam}</p>
           </div>
         </div>
-        <div className='homeTeam'>
+        <div className="homeTeam">
           <div>
             <p style={{paddingTop: '5px', textAlign: 'right'}}>{homeTeam}</p>
           </div>
           <div>
-            <div className='img-container-side'>
-              <GetPlayerImage playerName={homeTeam.replace(/ /g, "_").replace(".", ",")} isTeam={true}/>
+            <div className="img-container-side">
+              <GetPlayerImage
+                playerName={homeTeam.replace(/ /g, "_").replace(".", ",")}
+                isTeam={true}
+              />
             </div>
           </div>
         </div>
@@ -66,14 +71,16 @@ const Information = ({matchFact, gameInfo}) => {
       </div>
       <CustomizeTable>
         <EachColumn>
-          <p style={{fontWeight: 'bold'}}>Win Rate</p>
-          <p style={{textAlign: 'center'}}>{AwayWinRate}%</p>
-          <p style={{textAlign: 'center'}}>{HomeWinRate}%</p>
+          <p style={{ fontWeight: "bold" }}>Win Rate</p>
+          <p style={{ textAlign: "center" }}>{AwayWinRate}%</p>
+          <p style={{ textAlign: "center" }}>{HomeWinRate}%</p>
         </EachColumn>
         <EachColumn>
-          <p style={{fontWeight: 'bold'}}>Away Field Disadvantage | Home Field Advantage</p>
-          <p style={{textAlign: 'center'}}>{AFD}%</p>
-          <p style={{textAlign: 'center'}}>{HFA}%</p>
+          <p style={{ fontWeight: "bold" }}>
+            Away Field Disadvantage & Home Field Advantage
+          </p>
+          <p style={{ textAlign: "center" }}>{AFD}%</p>
+          <p style={{ textAlign: "center" }}>{HFA}%</p>
         </EachColumn>
       </CustomizeTable>
       <div className='tableHeader buttom'>
@@ -88,18 +95,18 @@ const Information = ({matchFact, gameInfo}) => {
           <p style={{textAlign: 'center'}}>{numHomeLoseAwayHF}:{numHomeWinsAeayHF}</p>
         </EachColumn>
         <EachColumn>
-          <p style={{fontWeight: 'bold'}}>Expected Spread</p>
-          <p style={{textAlign: 'center'}}>{expSpread}</p>
-          <p style={{textAlign: 'center'}}>{expSpreadHF}</p>
+          <p style={{ fontWeight: "bold" }}>Expected Spread</p>
+          <p style={{ textAlign: "center" }}>{expSpread}</p>
+          <p style={{ textAlign: "center" }}>{expSpreadHF}</p>
         </EachColumn>
         <EachColumn>
-          <p style={{fontWeight: 'bold'}}>Avg. Total Score</p>
-          <p style={{textAlign: 'center'}}>{expTotalScore}</p>
-          <p style={{textAlign: 'center'}}>{totalScoreHF}</p>
+          <p style={{ fontWeight: "bold" }}>Avg. Total Score</p>
+          <p style={{ textAlign: "center" }}>{expTotalScore}</p>
+          <p style={{ textAlign: "center" }}>{totalScoreHF}</p>
         </EachColumn>
       </CustomizeTable>
     </Wrapper>
-  )
-}
+  );
+};
 
 export default Information;

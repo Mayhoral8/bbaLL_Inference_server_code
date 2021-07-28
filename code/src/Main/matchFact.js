@@ -58,7 +58,7 @@ const MatchFact = ({futureGames}) => {
           gameInfo = {futureGameChecked[0]['Game Info']} />
       </MatchFactWrapper>
     </Wrapper>
-  )
+  );
 };
 
 export default MatchFact;
