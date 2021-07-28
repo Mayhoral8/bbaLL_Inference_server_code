@@ -61,8 +61,8 @@ const Information = ({matchFact, gameInfo}) => {
 
       <div className='tableHeader'>
         <p></p>
-        <p style={{textAlign: 'center', fontWeight: 'bold'}}>{awayTeamABB}(Away)</p>
-        <p style={{textAlign: 'center', fontWeight: 'bold'}}>{homeTeamABB}(Home)</p>
+        <p style={{textAlign: 'center', fontWeight: 'bold'}}>{awayTeamABB} (Away)</p>
+        <p style={{textAlign: 'center', fontWeight: 'bold'}}>{homeTeamABB} (Home)</p>
       </div>
       <CustomizeTable>
         <EachColumn>
@@ -79,7 +79,7 @@ const Information = ({matchFact, gameInfo}) => {
       <div className='tableHeader buttom'>
         <p></p>
         <p style={{fontWeight: 'bold', textAlign: 'center'}}>Total Match</p>
-        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Match @{homeTeamABB}</p>
+        <p style={{fontWeight: 'bold', textAlign: 'center'}}>Match @{homeTeamABB} ~{awayTeamABB}</p>
       </div>
       <CustomizeTable>
         <EachColumn>
