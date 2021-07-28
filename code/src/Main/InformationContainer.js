@@ -2,7 +2,8 @@ import React from "react"
 import { TitleWrapper,          
          EachColumn,
          CustomizeTable,
-         Wrapper } from "./InformationContainer-Style";
+         Wrapper,
+         TableHeader } from "./InformationContainer-Style";
 import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 import GetPlayerImage from "../Individual/Components/GetPlayerImage";
 import * as teamABB from '../constants/TeamABB';
@@ -58,7 +59,7 @@ const Information = ({matchFact, gameInfo}) => {
         </div>
       </TitleWrapper>
 
-      <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto'}}>
+      <div className='tableHeader'>
         <p></p>
         <p style={{textAlign: 'center', fontWeight: 'bold'}}>{awayTeamABB}(Away)</p>
         <p style={{textAlign: 'center', fontWeight: 'bold'}}>{homeTeamABB}(Home)</p>
@@ -75,7 +76,7 @@ const Information = ({matchFact, gameInfo}) => {
           <p style={{textAlign: 'center'}}>{HFA}%</p>
         </EachColumn>
       </CustomizeTable>
-      <div style={{display: 'grid', gridTemplateColumns: '3fr 2fr 2fr', width: '80%', margin: '0 auto 0 auto', paddingTop: '30px'}}>
+      <div className='tableHeader buttom'>
         <p></p>
         <p style={{fontWeight: 'bold', textAlign: 'center'}}>Total Match</p>
         <p style={{fontWeight: 'bold', textAlign: 'center'}}>Match @{homeTeamABB}</p>

@@ -7,56 +7,55 @@ const MatchFact = ({futureGames}) => {
   const futureGameChecked = futureGames.filter(game => game['Match Facts'] !== undefined);
   const length = futureGameChecked.length;
   const [currentIndex, setCurrentIndex] = useState(0);
- 
-  console.log(futureGameChecked)
+  const justifyContentStyle = length === 1 ? 'center' : 'space-between'
+
+  function nextbuttonHandle(event) {
+    if (currentIndex < length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      setCurrentIndex(0);
+    }
+  }
+
+  function prevbuttonHandle(event) {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      setCurrentIndex(length - 1);
+    }
+  }
+  
   return(
     <Wrapper>
       <div
-        className="title"
         style={{
+          paddingTop: '10px',
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "1.5rem",
-          paddingTop: '20px'
+          flexDirection: "row",
+          justifyContent: justifyContentStyle,
+          width: "100%",
         }}
       >
+        <button className={length === 1 ? 'hide' : "button prev"} onClick={prevbuttonHandle}>
+          <span>Previous</span>
+        </button>
+        <div
+          className='title'
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
          Match Fact
+        </div>
+        <button className={length === 1 ? 'hide' : "button next"} onClick={nextbuttonHandle}>
+          <span>Next</span>
+        </button>
       </div>
       <MatchFactWrapper>
-        <button
-          className= {length === 1 ? 'hide' : 'left-arrow'}
-          onClick={() => {
-            if (currentIndex <= 0) {
-              setCurrentIndex(length - 1);
-            } else {
-              setCurrentIndex(currentIndex - 1);
-            }
-          }}
-        >
-          <img
-            style={{ maxWidth: "40px" }}
-            src="https://image.flaticon.com/icons/png/512/60/60758.png"
-          />
-        </button>
         <Information 
-          matchFact = {futureGameChecked[currentIndex]['Match Facts']} 
-          gameInfo = {futureGameChecked[currentIndex]['Game Info']} />
-        <button
-          className= {length === 1 ? 'hide' : 'right-arrow'}
-          onClick={() => {
-            if (currentIndex >= length - 1) {
-              setCurrentIndex(0);
-            } else {
-              setCurrentIndex(currentIndex + 1);
-            }
-          }}
-        >
-          <img
-            style={{ maxWidth: "40px" }}
-            src="https://image.flaticon.com/icons/png/512/60/60758.png"
-          />
-        </button>
+          matchFact = {futureGameChecked[0]['Match Facts']} 
+          gameInfo = {futureGameChecked[0]['Game Info']} />
       </MatchFactWrapper>
     </Wrapper>
   )

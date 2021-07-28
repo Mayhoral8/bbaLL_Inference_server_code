@@ -1,5 +1,5 @@
 import React from 'react';
-import EachRandomSet from "../Comparison/Components/EachRandomSet";
+import EachRandomSet from "./EachRandomSet";
 import { useHistory } from "react-router-dom";
 import { Wrapper } from './RandomComparison-style';
 

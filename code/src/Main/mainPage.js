@@ -197,7 +197,7 @@ const GamePageContainer = () => {
                   <FutureGameList games={games} />
                 </FutureGameListRow>
                 <BettingButton>
-                  <Link to="/betting" className="styledButton">Bet Now</Link>
+                  <Link to="/betting" className="styledButton">Virtual Betting</Link>
                 </BettingButton>
               </FutureGameListBox>
             )}
@@ -229,25 +229,27 @@ const GamePageContainer = () => {
             
             <TeamRankingsContainer>
               <RandomComparison nameArray={randomSet} loadRandomPlayers={loadRandomPlayers}/>
-              <div>
+              <div style={{width: 'auto', margin: '0px 10px'}}>
                 <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
-                    {hasDataLoaded ? (
-                      <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
-                    ) : (
-                      <div style={{ minHeight: "400px" }}></div>
-                    )}
+                {hasDataLoaded ? (
+                  <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                ) : (
+                  <div style={{ minHeight: "400px" }}></div>
+                )}
               </div>
             </TeamRankingsContainer>
           </div>
 
           {useWindowSize() > 1400 && games.length > 0 && (
-            <FutureGameListBox>
-              <FutureGameTitle>Upcoming Games</FutureGameTitle>
-              <FutureGameList games={games} />
-              <BettingButton>
-                <Link to="/betting" className="styledButton">Bet Now</Link>
-              </BettingButton>
-            </FutureGameListBox>
+            <div style={{marginLeft: '3rem'}}>
+              <FutureGameListBox>
+                <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                <BettingButton>
+                  <Link to="/betting" className="styledButton">Virtual Betting</Link>
+                </BettingButton>
+                <FutureGameList games={games} />
+              </FutureGameListBox>
+            </div>
           )}
         </MainPageContainer>
       </FullWidthMain>
