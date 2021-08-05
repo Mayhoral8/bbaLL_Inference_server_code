@@ -172,7 +172,11 @@ const FutureGameOddsCard = ({ data, reference }) => {
   awayTeamName = awayWords[awayWords.length - 1];
 
   return (
-    <Card homeColour={teamColours.colourOne} awayColour={teamColours.colourTwo} ref = { reference }>
+    <Card
+      homeColour={teamColours.colourOne}
+      awayColour={teamColours.colourTwo}
+      ref={reference}
+    >
       {vsImg(homeImg, awayImg)}
       <div className="team-names">
         <div className="team-name1">

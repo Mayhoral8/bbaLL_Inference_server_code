@@ -34,8 +34,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    /* font-family: Verdana, sans-serif; */
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif; 
   }
 
   button {
@@ -101,7 +100,7 @@ export const BadgeButton = styled.button`
   font-style: normal;
   font-weight: 300;
   font-size: 15px;
-  justtify-content: center;
+  justify-content: center;
   text-align: center;
   color: #080a1e;
   border: no;

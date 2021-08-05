@@ -7,7 +7,7 @@ export const Card = styled.div`
   @media screen and (max-width: 834px) {
     margin: 0.5rem;
   }
-  margin: 1rem;
+  margin: 30px 10px;
   height: 175px;
   min-width: 240px;
   max-width: 270px;
@@ -84,14 +84,16 @@ export const LogoBox = styled.div`
 
   .logo-1 {
     z-index: 0;
-    width: 40%;
-    top: 5px;
+    width: 97.827px;
+    height: 75px;
+    top: -3px;
   }
 
   .logo-2 {
     z-index: 0;
-    width: 40%;
-    top: 5px;
+    width: 97.827px;
+    height: 75px;
+    top: -3px;
   }
 
   .vs-text {

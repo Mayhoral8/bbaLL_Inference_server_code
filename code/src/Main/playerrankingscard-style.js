@@ -119,10 +119,9 @@ export const CardContainer = styled.div`
   }
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 60px;
+    height: 60px;
     border-radius: 50px;
-    //border: solid black 2px;
   }
 
   .player-name {
@@ -131,7 +130,6 @@ export const CardContainer = styled.div`
     align-items: center; //vertical align;
 
     margin-left: 0.5rem;
-
     font-family: Roboto;
     font-weight: 100;
     @media (max-width: 834px) {

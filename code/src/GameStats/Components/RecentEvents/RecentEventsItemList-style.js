@@ -9,8 +9,8 @@ export const RecentEventsItemWrapper = styled.div`
     height: 30px;
     margin-right: 0.5rem;
     img {
-      width: 100%;
-      height: 100%;
+      width: 30px;
+      height: 30px;
     }
   }
   .active.team-container {

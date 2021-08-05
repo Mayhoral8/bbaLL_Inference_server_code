@@ -17,8 +17,8 @@ import FutureGameOddsCard from '../../Main/futureGameOddsCard'
 
 import momentTimezone from 'moment-timezone'
 
-const { WebClient } = require('@slack/web-api');
-const slack = new WebClient(process.env.REACT_APP_SLACK_TOKEN);
+const { WebClient, retryPolicies } = require('@slack/web-api');
+const slack = new WebClient(process.env.REACT_APP_SLACK_TOKEN, {retryConfig: retryPolicies.fiveRetriesInFiveMinutes,});
 
 const HomePage = () => {
 
