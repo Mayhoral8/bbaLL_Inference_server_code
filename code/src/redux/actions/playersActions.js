@@ -10,7 +10,7 @@ export const getPlayerRankings = () => {
         const docData = doc.data();
         data.push(docData);
       });
-
+      
       dispatch({
         type: "PlayerRankings",
         payload: {

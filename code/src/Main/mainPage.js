@@ -31,22 +31,23 @@ const GamePageContainer = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    let rankingsData = [];
     const initialTypes = ["bidaily", "weekly", "seasonal"];
     let rankingTypesArray = [];
+    let playerRankings = [];
     initialTypes.forEach((type) => {
       if (
-        type in props.rankings[0] &&
-        Object.keys(props.rankings[0][type]).length !== 0
+        type in props.playerRankings[0] &&
+        Object.keys(props.playerRankings[0][type]).length !== 0
       ) {
-        rankingsData.push(props.rankings[0][type]);
+        playerRankings.push({...props.playerRankings[0][type]});
         rankingTypesArray.push(type);
       }
     });
+    playerRankings.push({...props.playerRankings[1]});
 
     setRankingTypes(rankingTypesArray);
-    rankingsData.push(props.rankings[1]);
-    setData(rankingsData);
+    setData(playerRankings);
+
     let sortedGames = props.futureGames;
     sortedGames.sort((game1, game2) => {
       return (
@@ -93,7 +94,7 @@ const GamePageContainer = (props) => {
                     <PlayerRankingsCard
                       data={[data[0], data[1], data[2]]}
                       rankingTypes={rankingTypes}
-                      timeOut={5000}
+                      timeOut={10000000}
                       cycling={true}
                     />
                   </Suspense>
@@ -158,7 +159,7 @@ const mapStateToProps = ({
     gamePbp: firestoreReducer.ordered.gamePbpJson,
     gamePlayers: firestoreReducer.ordered.gamePlayersJson,
     futureGames: gamesReducer.futureGames.games,
-    rankings: playersReducer.rankings.rankings,
+    playerRankings: playersReducer.playerRankings.rankings,
   };
 };
 

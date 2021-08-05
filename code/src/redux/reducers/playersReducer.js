@@ -1,12 +1,16 @@
 const initialState = {
-    rankings: {isLoading: true, rankings: []}
-  };
-  
-  export default (state = initialState, action) => {
-    switch (action.type) {
-      case 'PlayerRankings':
-        return { ...state, rankings: action.payload };
-      default:
-        return state;
-    }
-  };
+  playerRankings: {
+    isLoading: true,
+  },
+};
+
+export const playersReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "PlayerRankings":
+      return { ...state, playerRankings: action.payload };
+    default:
+      return state;
+  }
+};
+
+export default playersReducer;

@@ -126,7 +126,7 @@ const mapStateToProps = (state) => {
   console.log(state);
   return {
     futureGames: state.gamesReducer.futureGames,
-    playerRankings: state.playersReducer.rankings,
+    playerRankings: state.playersReducer.playerRankings,
     gameInfo: state.firestoreReducer.ordered.gameInfoJson,
     gamePbpJson: state.firestoreReducer.ordered.gamePbpJson,
     gamePlayersJson: state.firestoreReducer.ordered.gamePlayersJson

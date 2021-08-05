@@ -15,7 +15,6 @@ const GamePage = (props) => {
   useEffect(() => {
     props.history.push(`${path}/${props.gameInfo[0].id}`);
   }, []);
-  console.log(props)
   return (
     <>
       <ScrollToTopOnMount />

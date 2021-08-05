@@ -175,7 +175,9 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
 
 
   const getPic = async (playerNames) => {
+    // console.log(playerNames)
     playerNames.map((name) => {
+
       if (!(name in imgs)) {
         const imageReference = fbStorage.refFromURL(
           "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
@@ -188,13 +190,14 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
           .then((url) => {
             setImgs((imgs) => ({ [name]: url, ...imgs }));
           })
-          .catch(() => {
-            const imageReference = fbStorage.refFromURL(
-              "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
-            );
-            imageReference.getDownloadURL().then((url) => {
-              setImgs((imgs) => ({ [name]: url, ...imgs }));
-            });
+          .catch((e) => {
+            // console.log(e)
+            // const imageReference = fbStorage.refFromURL(
+            //   "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
+            // );
+            // imageReference.getDownloadURL().then((url) => {
+            //   setImgs((imgs) => ({ [name]: url, ...imgs }));
+            // });
           });
       }
     });
