@@ -39,13 +39,13 @@ const GamePageContainer = (props) => {
         type in props.rankings[0] &&
         Object.keys(props.rankings[0][type]).length !== 0
       ) {
-        rankingsData.push(props.rankings[0][type]);
+        rankingsData.push({ ...props.rankings[0][type] });
         rankingTypesArray.push(type);
       }
     });
 
     setRankingTypes(rankingTypesArray);
-    rankingsData.push(props.rankings[1]);
+    rankingsData.push({ ...props.rankings[1] });
     setData(rankingsData);
     let sortedGames = props.futureGames;
     sortedGames.sort((game1, game2) => {
