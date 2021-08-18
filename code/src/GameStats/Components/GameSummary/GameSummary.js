@@ -54,7 +54,6 @@ const GameSummary = ({ gameInfo, selectedGameIndex, gamePbp, gamePlayers }) => {
 
           return (
             <div className="single-summary" key={date}>
-              {/* Top section:  Game Scores */}
               <div className="top-section">
                 <GameSummaryBanner
                   homeTeam={info.Home.Team}
@@ -76,10 +75,7 @@ const GameSummary = ({ gameInfo, selectedGameIndex, gamePbp, gamePlayers }) => {
               </div>
 
               {/* Middle section: Select Tabs */}
-              <GameSummaryTab
-                gameCode={date}
-                url={url}
-              />
+              <GameSummaryTab gameCode={date} url={url} />
 
               {/* Bottom section: Summary Content */}
               <div className="game-summary-content">

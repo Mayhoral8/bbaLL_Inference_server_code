@@ -28,8 +28,8 @@ export const NavbarLogo = styled(Link)`
   width: 220px;
   display: flex;
   img {
-    width: 100%;
-    height: 100%;
+    width: 220px;
+    height: 50.994px;
   }
 `;
 

@@ -17,14 +17,7 @@ const firesbaseConfig = {
 export const firebaseInstanceSpigamebet = firebase.initializeApp(firesbaseConfig,'secondary');
 
 const db = firebase.database()
-// if (location.hostname === "localhost") {
-//   console.log('RTDB is running locally on port 9000')
-//   db.useEmulator("localhost", 9000);
-// }
-
 export const fbFirestoreSpigameBet = firebaseInstanceSpigamebet.firestore();
-
-// fix to occasional firestore error - "Could not reach firestore backend"
 // fbFirestoreSpigameBet.settings({ experimentalForceLongPolling: true });
 export const fbStorage = firebase.storage();
 export const fbRealtimeDB = db;

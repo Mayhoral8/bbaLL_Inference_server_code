@@ -4,8 +4,6 @@ import {
   Link,
   useHistory,
   useLocation,
-  useParams,
-  useRouteMatch,
 } from "react-router-dom";
 import { changeGamesTab } from "../../../redux/actions/gamesActions";
 import { GameSummaryTabWrapper} from "./GameSummary-Styles";

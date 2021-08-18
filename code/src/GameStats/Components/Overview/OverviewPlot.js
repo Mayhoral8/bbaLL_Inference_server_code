@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Scatter, defaults } from "react-chartjs-2";
+import React, { lazy, useEffect, useState, Suspense } from "react";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { rgba } from "polished";
-import { ABB2TEAM, GREEN_ACCENT_COLOR, MOBILE_SM_BREAKPOINT } from "../../../constants";
+import {
+  ABB2TEAM,
+  GREEN_ACCENT_COLOR,
+  MOBILE_SM_BREAKPOINT,
+} from "../../../constants";
 import { getKeyByValue } from "../../../Shared/Functions/GetKeyByValue";
 import GraphInfo from "../../../Shared/GraphInfo/GraphInfo";
 import "chartjs-plugin-watermark";
 import logo from "Assets/images/new-logo-square.png";
-import { ChartContainer } from "./Overview-styles"
+import { ChartContainer } from "./Overview-styles";
+import Spinner from '../../../Shared/Spinner/loadingSpinner'
+const Scatter = lazy(() => import("react-chartjs-2").then(mod => ({ default: mod.Scatter })));
 
 const OverviewPlot = (props) => {
   const {
@@ -123,7 +128,14 @@ const OverviewPlot = (props) => {
   });
 
   // plot options
-  let labelDisplay, labelFontSize, tickFontSize, labelString, watermarkWidth, watermarkHeight, watermarkX, watermarkY;
+  let labelDisplay,
+    labelFontSize,
+    tickFontSize,
+    labelString,
+    watermarkWidth,
+    watermarkHeight,
+    watermarkX,
+    watermarkY;
   if (width < MOBILE_SM_BREAKPOINT) {
     labelDisplay = false;
     labelFontSize = 12;
@@ -141,8 +153,6 @@ const OverviewPlot = (props) => {
     watermarkX = 80;
     watermarkY = 80;
   }
-
-  defaults.global.defaultFontFamily = "Roboto Condensed";
 
   switch (selectedPlotBtn) {
     case "EFG":
@@ -276,7 +286,7 @@ const OverviewPlot = (props) => {
       alignX: "left",
       alignY: "top",
       position: "front",
-    }
+    },
   };
 
   // plot data
@@ -290,7 +300,7 @@ const OverviewPlot = (props) => {
       borderWidth: 4,
       pointRadius: 0,
       data: scoreDiffData,
-      yAxisID: "right-y-axis"
+      yAxisID: "right-y-axis",
     };
     // one of four datas
     const yPosDatasets = {
@@ -303,7 +313,7 @@ const OverviewPlot = (props) => {
       pointColor: "#fff",
       pointRadius: 0,
       data: posYValues,
-      yAxisID: "right-y-axis"
+      yAxisID: "right-y-axis",
     };
     const yNegDatasets = {
       label: "neg",
@@ -315,7 +325,7 @@ const OverviewPlot = (props) => {
       pointColor: "#fff",
       pointRadius: 0,
       data: negYValues,
-      yAxisID: "right-y-axis"
+      yAxisID: "right-y-axis",
     };
     const yDatasets = {
       label: labelString,
@@ -326,7 +336,7 @@ const OverviewPlot = (props) => {
       pointColor: "#fff",
       pointRadius: 0,
       data: yAxisData,
-      yAxisID: "left-y-axis"
+      yAxisID: "left-y-axis",
     };
 
     return {
@@ -335,22 +345,24 @@ const OverviewPlot = (props) => {
   };
 
   return (
-    <ChartContainer hide={hide}>
-      <GraphInfo nomargin plotType={graphInfoKeys[selectedPlotIndex]} />
-      <Scatter
-        data={data}
-        options={options}
-        plugins={[
-          {
-            beforeInit: function (chart, options) {
-              chart.legend.afterFit = function () {
-                this.height = this.height + 30;
-              };
+    <Suspense fallback={<Spinner height = '300px' width = '100%'/>}>
+      <ChartContainer hide={hide}>
+        <GraphInfo nomargin plotType={graphInfoKeys[selectedPlotIndex]} />
+        <Scatter
+          data={data}
+          options={options}
+          plugins={[
+            {
+              beforeInit: function (chart, options) {
+                chart.legend.afterFit = function () {
+                  this.height = this.height + 30;
+                };
+              },
             },
-          },
-        ]}
-      />
-    </ChartContainer>
+          ]}
+        />
+      </ChartContainer>
+    </Suspense>
   );
 };
 export default OverviewPlot;

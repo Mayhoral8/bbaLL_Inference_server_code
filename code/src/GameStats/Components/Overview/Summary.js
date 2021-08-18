@@ -6,19 +6,20 @@ import { BadgeButton } from "../../../globalStyles";
 import "../../../fonts.css";
 import { avoidColourSets } from "../../../Shared/Functions/gameStatsFunctions";
 import { createScatterPlot } from "../../../Shared/Functions/scatterPlotFunctions";
-import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { capitalizeFirstLetter } from "../../../Shared/Functions/capitalizeFirstLetter";
-import { TapsWrapper, PlotButtonsContiner, PlotButtons, SummaryOverviewWrapper, PlotButtonsContinerLeft} from "./Overview-styles"
+import {
+  TapsWrapper,
+  PlotButtonsContiner,
+  PlotButtons,
+  SummaryOverviewWrapper,
+  PlotButtonsContinerLeft,
+} from "./Overview-styles";
 // CONSTANT
 const CS = 0;
 const SCORES = 4;
 
-const Summary = ({
-  selectedGameIndex,
-  homeTeam,
-  awayTeam,
-  gamePbp,
-}) => {
+const Summary = ({ selectedGameIndex, homeTeam, awayTeam, gamePbp }) => {
   // extract data
   const selectedGameData = gamePbp[selectedGameIndex];
   const xAxis = selectedGameData["timer"];
@@ -30,7 +31,6 @@ const Summary = ({
   const fantasy = selectedGameData["Flow_data"]["Fantasy_score"];
   const playScore = selectedGameData["Flow_data"]["Play_score"];
   const rawText = selectedGameData["raw_text"];
-
 
   const colours = avoidColourSets(
     homeTeam.replace(/\s/g, "").toUpperCase(),
@@ -66,7 +66,7 @@ const Summary = ({
 
   // states
   const plotButtons = ["CS", "EFG", "Fantasy", "Play"];
-  const plotSideButtons= ["CS", "EFG", "Fantasy", "Play", "Scores"];
+  const plotSideButtons = ["CS", "EFG", "Fantasy", "Play", "Scores"];
 
   const plotArr = [csData, efgData, fantasyData, playData];
   const progressArr = [cs, efg, fantasy, playScore];
@@ -75,7 +75,9 @@ const Summary = ({
   const [textToDisplay, setTextToDisplay] = useState(initialRawText);
   const [displayPlot, setDisplayPlot] = useState(plotArr[CS]);
   const [selectedPlotBtn, setSelectedPlotBtn] = useState(plotButtons[CS]);
-  const [selectedToggleBtn, setSelectedToggleBtn] = useState(plotSideButtons[SCORES]);
+  const [selectedToggleBtn, setSelectedToggleBtn] = useState(
+    plotSideButtons[SCORES]
+  );
 
   const [selectedPlotIndex, setSelectedPlotIndex] = useState(0);
   const [selectedPlotProgress, setSelectedPlotProgress] = useState([
@@ -98,7 +100,7 @@ const Summary = ({
   useEffect(() => {
     if (search) {
       let plotType = search.split("=")[1];
-      if( plotType==='cs' || plotType==='efg'){
+      if (plotType === "cs" || plotType === "efg") {
         plotType = plotType.toUpperCase();
       } else {
         plotType = capitalizeFirstLetter(plotType);
@@ -123,55 +125,55 @@ const Summary = ({
   });
 
   return (
-    <> 
+    <>
       <TapsWrapper>
         <PlotButtonsContinerLeft>
           <PlotButtons>
             {plotButtons.map((btn, i) => {
-                return (
-                  <BadgeButton
-                    key={i}
-                    isActive={btn === selectedPlotBtn}
-                    onClick={() => {
-                      setSelectedPlotBtn(btn);
-                      setSelectedPlotIndex(i);
-                      setSelectedPlotProgress([
+              return (
+                <BadgeButton
+                  key={i}
+                  isActive={btn === selectedPlotBtn}
+                  onClick={() => {
+                    setSelectedPlotBtn(btn);
+                    setSelectedPlotIndex(i);
+                    setSelectedPlotProgress([
                       progressArr[i].Home[progressArr[i].Home.length - 1],
                       progressArr[i].Away[progressArr[i].Away.length - 1],
-                      ]);
-                      setDisplayPlot(plotArr[i]);
-                    }
-                  }
-                  >
-                    <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>{btn}</Link>
-                  </BadgeButton>
-                );
+                    ]);
+                    setDisplayPlot(plotArr[i]);
+                  }}
+                >
+                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
+                    {btn}
+                  </Link>
+                </BadgeButton>
+              );
             })}
-            
           </PlotButtons>
         </PlotButtonsContinerLeft>
         <PlotButtonsContiner>
-            <PlotButtons>
-                {["Scores", selectedPlotBtn].map((btn, i) => {
-                  return (
-                    <BadgeButton
-                      key={i}
-                      onClick={() => {
-                        setToggled(btn === "Scores" ? false : true);
-                        setSelectedToggleBtn(btn);
-                      }}
-                      isActive={ btn === selectedToggleBtn}
-                    >
-                      <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
-                        {btn}
-                      </Link>
-                    </BadgeButton>
-                  );
-                })}
-              </PlotButtons>
+          <PlotButtons>
+            {["Scores", selectedPlotBtn].map((btn, i) => {
+              return (
+                <BadgeButton
+                  key={i}
+                  onClick={() => {
+                    setToggled(btn === "Scores" ? false : true);
+                    setSelectedToggleBtn(btn);
+                  }}
+                  isActive={btn === selectedToggleBtn}
+                >
+                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
+                    {btn}
+                  </Link>
+                </BadgeButton>
+              );
+            })}
+          </PlotButtons>
         </PlotButtonsContiner>
       </TapsWrapper>
-      
+
       <SummaryOverviewWrapper>
         <div>
           <div className="axis-description mobile-hide">
@@ -191,7 +193,6 @@ const Summary = ({
               </span>
             </p>
           </div>
-
           <OverviewPlot
             homeData={homeData}
             awayData={awayData}
@@ -215,7 +216,7 @@ const Summary = ({
           />
         </div>
 
-        <div>      
+        <div>
           <ProgressBar
             toggled={toggled}
             scoresProgress={scoresProgress}
