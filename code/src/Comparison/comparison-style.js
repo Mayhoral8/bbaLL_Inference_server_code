@@ -252,6 +252,10 @@ export const EachRandomSetWrapper = styled.div`
       grid-template-columns: 1fr auto 1fr;
     } 
   }
+
+  .comparsion:hover{
+    box-shadow: 0px 0px 18px #2F195F;
+  }
   .continer {
     text-align: center;
     padding-top: 10px;

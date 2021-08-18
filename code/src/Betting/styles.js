@@ -11,7 +11,8 @@ const media = {
 
 export const BettingPageContainer = styled.div`
   width: 100%;
-  height: calc(100vh - 64px);
+  min-height: 80vh;
+  height: auto;
   padding: 0px 10px;
   margin-top: 64px;
   display: flex;
@@ -62,19 +63,6 @@ export const ContentHeader = styled.div`
   }
 `;
 
-export const DisplayGamesBtnContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const TodayBtnContainer = styled.div`
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 6px 20px;
-`;
-
 export const BettingSectionColumn = styled.div`
   width: 64%;
   height: auto;
@@ -92,6 +80,7 @@ export const BettingSectionColumn = styled.div`
     padding: 20px 40px 0px;
     font-size: 24px;
     font-family: Roboto;
+    height: auto;
   }
 `;
 

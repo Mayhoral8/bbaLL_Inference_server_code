@@ -1,11 +1,18 @@
 import React, { useState, lazy, Suspense, useEffect } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
 import { FullWidthMain } from "../globalStyles";
 import { fbFirestore } from "../App/config";
 import EventList from "./eventlist";
 import SEO from "../Shared/SEO";
 import useWindowSize from "Shared/hooks/useWindowSize";
 import Spinner from "./spinner";
+
+//TODO : lazy import
+import RandomComparison from "./RandomComparison";
+import candidates from "JSON/player_candidates_for_comparison.json";
+import MatchFact from "./matchFact";
 
 import {
   FutureGameListBox,
@@ -17,6 +24,7 @@ import {
   TeamRankingsContainer,
   RowContainer,
   MainPageContainer,
+  BettingButton,
 } from "./mainpage-style";
 
 const PlayerRankingsCard = lazy(() => import("./playerRankingsCard"));
@@ -29,7 +37,35 @@ const GamePageContainer = (props) => {
   const [rankingTypes, setRankingTypes] = useState([]);
   const [games, setGames] = useState([]);
   const [data, setData] = useState([]);
+  const [randomSet, setRandomSet] = useState([]);
 
+  function loadRandomPlayers() {
+    let selectedForComparison = new Array();
+
+    let data = candidates;
+    let randRange = 59;
+    let nameObject;
+    let index;
+
+    nameObject = Object.values(data)["0"];
+
+    for (index = 0; index < 3; index++) {
+      var indexOne = Math.floor(Math.random() * randRange + 0);
+      var indexTwo = Math.floor(Math.random() * randRange + 0);
+      if (indexOne == indexTwo) {
+        indexTwo = Math.floor(Math.random() * randRange + 0);
+      }
+
+      let pair = {
+        nameOne: nameObject[indexOne],
+        nameTwo: nameObject[indexTwo],
+      };
+
+      selectedForComparison.push(pair);
+    }
+
+    setRandomSet(selectedForComparison);
+  }
   useEffect(() => {
     const initialTypes = ["bidaily", "weekly", "seasonal"];
     let rankingTypesArray = [];
@@ -39,11 +75,11 @@ const GamePageContainer = (props) => {
         type in props.playerRankings[0] &&
         Object.keys(props.playerRankings[0][type]).length !== 0
       ) {
-        playerRankings.push({...props.playerRankings[0][type]});
+        playerRankings.push({ ...props.playerRankings[0][type] });
         rankingTypesArray.push(type);
       }
     });
-    playerRankings.push({...props.playerRankings[1]});
+    playerRankings.push({ ...props.playerRankings[1] });
 
     setRankingTypes(rankingTypesArray);
     setData(playerRankings);
@@ -67,9 +103,11 @@ const GamePageContainer = (props) => {
       .catch((error) => {
         console.log(error); //Error handeling
       });
+    loadRandomPlayers();
   }, []);
 
   let hasDataLoaded = Object.keys(data).length === 4;
+
   return (
     <>
       <SEO
@@ -93,8 +131,8 @@ const GamePageContainer = (props) => {
                   >
                     <PlayerRankingsCard
                       data={[data[0], data[1], data[2]]}
-                      rankingTypes={rankingTypes}
-                      timeOut={10000000}
+                      rankingTypes={rankingTypes} //playerRankingTypes}
+                      timeOut={5000}
                       cycling={true}
                     />
                   </Suspense>
@@ -105,21 +143,32 @@ const GamePageContainer = (props) => {
                     </PlayerRankingsPlaceholderTitle>
                   </PlayerRankingPlaceholderBox>
                 )}
-                <Suspense fallback={<div>Loading</div>}>
-                  <MemeCard urls={memeUrls} />
-                </Suspense>
+                {games.length != 0 ? (
+                  <Suspense fallback={<div>Loading</div>}>
+                    <MatchFact futureGames={games} />
+                  </Suspense>
+                ) : (
+                  <Suspense fallback={<div>Loading</div>}>
+                    <MemeCard urls={memeUrls} />
+                  </Suspense>
+                )}
               </RowContainer>
-
               <Suspense
                 fallback={<Spinner width="1244px" height="463.065px" />}
               >
                 <TeamRankingsContainer>
-                  <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
-                  {hasDataLoaded ? (
-                    <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
-                  ) : (
-                    <div style={{ minHeight: "400px" }}></div>
-                  )}
+                  <RandomComparison
+                    nameArray={randomSet}
+                    loadRandomPlayers={loadRandomPlayers}
+                  />
+                  <div style={{ width: "auto", margin: "0px 10px" }}>
+                    <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
+                    {hasDataLoaded ? (
+                      <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                    ) : (
+                      <div style={{ minHeight: "400px" }}></div>
+                    )}
+                  </div>
                 </TeamRankingsContainer>
               </Suspense>
             </div>
@@ -128,20 +177,33 @@ const GamePageContainer = (props) => {
               <Suspense fallback={<Spinner width="100%" height="283.506px" />}>
                 <FutureGameListBox>
                   <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                  <BettingButton>
+                    <Link to="/betting" className="styledButton">
+                      Virtual Bet Now!
+                    </Link>
+                  </BettingButton>
                   <FutureGameListRow>
                     <FutureGameList games={games} />
                   </FutureGameListRow>
                 </FutureGameListBox>
               </Suspense>
             )}
-
             {useWindowSize() > 1400 && games.length > 0 && (
-              <Suspense fallback={<Spinner width="292px" height="300px" />}>
-                <FutureGameListBox>
-                  <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                  <FutureGameList games={games} />
-                </FutureGameListBox>{" "}
-              </Suspense>
+              <div style={{ marginLeft: "3rem" }}>
+                <Suspense fallback={<Spinner width="292px" height="300px" />}>
+                  <FutureGameListBox>
+                    <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                    <BettingButton>
+                      <Link to="/betting" className="styledButton">
+                        Virtual Bet Now!
+                      </Link>
+                    </BettingButton>
+                    <FutureGameListRow>
+                      <FutureGameList games={games} />
+                    </FutureGameListRow>
+                  </FutureGameListBox>
+                </Suspense>
+              </div>
             )}
           </div>
         </MainPageContainer>

@@ -1,10 +1,19 @@
 import styled from "styled-components";
 
+const media = {
+  deskLLG: `@media(max-width: 1350px)`,
+  deskLG: `@media(max-width: 1100px)`,
+  deskMD: `@media(max-width: 930px)`,
+  tabletLG: `@media(max-width: 1024px)`,
+  tablet: `@media(max-width: 768px)`,
+  phone: `@media(max-width: 550px)`,
+}
+
 export const FutureGameListBox = styled.div`
   background-color: white;
   margin-top: 0rem;
-  margin-left: 3rem;
-  height: 100%;
+  height: auto;
+  max-height: 998px;
   min-width: 300px;
   display: flex;
   flex-direction: column;
@@ -13,7 +22,6 @@ export const FutureGameListBox = styled.div`
   overflow-x: hidden;
   position: relative;
   box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-  height: 1043px;
   scrollbar-width: thin; /* "auto" or "thin" */
 
   @media (max-width: 1400px) {
@@ -59,18 +67,41 @@ export const FutureGameTitle = styled.div`
   margin: 1rem 0rem 1rem 0rem;
 `;
 
-export const TeamRankingsContainer = styled.div`
+export const BettingButton = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  .styledButton{
+    color: white;
+    background-color: #65AE24;
+    border-radius: 5px;
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 15px 80px;
+    ${media.tablet}{
+      padding: 15px 40px;
+    }
+  }
+`
+
+export const TeamRankingsContainer = styled.div`
+
+  @media(min-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-gap: 10px;
+  }
 
   @media (max-width: 1400px) {
     margin: 0rem 0rem 0rem 0rem;
   }
-  margin: 3rem 0rem 0rem 0rem;
   background-color: white;
-
   box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-  padding: 1.5rem;
+  padding: 1.5rem 0;
 `;
 
 export const futureGameList = styled.div`

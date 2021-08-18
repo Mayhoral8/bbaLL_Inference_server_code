@@ -25,6 +25,14 @@ export const Wrapper = style.div`
 
   .date{
     padding-left: 12px;
+    padding-top: 4px;
+  }
+
+  .bettingName {
+    text-align: center;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
   }
 `;
 
@@ -33,7 +41,7 @@ export const GameDetail = style.div`
   grid-template-columns: 2fr 1fr 2fr;
   padding-top: 5px;
   .name{
-    padding-top: 25px;
+    padding-top: 15px;
     font-weight: 800;
     font-size: 18px;
     text-align: center;

@@ -11,25 +11,10 @@ const media = {
 
 
 export const Continer = styled.div`
-  padding-top: 20px;
-  .titleStyle {
-    padding-left: 60px;
-    font-family: Poppins;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 22px;
-    color: #FB4A59;
-    line-height: 30px;
-    ${media.deskLG} {
-      padding-left: 30px;
-    }
-    @media screen and (max-width: 610px) {
-      text-align: center;
-    }
-  }
+
 `
 export const StyledButtonsContiner = styled.div`
-  padding-top: 30px;
+  padding-top: 10px;
   @media screen and (max-width: 610px) {
     display: flex;
     justify-content: center;
