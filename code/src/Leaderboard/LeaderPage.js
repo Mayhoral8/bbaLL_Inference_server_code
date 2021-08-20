@@ -82,6 +82,8 @@ const LeaderPage = () => {
     }
   }, [history]);
 
+  console.log("ABC")
+
   const dbLeaderStats = isTeam
     ? "team_leaderboard_stats"
     : "player_leaderboard_stats";
@@ -109,7 +111,7 @@ const LeaderPage = () => {
 
   const makeTitle = () =>
     FormatYearLengthen(YEARS[yearId]) + " " + stat.replace(/_/g, " ");
-
+console.log(stat)
   if (!json) {
     return <Spinner />;
   }
