@@ -71,7 +71,13 @@ const Routes = (props) => {
     },
   ]);
   console.warn = () => {};
-  if (props.futureGames.isLoading || props.playerRankings.isLoading || !props.gameInfo || !props.gamePbpJson || !props.gamePlayersJson) {
+  if (
+    props.futureGames.isLoading ||
+    props.playerRankings.isLoading ||
+    !props.gameInfo ||
+    !props.gamePbpJson ||
+    !props.gamePlayersJson
+  ) {
     return (
       <>
         <GlobalStyle />
@@ -126,10 +132,10 @@ const mapStateToProps = (state) => {
   console.log(state);
   return {
     futureGames: state.gamesReducer.futureGames,
-    playerRankings: state.playersReducer.rankings,
+    playerRankings: state.playersReducer.playerRankings,
     gameInfo: state.firestoreReducer.ordered.gameInfoJson,
     gamePbpJson: state.firestoreReducer.ordered.gamePbpJson,
-    gamePlayersJson: state.firestoreReducer.ordered.gamePlayersJson
+    gamePlayersJson: state.firestoreReducer.ordered.gamePlayersJson,
   };
 };
 export default compose(

@@ -1,7 +1,6 @@
 import { fbFirestore } from "../../App/config";
 
 export const getPlayerRankings = () => {
-  console.log('ACTION')
   return async (dispatch) => {
     try {
       const rankings = await fbFirestore.collection("ranking").get();
@@ -11,7 +10,7 @@ export const getPlayerRankings = () => {
         const docData = doc.data();
         data.push(docData);
       });
-
+      
       dispatch({
         type: "PlayerRankings",
         payload: {

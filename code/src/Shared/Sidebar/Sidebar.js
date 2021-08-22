@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import {
   changeStat,
   changeIsTeam,

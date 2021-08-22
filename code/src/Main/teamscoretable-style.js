@@ -4,7 +4,7 @@ export const BoxScoreTableWrapper = styled.div`
   margin: 1.5rem 0 0 0rem;
   user-select: none;
   max-height: 410px;
-
+  
   .table-scroll {
     overflow-x: auto;
     overflow-y: auto;
@@ -19,7 +19,7 @@ export const BoxScoreTableWrapper = styled.div`
   .table.name .table-body {
     display: flex;
     flex-direction: column;
-    min-width: 11rem;
+
     @media (max-width: 834px) {
       min-width: 7.5rem;
     }
@@ -42,7 +42,8 @@ export const BoxScoreTableWrapper = styled.div`
   }
   .table.data {
     width: 100%;
-    min-width: 800px;
+
+    
     @media (max-width: 834px) {
       min-width: 200px;
     }

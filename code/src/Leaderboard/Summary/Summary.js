@@ -94,7 +94,7 @@ const Summary = ({ json }) => {
 
     return (
       <ContainerCard key={statPrime} graph style={{ margin: "0" }}>
-        <GraphInfo
+        {/* <GraphInfo
           plotType={GRAPHINFO[i]}
           plotType2={graphInfo2 && graphInfo2[i]}
         />
@@ -107,7 +107,7 @@ const Summary = ({ json }) => {
           teamColourArray={teamColourArray}
           isTeam={isTeam}
           isTotal={isTotal}
-        />
+        /> */}
       </ContainerCard>
     );
   });

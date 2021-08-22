@@ -13,9 +13,8 @@ const GamePage = (props) => {
   const { path, url } = useRouteMatch();
 
   useEffect(() => {
-    props.history.push(`${path}/${props.gameInfo[0].id}`);
+    props.history.push(`${path}/${props.gameInfo[0].id}/overview`);
   }, []);
-  console.log(props)
   return (
     <>
       <ScrollToTopOnMount />

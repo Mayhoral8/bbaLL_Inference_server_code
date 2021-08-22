@@ -43,10 +43,14 @@ const PointsBox = ({
 }) => {
     return(
         <PointsBoxContainer
-         selected = {
-             gameInfo[index][selectedClass] === colIndex
+
+            key = {index}
+
+            selected = {
+                gameInfo[index][selectedClass] === colIndex
             } 
-         onClick={(e)=>{
+
+            onClick={(e)=>{
             if(type === 'moneyLine'){
                 onPointBoxClick(
                     e,
@@ -98,7 +102,7 @@ const PointsBox = ({
                     isGameStartTimeBeforeTheCurrentTime
                 )
             }
-         }}
+            }}
         >
             {
             pointsSpinner ? 
@@ -146,46 +150,46 @@ const PointsBox = ({
                                 </TeamIconOddsContainer>
                             </>
                         :
-                        <>
-                            <TotalScoreValueContainer>
-                                {
-                                    element.overUnder[overOrUnderTotalScore]
-                                }
-                            </TotalScoreValueContainer>
-
-                            <TeamIconOddsContainer>
-
-                                <ArrowIconContainer>
-                                    <ArrowIcon src = {
-                                        overOrUnder == 'under' ? underIcon : overIcon
-                                    }/>
-                                </ArrowIconContainer>
-
-                                <OddsValueContainer>
+                            <>
+                                <TotalScoreValueContainer>
                                     {
-                                        element.overUnder[overOrUnderOddsValue]
+                                        element.overUnder[overOrUnderTotalScore]
                                     }
-                                </OddsValueContainer>
+                                </TotalScoreValueContainer>
 
-                            </TeamIconOddsContainer>
-                        </>
+                                <TeamIconOddsContainer>
+
+                                    <ArrowIconContainer>
+                                        <ArrowIcon src = {
+                                            overOrUnder == 'under' ? underIcon : overIcon
+                                        }/>
+                                    </ArrowIconContainer>
+
+                                    <OddsValueContainer>
+                                        {
+                                            element.overUnder[overOrUnderOddsValue]
+                                        }
+                                    </OddsValueContainer>
+
+                                </TeamIconOddsContainer>
+                            </>
                     }
 
                     {
                         type === 'overUnder' ? 
                             element[type].selected ?
-                            <LockIconContainer>
+                            <LockIconContainer key = {index}>
                                 <LockIcon src={blueLock}/>
                             </LockIconContainer>
                             :
                             !element[type][overOrUnderOddsValue]
                             ?
-                            <LockIconContainer>
+                            <LockIconContainer key = {index}>
                                 <LockIcon src={yellowLock}/>
                             </LockIconContainer>
                             :
                             !isGameStartTimeBeforeTheCurrentTime?
-                            <LockIconContainer>
+                            <LockIconContainer key = {index}>
                                 <LockIcon src={redLock}/>
                             </LockIconContainer>
                             :
@@ -193,19 +197,19 @@ const PointsBox = ({
                         :
 
                         [
-                            element[type].selected ?
-                        <LockIconContainer>
+                        element[type].selected ?
+                        <LockIconContainer key = {index}>
                             <LockIcon src={blueLock}/>
                         </LockIconContainer>
                         :
                         !element[type][homeOrAway].odds
                         ?
-                        <LockIconContainer>
+                        <LockIconContainer key = {index}>
                             <LockIcon src={yellowLock}/>
                         </LockIconContainer>
                         :
                         !isGameStartTimeBeforeTheCurrentTime?
-                        <LockIconContainer>
+                        <LockIconContainer key = {index}>
                             <LockIcon src={redLock}/>
                         </LockIconContainer>
                         :

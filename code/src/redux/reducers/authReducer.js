@@ -1,6 +1,6 @@
 import {LOGIN} from '../actions/types'
 const initialState={
-    userDetails: {user: {}, isLoading: true}
+    userDetails: {user: {}}
 }
 const authReducer=(state=initialState,action)=>{
     switch(action.type){
