@@ -202,7 +202,7 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
       }
     });
   };
-console.log(imgs)
+  
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (

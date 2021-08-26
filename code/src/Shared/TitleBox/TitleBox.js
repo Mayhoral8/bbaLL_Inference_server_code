@@ -5,8 +5,10 @@ import { changeYear } from "Redux/actions/sharedActions";
 import { YEARS } from "../../constants";
 import TimeLine from "../Timeline/TimeLine";
 import { TitleBoxDiv, TitleBoxRightDiv, Title } from "./titlebox-style";
+import { getStats } from "../../redux/actions/statsActions";
 
-const TitleBox = ({ stat, title, page, changeYear, statCategory }) => {
+const TitleBox = ({ stat, title, page, changeYear, pageType, getStats }) => {
+
   const history = useHistory();
   const location = useLocation();
   const pathname = history.location.pathname;
@@ -18,9 +20,11 @@ const TitleBox = ({ stat, title, page, changeYear, statCategory }) => {
   const [showTimeline, setShowTimeline] = useState(true);
 
   const isTeam = useSelector((state) => state.sidebarReducer.isTeam);
+
   const handleTimeLineChange = (statName, year) => {
     statName = statName.replace(/\s/g, "");
     changeYear({ yearId: year });
+    getStats(pageType, yearNames[year])
 
     let pathIncludingYear;
     if (pagePath === "leaderboard") {
@@ -82,4 +86,4 @@ const mapStateToProps = (state) => ({
   stat: state.sidebarReducer.stat,
 });
 
-export default connect(mapStateToProps, { changeYear })(TitleBox);
+export default connect(mapStateToProps, { changeYear, getStats })(TitleBox);

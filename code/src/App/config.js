@@ -16,7 +16,7 @@ const firesbaseConfig = {
 firebase.initializeApp(firesbaseConfig);
 const db = firebase.database();
 export const fbFirestore = firebase.firestore();
-// fbFirestore.settings({ experimentalForceLongPolling: true });
+fbFirestore.settings({ experimentalForceLongPolling: true });
 export const fbStorage = firebase.storage();
 export const fbRealtimeDB = db;
 export default firebase;

@@ -1,7 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { cleanName } from "../../Shared/Functions/PlotFunctions";
-import { AddBrString } from "../../Shared/Functions/AddBrString";
 import { ABB2TEAM } from "../../constants";
 import { MobileYAxisTitle } from "../../globalStyles";
 import { GraphInstruction, StatsPlotDiv } from "../stats-style";

@@ -10,6 +10,7 @@ import betsReducer from "./betsReducer";
 import recordReducer from "./recordReducer";
 import bettingHistoryReducer from "./bettingHistoryReducer";
 import playersReducer from "./playersReducer";
+import statsReducer from "./statsReducer";
 
 export default combineReducers({
   authReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
   betsReducer,
   recordReducer,
   bettingHistoryReducer,
-  playersReducer
+  playersReducer,
+  statsReducer
 });
