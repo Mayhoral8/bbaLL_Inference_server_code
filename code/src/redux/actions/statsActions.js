@@ -3,7 +3,6 @@ import {
 } from "../../App/config";
 
 export const getStats = (statsType, year) => {
-    console.log(statsType, year)
     return async(dispatch) => {
         try{
             dispatch({
@@ -16,23 +15,47 @@ export const getStats = (statsType, year) => {
                         }
                     }
             })
-            let data = []
-            await fbRealtimeDB.ref(`${statsType}/${year}`).once("value", (snapshots) => {
-                snapshots.forEach((snapShot) => {
-                    data.push(snapShot.val())
-                });
 
+            let playerTeamStats = []
+            let champMvpStats = {
+                regular: [],
+                playOffs: []
+            }
+            if(statsType === "player_stats_page" || statsType === "team_stats_page"){
+                await fbRealtimeDB.ref(`${statsType}/${year}`)
+                .once("value", (snapshots) => {
+                    snapshots.forEach((snapShot) => {
+                        playerTeamStats.push(snapShot.val())
+                    });
+                })
                 dispatch({
                     type: "Stats",
                     payload: {
                         isLoading: false,
                         type: {
-                            playOffs: data[0],
-                            regular: data[1]
+                            playOffs: playerTeamStats[0],
+                            regular: playerTeamStats[1]
                         }
                     }
                 })
-            })
+            }
+            else{
+                await fbRealtimeDB.ref(`${statsType}`)
+                .once("value", (snapshots) => {
+                    snapshots.forEach((snapShot) => {
+                        champMvpStats.regular.push(snapShot.val().Regular)
+                        champMvpStats.playOffs.push(snapShot.val().Playoffs)
+                    });
+                })
+                dispatch({
+                    type: "Stats",
+                    payload: {
+                        isLoading: false,
+                        type: champMvpStats
+                    }
+                })
+            }
+            
         }
         catch(e){
             throw e

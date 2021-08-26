@@ -159,8 +159,7 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat, getStats 
                 onClick={() => {
                   handleIsTeam(false);
                   handleChange("MVP", 2);
-                  let urlYear = history.location.search.split("=")[1]
-                  getStats("mvp_stats_page", urlYear)
+                  getStats("mvp_stats_page")
                 }}
               >
                 <Link to={teamOrPlayerLink("mvp", false)}>MVP</Link>
@@ -170,8 +169,7 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat, getStats 
                 onClick={() => {
                   handleIsTeam(true);
                   handleChange("Champion", 3);
-                  let urlYear = history.location.search.split("=")[1]
-                  getStats("champion_stats_page", urlYear)
+                  getStats("champion_stats_page")
                 }}
               >
                 <Link to={teamOrPlayerLink("champions", false)}>Champions</Link>
