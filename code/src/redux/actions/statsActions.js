@@ -40,6 +40,7 @@ export const getStats = (statsType, year) => {
                 })
             }
             else{
+                console.log("ACTIONS: ", statsType)
                 await fbRealtimeDB.ref(`${statsType}`)
                 .once("value", (snapshots) => {
                     snapshots.forEach((snapShot) => {

@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useRef } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import {
   changeIsTeam,
@@ -21,7 +21,6 @@ import StatButtons from "./Components/StatButtons";
 import StatsPlot from "./Components/StatsPlot";
 import StatsBar from "./Components/StatsBar";
 import ButtonBox from "../Shared/ButtonBox/ButtonBox";
-import Spinner from "../Shared/Spinner/Spinner";
 import GraphInfo from "../Shared/GraphInfo/GraphInfo";
 import StatsPageSelect from "../Shared/SmallSelect/StatsPageSelect";
 import StatsTable from "./Components/StatsTable";
@@ -70,7 +69,6 @@ const StatsPage = ({
   const yearQuery = yearQueryExists && location.search.split("&")[0].split("=")[1];
   const attrPath = location.pathname.split("/")[3];
   const teamOrPlayerPath = location.pathname.split("/")[2];
-  const isTeamRef = useRef(null)
 
   let pageType;
   if (statCategory === "Basic") {
@@ -80,9 +78,14 @@ const StatsPage = ({
   }
 
   useEffect(() => {
-    isTeamRef.current = isTeam
-    let urlYear = location.search.split("&")[0].split("=")[1] ? location.search.split("&")[0].split("=")[1] : "2020-21"
-    getStats(pageType, urlYear)
+    console.log(teamOrPlayerPath)
+    if(teamOrPlayerPath != 'champions'){
+      let urlYear = location.search.split("&")[0].split("=")[1] ? location.search.split("&")[0].split("=")[1] : "2020-21"
+      getStats(pageType, urlYear)
+    }
+    else{
+      getStats("champion_stats_page")
+    }
   }, [])
 
   useEffect(() => {
@@ -263,13 +266,7 @@ const StatsPage = ({
 
     const displayClassName =
       statX.reduce((a, b) => a + b, 0) === 0 ? "hide" : "show";
-
-    // graph info description
-    const graphInfo1 =
-      stat === "Points" || stat === "Three Points"
-        ? "stats_avg_dstd"
-        : "stats_avg_std";
-
+      
     let graphInfo2;
     let graphInfo2Arr;
     if ((statCategory === "Basic" && isTeam) || statCategory === "Champion") {
