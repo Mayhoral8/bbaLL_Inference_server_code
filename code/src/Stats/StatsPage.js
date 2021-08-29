@@ -78,7 +78,6 @@ const StatsPage = ({
   }
 
   useEffect(() => {
-    console.log(teamOrPlayerPath)
     if(teamOrPlayerPath != 'champions'){
       let urlYear = location.search.split("&")[0].split("=")[1] ? location.search.split("&")[0].split("=")[1] : "2020-21"
       getStats(pageType, urlYear)
