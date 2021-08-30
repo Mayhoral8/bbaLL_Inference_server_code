@@ -5,7 +5,6 @@ import { List, ListItem } from "../sidebar-style";
 
 const SidebarLeaderboard = ({ stat, isTeam, handleStat }) => {
   const stats = [
-    "Summary",
     "Points",
     "Rebounds",
     "Assists",

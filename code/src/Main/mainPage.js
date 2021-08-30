@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, lazy, Suspense, useEffect } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { useFirestoreConnect } from "react-redux-firebase";
-import { useSelector } from "react-redux";
+
 import { FullWidthMain } from "../globalStyles";
+import { fbFirestore } from "../App/config";
 import EventList from "./eventlist";
 import SEO from "../Shared/SEO";
-import { fbFirestore } from "../App/config";
 import useWindowSize from "Shared/hooks/useWindowSize";
-import PlayerRankingsCard from "./playerRankingsCard";
-import MemeCard from "./memeCard";
-import TeamScoreTable from "./TeamScoreTable";
-import FutureGameList from "./futuregamelist";
-import RandomComparison from "./RandomComparison"
+import Spinner from "./spinner";
+
+//TODO : lazy import
+import RandomComparison from "./RandomComparison";
 import candidates from "JSON/player_candidates_for_comparison.json";
-import MatchFact from './matchFact';
+import MatchFact from "./matchFact";
+
 import {
   FutureGameListBox,
   FutureGameTitle,
@@ -24,14 +24,19 @@ import {
   TeamRankingsContainer,
   RowContainer,
   MainPageContainer,
-  BettingButton
+  BettingButton,
 } from "./mainpage-style";
 
-const GamePageContainer = () => {
-  const [data, setData] = useState([{}, {}, {}]);
-  const [games, setGames] = useState([]);
+const PlayerRankingsCard = lazy(() => import("./playerRankingsCard"));
+const MemeCard = lazy(() => import("./memeCard"));
+const TeamScoreTable = lazy(() => import("./TeamScoreTable"));
+const FutureGameList = lazy(() => import("./futuregamelist"));
+
+const GamePageContainer = (props) => {
   const [memeUrls, setMemeUrls] = useState([]);
-  const [playerRankingTypes, setPlayerRankingTypes] = useState([]);
+  const [rankingTypes, setRankingTypes] = useState([]);
+  const [games, setGames] = useState([]);
+  const [data, setData] = useState([]);
   const [randomSet, setRandomSet] = useState([]);
 
   function loadRandomPlayers() {
@@ -42,7 +47,7 @@ const GamePageContainer = () => {
     let nameObject;
     let index;
 
-    nameObject = Object.values(data)['0'];
+    nameObject = Object.values(data)["0"];
 
     for (index = 0; index < 3; index++) {
       var indexOne = Math.floor(Math.random() * randRange + 0);
@@ -53,34 +58,41 @@ const GamePageContainer = () => {
 
       let pair = {
         nameOne: nameObject[indexOne],
-        nameTwo: nameObject[indexTwo]
-      }
+        nameTwo: nameObject[indexTwo],
+      };
 
       selectedForComparison.push(pair);
     }
 
-    setRandomSet(selectedForComparison)
+    setRandomSet(selectedForComparison);
   }
-
   useEffect(() => {
-    fbFirestore
-      .collection("future_game_info")
-      .get()
-      .then((snapshot) => {
-        let gamesFound = [];
-        snapshot.docs.map((doc) => {
-          const obj = doc.data();
-          if (Object.keys(obj).length !== 0) {
-            gamesFound.push(obj);
-          }
-        });
+    const initialTypes = ["bidaily", "weekly", "seasonal"];
+    let rankingTypesArray = [];
+    let playerRankings = [];
+    initialTypes.forEach((type) => {
+      if (
+        type in props.playerRankings[0] &&
+        Object.keys(props.playerRankings[0][type]).length !== 0
+      ) {
+        playerRankings.push({ ...props.playerRankings[0][type] });
+        rankingTypesArray.push(type);
+      }
+    });
+    playerRankings.push({ ...props.playerRankings[1] });
 
-        setGames(gamesFound);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      
+    setRankingTypes(rankingTypesArray);
+    setData(playerRankings);
+    
+    let sortedGames = props.futureGames;
+    sortedGames.sort((game1, game2) => {
+      return (
+        new Date(game1["Game Info"]["Game Time"]) -
+        new Date(game2["Game Info"]["Game Time"])
+      );
+    });
+    setGames(sortedGames);
+
     fbFirestore
       .collection("landing_page_Video")
       .get()
@@ -89,92 +101,13 @@ const GamePageContainer = () => {
         setMemeUrls(documents["0"].links);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error); //Error handeling
       });
-    setData(getFirebaseData());
     loadRandomPlayers();
   }, []);
 
-  let test = [{}];
   let hasDataLoaded = Object.keys(data).length === 4;
 
-  const currentYear = "2020-21";
-  useFirestoreConnect(() => [
-    {
-      collection: "game_info",
-      doc: currentYear,
-      subcollections: [
-        {
-          collection: "Gamecode",
-        },
-      ],
-      storeAs: "gameInfoJson",
-    },
-    {
-      collection: "game_pbp",
-      doc: currentYear,
-      subcollections: [
-        {
-          collection: "Gamecode",
-        },
-      ],
-      storeAs: "gamePbpJson",
-    },
-    {
-      collection: "game_players",
-      doc: currentYear,
-      subcollections: [
-        {
-          collection: "Gamecode",
-        },
-      ],
-      storeAs: "gamePlayersJson",
-    },
-  ]);
-
-  const getFirebaseData = () => {
-    let data = [];
-    fbFirestore
-      .collection("ranking")
-      .get()
-      .then((snapshot) => {
-        const documents = snapshot.docs.map((doc) => doc.data());
-        const types = ["bidaily", "weekly", "seasonal"];
-
-        let foundTypes = [];
-        types.forEach((type) => {
-          if (
-            type in documents[0] &&
-            Object.keys(documents[0][type]).length !== 0
-          ) {
-            data.push(documents[0][type]);
-            foundTypes.push(type);
-          }
-        });
-
-        setPlayerRankingTypes(foundTypes);
-        data.push(documents[1]);
-      });
-    return data;
-  };
-
-  const gameInfo = useSelector(
-    (state) => state.firestoreReducer.ordered.gameInfoJson
-  );
-  const gamePbp = useSelector(
-    (state) => state.firestoreReducer.ordered.gamePbpJson
-  );
-  const gamePlayers = useSelector(
-    (state) => state.firestoreReducer.ordered.gamePlayersJson
-  );
-
-  games.sort((game1, game2) => {
-    return (
-      new Date(game1["Game Info"]["Game Time"]) -
-      new Date(game2["Game Info"]["Game Time"])
-    );
-  });
-  
   return (
     <>
       <SEO
@@ -183,77 +116,113 @@ const GamePageContainer = () => {
       />
       <FullWidthMain>
         <EventList
-          gameInfo={gameInfo}
-          gamePbp={gamePbp}
-          gamePlayers={gamePlayers}
+          gameInfo={props.orderedGameInfo}
+          gamePbp={props.gamePbp}
+          gamePlayers={props.gamePlayers}
         />
 
         <MainPageContainer>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {useWindowSize() < 1400 && games.length > 0 && (
-              <FutureGameListBox>
-                <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                <FutureGameListRow>
-                  <FutureGameList games={games} />
-                </FutureGameListRow>
-                <BettingButton>
-                  <Link to="/betting" className="styledButton">Virtual Bet Now!</Link>
-                </BettingButton>
-              </FutureGameListBox>
-            )}
-
-            <RowContainer>
-              {hasDataLoaded ? (
-                <PlayerRankingsCard
-                  data={[data[0], data[1], data[2]]}
-                  rankingTypes={playerRankingTypes}
-                  timeOut = {5000}
-                  cycling = {true}
-                />
-              ) : (
-                <PlayerRankingPlaceholderBox>
-                  <PlayerRankingsPlaceholderTitle>
-                    Player Rankings
-                  </PlayerRankingsPlaceholderTitle>
-                </PlayerRankingPlaceholderBox>
-              )}
-              { games.length != 0 ?
-                <MatchFact futureGames = {games}/>
-                :
-                <MemeCard urls={memeUrls} />
-              }
-            </RowContainer>
-
-           
-            
-            <TeamRankingsContainer>
-              <RandomComparison nameArray={randomSet} loadRandomPlayers={loadRandomPlayers}/>
-              <div style={{width: 'auto', margin: '0px 10px'}}>
-                <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
+          <div className="wrapper">
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <RowContainer>
                 {hasDataLoaded ? (
-                  <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                  <Suspense
+                    fallback={<Spinner width="556.364px" height="481.960px" />}
+                  >
+                    <PlayerRankingsCard
+                      data={[data[0], data[1], data[2]]}
+                      rankingTypes={rankingTypes} //playerRankingTypes}
+                      timeOut={5000}
+                      cycling={true}
+                    />
+                  </Suspense>
                 ) : (
-                  <div style={{ minHeight: "400px" }}></div>
+                  <PlayerRankingPlaceholderBox>
+                    <PlayerRankingsPlaceholderTitle>
+                      Player Rankings
+                    </PlayerRankingsPlaceholderTitle>
+                  </PlayerRankingPlaceholderBox>
                 )}
-              </div>
-            </TeamRankingsContainer>
-          </div>
-
-          {useWindowSize() > 1400 && games.length > 0 && (
-            <div style={{marginLeft: '3rem'}}>
-              <FutureGameListBox>
-                <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                <BettingButton>
-                  <Link to="/betting" className="styledButton">Virtual Bet Now!</Link>
-                </BettingButton>
-                <FutureGameList games={games} />
-              </FutureGameListBox>
+                {games.length != 0 ? (
+                  <Suspense fallback={<div>Loading</div>}>
+                    <MatchFact futureGames={games} />
+                  </Suspense>
+                ) : (
+                  <Suspense fallback={<div>Loading</div>}>
+                    <MemeCard urls={memeUrls} />
+                  </Suspense>
+                )}
+              </RowContainer>
+              <Suspense
+                fallback={<Spinner width="1244px" height="463.065px" />}
+              >
+                <TeamRankingsContainer>
+                  <RandomComparison
+                    nameArray={randomSet}
+                    loadRandomPlayers={loadRandomPlayers}
+                  />
+                  <div style={{ width: "auto", margin: "0px 10px" }}>
+                    <TeamRankingsTitle>NBA Team Rankings</TeamRankingsTitle>
+                    {hasDataLoaded ? (
+                      <TeamScoreTable leftColHeading={"Rank"} data={data[3]} />
+                    ) : (
+                      <div style={{ minHeight: "400px" }}></div>
+                    )}
+                  </div>
+                </TeamRankingsContainer>
+              </Suspense>
             </div>
-          )}
+
+            {useWindowSize() < 1400 && games.length > 0 && (
+              <Suspense fallback={<Spinner width="100%" height="283.506px" />}>
+                <FutureGameListBox>
+                  <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                  <BettingButton>
+                    <Link to="/betting" className="styledButton">
+                      Virtual Bet Now!
+                    </Link>
+                  </BettingButton>
+                  <FutureGameListRow>
+                    <FutureGameList games={games} />
+                  </FutureGameListRow>
+                </FutureGameListBox>
+              </Suspense>
+            )}
+            {useWindowSize() > 1400 && games.length > 0 && (
+              <div style={{ marginLeft: "3rem" }}>
+                <Suspense fallback={<Spinner width="292px" height="300px" />}>
+                  <FutureGameListBox>
+                    <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                    <BettingButton>
+                      <Link to="/betting" className="styledButton">
+                        Virtual Bet Now!
+                      </Link>
+                    </BettingButton>
+                    <FutureGameListRow>
+                      <FutureGameList games={games} />
+                    </FutureGameListRow>
+                  </FutureGameListBox>
+                </Suspense>
+              </div>
+            )}
+          </div>
         </MainPageContainer>
       </FullWidthMain>
     </>
   );
 };
+const mapStateToProps = ({
+  firestoreReducer,
+  gamesReducer,
+  playersReducer,
+}) => {
+  return {
+    orderedGameInfo: firestoreReducer.ordered.gameInfoJson,
+    gamePbp: firestoreReducer.ordered.gamePbpJson,
+    gamePlayers: firestoreReducer.ordered.gamePlayersJson,
+    futureGames: gamesReducer.futureGames.games,
+    playerRankings: playersReducer.playerRankings.rankings,
+  };
+};
 
-export default GamePageContainer;
+export default connect(mapStateToProps, {})(GamePageContainer);

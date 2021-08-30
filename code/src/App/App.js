@@ -35,11 +35,11 @@ const App = () => {
   return (
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <ThemeProvider theme={theme}>
+        {/* <ThemeProvider theme={theme}> */}
           <Router history={browserHistory}>
             <Routes/>
           </Router>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </ReactReduxFirebaseProvider>
     </Provider>
   );

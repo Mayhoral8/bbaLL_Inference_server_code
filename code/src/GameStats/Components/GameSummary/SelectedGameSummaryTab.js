@@ -1,10 +1,13 @@
 import React from "react";
+import { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
-import BoxScoreContainer from "../Boxscore/BoxScoreContainer";
-import GameStatsTable from "../GameStats/GameStatsTable";
-import MatchFacts from "../MatchFacts/MatchFacts";
-import Overview from "../Overview/Overview";
-import Summary from "../Overview/Summary";
+import Spinner from "../../../Shared/Spinner/loadingSpinner";
+import { SpinnerContainer } from "./SelectedGameSummaryTabStyles";
+const BoxScoreContainer = lazy(() => import("../Boxscore/BoxScoreContainer"));
+const GameStatsTable = lazy(() => import("../GameStats/GameStatsTable"));
+const MatchFacts = lazy(() => import("../MatchFacts/MatchFacts"));
+const Overview = lazy(() => import("../Overview/Overview"));
+const Summary = lazy(() => import("../Overview/Summary"));
 
 const SelectedGameSummaryTab = ({
   info,
@@ -22,63 +25,127 @@ const SelectedGameSummaryTab = ({
   if (tab === "stats") {
     return (
       <>
-        <GameStatsTable info={info} />
-        <Summary 
-        selectedGameIndex={selectedGameIndex}
-        homeTeam={info.Home.Team}
-        awayTeam={info.Away.Team}
-        gamePbp={gamePbp}
-        />
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <GameStatsTable info={info} />
+        </Suspense>
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <Summary
+            selectedGameIndex={selectedGameIndex}
+            homeTeam={info.Home.Team}
+            awayTeam={info.Away.Team}
+            gamePbp={gamePbp}
+          />
+        </Suspense>
       </>
     );
   } else if (tab === "boxscore") {
     return (
       <>
-        <BoxScoreContainer
-          selectedGameIndex={selectedGameIndex}
-          info={info}
-          gamePlayers={gamePlayers}
-        />
-        <Summary 
-        selectedGameIndex={selectedGameIndex}
-        homeTeam={info.Home.Team}
-        awayTeam={info.Away.Team}
-        gamePbp={gamePbp}
-        />
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <BoxScoreContainer
+            selectedGameIndex={selectedGameIndex}
+            info={info}
+            gamePlayers={gamePlayers}
+          />
+        </Suspense>
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <Summary
+            selectedGameIndex={selectedGameIndex}
+            homeTeam={info.Home.Team}
+            awayTeam={info.Away.Team}
+            gamePbp={gamePbp}
+          />
+        </Suspense>
       </>
     );
   } else if (tab === "overview" || !tab) {
     return (
       <>
-        <Overview
-          highlights={info.Highlights.Text}
-          YoutubeHighlight={info.Common.YoutubeHighlight}
-        />
-        <Summary 
-          selectedGameIndex={selectedGameIndex}
-          homeTeam={info.Home.Team}
-          awayTeam={info.Away.Team}
-          gamePbp={gamePbp}
-        />
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <Overview
+            highlights={info.Highlights.Text}
+            YoutubeHighlight={info.Common.YoutubeHighlight}
+          />
+        </Suspense>
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <Summary
+            selectedGameIndex={selectedGameIndex}
+            homeTeam={info.Home.Team}
+            awayTeam={info.Away.Team}
+            gamePbp={gamePbp}
+          />
+        </Suspense>
       </>
     );
   } else {
     return (
       <>
-        <MatchFacts
-          leads={leads}
-          ties={ties}
-          fantasy={fantasy}
-          info={info}
-          abbreviatedHomeTeam={abbreviatedHomeTeam}
-          abbreviatedAwayTeam={abbreviatedAwayTeam}
-        />
-          <Summary 
-          selectedGameIndex={selectedGameIndex}
-          homeTeam={info.Home.Team}
-          awayTeam={info.Away.Team}
-          gamePbp={gamePbp}
-        />
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <MatchFacts
+            leads={leads}
+            ties={ties}
+            fantasy={fantasy}
+            info={info}
+            abbreviatedHomeTeam={abbreviatedHomeTeam}
+            abbreviatedAwayTeam={abbreviatedAwayTeam}
+          />
+        </Suspense>
+        <Suspense
+          fallback={
+            <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+          }
+        >
+          <Summary
+            selectedGameIndex={selectedGameIndex}
+            homeTeam={info.Home.Team}
+            awayTeam={info.Away.Team}
+            gamePbp={gamePbp}
+          />
+        </Suspense>
       </>
     );
   }

@@ -122,17 +122,16 @@ export const futureGameList = styled.div`
 `;
 
 export const MainPageContainer = styled.div`
-  @media (max-width: 1400px) {
-    flex-direction: column;
+  .wrapper {
+    display: flex;
+    @media (max-width: 1400px) {
+      flex-direction: column-reverse;
+    }
   }
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   height: 100%;
   width: 100%;
   max-width: 1640px;
-  justify-content: center;
 
   @media screen and (min-width: 996px) {
     margin: 4rem auto 0rem auto;

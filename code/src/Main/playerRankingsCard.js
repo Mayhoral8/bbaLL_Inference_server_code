@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as teamColours from "../constants/teamColours";
 import { fbStorage } from "../App/config";
-import { exportComponentAsJPEG } from 'react-component-export-image';
 import Select from "react-select";
 import { CardContainer, OutsideContainer } from "./playerrankingscard-style";
 const capitalizeFirstLetter = (string) => {
@@ -177,30 +176,33 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
 
   const getPic = async (playerNames) => {
     playerNames.map((name) => {
+
       if (!(name in imgs)) {
         const imageReference = fbStorage.refFromURL(
-          "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
+          "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_S_jp2/" +
             name.replaceAll(" ", "_").replaceAll(".", ",") +
-            ".png"
+            ".jp2"
         );
 
         imageReference
           .getDownloadURL()
           .then((url) => {
+            console.log(url)
             setImgs((imgs) => ({ [name]: url, ...imgs }));
           })
-          .catch(() => {
-            const imageReference = fbStorage.refFromURL(
-              "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
-            );
-            imageReference.getDownloadURL().then((url) => {
-              setImgs((imgs) => ({ [name]: url, ...imgs }));
-            });
+          .catch((e) => {
+            console.log(e)
+            // const imageReference = fbStorage.refFromURL(
+            //   "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
+            // );
+            // imageReference.getDownloadURL().then((url) => {
+            //   setImgs((imgs) => ({ [name]: url, ...imgs }));
+            // });
           });
       }
     });
   };
-
+  
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (
@@ -219,7 +221,7 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
             }}
           >
             <img
-              style={{ maxWidth: "40px" }}
+              style={{ width: "40px", height: '40px' }}
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
             />
           </button>
@@ -330,7 +332,7 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
             }}
           >
             <img
-              style={{ maxWidth: "40px" }}
+              style={{ width: "40px", height: '40px' }}
               src="https://image.flaticon.com/icons/png/512/60/60758.png"
             />
           </button>
