@@ -175,23 +175,23 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
 
 
   const getPic = async (playerNames) => {
-    // console.log(playerNames)
     playerNames.map((name) => {
 
       if (!(name in imgs)) {
         const imageReference = fbStorage.refFromURL(
-          "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/" +
+          "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_S_jp2/" +
             name.replaceAll(" ", "_").replaceAll(".", ",") +
-            ".png"
+            ".jp2"
         );
 
         imageReference
           .getDownloadURL()
           .then((url) => {
+            console.log(url)
             setImgs((imgs) => ({ [name]: url, ...imgs }));
           })
           .catch((e) => {
-            // console.log(e)
+            console.log(e)
             // const imageReference = fbStorage.refFromURL(
             //   "gs://nba-database-cb52a.appspot.com/player_photo_hayaoStyle_v2/Anonymous_Image.png"
             // );
@@ -202,7 +202,7 @@ const PlayerRankingsCard = ({ data, rankingTypes, timeOut, cycling, rankingProps
       }
     });
   };
-
+  
   const renderComponent = () => {
     if (hasDataLoaded == true) {
       return (

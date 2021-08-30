@@ -21,6 +21,7 @@ const SidebarIndiv = ({ indivStat, changeIndivStat }) => {
   return (
     <List>
       {TEMPfiller.map((category) => {
+        console.log("CATEGORY: ",category)
         return (
           <ListItem
             key={category}

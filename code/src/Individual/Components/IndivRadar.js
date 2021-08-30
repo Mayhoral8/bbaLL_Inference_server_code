@@ -1,8 +1,5 @@
 import React, { Fragment } from "react";
-import Plot from "react-plotly.js";
-import logo from "Assets/images/new-logo-square.png";
 import { radarStats } from "../individualConstants";
-import useWindowSize from "../../Shared/hooks/useWindowSize";
 import { Radar } from "react-chartjs-2";
 import { rgba } from "polished";
 import "chartjs-plugin-datalabels";

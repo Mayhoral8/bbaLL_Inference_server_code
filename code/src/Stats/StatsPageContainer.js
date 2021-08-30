@@ -1,9 +1,10 @@
-import React from "react";
+import React, {lazy, Suspense} from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import SEO from "../Shared/SEO";
-import StatsPage from "./StatsPage";
 import { StatsDiv } from "./stats-style";
 import { CenteredMain } from "../globalStyles";
+import Spinner from "../Shared/Spinner/Spinner";
+const StatsPage = lazy(() => import ("./StatsPage"));
 
 const StatsPageContainer = () => {
   const { path } = useRouteMatch();
@@ -16,9 +17,11 @@ const StatsPageContainer = () => {
       <CenteredMain>
         <StatsDiv>
           <Switch>
+          <Suspense fallback = {<Spinner/>}>
             <Route path={`${path}/:teamsOrPlayers?`}>
               <StatsPage />
             </Route>
+          </Suspense>
           </Switch>
         </StatsDiv>
       </CenteredMain>

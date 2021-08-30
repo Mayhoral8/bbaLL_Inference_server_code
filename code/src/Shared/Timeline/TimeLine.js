@@ -4,7 +4,6 @@ import { SliderRail, Handle, Tick } from "./Components/TimeLineComponents";
 import { connect } from "react-redux";
 import { TimeLineDiv } from "./timeline-style";
 import { NUMBEROFYEARS } from "Constants";
-import { NavLink } from "react-router-dom";
 
 const domain = [0, NUMBEROFYEARS - 1];
 const validValues = [...Array(NUMBEROFYEARS).keys()];

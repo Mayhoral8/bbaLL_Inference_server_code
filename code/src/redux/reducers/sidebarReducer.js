@@ -6,7 +6,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  stat: "Summary",
+  stat: "Points",
   indivStat: "Overall",
   statCategory: "Basic",
   isTeam: false,

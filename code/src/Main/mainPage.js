@@ -83,7 +83,7 @@ const GamePageContainer = (props) => {
 
     setRankingTypes(rankingTypesArray);
     setData(playerRankings);
-
+    
     let sortedGames = props.futureGames;
     sortedGames.sort((game1, game2) => {
       return (
