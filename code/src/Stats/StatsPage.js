@@ -1,12 +1,11 @@
 import React, { useState, Fragment, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
-import { useFirebaseConnect } from "react-redux-firebase";
-import { changeYear } from "../redux/actions/sharedActions";
 import {
   changeIsTeam,
   changeStat,
   changeStatCategory,
 } from "../redux/actions/sidebarActions";
+import { getStats } from "../redux/actions/statsActions";
 import { preprocessBasicData, preprocessChampNmvpData } from "./StatsHelper";
 import {
   ButtonsAndSearchBox,
@@ -22,22 +21,20 @@ import StatButtons from "./Components/StatButtons";
 import StatsPlot from "./Components/StatsPlot";
 import StatsBar from "./Components/StatsBar";
 import ButtonBox from "../Shared/ButtonBox/ButtonBox";
-import Spinner from "../Shared/Spinner/Spinner";
 import GraphInfo from "../Shared/GraphInfo/GraphInfo";
-import StatSelect from "../Shared/SmallSelect/StatSelect";
 import StatsPageSelect from "../Shared/SmallSelect/StatsPageSelect";
 import StatsTable from "./Components/StatsTable";
 import ScrollToTopOnMount from "../Shared/ScrollToTopOnMount";
 import { useHistory, useLocation } from "react-router-dom";
 import { capitalizeFirstLetter } from "../Shared/Functions/capitalizeFirstLetter";
 import ButtonBoxSelect from "../Shared/SmallSelect/ButtonBoxSelect";
+import LoadingSpinner from "../Shared/Spinner/loadingSpinner";
 
 const PLAYERTIMEINDEX = 4;
 const PLAYERTIMEMAX = 5;
 
 const StatsPage = ({
   isTeam,
-  changeYear,
   width,
   height,
   stat,
@@ -46,6 +43,8 @@ const StatsPage = ({
   yearId,
   changeStatCategory,
   changeIsTeam,
+  getStats,
+  stats
 }) => {
   const [season, setSeason] = useState("Regular");
   const [dataType, setDataType] = useState("Graphs");
@@ -67,13 +66,28 @@ const StatsPage = ({
   const query1 = buttonPillQuery1 && buttonPillQuery1.split("=")[1];
   const query2 = buttonPillQuery2 && buttonPillQuery2.split("=")[1];
   const playerTimeQuery = playerTime && playerTime.split("=")[1];
-  const yearQuery =
-    yearQueryExists && location.search.split("&")[0].split("=")[1];
+  const yearQuery = yearQueryExists && location.search.split("&")[0].split("=")[1];
   const attrPath = location.pathname.split("/")[3];
   const teamOrPlayerPath = location.pathname.split("/")[2];
 
+  let pageType;
+  if (statCategory === "Basic") {
+    pageType = isTeam ? "team_stats_page" : "player_stats_page";
+  } else {
+    pageType = isTeam ? "champion_stats_page" : "mvp_stats_page";
+  }
+
   useEffect(() => {
-    //changeStatCategory({ statCategory: "Basic" });
+    if(teamOrPlayerPath != 'champions'){
+      let urlYear = location.search.split("&")[0].split("=")[1] ? location.search.split("&")[0].split("=")[1] : "2020-21"
+      getStats(pageType, urlYear)
+    }
+    else{
+      getStats("champion_stats_page")
+    }
+  }, [])
+
+  useEffect(() => {
     changeStat({ stat: "Points" });
     let seasonPath;
     let dataTypePath;
@@ -151,32 +165,14 @@ const StatsPage = ({
     }
   }, [history, statCategory]);
 
-  let dbCollName;
-  if (statCategory === "Basic") {
-    dbCollName = isTeam ? "team_stats_page" : "player_stats_page";
-  } else {
-    dbCollName = isTeam ? "champion_stats_page" : "mvp_stats_page";
-  }
-  // connect to firebase
-  useFirebaseConnect([{ path: dbCollName }]);
-  let statData = useSelector(
-    (state) => state.firebaseReducer.ordered[dbCollName]
-  );
-  if (statData === undefined) {
-    return <Spinner />;
-  }
-
   // check if playoffs data exist
-  const playoffsExist = typeof statData[yearId].value["Playoffs"] === "object";
-
-  statData =
-    statCategory === "Basic"
-      ? statData[yearId].value[season]
-      : statData.map((year) => {
-          return year.value[season];
-        });
+  let playoffsExist
+  if(!stats.isLoading){
+    playoffsExist = typeof stats.type.playOffs === "object";
+  }
 
   const makeStatsPlot = () => {
+    let statData = season === 'Regular' ? stats.type.regular : stats.type.playOffs
     let names = [],
       statY = [],
       statX = [],
@@ -190,7 +186,7 @@ const StatsPage = ({
     let ylabel = STATSCONSTANTS.YAXISTITLE[0] + stat;
     const modifiedYLabel = ylabel.replace(/\_/g, " ");
 
-    if (statData) {
+    if(statData){
       if (statCategory === "Basic") {
         [
           statX,
@@ -269,13 +265,7 @@ const StatsPage = ({
 
     const displayClassName =
       statX.reduce((a, b) => a + b, 0) === 0 ? "hide" : "show";
-
-    // graph info description
-    const graphInfo1 =
-      stat === "Points" || stat === "Three Points"
-        ? "stats_avg_dstd"
-        : "stats_avg_std";
-
+      
     let graphInfo2;
     let graphInfo2Arr;
     if ((statCategory === "Basic" && isTeam) || statCategory === "Champion") {
@@ -309,7 +299,6 @@ const StatsPage = ({
         "",
       ];
     }
-
     CONSTANTS.STATS.forEach((el, i) => {
       let attr = el;
       if (/\s/.test(attr)) {
@@ -443,22 +432,47 @@ const StatsPage = ({
     title = makeTitle();
   }
 
-  return (
-    <Fragment>
-      <ScrollToTopOnMount />
-      <TitleBox title={title} page="stats" statCategory={statCategory} />
-      {/* Mobile */}
-      <MobileFilterDiv>
-        <StatsPageSelect
-          statData={statData}
-          statCategory={statCategory}
-          isTeam={isTeam}
-        />
-      </MobileFilterDiv>
-      <MobileFilterDiv>
-        <ButtonBoxSelect
+    return (
+      <Fragment>
+        <ScrollToTopOnMount />
+        <TitleBox title={title} page="stats" pageType = {pageType}/>
+        {
+          stats.isLoading ? 
+            <LoadingSpinner width = "100%" height = "calc(100vh - 179.453px)"/>
+          :
+          <>
+          {/* Mobile */}
+        <MobileFilterDiv>  
+          <StatsPageSelect
+            statData={ season === 'Regular' ? stats.type.regular : stats.type.playoffs }
+            statCategory={statCategory}
+            isTeam={isTeam}
+          />
+        </MobileFilterDiv>
+        <MobileFilterDiv>
+          <ButtonBoxSelect
+            isTeam={isTeam}
+            time={time}
+            dataArray={attribute_menu.filter((stat) => {
+              if (isTeam) {
+                return !["Plus-Minus"].includes(stat);
+              } else {
+                return stat;
+              }
+            })}
+            stat={stat}
+            season={season}
+            dataType={dataType}
+          />
+        </MobileFilterDiv>
+  
+        {/* Desktop */}
+        <ButtonBox
+          hide
           isTeam={isTeam}
           time={time}
+          isActive={stat.replace(/_/g, " ")}
+          buttonFunction={(data) => changeStat({ stat: data })}
           dataArray={attribute_menu.filter((stat) => {
             if (isTeam) {
               return !["Plus-Minus"].includes(stat);
@@ -466,54 +480,37 @@ const StatsPage = ({
               return stat;
             }
           })}
-          stat={stat}
           season={season}
           dataType={dataType}
         />
-      </MobileFilterDiv>
-
-      {/* Desktop */}
-      <ButtonBox
-        hide
-        isTeam={isTeam}
-        time={time}
-        isActive={stat.replace(/_/g, " ")}
-        buttonFunction={(data) => changeStat({ stat: data })}
-        dataArray={attribute_menu.filter((stat) => {
-          if (isTeam) {
-            return !["Plus-Minus"].includes(stat);
-          } else {
-            return stat;
-          }
-        })}
-        season={season}
-        dataType={dataType}
-      />
-
-      <ButtonsAndSearchBox>
-        <StatButtons
-          statCategory={statCategory}
-          season={season}
-          dataType={dataType}
-          minutes={minutes}
-          setTime={setTime}
-          time={time}
-          handleSeason={(data) => {
-            setSeason(data);
-            setMinutes([
-              STATSCONSTANTS.PLAYERTIME[data][PLAYERTIMEINDEX] - 0.5,
-              STATSCONSTANTS.PLAYERTIME[data][PLAYERTIMEMAX],
-            ]);
-          }}
-          handleDataType={(type) => setDataType(type)}
-          handleMinutes={(min, max) => setMinutes([min, max])}
-          isTeam={isTeam}
-          playoffsExist={playoffsExist}
-        />
-      </ButtonsAndSearchBox>
-      {makeStatsPlot()}
-    </Fragment>
-  );
+  
+        <ButtonsAndSearchBox>
+          <StatButtons
+            statCategory={statCategory}
+            season={season}
+            dataType={dataType}
+            minutes={minutes}
+            setTime={setTime}
+            time={time}
+            handleSeason={(data) => {
+              setSeason(data);
+              setMinutes([
+                STATSCONSTANTS.PLAYERTIME[data][PLAYERTIMEINDEX] - 0.5,
+                STATSCONSTANTS.PLAYERTIME[data][PLAYERTIMEMAX],
+              ]);
+            }}
+            handleDataType={(type) => setDataType(type)}
+            handleMinutes={(min, max) => setMinutes([min, max])}
+            isTeam={isTeam}
+            playoffsExist={playoffsExist}
+          />
+        </ButtonsAndSearchBox>
+        {makeStatsPlot()}
+          </>
+        }
+      </Fragment>
+    );
+  // }
 };
 
 const mapStateToProps = (state) => ({
@@ -523,11 +520,12 @@ const mapStateToProps = (state) => ({
   stat: state.sidebarReducer.stat,
   statCategory: state.sidebarReducer.statCategory,
   isTeam: state.sidebarReducer.isTeam,
+  stats: state.statsReducer.stats
 });
 
 export default connect(mapStateToProps, {
-  changeYear,
   changeStat,
   changeStatCategory,
   changeIsTeam,
+  getStats
 })(StatsPage);

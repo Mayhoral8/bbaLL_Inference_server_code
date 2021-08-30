@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import {
   changeStat,
   changeIsTeam,
-  changeStatCategory,
+  changeStatCategory
 } from "Redux/actions/sidebarActions";
+import { getStats } from "../../redux/actions/statsActions";
 import { SidebarContainer, List, ListItem } from "./sidebar-style";
 import { SidebarSelector } from "./Components/SidebarSelector";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { capitalizeFirstLetter } from "../Functions/capitalizeFirstLetter";
 import { doesStatInclude } from "../Functions/doesStatInclude";
 
-const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
+const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat, getStats }) => {
   // states
   const [active, setActive] = useState(0);
   const yearNames = useSelector((state) => state.sharedReducer.yearNames);
@@ -21,6 +22,7 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
   // routes
   const dispatch = useDispatch();
   const location = useLocation();
+  const history = useHistory()
   const pathname = location.pathname;
   const searchname = location.search;
   const path = pathname.split("/")[1];
@@ -127,13 +129,25 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
         <List>
           <ListItem
             isActive={active === 0}
-            onClick={() => handleIsTeam(false, 0)}
+            onClick={() => {
+              if(path === 'stats'){
+                let urlYear = history.location.search.split("=")[1]
+                getStats('player_stats_page', urlYear)
+              }
+              handleIsTeam(false, 0)
+            }}
           >
             <Link to={teamOrPlayerLink("players", true)}>Players</Link>
           </ListItem>
           <ListItem
             isActive={active === 1}
-            onClick={() => handleIsTeam(true, 1)}
+            onClick={() => {
+              if(path === 'stats'){
+                let urlYear = history.location.search.split("=")[1]
+                getStats("team_stats_page", urlYear)
+              }
+              handleIsTeam(true, 1)
+            }}
           >
             <Link to={teamOrPlayerLink("teams", true)}>Teams</Link>
           </ListItem>
@@ -145,6 +159,7 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
                 onClick={() => {
                   handleIsTeam(false);
                   handleChange("MVP", 2);
+                  getStats("mvp_stats_page")
                 }}
               >
                 <Link to={teamOrPlayerLink("mvp", false)}>MVP</Link>
@@ -154,6 +169,7 @@ const Sidebar = ({ changeStat, changeStatCategory, changeIsTeam, stat }) => {
                 onClick={() => {
                   handleIsTeam(true);
                   handleChange("Champion", 3);
+                  getStats("champion_stats_page")
                 }}
               >
                 <Link to={teamOrPlayerLink("champions", false)}>Champions</Link>
@@ -179,4 +195,5 @@ export default connect(mapStateToProps, {
   changeStat,
   changeIsTeam,
   changeStatCategory,
+  getStats
 })(Sidebar);

@@ -7,7 +7,6 @@ import { PlotDiv, PlotContainerDiv, ScatterGraphToolBar } from "./scatterline-st
 import { BadgeButton, MobileYAxisTitle } from "../../../globalStyles";
 import { STATS, GRAPHINFO2ARRAY, MOBILE_SM_BREAKPOINT } from "Constants";
 import { GRAPH_COLOR } from "../../../constants";
-import { createGlobalStyle } from "styled-components";
 
 const ScatterLinePlot = ({
   x,

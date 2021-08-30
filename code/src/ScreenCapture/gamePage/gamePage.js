@@ -23,7 +23,7 @@ import {
 } from './gamePageStyles'
 
 const { WebClient } = require('@slack/web-api');
-const slack = new WebClient(process.env.REACT_APP_SLACK_TOKEN);
+const slack = new WebClient(process.env.REACT_APP_SLACK_TOKEN, { retries: 0  });
 
 const GamePage = () => {
     const [containerType, setContainerType] = useState('overview')

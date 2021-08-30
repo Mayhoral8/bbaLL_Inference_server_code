@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { changeYear } from "Redux/actions/sharedActions";
 import { changeStat } from "Redux/actions/sidebarActions";
 import {
@@ -28,9 +28,9 @@ const Navbar = ({ changeStat, changeYear, changeIsTeam }) => {
 
   const handleLinkClick = (name) => {
     if (name === "Leaderboard") {
-      changeStat({ stat: "Summary" });
-    } else {
       changeStat({ stat: "Points" });
+    } else {
+      changeStat({ stat: "Rebounds" });
     }
 
     if (name === "Comparison") {
