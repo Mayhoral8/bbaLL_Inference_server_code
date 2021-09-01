@@ -53,6 +53,7 @@ const StatsPage = ({
     STATSCONSTANTS.PLAYERTIME[season][PLAYERTIMEINDEX] - 0.5,
     STATSCONSTANTS.PLAYERTIME[season][PLAYERTIMEMAX],
   ]);
+  const [activeMin, setActiveMin] = useState(5);
   const [time, setTime] = useState("35+");
   const yearNames = useSelector((state) => state.sharedReducer.yearNames);
 
@@ -486,6 +487,8 @@ const StatsPage = ({
   
         <ButtonsAndSearchBox>
           <StatButtons
+            setActiveMin = {setActiveMin}
+            activeMin = {activeMin}
             statCategory={statCategory}
             season={season}
             dataType={dataType}
@@ -494,10 +497,13 @@ const StatsPage = ({
             time={time}
             handleSeason={(data) => {
               setSeason(data);
-              setMinutes([
-                STATSCONSTANTS.PLAYERTIME[data][PLAYERTIMEINDEX] - 0.5,
-                STATSCONSTANTS.PLAYERTIME[data][PLAYERTIMEMAX],
-              ]);
+              if(data === 'Regular'){
+                setMinutes([34.5, 99.5]);
+              }
+              else{
+                setMinutes([37.5, 99.5]);
+              }
+              setActiveMin(5)
             }}
             handleDataType={(type) => setDataType(type)}
             handleMinutes={(min, max) => setMinutes([min, max])}

@@ -20,6 +20,8 @@ const StatButtons = ({
   playoffsExist,
   setTime,
   time,
+  setActiveMin,
+  activeMin
 }) => {
   // routes
   const history = useHistory();
@@ -31,19 +33,38 @@ const StatButtons = ({
     search.split("&")[search.split("&").length - 1].split("=")[1];
 
   // states
-  const [activeMin, setActiveMin] = useState(5);
+  
   const yearNames = useSelector((state) => state.sharedReducer.yearNames);
   const yearId = useSelector((state) => state.sharedReducer.yearId);
   const attr = useSelector((state) => state.sidebarReducer.stat);
+
+  // useEffect(() => {
+  //   if(season === 'Regular'){
+  //     handleMinutes(34.5, 99.5);
+  //   }
+  //   else{
+  //     handleMinutes(37.5, 99.5);
+  //   }
+  //   setActiveMin(5);
+  // }, [])
 
   useEffect(() => {
     if (timePath) {
       const timeIndex = CONSTANTS.minuteButtonArray(season).findIndex(
         (e) => e.path === timePath
       );
+      let btnsArray = CONSTANTS.minuteButtonArray(season)
+      let targetBtn = btnsArray[timeIndex]
       setActiveMin(timeIndex + 1);
+      handleMinutes(targetBtn.handleMinutes1, targetBtn.handleMinutes2)
     } else {
       setActiveMin(5);
+      if(season === 'Regular'){
+        handleMinutes(34.5, 99.5);
+      }
+      else{
+        handleMinutes(37.5, 99.5);
+      }
     }
   }, [history]);
 
