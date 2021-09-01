@@ -10,9 +10,7 @@ import useWindowSize from "Shared/hooks/useWindowSize";
 import Spinner from "./spinner";
 
 //TODO : lazy import
-import RandomComparison from "./RandomComparison";
 import candidates from "JSON/player_candidates_for_comparison.json";
-import MatchFact from "./matchFact";
 
 import {
   FutureGameListBox,
@@ -31,6 +29,8 @@ const PlayerRankingsCard = lazy(() => import("./playerRankingsCard"));
 const MemeCard = lazy(() => import("./memeCard"));
 const TeamScoreTable = lazy(() => import("./TeamScoreTable"));
 const FutureGameList = lazy(() => import("./futuregamelist"));
+const MatchFact = lazy(() => import ("./matchFact"));
+const RandomComparison = lazy(() => import("./RandomComparison"));
 
 const GamePageContainer = (props) => {
   const [memeUrls, setMemeUrls] = useState([]);
@@ -144,7 +144,7 @@ const GamePageContainer = (props) => {
                   </PlayerRankingPlaceholderBox>
                 )}
                 {games.length != 0 ? (
-                  <Suspense fallback={<div>Loading</div>}>
+                  <Suspense fallback={<Spinner width = '100%' height = '500px'/>}>
                     <MatchFact futureGames={games} />
                   </Suspense>
                 ) : (
@@ -154,7 +154,7 @@ const GamePageContainer = (props) => {
                 )}
               </RowContainer>
               <Suspense
-                fallback={<Spinner width="1244px" height="463.065px" />}
+                fallback={<Spinner width="100%" height="463.065px" />}
               >
                 <TeamRankingsContainer>
                   <RandomComparison
