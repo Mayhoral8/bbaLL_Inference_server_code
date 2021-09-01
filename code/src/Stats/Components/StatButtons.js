@@ -38,16 +38,6 @@ const StatButtons = ({
   const yearId = useSelector((state) => state.sharedReducer.yearId);
   const attr = useSelector((state) => state.sidebarReducer.stat);
 
-  // useEffect(() => {
-  //   if(season === 'Regular'){
-  //     handleMinutes(34.5, 99.5);
-  //   }
-  //   else{
-  //     handleMinutes(37.5, 99.5);
-  //   }
-  //   setActiveMin(5);
-  // }, [])
-
   useEffect(() => {
     if (timePath) {
       const timeIndex = CONSTANTS.minuteButtonArray(season).findIndex(
