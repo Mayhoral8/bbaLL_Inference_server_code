@@ -1,6 +1,6 @@
 import React from "react";
 import { BadgeButton } from "../globalStyles";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AvgTotButtonBoxDiv } from "../Leaderboard/SharedLeaderboard/avgtotbuttonbox-style";
 import { useSelector } from "react-redux";
 
