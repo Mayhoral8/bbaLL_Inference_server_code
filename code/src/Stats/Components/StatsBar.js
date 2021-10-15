@@ -2,33 +2,52 @@ import React from "react";
 import Plot from "react-plotly.js";
 import logo from "Assets/images/new-logo-square.png";
 import { GraphTitle } from "../../globalStyles";
-import { BarGraphDiv,GraphInstruction } from "../stats-style";
+import { BarGraphDiv, GraphInstruction } from "../stats-style";
 import useWindowSize from "../../Shared/hooks/useWindowSize";
 
 const StatsBar = ({ x, y, teamColours, yAxisTitle, barPlotHeight }) => {
+  console.log(
+    "x: ",
+    x,
+    "y: ",
+    y,
+    "teamColour: ",
+    teamColours,
+    "yAxisTitle: ",
+    yAxisTitle
+  );
   const windowSize = useWindowSize();
   const breakpoint = 600;
   const medBreakpoint = 768;
   const lgBreakpoint = 1024;
 
-  const images = [{
-    source: logo,
-    xref: "paper",
-    yref: "paper",
-    x: 1,
-    y: 0.98,
-    sizex: 1,
-    sizey: 0.25,
-    opacity: 0.1,
-    layer: "below",
-    xanchor: "right",
-    yanchor: "top",
-  }];
+  const images = [
+    {
+      source: logo,
+      xref: "paper",
+      yref: "paper",
+      x: 1,
+      y: 0.98,
+      sizex: 1,
+      sizey: 0.25,
+      opacity: 0.1,
+      layer: "below",
+      xanchor: "right",
+      yanchor: "top",
+    },
+  ];
 
-  let axisFontSize, tickFontSize, margin, titleFont, tickAngle, plotWidth, height, marginBottom;
+  let axisFontSize,
+    tickFontSize,
+    margin,
+    titleFont,
+    tickAngle,
+    plotWidth,
+    height,
+    marginBottom;
 
   // margin bottom depending on length of x-axis data
-  x.forEach(name => {
+  x.forEach((name) => {
     const nameWithYear = /\d{4}/;
     if (nameWithYear.test(name)) {
       marginBottom = 200;
@@ -38,16 +57,16 @@ const StatsBar = ({ x, y, teamColours, yAxisTitle, barPlotHeight }) => {
   });
 
   if (windowSize < breakpoint) {
-    height = 'auto';
+    height = "auto";
   } else {
-    height = '';
+    height = "";
   }
 
   if (windowSize <= medBreakpoint) {
     axisFontSize = 12;
     tickFontSize = 12;
     titleFont = {
-      "size": 12
+      size: 12,
     };
     margin = {
       l: 40,
@@ -56,7 +75,7 @@ const StatsBar = ({ x, y, teamColours, yAxisTitle, barPlotHeight }) => {
       t: 10,
     };
     tickAngle = 45;
-    plotWidth = 600
+    plotWidth = 600;
   } else if (windowSize <= lgBreakpoint) {
     tickAngle = 90;
     margin = {
@@ -70,15 +89,15 @@ const StatsBar = ({ x, y, teamColours, yAxisTitle, barPlotHeight }) => {
     tickFontSize = 16;
     tickAngle = 35;
     titleFont = {
-      size: 18
+      size: 18,
     };
     margin = {
       l: 50,
       r: 100,
       b: 150,
       t: 10,
-    }
-  };
+    };
+  }
 
   // SORT
   var sorted_index = [];
@@ -133,20 +152,20 @@ const StatsBar = ({ x, y, teamColours, yAxisTitle, barPlotHeight }) => {
     margin,
     images,
     font: {
-      family: 'Roboto Condensed'
+      family: "Roboto Condensed",
     },
     xaxis: {
       tickfont: {
-        size: tickFontSize
+        size: tickFontSize,
       },
-      tickangle: tickAngle
+      tickangle: tickAngle,
     },
     yaxis: {
       tickfont: {
-        size: tickFontSize
+        size: tickFontSize,
       },
       range: [vmin, vmax],
-    }
+    },
   };
   const config = {
     staticPlot: true,
@@ -156,20 +175,18 @@ const StatsBar = ({ x, y, teamColours, yAxisTitle, barPlotHeight }) => {
     <BarGraphDiv>
       <GraphTitle>{yAxisTitle}</GraphTitle>
       <Plot
-        className='plot'
+        className="plot"
         useResizeHandler
         data={data}
         layout={layout}
         config={config}
       />
-      <GraphInstruction className='instruction'>
-        <span className='scroll-txt'>scroll to view</span>
+      <GraphInstruction className="instruction">
+        <span className="scroll-txt">scroll to view</span>
         <i className="fas fa-long-arrow-alt-right arrow"></i>
       </GraphInstruction>
     </BarGraphDiv>
   );
 };
-
-
 
 export default StatsBar;
