@@ -19,7 +19,6 @@ import * as STATSCONSTANTS from "./statsConstants";
 import TitleBox from "../Shared/TitleBox/TitleBox";
 import StatButtons from "./Components/StatButtons";
 import StatsPlot from "./Components/StatsPlot";
-import StatsBar from "./Components/StatsBar";
 import ButtonBox from "../Shared/ButtonBox/ButtonBox";
 import GraphInfo from "../Shared/GraphInfo/GraphInfo";
 import StatsPageSelect from "../Shared/SmallSelect/StatsPageSelect";
@@ -29,7 +28,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { capitalizeFirstLetter } from "../Shared/Functions/capitalizeFirstLetter";
 import ButtonBoxSelect from "../Shared/SmallSelect/ButtonBoxSelect";
 import LoadingSpinner from "../Shared/Spinner/loadingSpinner";
-import StatsBar_char from "./Components/StatsBar_char";
+import StatsBar from "./Components/StatsBar";
 
 const PLAYERTIMEINDEX = 4;
 const PLAYERTIMEMAX = 5;
@@ -344,25 +343,10 @@ const StatsPage = ({
                 bottom right quadrant.
               </p>
             </PlotInformation>
-            {/* <IndivPlots
-            data={plot}
-            barData={barData}
-            labels={labels}
-            page={page}
-            isTeam={this.props.isTeam}
-          /> */}
             <ContainerCard className="m-1">
               <GraphInfoDiv>
                 <GraphInfo plotType="stats_avg" />
-                {/* <StatsBar
-                  x={names}
-                  y={statY}
-                  teamColours={colours}
-                  yAxisTitle={modifiedYLabel}
-                  barPlotWidth={plotWidth}
-                  barPlotHeight={plotHeight}
-                /> */}
-                <StatsBar_char
+                <StatsBar
                   labels={names}
                   avgData={statY}
                   teamColours={colours}
@@ -386,15 +370,7 @@ const StatsPage = ({
                       : "stats_volatility"
                   }
                 />
-                {/* <StatsBar
-                  x={names}
-                  y={statX}
-                  teamColours={colours}
-                  yAxisTitle={xlabel}
-                  barPlotWidth={plotWidth}
-                  barPlotHeight={plotHeight}
-                /> */}
-                <StatsBar_char
+                <StatsBar
                   labels={names}
                   avgData={statX}
                   teamColours={colours}
