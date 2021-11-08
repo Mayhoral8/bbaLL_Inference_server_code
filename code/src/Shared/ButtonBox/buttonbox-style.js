@@ -31,7 +31,7 @@ export const Button = styled.button`
     if (props.isActive) {
       buttonColour = `
       color: white;
-      background: var(--main-purple);    
+      background: var(--main-blue);    
       `;
     }
     return buttonColour;

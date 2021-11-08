@@ -373,7 +373,7 @@ export const StyledPlayerCandidates = styled.div `
 
 export const StyledButton = styled.button`
   padding: 0.7rem 2rem;
-  background: var(--main-purple);
+  background: var(--main-blue);
   color: var(--white);
   margin-top: 1rem;
 `;

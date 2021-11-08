@@ -39,7 +39,7 @@ export const SubscribeContent = styled.div`
     padding: 1rem;
     margin-top: 0.5rem;
     cursor: pointer;
-    background: var(--main-purple);
+    background: var(--main-blue);
     color: #fff;
     outline: none;
     &:hover {

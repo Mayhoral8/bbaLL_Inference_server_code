@@ -37,13 +37,13 @@ export const ListItem = styled.li`
     left: 0;
     right: 0;
     height: ${({ isActive }) => (isActive ? "4px" : "0")};
-    background: linear-gradient(90deg, var(--main-purple), #8806ce);
+    background: linear-gradient(90deg, var(--main-blue), #8806ce);
     transition: 0.2s;
   }
 
   &:hover:before {
     height: 4px;
-    background: linear-gradient(90deg, var(--main-purple), #8806ce);
+    background: linear-gradient(90deg, var(--main-blue), #8806ce);
   }
 
   a{
