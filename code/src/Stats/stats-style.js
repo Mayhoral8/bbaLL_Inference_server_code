@@ -10,6 +10,7 @@ export const ButtonsAndSearchBox = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  margin: 1rem 0rem;
   @media (min-width: 1024px) {
     flex-direction: row;
     justify-content: center;
@@ -39,7 +40,7 @@ export const StatButtonBoxWrapper = styled.div`
   }
   .timeline-container:before {
     content: '';
-    background: silver;
+    background: #090979;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -65,14 +66,14 @@ export const StatButtonBoxWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid silver;
+    border: 3px solid #090979;
     z-index: 2;
     display: relative;
     cursor: pointer;
   }
   .circle.active {
-    border-color: black;
-    background-color: black;
+    border-color: #090979;
+    background-color: #090979;
   }
   @media(min-width: 968px) {
     margin: 0;
@@ -131,6 +132,8 @@ export const StatsPlotDiv = styled.div`
 
 export const GraphInfoDiv = styled.div`
   padding-bottom: 2rem;
+  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+  border-radius: 5px;
 `
 
 export const BarGraphDiv = styled.div`
@@ -165,7 +168,12 @@ export const GraphInstruction = styled.div`
 export const StatButtonPillsContainer = styled.div`
   display: flex;
   justify-content: center;
-  height: fit-content;
+  height: 40px;
+  align-items: center;
+  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+  border-radius: 5px;
+  padding: 0px 10px
+  background: linear-gradient(to right,#362daa,#0d93f6,#36afca);
 `
 
 export const PlotInformation = styled.div`

@@ -20,7 +20,7 @@ import {
   FutureGameListRow,
   TeamRankingsTitle,
   TeamRankingsContainer,
-  RowContainer,
+  PlayerRankingsMatchFacts,
   MainPageContainer,
   BettingButton,
 } from "./mainpage-style";
@@ -29,7 +29,7 @@ const PlayerRankingsCard = lazy(() => import("./playerRankingsCard"));
 const MemeCard = lazy(() => import("./memeCard"));
 const TeamScoreTable = lazy(() => import("./TeamScoreTable"));
 const FutureGameList = lazy(() => import("./futuregamelist"));
-const MatchFact = lazy(() => import ("./matchFact"));
+const MatchFact = lazy(() => import("./matchFact"));
 const RandomComparison = lazy(() => import("./RandomComparison"));
 
 const GamePageContainer = (props) => {
@@ -83,7 +83,7 @@ const GamePageContainer = (props) => {
 
     setRankingTypes(rankingTypesArray);
     setData(playerRankings);
-    
+
     let sortedGames = props.futureGames;
     sortedGames.sort((game1, game2) => {
       return (
@@ -124,14 +124,14 @@ const GamePageContainer = (props) => {
         <MainPageContainer>
           <div className="wrapper">
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <RowContainer>
+              <PlayerRankingsMatchFacts>
                 {hasDataLoaded ? (
                   <Suspense
                     fallback={<Spinner width="556.364px" height="481.960px" />}
                   >
                     <PlayerRankingsCard
                       data={[data[0], data[1], data[2]]}
-                      rankingTypes={rankingTypes} //playerRankingTypes}
+                      rankingTypes={rankingTypes}
                       timeOut={5000}
                       cycling={true}
                     />
@@ -144,7 +144,7 @@ const GamePageContainer = (props) => {
                   </PlayerRankingPlaceholderBox>
                 )}
                 {games.length != 0 ? (
-                  <Suspense fallback={<Spinner width = '100%' height = '500px'/>}>
+                  <Suspense fallback={<Spinner width="100%" height="500px" />}>
                     <MatchFact futureGames={games} />
                   </Suspense>
                 ) : (
@@ -152,10 +152,8 @@ const GamePageContainer = (props) => {
                     <MemeCard urls={memeUrls} />
                   </Suspense>
                 )}
-              </RowContainer>
-              <Suspense
-                fallback={<Spinner width="100%" height="463.065px" />}
-              >
+              </PlayerRankingsMatchFacts>
+              <Suspense fallback={<Spinner width="100%" height="463.065px" />}>
                 <TeamRankingsContainer>
                   <RandomComparison
                     nameArray={randomSet}
@@ -173,38 +171,21 @@ const GamePageContainer = (props) => {
               </Suspense>
             </div>
 
-            {useWindowSize() < 1400 && games.length > 0 && (
-              <Suspense fallback={<Spinner width="100%" height="283.506px" />}>
+            <Suspense fallback={<Spinner width="100%" height="283.506px" />}>
+              <div className = "futureGameListContainer">
+                <FutureGameTitle>Upcoming Games</FutureGameTitle>
+                <BettingButton>
+                  <Link to="/betting" className="styledButton">
+                    Virtual Bet Now!
+                  </Link>
+                </BettingButton>
                 <FutureGameListBox>
-                  <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                  <BettingButton>
-                    <Link to="/betting" className="styledButton">
-                      Virtual Bet Now!
-                    </Link>
-                  </BettingButton>
                   <FutureGameListRow>
                     <FutureGameList games={games} />
                   </FutureGameListRow>
                 </FutureGameListBox>
-              </Suspense>
-            )}
-            {useWindowSize() > 1400 && games.length > 0 && (
-              <div style={{ marginLeft: "3rem" }}>
-                <Suspense fallback={<Spinner width="292px" height="300px" />}>
-                  <FutureGameListBox>
-                    <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                    <BettingButton>
-                      <Link to="/betting" className="styledButton">
-                        Virtual Bet Now!
-                      </Link>
-                    </BettingButton>
-                    <FutureGameListRow>
-                      <FutureGameList games={games} />
-                    </FutureGameListRow>
-                  </FutureGameListBox>
-                </Suspense>
               </div>
-            )}
+            </Suspense>
           </div>
         </MainPageContainer>
       </FullWidthMain>

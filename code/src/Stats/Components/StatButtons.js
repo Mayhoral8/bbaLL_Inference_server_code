@@ -115,7 +115,7 @@ const StatButtons = ({
           isActive={dataType}
           dataArr={["Graphs", "Table"]}
           onClickAction={handleDataType}
-          customStyle={{ marginRight: "1rem" }}
+          customStyle={{ marginRight: "2rem" }}
           additionalQueryParam={`season=${season}`}
           queryParam="type"
           time={time}

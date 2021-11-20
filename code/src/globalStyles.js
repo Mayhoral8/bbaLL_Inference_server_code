@@ -95,15 +95,13 @@ export const ContainerCard = styled.div`
 `;
 
 export const BadgeButton = styled.button`
-  background: white;
-  font-family: Popins;
-  font-style: normal;
+  background: rgb(0,0,0,0.0);
+  height: 25px;
+  margin: 0px 7px;
   font-weight: 300;
   font-size: 15px;
   justify-content: center;
   text-align: center;
-  color: #080a1e;
-  border: no;
   display: flex;
   &:disabled,
   &:disabled:hover {
@@ -116,7 +114,7 @@ export const BadgeButton = styled.button`
     let underLine;
     if (props.isActive) {
       underLine = `
-      border-bottom: 7px solid #F8DF5E;
+      border-bottom: 7px solid #090979;
       `;
     }
     return underLine;
@@ -131,18 +129,6 @@ export const BadgeButton = styled.button`
     }
     return size;
   }}
-
-  a, span {
-    width: 100%;
-    padding: 7px;
-  }
-
-  @media (min-width: 996px) {
-    a,
-    span {
-      padding: 10px 10px;
-    }
-  }
 `;
 
 export const GraphTitle = styled.h3`

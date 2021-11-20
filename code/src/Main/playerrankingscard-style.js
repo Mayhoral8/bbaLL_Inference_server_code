@@ -1,18 +1,6 @@
 import styled from "styled-components";
 
 export const OutsideContainer = styled.div`
-  @media (min-width: 1700px) {
-    position: relative;
-    left: -2.7rem;
-  }
-
-  // position: relative;
-  // left: -2.7rem;
-
-  @media (max-width: 1400px) {
-    margin: 2rem 0rem 2rem 0rem;
-  }
-
   margin-left: 0rem;
   margin-top: 0rem;
   margin-bottom: auto;
@@ -20,38 +8,29 @@ export const OutsideContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
+  
   .left-arrow {
     transform: rotate(180deg);
-    padding: 0.1rem;
-  }
-  .right-arrow {
-    padding: 0.1rem;
   }
 `;
 export const CardContainer = styled.div`
   background: white;
+  max-width: 470px;
+  max-height: 500px;
+  width: 100%;
+  border-radius: 5px;
+  padding: 1rem 0.4rem;
+  box-shadow: 0px 1px 6px rgba(9, 9, 121, 0.7);
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-  display: inline-block;
-  flex-direction: column;
-
-  @media (max-width: 834px) {
-    min-width: 280px;
-  }
   @media (min-width: 835px) {
     min-width: 400px;
   }
   @media (min-width: 1440px) {
     min-width: 470px;
   }
-
-  max-width: 470px;
-  max-height: 500px;
-
-  width: 100%;
-  border-radius: 5px;
-  padding: 1rem;
 
   .top {
     display: flex;
@@ -91,21 +70,17 @@ export const CardContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    //background: #c4c4c4;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: #2e2e2e;
 
     @media (max-width: 834px) {
       padding: 0.25rem;
       margin-top: 0.25rem;
       margin-bottom: 0.25rem;
     }
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-
-    border-radius: 5px;
-    //color: #e0e0e0;
-    color: #2e2e2e;
     @media (max-width: 834px) {
       max-height: 60px;
     }

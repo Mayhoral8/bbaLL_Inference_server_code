@@ -1,7 +1,6 @@
 import { rgba } from "polished";
 import styled from "styled-components";
 import { breakpoints } from "../constants/breakpoints.js";
-import backgroundImage from "../assets/images/court.jpg";
 import refresh from "../assets/images/refresh.png";
 import "../../src/fonts.css";
 
@@ -12,9 +11,9 @@ export const StyledPlayerCanidatesMobile = styled.div`
     justify-content: center;
     align-items: center;
   }
-  .refresh-button{
-    background-color: #7A1DC4;
-    border: 2px solid #7500DE;
+  .refresh-button {
+    background-color: #7a1dc4;
+    border: 2px solid #7500de;
     border-radius: 10px;
     color: white;
     padding: 2% 8%;
@@ -23,16 +22,15 @@ export const StyledPlayerCanidatesMobile = styled.div`
     background-position: center;
     background-size: 20% auto;
   }
-`
+`;
 
 // ComparisonPage / StyledComparisonBanner  ===========================
 export const StyledComparisonBanner = styled.div`
-  background-image: linear-gradient(
-      to right,
-      rgba(56, 40, 81, 0.95) 50%,
-      rgba(56, 40, 81, 0.3)
-    ),
-    url(${backgroundImage});
+  background: linear-gradient(
+    90deg,
+    rgba(9, 9, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -52,17 +50,17 @@ export const StyledComparisonBanner = styled.div`
       font-size: 1.5rem;
     }
   }
-`
-// The main content(menu / player(team) conparsion / static) 
+`;
+// The main content(menu / player(team) conparsion / static)
 export const MainContent = styled.div`
-  display:flex;
-  max-width:1150px;
+  display: flex;
+  max-width: 1150px;
   margin: 0 auto 0 auto;
   .leftContent {
     max-width: 900px;
   }
 
-  @media(max-width: 1024px) {
+  @media (max-width: 1024px) {
     justify-content: center;
   }
 `;
@@ -91,12 +89,12 @@ export const StyledOptionsTeams = styled.ul`
     display: inline;
     margin: 0 1rem;
     cursor: pointer;
-    padding: 5px 5px;
+    padding: 5px 15px;
     &:hover,
     &.active {
-      border: 2px solid #7500DE;
+      border: 2px solid #090979;
       border-radius: 5px;
-      box-shadow: -1px 1px 5px;
+      box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
     }
     &:before {
       content: attr(title);
@@ -194,7 +192,7 @@ export const StyledBar = styled.div`
     color: ${(props) => props.text && props.text};
     background: ${(props) => (props.bcg ? props.bcg : "mediumaquamarine")};
     padding: 0 1rem;
-    @media(max-width: ${breakpoints.phone}) {
+    @media (max-width: ${breakpoints.phone}) {
       font-size: 0.8rem;
       padding: 0 0.4rem;
     }
@@ -225,7 +223,7 @@ export const StyledBarText = styled.div`
   align-items: center;
   justify-content: center;
   p {
-    @media(max-width: ${breakpoints.phone}) {
+    @media (max-width: ${breakpoints.phone}) {
       font-size: 0.8rem;
     }
     .text-bold {
@@ -240,31 +238,31 @@ export const RandomPlayerContiner = styled.div`
 `;
 
 export const EachRandomSetWrapper = styled.div`
-  .comparsion{
+  .comparsion {
     max-width: 200px;
-    border: 1px solid #39204F;
+    border: 1px solid #39204f;
     box-shadow: 0px 0px 5px;
     border-radius: 10px;
-    margin-bottom:20px;
+    margin-bottom: 20px;
     min-height: 100px;
     @media (min-width: ${breakpoints.desk}) {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-    } 
+    }
   }
 
-  .comparsion:hover{
-    box-shadow: 0px 0px 18px #2F195F;
+  .comparsion:hover {
+    box-shadow: 0px 0px 18px #2f195f;
   }
   .continer {
     text-align: center;
     padding-top: 10px;
   }
-  .nameTag{
+  .nameTag {
     text-align: center;
     font-size: 10px;
   }
-  .vsText{
+  .vsText {
     font-family: Ubuntu;
     font-style: normal;
     font-weight: 300;
@@ -298,41 +296,41 @@ export const EachRandomSetWrapper = styled.div`
     }
   }
 
-  .left{
+  .left {
     border: 3px solid;
-    border-color: #207EEC;
+    border-color: #207eec;
     border-radius: 50%;
   }
 
-  .right{
+  .right {
     border: 3px solid;
-    border-color: #EC2020;
+    border-color: #ec2020;
     border-radius: 50%;
   }
-`
+`;
 
 export const SideNav = styled.div`
   margin-top: 100px;
-  height:700px;
+  height: 700px;
   border-radius: 0.5ex;
   position: sticky;
-  top: -.3em;
+  top: -0.3em;
   @media (max-width: ${breakpoints.desk}) {
-    height:1200px;
+    height: 1200px;
   }
 `;
 
 export const StyledDropdown = styled.div`
-  border: ${props=>props.color === "blue" ? "3px solid #207EEC" : "3px solid #EC2020"};
+  border: ${(props) =>
+    props.color === "blue" ? "3px solid #207EEC" : "3px solid #EC2020"};
   border-radius: 4px;
   margin-top: 5px;
   .select__control {
     width: 100%;
-    min-width: ${props=>props.length==="longer" ? '13rem': '10rem'};
+    min-width: ${(props) => (props.length === "longer" ? "13rem" : "10rem")};
     border: none;
     border-bottom: 1px solid #ccc;
     border-radius: 0;
-    
   }
   .select__control--is-focused {
     border: none;
@@ -346,17 +344,17 @@ export const StyledDropdown = styled.div`
   }
 `;
 
-export const StyledPlayerCandidates = styled.div `
+export const StyledPlayerCandidates = styled.div`
   margin: 2rem 2rem 0;
   max-width: 200px;
-  .centerButton{
+  .centerButton {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  .button{
-    background-color: #7A1DC4;
-    border: 2px solid #7500DE;
+  .button {
+    background-color: #7a1dc4;
+    border: 2px solid #7500de;
     border-radius: 10px;
     color: white;
     padding: 8% 30%;
@@ -368,8 +366,7 @@ export const StyledPlayerCandidates = styled.div `
       height: 10px;
     }
   }
-
-`
+`;
 
 export const StyledButton = styled.button`
   padding: 0.7rem 2rem;

@@ -8,29 +8,18 @@ export const MatchFactWrapper = styled.div`
 `
 
 export const Wrapper = styled.div`
-  margin: 0rem 0rem 2rem 0rem;
   min-width: 200px;
   width: 100%;
+  margin-left: 20px;
   background: white;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
-
-  @media (min-width: 634px) {
-    margin: 2rem 0rem 2rem 0rem;
-    min-height: 355px;
-  }
-  
-  @media (min-width: 1200px) {
-    margin: 2rem 0rem 0rem 0rem;
-    max-height: 500px;
-  }
-
-  @media (min-width: 1400px) {
-    margin: 0rem 0rem 0rem 0rem;
-    max-height: 485px;
-  }
-  
+  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+  border-radius: 5px;
   padding: 0rem 1rem 1rem 1rem;
 
+  @media (max-width: 730px) {
+    margin-top: 20px;
+  }
+  
   .title {
     @media (max-width: 865px) {
       font-size: 1rem;
@@ -44,26 +33,22 @@ export const Wrapper = styled.div`
 
   .button {
     transition-duration: 0.4s;
-    background-color: white;
-    border: solid #555555 2px;
+    background: linear-gradient(to right,#362daa,#0d93f6,#36afca);
     border-radius: 5px;
-    color: black;
-
+    color: white;
     padding: 1rem;
     margin: 1rem 0rem 1rem 0rem;
-
     text-align: center;
     display: inline-block;
+    font-size: 1rem;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    min-width: 120px;
+
     @media (max-width: 834px) {
       min-width: 75px;
       font-size: 0.8rem;
     }
-
-    font-size: 1rem;
-
-    transition-duration: 0.4s;
-    cursor: pointer;
-    min-width: 120px;
   }
 
   .button span {
@@ -109,10 +94,5 @@ export const Wrapper = styled.div`
   .button:hover span:before {
     opacity: 1;
     right: 0;
-  }
-
-  .button:hover {
-    background-color: #555555;
-    color: white;
   }
 `

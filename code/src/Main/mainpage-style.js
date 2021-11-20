@@ -7,11 +7,10 @@ const media = {
   tabletLG: `@media(max-width: 1024px)`,
   tablet: `@media(max-width: 768px)`,
   phone: `@media(max-width: 550px)`,
-}
+};
 
 export const FutureGameListBox = styled.div`
   background-color: white;
-  margin-top: 0rem;
   height: auto;
   max-height: 998px;
   min-width: 300px;
@@ -21,21 +20,30 @@ export const FutureGameListBox = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   position: relative;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgb(0, 0, 0, 0.2);
   scrollbar-width: thin; /* "auto" or "thin" */
 
   @media (max-width: 1400px) {
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     height: 100%;
-    margin-left: 0rem;
+  }
+  @media (min-width: 1400px) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
   }
 `;
 
 export const FutureGameListRow = styled.div`
   display: flex;
-  flex-direction: row;
   padding: 0.5rem;
+  @media (max-width: 1400px) {
+    flex-direction: row;
+  }
+  @media (min-width: 1400px) {
+    flex-direction: column;
+  }
 `;
 
 export const PlayerRankingsPlaceholderTitle = styled.div`
@@ -73,35 +81,31 @@ export const BettingButton = styled.div`
   align-content: center;
   margin-top: 20px;
   margin-bottom: 10px;
-  .styledButton{
+  .styledButton {
     color: white;
-    background-color: #65AE24;
+    background-color: #65ae24;
     border-radius: 5px;
     font-family: Poppins;
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
     padding: 15px 80px;
-    ${media.tablet}{
+    ${media.tablet} {
       padding: 15px 40px;
     }
   }
-`
+`;
 
 export const TeamRankingsContainer = styled.div`
-
-  @media(min-width: 768px) {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-gap: 10px;
-  }
-
-  @media (max-width: 1400px) {
-    margin: 0rem 0rem 0rem 0rem;
-  }
+  display: flex;
+  margin-top: 20px;
+  border-radius: 5px;
   background-color: white;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
   padding: 1.5rem 0;
+  @media (max-width: 730px) {
+    flex-direction: column-reverse;
+  }
 `;
 
 export const futureGameList = styled.div`
@@ -118,31 +122,37 @@ export const futureGameList = styled.div`
   border: solid gray 1px;
   height: 885px;
   scrollbar-width: thin;
-  // scrollbarColor: "#8783A8 #9693ab" /* scroll thumb and track */,
 `;
 
 export const MainPageContainer = styled.div`
+height: 100%;
+width: 100%;
+padding 40px 20px;
   .wrapper {
     display: flex;
     @media (max-width: 1400px) {
       flex-direction: column-reverse;
     }
   }
-
-  height: 100%;
-  width: 100%;
-  max-width: 1640px;
-
-  @media screen and (min-width: 996px) {
-    margin: 4rem auto 0rem auto;
+  .futureGameListContainer{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px; 
+    box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+    border-radius: 5px;
+    @media (max-width: 1400px) {
+      margin-left: 0px;
+    }
   }
-  margin: 2.2rem auto 0rem auto;
 `;
 
-export const RowContainer = styled.div`
-  @media (max-width: 643px) {
-    flex-direction: column;
-  }
+export const PlayerRankingsMatchFacts = styled.div`
   display: flex;
   flex-direction: row;
+  @media (max-width: 1400px) {
+    margin-top: 20px;
+  }
+  @media (max-width: 730px) {
+    flex-direction: column;
+  }
 `;

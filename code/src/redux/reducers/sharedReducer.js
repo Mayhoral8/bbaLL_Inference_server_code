@@ -10,6 +10,7 @@ const yearMed = [
   "18-19",
   "19-20",
   "20-21",
+  "21-22",
 ];
 const yearBig = [
   "2012-13",
@@ -21,6 +22,7 @@ const yearBig = [
   "2018-19",
   "2019-20",
   "2020-21",
+  "2021-22",
 ];
 const initialState = {
   isPlay: false,
@@ -38,6 +40,7 @@ const initialState = {
     "2018-19",
     "2019-20",
     "2020-21",
+    "2021-22",
   ],
 };
 export default (state = initialState, action) => {

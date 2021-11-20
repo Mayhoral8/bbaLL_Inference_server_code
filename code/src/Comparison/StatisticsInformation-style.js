@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import { breakpoints } from "../constants/breakpoints.js";
 import "../../src/fonts.css";
@@ -14,7 +13,7 @@ export const StyledComparisonProfileBlank = styled.section`
   @media (max-width: ${breakpoints.phone}) {
     margin: 0 1rem;
   }
-`
+`;
 // ComparisonPage / StyledComparisonProfile  ==========================
 export const StyledComparisonProfile = styled.section`
   max-width: 900px;
@@ -49,9 +48,9 @@ export const StyledComparisonProfileElement = styled.div`
   font-size: 18px;
   text-transform: capitalize;
 
-  .outline{
+  .outline {
     border: 10px solid;
-    border-color: ${props=>props.teamColour && props.teamColour};
+    border-color: ${(props) => props.teamColour && props.teamColour};
     border-radius: 50%;
     padding: 8px;
 
@@ -68,7 +67,7 @@ export const StyledComparisonProfileElement = styled.div`
     object-fit: cover;
     position: relative;
     border: 2px solid;
-    border-color: ${props=>props.teamColour && props.teamColour};
+    border-color: ${(props) => props.teamColour && props.teamColour};
     border-radius: 50%;
 
     overflow: hidden;
@@ -120,13 +119,12 @@ export const StyledInfo = styled.div`
   }
 `;
 
-export const StyledPlayerInfoAndSwitches = styled.div `
-  max-width: 800px; 
+export const StyledPlayerInfoAndSwitches = styled.div`
+  max-width: 800px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   margin: 0 auto 0 auto;
   @media (max-width: ${breakpoints.tablet}) {
-
   }
 
   @media (max-width: ${breakpoints.phone}) {
@@ -135,15 +133,14 @@ export const StyledPlayerInfoAndSwitches = styled.div `
   }
 
   @media (max-width: ${breakpoints.phoneXXS}) {
-
   }
-
 `;
 
 export const StyledPlayerInfo = styled.div`
   box-shadow: ${(props) =>
-        (props.location == "left" ? "0px 0px 5px rgba(32, 126, 236, 0.5)"
-                                  : "0px 0px 5px rgba(236, 32, 32, 0.5)")};
+    props.location == "left"
+      ? "0px 0px 5px rgba(32, 126, 236, 0.5)"
+      : "0px 0px 5px rgba(236, 32, 32, 0.5)"};
   border-radius: 10px;
   padding-left: 10px;
   padding-top: 10px;
@@ -152,9 +149,7 @@ export const StyledPlayerInfo = styled.div`
   }
 
   @media (max-width: ${breakpoints.phoneXXS}) {
-    
   }
-
 `;
 
 export const StyleButton = styled.div`
@@ -164,37 +159,40 @@ export const StyleButton = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: default;
-  
+
   .button {
-    display: inline-block;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-family: Ubuntu;
-    font-style: normal;
-    font-weight: normal;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 40px;
     font-size: 16px;
+    cursor: pointer;
     margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
     @media (max-width: ${breakpoints.phone}) {
       font-size: 10px;
       margin: 5px;
     }
   }
-  
-  .left{
-    border: ${(props) => 
-        (props.left == true ? "2px solid #7500DE" : "none")};
-    box-shadow: ${(props) => 
-      (props.left == true ? "-1px 1px 5px" : "none")};
-    border-radius: 10px;
+
+  .left {
+    background: ${(props) =>
+      props.left == true
+        ? "linear-gradient(to right,#362daa,#0d93f6,#36afca)"
+        : "none"};
+    color: ${(props) => (props.left == true ? "white" : "black")};
+    border: ${(props) => (props.left == true ? "none" : "1px solid #090979")};
   }
 
-  .right{
-    border: ${(props) => 
-        (props.right == true ? "2px solid #7500DE" : "none")};
-    box-shadow: ${(props) => 
-      (props.right == true ? "-1px 1px 5px" : "none")};
-    border-radius: 10px;
+  .right {
+    background: ${(props) =>
+      props.right == true
+        ? "linear-gradient(to right,#362daa,#0d93f6,#36afca)"
+        : "none"};
+    color: ${(props) => (props.right == true ? "white" : "black")};
+    border: ${(props) => (props.right == true ? "none" : "1px solid #090979")};
   }
 
   @media (max-width: ${breakpoints.phone}) {
@@ -237,15 +235,13 @@ export const StyledComparisonBars = styled.section`
 `;
 
 export const StyledSideInfo = styled.div`
-
-  color: ${(props) => 
-            (props.location == "left" ? "#207EEC" : "#EC2020")};
+  color: ${(props) => (props.location == "left" ? "#207EEC" : "#EC2020")};
   .info {
     font-family: Ubuntu;
     font-size: 16px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    @media(max-width: ${breakpoints.phone}) {
+    @media (max-width: ${breakpoints.phone}) {
       font-size: 8px;
     }
     @media (max-width: ${breakpoints.phoneXXS}) {
