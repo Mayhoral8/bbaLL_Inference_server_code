@@ -20,7 +20,7 @@ export const CardContainer = styled.div`
   width: 100%;
   border-radius: 5px;
   padding: 1rem 0.4rem;
-  box-shadow: 0px 1px 6px rgba(9, 9, 121, 0.7);
+  box-shadow: var(--aqua-box-shadow);
   display: flex;
   justify-content: space-between;
   flex-direction: row;

@@ -259,10 +259,8 @@ export const PlotButtons = styled.div`
   width: 100%;
   justify-content: center;
   align-items: center;
-  height: 40px;
-  border-radius: 5px;
-  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
-  // background: linear-gradient(to right,#362daa,#0d93f6,#36afca);
+  height: 50px;
+  border-bottom: 3px solid grey;
 `;
 
 //Used in Summary.js

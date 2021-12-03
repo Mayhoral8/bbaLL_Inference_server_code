@@ -32,7 +32,7 @@ const RandomComparison = ({nameArray, loadRandomPlayers}) => {
         <button
           className={"button"}
           onClick={() => loadRandomPlayers()}
-        >Refresh</button>
+        ></button>
       </div>
     </Wrapper>
   )

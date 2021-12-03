@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
   width: 100%;
   margin-left: 20px;
   background: white;
-  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+  box-shadow: var(--aqua-box-shadow);
   border-radius: 5px;
   padding: 0rem 1rem 1rem 1rem;
 

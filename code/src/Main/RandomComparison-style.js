@@ -25,10 +25,9 @@ export const Wrapper = styled.div`
   
   .button{
     border-radius: 10px;
-    color: white;
+    background: #090979;
     padding: 8% 30%;
-    // background-image: url(${refresh});
-    background: linear-gradient(to right,#362daa,#0d93f6,#36afca);
+    background-image: url(${refresh});
     background-repeat: no-repeat;
     background-position: center;
     @media (min-width: 280px) and (max-width: 767px){

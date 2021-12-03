@@ -8,6 +8,7 @@ export const YEARS = [
   "2018-19",
   "2019-20",
   "2020-21",
+  "2021-22"
 ];
 
 export const STATS = [
@@ -35,7 +36,7 @@ export const GRAPHINFO2ARRAY = [...GRAPHINFO, "Plus_Minus", "Fantasy Score"];
 
 export const MOBILE_SM_BREAKPOINT = 568;
 export const DEFAULTYEARID = 8;
-export const NUMBEROFYEARS = 9;
+export const NUMBEROFYEARS = 10;
 export const GRAPH_COLOR = "#666";
 
 export const ABB2TEAM = {

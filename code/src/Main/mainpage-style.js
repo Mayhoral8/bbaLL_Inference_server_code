@@ -101,7 +101,7 @@ export const TeamRankingsContainer = styled.div`
   margin-top: 20px;
   border-radius: 5px;
   background-color: white;
-  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+  box-shadow: var(--aqua-box-shadow);
   padding: 1.5rem 0;
   @media (max-width: 730px) {
     flex-direction: column-reverse;
@@ -138,7 +138,7 @@ padding 40px 20px;
     display: flex;
     flex-direction: column;
     margin-left: 20px; 
-    box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+    box-shadow: var(--aqua-box-shadow);
     border-radius: 5px;
     @media (max-width: 1400px) {
       margin-left: 0px;

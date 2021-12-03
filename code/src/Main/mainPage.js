@@ -6,7 +6,6 @@ import { FullWidthMain } from "../globalStyles";
 import { fbFirestore } from "../App/config";
 import EventList from "./eventlist";
 import SEO from "../Shared/SEO";
-import useWindowSize from "Shared/hooks/useWindowSize";
 import Spinner from "./spinner";
 
 //TODO : lazy import

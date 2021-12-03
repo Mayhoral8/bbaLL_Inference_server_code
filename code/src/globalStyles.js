@@ -29,6 +29,7 @@ export const GlobalStyle = createGlobalStyle`
     --box-shadow-1: 0px 4px 10px rgba(83, 74, 145,0.4);
     --box-shadow-2: 0 6px 50px 0 rgba(0, 0, 0, 0.1);
     --box-shadow-3: 10px 10px 10px rgba(83, 74, 145,0.4);
+    --aqua-box-shadow: 0px 1px 6px rgb(4 120 191 / 70%);
     --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
     --table-border: 1px solid #eee;
   }
@@ -95,12 +96,13 @@ export const ContainerCard = styled.div`
 `;
 
 export const BadgeButton = styled.button`
-  background: rgb(0,0,0,0.0);
-  height: 25px;
-  margin: 0px 7px;
+  background: rgb(0, 0, 0, 0);
+  padding: 17px 0px;
+  text-align: center;
   font-weight: 300;
   font-size: 15px;
   justify-content: center;
+  width: 75px;
   text-align: center;
   display: flex;
   &:disabled,
@@ -110,25 +112,11 @@ export const BadgeButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-  ${(props) => {
-    let underLine;
-    if (props.isActive) {
-      underLine = `
-      border-bottom: 7px solid #090979;
-      `;
-    }
-    return underLine;
-  }}
-
-  ${(props) => {
-    let size;
-    if (props.isActive) {
-      size = `
-        font-weight: bold;
-      `;
-    }
-    return size;
-  }}
+  font-weight: ${props => props.isActive ? 'bold' : 'normal'};
+  border-bottom: ${props => props.isActive ? '3px solid #0478bf' : 'none'};
+  .buttonTitle{
+    color: ${props => props.isActive ? "#0478bf" : "black"};
+  }
 `;
 
 export const GraphTitle = styled.h3`

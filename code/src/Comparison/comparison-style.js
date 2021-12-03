@@ -94,7 +94,7 @@ export const StyledOptionsTeams = styled.ul`
     &.active {
       border: 2px solid #090979;
       border-radius: 5px;
-      box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+      box-shadow: var(--aqua-box-shadow);
     }
     &:before {
       content: attr(title);
@@ -240,7 +240,7 @@ export const RandomPlayerContiner = styled.div`
 export const EachRandomSetWrapper = styled.div`
   .comparsion {
     max-width: 200px;
-    border: 1px solid #39204f;
+    border: 1px solid #090979;
     box-shadow: 0px 0px 5px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -353,8 +353,8 @@ export const StyledPlayerCandidates = styled.div`
     align-items: center;
   }
   .button {
-    background-color: #7a1dc4;
-    border: 2px solid #7500de;
+    background-color: #090979;
+    border: 2px solid #090979;
     border-radius: 10px;
     color: white;
     padding: 8% 30%;

@@ -9,15 +9,19 @@ export const StatsDiv = styled.div`
 export const ButtonsAndSearchBox = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100px;
   width: 100%;
   margin: 1rem 0rem;
   @media (min-width: 1024px) {
     flex-direction: row;
     justify-content: center;
+    height: auto;
   }
   @media (max-width: 1023px) {
     flex-direction: column;
     font-size: 0.85rem;
+    height: auto;
   }
 `;
 
@@ -77,7 +81,7 @@ export const StatButtonBoxWrapper = styled.div`
   }
   @media(min-width: 968px) {
     margin: 0;
-    margin-left: 4rem;
+    margin-left: 11rem;
   }
 `;
 
@@ -132,7 +136,7 @@ export const StatsPlotDiv = styled.div`
 
 export const GraphInfoDiv = styled.div`
   padding-bottom: 2rem;
-  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+  box-shadow: var(--aqua-box-shadow);
   border-radius: 5px;
 `
 
@@ -168,12 +172,10 @@ export const GraphInstruction = styled.div`
 export const StatButtonPillsContainer = styled.div`
   display: flex;
   justify-content: center;
-  height: 40px;
   align-items: center;
-  box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
-  border-radius: 5px;
-  padding: 0px 10px
-  background: linear-gradient(to right,#362daa,#0d93f6,#36afca);
+  height: 50px;
+  border-bottom: 3px solid grey;
+  width: 150px;
 `
 
 export const PlotInformation = styled.div`

@@ -170,7 +170,7 @@ export const StyleButton = styled.div`
     cursor: pointer;
     margin: 10px;
     border-radius: 5px;
-    box-shadow: 0px 1px 6px rgb(9 9 121 / 70%);
+    box-shadow: var(--aqua-box-shadow);
     @media (max-width: ${breakpoints.phone}) {
       font-size: 10px;
       margin: 5px;

@@ -13,17 +13,12 @@ const sliderStyle = {
 };
 
 class TimeLine extends Component {
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-    this.formatTick = this.formatTick.bind(this);
-  }
-  formatTick(val) {
+  formatTick = (val) => {
     return this.props.yearNames[val];
-  }
-  onChange(e) {
+  };
+  onChange = (e) => {
     this.props.handleTimeLineChange(this.props.statName, e[0]);
-  }
+  };
   render() {
     return (
       <TimeLineDiv>
@@ -54,20 +49,20 @@ class TimeLine extends Component {
             )}
           </Handles>
 
-            <Ticks values={validValues}>
-              {({ ticks }) => (
-                <div className="slider-ticks">
-                  {ticks.map((tick) => (
-                    <Tick
-                      key={tick.id}
-                      tick={tick}
-                      count={ticks.length}
-                      format={this.formatTick}
-                    />
-                  ))}
-                </div>
-              )}
-            </Ticks>
+          <Ticks values={validValues}>
+            {({ ticks }) => (
+              <div className="slider-ticks">
+                {ticks.map((tick) => (
+                  <Tick
+                    key={tick.id}
+                    tick={tick}
+                    count={ticks.length}
+                    format={this.formatTick}
+                  />
+                ))}
+              </div>
+            )}
+          </Ticks>
         </Slider>
       </TimeLineDiv>
     );
