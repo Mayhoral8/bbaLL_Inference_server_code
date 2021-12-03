@@ -83,7 +83,6 @@ export const OddsValueContainer = styled.div`
 export const PointsValueContainer = styled.div`
     width: 100%;
     text-align: center;
-    /* background: #39204F; */
     color: black;
     border-radius: 5px;
     font-size: 14px;
@@ -100,7 +99,6 @@ export const PointsValueContainer = styled.div`
 export const TotalScoreValueContainer = styled.div`
     width: 100%;
     text-align: center;
-    /* background: #39204F; */
     color: black;
     border-radius: 5px;
     font-size: 14px;

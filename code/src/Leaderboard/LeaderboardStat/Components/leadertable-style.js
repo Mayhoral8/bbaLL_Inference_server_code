@@ -49,7 +49,7 @@ export const TableBoxMiddle = styled.div`
   width: 60%;
   a {
     text-decoration: none;
-    color: var(--penblue);
+    color: var(--main-blue);
     &:hover {
       text-decoration: underline;
     }
@@ -59,7 +59,7 @@ export const TableBoxMiddle = styled.div`
 export const TableBoxRight = styled.div`
   order: 2;
   width: 20%;
-  color: var(--penblue);
+  color: var(--main-blue);
 `;
 
 export const ExpandButton = styled.button`

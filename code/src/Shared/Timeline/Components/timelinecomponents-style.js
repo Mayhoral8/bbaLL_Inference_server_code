@@ -10,7 +10,7 @@ export const RailOuterStyle = styled.div`
 `;
 export const RailDotted = styled.div`
   height: 0px;
-  border: 1.5px dashed #b2adce;
+  border: 1.5px dashed #090979;
 `;
 
 export const SliderBallDiv = styled.div`
@@ -36,7 +36,7 @@ export const TickCircle = styled.div`
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: #544a91;
+  background-color: #090979;
   border-radius: 5px;
   transform: translate(-45%, -60%);
   pointer-events: none;

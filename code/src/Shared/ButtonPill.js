@@ -57,26 +57,26 @@ const ButtonPill = ({
   };
 
   return (
-    <AvgTotButtonBoxDiv flexStart={flexStart} style={customStyle}>
+    <div style = {{display: "flex"}}>
       {dataArr.map((data) => {
         const disabled = data === "Playoffs" && !playoffsExist;
 
         return (
-          <BadgeButton
-            key={data}
-            isActive={data === isActive}
-            onClick={() => handleButtonClick(data)}
-            disabled={disabled}
-          >
-            {yearNames.length - 1 === yearId && data==='Playoffs' ? (
-              <span>{data}</span>
-            ) : (
-              <Link to={linkPath(data)}>{data}</Link>
-            )}
-          </BadgeButton>
+            <BadgeButton
+              key={data}
+              isActive={data === isActive}
+              onClick={() => handleButtonClick(data)}
+              disabled={disabled}
+            >
+              {yearNames.length - 1 === yearId && data === "Playoffs" ? (
+                <span>{data}</span>
+              ) : (
+                <Link to={linkPath(data)} className = "buttonTitle">{data}</Link>
+              )}
+            </BadgeButton>
         );
       })}
-    </AvgTotButtonBoxDiv>
+    </div>
   );
 };
 

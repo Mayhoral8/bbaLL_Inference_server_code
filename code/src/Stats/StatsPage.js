@@ -192,11 +192,25 @@ const StatsPage = ({
 
     if (statData) {
       if (statCategory === "Basic") {
-        [statX, statY, names, colours, textFontSize, xlabel, ylabel] =
-          preprocessBasicData(statData, category, stat, isTeam, minutes);
+        [
+          statX,
+          statY,
+          names,
+          colours,
+          textFontSize,
+          xlabel,
+          ylabel,
+        ] = preprocessBasicData(statData, category, stat, isTeam, minutes);
       } else {
-        [statX, statY, names, colours, textFontSize, xlabel, ylabel] =
-          preprocessChampNmvpData(statData, category, stat, isTeam, season);
+        [
+          statX,
+          statY,
+          names,
+          colours,
+          textFontSize,
+          xlabel,
+          ylabel,
+        ] = preprocessChampNmvpData(statData, category, stat, isTeam, season);
       }
     }
 
@@ -495,12 +509,11 @@ const StatsPage = ({
               playoffsExist={playoffsExist}
             />
           </ButtonsAndSearchBox>
-          {makeStatsPlot()}
+          <div style={{ marginTop: "3rem" }}>{makeStatsPlot()}</div>
         </>
       )}
     </Fragment>
   );
-  // }
 };
 
 const mapStateToProps = (state) => ({

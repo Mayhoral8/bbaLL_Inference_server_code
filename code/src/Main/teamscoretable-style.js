@@ -32,7 +32,7 @@ export const BoxScoreTableWrapper = styled.div`
     flex-flow: row wrap;
   }
   .table-header {
-    background: var(--penblue);
+    background: var(--main-blue);
     color: var(--white);
     text-transform: uppercase;
     font-size: 0.8rem;

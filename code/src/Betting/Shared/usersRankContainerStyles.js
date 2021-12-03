@@ -39,7 +39,7 @@ export const Col = styled.div`
     grid-template-columns: 1fr 2fr 2fr;
     border: 1px solid #ddd;
     border-top: ${props => props.header == 'false' && "0"};
-    background-color: ${props => props.header == 'true' && "#552A9F"};
+    background-color: ${props => props.header == 'true' && "#090979"};
     color: ${props => props.header == 'true' && "white"};
     padding: 10px 0px;
 `

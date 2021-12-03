@@ -98,7 +98,6 @@ const ComparisonPage = () => {
   const [tempYearTwo, setTempYearTwo] = useState(tempRightYear);
   let clearLeftValue = false;
   let clearRightValue = false;
-
   useEffect(() => {
     Chart.plugins.unregister(ChartDataLabels);
 

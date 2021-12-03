@@ -22,16 +22,17 @@ export const ButtonBoxDiv = styled.div`
 
 export const Button = styled.button`
   border-radius: 5px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  padding: 0.5rem;
+  box-shadow: var(--aqua-box-shadow);
+  background: linear-gradient(to right,#362daa,#0d93f6,#36afca);
+  padding: 1rem;
   margin: 0.5rem;
-  color: var(--black);
+  color: #ffff;
   ${(props) => {
     let buttonColour;
     if (props.isActive) {
       buttonColour = `
-      color: white;
-      background: var(--main-purple);    
+      color: var(--black);
+      background: #ffff;    
       `;
     }
     return buttonColour;

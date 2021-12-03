@@ -144,7 +144,7 @@ const Summary = ({ selectedGameIndex, homeTeam, awayTeam, gamePbp }) => {
                     setDisplayPlot(plotArr[i]);
                   }}
                 >
-                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
+                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`} className = 'buttonTitle'>
                     {btn}
                   </Link>
                 </BadgeButton>
@@ -153,7 +153,7 @@ const Summary = ({ selectedGameIndex, homeTeam, awayTeam, gamePbp }) => {
           </PlotButtons>
         </PlotButtonsContinerLeft>
         <PlotButtonsContiner>
-          <PlotButtons>
+          <PlotButtons style = {{width: "150px"}}>
             {["Scores", selectedPlotBtn].map((btn, i) => {
               return (
                 <BadgeButton
@@ -164,7 +164,7 @@ const Summary = ({ selectedGameIndex, homeTeam, awayTeam, gamePbp }) => {
                   }}
                   isActive={btn === selectedToggleBtn}
                 >
-                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`}>
+                  <Link to={`${pathname}?plot=${btn.toLowerCase()}`} className = 'buttonTitle'>
                     {btn}
                   </Link>
                 </BadgeButton>

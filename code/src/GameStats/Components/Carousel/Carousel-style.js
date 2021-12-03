@@ -39,7 +39,7 @@ export const CarouselWrapper = styled.div`
       right: 0.5rem;
     }
     &:hover {
-      background: var(--main-purple);
+      background: var(--main-blue);
       color: var(--white);
     }
     .fa-chevron-left, .fa-chevron-right {
