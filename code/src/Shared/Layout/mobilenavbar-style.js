@@ -106,7 +106,7 @@ export const MobileNavbarDiv = styled.aside`
       width: 100%;
       padding: 1rem 1rem 1rem 2rem;
       &.active {
-        background: var(--main-purple);
+        background: var(--main-blue);
 
         border-radius: 2rem 0 0 2rem;
       }

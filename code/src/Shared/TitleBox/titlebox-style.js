@@ -27,7 +27,7 @@ export const Title = styled.h1`
   margin-top: 1vh;
   margin-bottom: 0.5rem;
   font-size: 2rem;
-  color: #534a91;
+  color: #090979;
   user-select: none;
   @media(min-width: 768px) {
     font-size: 3rem;

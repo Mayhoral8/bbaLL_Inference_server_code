@@ -13,7 +13,6 @@ export const Wrapper = styled.div`
   }
 
   .buttom {
-    padding-top: 20px;
     @media(max-width: 834px) {
       padding-top: 0px;
     }
@@ -56,7 +55,7 @@ export const TitleWrapper = styled.div`
     color: ${(props) => props.homeTeamColor};
     font-weight: bold;
     font-family: Roboto;
-    font-size: 2.5rem;
+    font-size: 2rem;
     @media (max-width: 834px) {
       font-size: 1rem;
     }
@@ -70,7 +69,7 @@ export const TitleWrapper = styled.div`
     color: ${(props) => props.awayTeamColor};
     font-weight: bold;
     font-family: Roboto;
-    font-size: 2.5rem;
+    font-size: 2rem;
     @media (max-width: 834px) {
       font-size: 1rem;
     }

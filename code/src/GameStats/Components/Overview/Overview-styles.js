@@ -257,9 +257,10 @@ export const PlotButtons = styled.div`
   text-align: center;
   display: flex;
   width: 100%;
-  justify-content:center;
-  border: 1px solid #080A1E;
-  box-shadow: 0 4px 2px 0px gray;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  border-bottom: 3px solid grey;
 `;
 
 //Used in Summary.js

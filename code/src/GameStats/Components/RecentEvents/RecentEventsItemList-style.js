@@ -14,7 +14,7 @@ export const RecentEventsItemWrapper = styled.div`
     }
   }
   .active.team-container {
-    border-bottom: 5px solid var(--main-purple);
+    border-bottom: 5px solid var(--main-blue);
   }
   .team-container {
     padding: 0.5rem 1rem;
