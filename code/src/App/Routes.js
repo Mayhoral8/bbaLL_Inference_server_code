@@ -12,6 +12,7 @@ import Spinner from "../Shared/Spinner/Spinner";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import "firebase/auth";
+import { currentYear } from "Constants";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { getFutureGamesInfo } from "../redux/actions/gamesActions";
 import { getPlayerRankings } from "../redux/actions/playersActions";
@@ -37,7 +38,7 @@ const Routes = (props) => {
     props.getPlayerRankings();
   }, []);
 
-  const currentYear = "2020-21";
+  //const currentYear = "2021-22";
   useFirestoreConnect(() => [
     {
       collection: "game_info",
