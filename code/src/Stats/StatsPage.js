@@ -19,7 +19,6 @@ import * as STATSCONSTANTS from "./statsConstants";
 import TitleBox from "../Shared/TitleBox/TitleBox";
 import StatButtons from "./Components/StatButtons";
 import StatsPlot from "./Components/StatsPlot";
-import StatsBar from "./Components/StatsBar";
 import ButtonBox from "../Shared/ButtonBox/ButtonBox";
 import GraphInfo from "../Shared/GraphInfo/GraphInfo";
 import StatsPageSelect from "../Shared/SmallSelect/StatsPageSelect";
@@ -29,6 +28,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { capitalizeFirstLetter } from "../Shared/Functions/capitalizeFirstLetter";
 import ButtonBoxSelect from "../Shared/SmallSelect/ButtonBoxSelect";
 import LoadingSpinner from "../Shared/Spinner/loadingSpinner";
+import StatsBar from "./Components/StatsBar";
 
 const PLAYERTIMEINDEX = 4;
 const PLAYERTIMEMAX = 5;
@@ -192,11 +192,25 @@ const StatsPage = ({
 
     if (statData) {
       if (statCategory === "Basic") {
-        [statX, statY, names, colours, textFontSize, xlabel, ylabel] =
-          preprocessBasicData(statData, category, stat, isTeam, minutes);
+        [
+          statX,
+          statY,
+          names,
+          colours,
+          textFontSize,
+          xlabel,
+          ylabel,
+        ] = preprocessBasicData(statData, category, stat, isTeam, minutes);
       } else {
-        [statX, statY, names, colours, textFontSize, xlabel, ylabel] =
-          preprocessChampNmvpData(statData, category, stat, isTeam, season);
+        [
+          statX,
+          statY,
+          names,
+          colours,
+          textFontSize,
+          xlabel,
+          ylabel,
+        ] = preprocessChampNmvpData(statData, category, stat, isTeam, season);
       }
     }
 
@@ -343,17 +357,14 @@ const StatsPage = ({
                 bottom right quadrant.
               </p>
             </PlotInformation>
-
             <ContainerCard className="m-1">
               <GraphInfoDiv>
                 <GraphInfo plotType="stats_avg" />
                 <StatsBar
-                  x={names}
-                  y={statY}
+                  labels={names}
+                  avgData={statY}
                   teamColours={colours}
                   yAxisTitle={modifiedYLabel}
-                  barPlotWidth={plotWidth}
-                  barPlotHeight={plotHeight}
                 />
               </GraphInfoDiv>
             </ContainerCard>
@@ -374,12 +385,10 @@ const StatsPage = ({
                   }
                 />
                 <StatsBar
-                  x={names}
-                  y={statX}
+                  labels={names}
+                  avgData={statX}
                   teamColours={colours}
                   yAxisTitle={xlabel}
-                  barPlotWidth={plotWidth}
-                  barPlotHeight={plotHeight}
                 />
               </GraphInfoDiv>
             </ContainerCard>
@@ -500,7 +509,7 @@ const StatsPage = ({
               playoffsExist={playoffsExist}
             />
           </ButtonsAndSearchBox>
-          <div style = {{marginTop: "3rem"}}>{makeStatsPlot()}</div>
+          <div style={{ marginTop: "3rem" }}>{makeStatsPlot()}</div>
         </>
       )}
     </Fragment>
