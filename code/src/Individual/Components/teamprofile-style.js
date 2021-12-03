@@ -10,7 +10,7 @@ export const TeamProfileTitleDiv = styled.div`
   flex-direction: column;
   text-align: center;
   font-size: 2rem;
-  color: var(--main-purple);
+  color: var(--main-blue);
   font-weight: 550;
   .team-name-container {
     display: flex;

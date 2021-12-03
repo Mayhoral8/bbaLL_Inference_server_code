@@ -11,7 +11,7 @@ export const DropdownDiv = styled.div`
 
 export const DropButton = styled.div`
   background: var(--white);
-  border: 1px solid var(--main-purple);
+  border: 1px solid var(--main-blue);
   color: var(--black);
   padding: 0 1rem;
   width: 100%;

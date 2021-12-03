@@ -16,12 +16,7 @@ export const GameSummaryWrapper = styled.div`
     padding: 2rem 0;
   }
   .top-section {
-    background-image: linear-gradient(
-        to right,
-        rgba(56, 40, 81, 0.95) 50%,
-        rgba(56, 40, 81, 0.3)
-      ),
-      url(${backgroundImage});
+    background-image: linear-gradient(90deg, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%),url(${backgroundImage});
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -129,8 +124,8 @@ li:not(:last-child) {
   border-right: 0;
 }
 .isActive {
-  color: var(--main-purple);
-  border-bottom: 3px solid var(--main-purple);
+  color: var(--main-blue);
+  border-bottom: 3px solid var(--main-blue);
 }
 a {
   width: 100%;

@@ -2,9 +2,14 @@ import refresh from "../assets/images/refresh.png";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+  min-width: 230.5px;
   @media (min-width: 280px) and (max-width: 767px){
     padding-bottom: 30px;
   } 
+  @media (max-width: 730px) {
+    margin-top: 20px;
+    min-width: 100%;
+  }
   .eachRandomSetWrapper{
     cursor: pointer;
     display: flex;
@@ -19,10 +24,8 @@ export const Wrapper = styled.div`
   }
   
   .button{
-    background-color: #7A1DC4;
-    border: 2px solid #7500DE;
     border-radius: 10px;
-    color: white;
+    background: #090979;
     padding: 8% 30%;
     background-image: url(${refresh});
     background-repeat: no-repeat;

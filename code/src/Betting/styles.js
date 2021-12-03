@@ -169,7 +169,7 @@ export const CommonChild = styled.li`
 
 export const BetPointsSummaryColumn = styled.div`
   width: 18%;
-  background: #39204f;
+  background: #090979;
   border: 0.5px solid rgba(57, 32, 79, 0.25);
   box-shadow: 0px 0px 5px rgba(57, 32, 79, 0.25);
   border-radius: 5px;

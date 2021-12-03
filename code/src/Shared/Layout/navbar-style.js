@@ -9,7 +9,7 @@ export const NavbarContainer = styled.header`
   align-items: center;
   height: 4rem;
   box-shadow: var(--box-shadow-2);
-  background: var(--main-purple);
+  background: var(--header-footer-gradient);
   z-index: 11;
   width: 100%;
   padding: 0 1rem;

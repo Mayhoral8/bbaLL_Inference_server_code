@@ -21,7 +21,7 @@ const StatButtons = ({
   setTime,
   time,
   setActiveMin,
-  activeMin
+  activeMin,
 }) => {
   // routes
   const history = useHistory();
@@ -33,7 +33,7 @@ const StatButtons = ({
     search.split("&")[search.split("&").length - 1].split("=")[1];
 
   // states
-  
+
   const yearNames = useSelector((state) => state.sharedReducer.yearNames);
   const yearId = useSelector((state) => state.sharedReducer.yearId);
   const attr = useSelector((state) => state.sidebarReducer.stat);
@@ -43,16 +43,15 @@ const StatButtons = ({
       const timeIndex = CONSTANTS.minuteButtonArray(season).findIndex(
         (e) => e.path === timePath
       );
-      let btnsArray = CONSTANTS.minuteButtonArray(season)
-      let targetBtn = btnsArray[timeIndex]
+      let btnsArray = CONSTANTS.minuteButtonArray(season);
+      let targetBtn = btnsArray[timeIndex];
       setActiveMin(timeIndex + 1);
-      handleMinutes(targetBtn.handleMinutes1, targetBtn.handleMinutes2)
+      handleMinutes(targetBtn.handleMinutes1, targetBtn.handleMinutes2);
     } else {
       setActiveMin(5);
-      if(season === 'Regular'){
+      if (season === "Regular") {
         handleMinutes(34.5, 99.5);
-      }
-      else{
+      } else {
         handleMinutes(37.5, 99.5);
       }
     }
@@ -109,28 +108,31 @@ const StatButtons = ({
 
   return (
     <Fragment>
-      <StatButtonPillsContainer>
-        <ButtonPill
-          flexStart={!isTeam ? "flexStart" : ""}
-          isActive={dataType}
-          dataArr={["Graphs", "Table"]}
-          onClickAction={handleDataType}
-          customStyle={{ marginRight: "1rem" }}
-          additionalQueryParam={`season=${season}`}
-          queryParam="type"
-          time={time}
-        />
-        <ButtonPill
-          flexStart={!isTeam ? "flexStart" : ""}
-          isActive={season}
-          dataArr={["Regular", "Playoffs"]}
-          onClickAction={handleSeason}
-          playoffsExist={playoffsExist}
-          additionalQueryParam={`type=${dataType}`}
-          queryParam="season"
-          time={time}
-        />
-      </StatButtonPillsContainer>
+      <div style = {{display: "flex", justifyContent: "space-between", width: "350px"}}>
+        <StatButtonPillsContainer>
+          <ButtonPill
+            flexStart={!isTeam ? "flexStart" : ""}
+            isActive={dataType}
+            dataArr={["Graphs", "Table"]}
+            onClickAction={handleDataType}
+            additionalQueryParam={`season=${season}`}
+            queryParam="type"
+            time={time}
+          />
+        </StatButtonPillsContainer>
+        <StatButtonPillsContainer>
+          <ButtonPill
+            flexStart={!isTeam ? "flexStart" : ""}
+            isActive={season}
+            dataArr={["Regular", "Playoffs"]}
+            onClickAction={handleSeason}
+            playoffsExist={playoffsExist}
+            additionalQueryParam={`type=${dataType}`}
+            queryParam="season"
+            time={time}
+          />
+        </StatButtonPillsContainer>
+      </div>
       {minuteButtonBox()}
     </Fragment>
   );
