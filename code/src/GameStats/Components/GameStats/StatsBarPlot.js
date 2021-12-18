@@ -137,8 +137,6 @@ const StatsBarPlot = ({ info, mirror, y, away }) => {
     ],
   };
 
-  console.log(data)
-
   return (
     <PlotContainer>
         <HorizontalBar options={options} data={dataConfig} />
