@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // Used in GameStatsTable.js
 export const GameSummaryTableWrapper = styled.div`
@@ -10,12 +10,11 @@ export const GameSummaryTableWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr 250px 1fr;
     ul {
-      margin: 2rem 0; 
+      margin: 2rem 0;
     }
     li {
       text-transform: capitalize;
-      height: 2.2rem;
-      margin-bottom: 0.43rem;
+      height: 2.69rem;
       align-items: center;
       justify-content: center;
       text-align: center;
@@ -33,10 +32,10 @@ export const GameSummaryTableWrapper = styled.div`
       font-weight: bold;
     }
     .highlight {
-      color: var(--accent);
+      color: var(--secondary-blue);
     }
   }
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     padding: 0 1rem;
     .bar-graph-container {
       grid-template-columns: 1fr;
@@ -45,7 +44,7 @@ export const GameSummaryTableWrapper = styled.div`
       }
       li {
         height: 1.7rem;
-        font-size: 0.9rem
+        font-size: 0.9rem;
       }
     }
     .versus {
@@ -54,16 +53,20 @@ export const GameSummaryTableWrapper = styled.div`
       position: relative;
       font-size: 1rem;
     }
-    .versus:before, .versus:after {
+    .versus:before,
+    .versus:after {
       width: 2rem;
     }
-
   }
 `;
 
 // Used in StatsBarPlots
 export const PlotContainer = styled.div`
-  @media(max-width: 768px) {
+  margin-top: 2rem;
+  @media (max-width: 768px) {
     display: none;
   }
 `;
+
+
+

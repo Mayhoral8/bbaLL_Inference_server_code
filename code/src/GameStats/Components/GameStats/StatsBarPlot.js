@@ -1,8 +1,7 @@
 import React from "react";
-import Plot from "react-plotly.js";
+import { HorizontalBar } from "react-chartjs-2";
 import { rgba } from "polished";
 import { PlotContainer } from "./GameStats-styles";
-
 const StatsBarPlot = ({ info, mirror, y, away }) => {
   // find all objects with key of "Q#"
   const quarterlyInfo = Object.keys(info)
@@ -23,12 +22,10 @@ const StatsBarPlot = ({ info, mirror, y, away }) => {
     y.forEach((val) => {
       if (/percentage|rate/g.test(val)) {
         const xValue =
-          (info[quarter][team][val] / getAttrSum(val)) *
-          (info[team][val] / (info.Home[val] + info.Away[val]));
+          (info[quarter][team][val] / getAttrSum(val)) * (info[team][val] / (info.Home[val] + info.Away[val]));
         x.push(xValue);
       } else {
-        const xValue =
-          info[quarter][team][val] / (info.Home[val] + info.Away[val]);
+        const xValue = info[quarter][team][val] / (info.Home[val] + info.Away[val]);
         x.push(xValue);
       }
     });
@@ -56,7 +53,7 @@ const StatsBarPlot = ({ info, mirror, y, away }) => {
     };
   };
 
-  // bar graph data
+  // bar graph data structuring
   const data = [];
   quarterlyInfo.forEach((info) => {
     const quarterInt = +info.replace(/Q/, "");
@@ -66,51 +63,83 @@ const StatsBarPlot = ({ info, mirror, y, away }) => {
       y,
       info,
       "h",
-      rgba("#534a91", opacity),
+      rgba("#090979", opacity),
       1,
       "bar"
     );
     data.push(trace);
   });
 
-  // bar graph layout
-  const layout = {
-    barmode: "stack",
-    showlegend: false,
-    xaxis: {
-      zeroline: false,
-      range: mirror ? [1, 0] : [0, 1],
-      dtick: 0.1,
+  // bar options
+  const options = {
+    maintainAspectRatio: false,
+    responsive: true,
+    legend: {
+      display: false,
     },
-    yaxis: {
-      side: mirror && "right",
-      showticklabels: false,
+    tooltips: {
+      enabled: false,
     },
-    margin: {
-      t: 30,
-      b: 30,
-      l: 10,
-      r: 10,
+    scales: {
+      xAxes: [
+        {
+          stacked: true,
+          ticks: {
+            beginAtZero: true,
+            min: 0,
+            max: 1,
+            stepSize: 0.1,
+            reverse: mirror ? true : false,
+          },
+          gridLines: {
+            drawBorder: false,
+          },
+        },
+      ],
+      yAxes: [
+        {
+          display: false,
+          stacked: true,
+          position: mirror ? "right" : "left",
+          barThickness: 30,
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          ticks: {
+            reverse: true,
+          },
+        },
+      ],
     },
-    hovermode: false,
-    autosize: true,
   };
 
-  // bar graph config
-  const config = {
-    responsive: true,
-    displayModeBar: false,
-    staticPlot: true,
+  // bar data
+  const dataConfig = {
+    labels: y,
+    datasets: [
+      {
+        data: data[0].x,
+        backgroundColor: data[0].marker.color,
+      },
+      {
+        data: data[1].x,
+        backgroundColor: data[1].marker.color,
+      },
+      {
+        data: data[2].x,
+        backgroundColor: data[2].marker.color,
+      },
+      {
+        data: data[3].x,
+        backgroundColor: data[3].marker.color,
+      },
+    ],
   };
 
   return (
     <PlotContainer>
-      <Plot
-        data={data}
-        layout={layout}
-        config={config}
-        style={{ height: "30rem", width: "100%" }}
-      />
+        <HorizontalBar options={options} data={dataConfig} />
     </PlotContainer>
   );
 };

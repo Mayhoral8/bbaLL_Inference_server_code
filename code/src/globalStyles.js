@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
     --red: #e54861;
     --penblue: #353058;
     --main-blue: #090979;
+    --secondary-blue: #0478bf;
     --header-footer-gradient: linear-gradient(90deg, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
     --faint-purple: #e9e8f4;
     --white: #fff;
