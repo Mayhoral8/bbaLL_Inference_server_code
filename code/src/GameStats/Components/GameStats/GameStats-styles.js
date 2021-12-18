@@ -32,7 +32,7 @@ export const GameSummaryTableWrapper = styled.div`
       font-weight: bold;
     }
     .highlight {
-      color: var(--accent);
+      color: var(--secondary-blue);
     }
   }
   @media (max-width: 768px) {
