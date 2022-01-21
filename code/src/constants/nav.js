@@ -24,9 +24,9 @@ export const navConstants = [
     url: "/comparison",
     parentUrl: "comparison",
   },
-  {
-    name: "Virtual Betting",
-    url: '/betting',
-    parentUrl:'betting'
-  }
+  // {
+  //   name: "Virtual Betting",
+  //   url: '/betting',
+  //   parentUrl:'betting'
+  // }
 ];

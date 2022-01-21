@@ -16,18 +16,7 @@ const GameStatsTable = ({ info }) => {
     "assists",
     "play_score",
   ];
-  const modifiedY = [
-    "PLAY",
-    "AST",
-    "REB",
-    "OREB",
-    "BLK",
-    "STL",
-    "TO",
-    "3P%",
-    "FG%",
-    "eFG%",
-  ];
+  const modifiedY = ["PLAY", "AST", "REB", "OREB", "BLK", "STL", "TO", "3P%", "FG%", "eFG%"];
   return (
     <GameSummaryTableWrapper>
       <HomeVsAwayTitle home={info.Home.Team} away={info.Away.Team} />
@@ -42,15 +31,11 @@ const GameStatsTable = ({ info }) => {
             return (
               <li key={label}>
                 <span className={`${awayValue > homeValue ? "highlight" : ""}`}>
-                  {labelWithPercentage
-                    ? (awayValue * 100).toFixed(1)
-                    : awayValue}
+                  {labelWithPercentage ? (awayValue * 100).toFixed(1) : awayValue}
                 </span>
                 {modifiedY[i]}
                 <span className={`${homeValue > awayValue ? "highlight" : ""}`}>
-                  {labelWithPercentage
-                    ? (homeValue * 100).toFixed(1)
-                    : homeValue}
+                  {labelWithPercentage ? (homeValue * 100).toFixed(1) : homeValue}
                 </span>
               </li>
             );
