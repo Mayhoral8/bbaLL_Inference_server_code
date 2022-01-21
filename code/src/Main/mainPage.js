@@ -173,11 +173,11 @@ const GamePageContainer = (props) => {
             <Suspense fallback={<Spinner width="100%" height="283.506px" />}>
               <div className = "futureGameListContainer">
                 <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                <BettingButton>
+                {/* <BettingButton>
                   <Link to="/betting" className="styledButton">
                     Virtual Bet Now!
                   </Link>
-                </BettingButton>
+                </BettingButton> */}
                 <FutureGameListBox>
                   <FutureGameListRow>
                     <FutureGameList games={games} />
