@@ -9,13 +9,13 @@ import Layout from "../Shared/Layout/Layout";
 import Footer from "../Shared/Layout/Footer";
 import Login from "../Auth/Login";
 import Spinner from "../Shared/Spinner/Spinner";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import { useSelector, useDispatch } from "react-redux";
 import "firebase/auth";
 import { currentYear } from "Constants";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { getFutureGamesInfo } from "../redux/actions/gamesActions";
 import { getPlayerRankings } from "../redux/actions/playersActions";
+
 
 const Games = lazy(() => import("../GameStats/GamePageContainer"));
 const Leaderboard = lazy(() => import("../Leaderboard/LeaderPageContainer"));
@@ -32,10 +32,18 @@ const ScreenCaptureGamesPage = lazy(() =>
   import("../ScreenCapture/gamePage/gamePage")
 );
 
-const Routes = (props) => {
+const Routes = () => {
+  const rawData = useSelector((store)=> store)
+  const dispatch = useDispatch()
+  const {firestoreReducer, gamesReducer, playersReducer} = rawData
+  const futureGames = gamesReducer.futureGames
+  const playerRankings = playersReducer.playerRankings
+  const {gameInfoJson, gamePbpJson, gamePlayersJson} = firestoreReducer.ordered
+  
+  
   useEffect(() => {
-    props.getFutureGamesInfo();
-    props.getPlayerRankings();
+    dispatch(getFutureGamesInfo())
+    dispatch(getPlayerRankings())
   }, []);
 
   //const currentYear = "2021-22";
@@ -73,11 +81,11 @@ const Routes = (props) => {
   ]);
   console.warn = () => {};
   if (
-    props.futureGames.isLoading ||
-    props.playerRankings.isLoading ||
-    !props.gameInfo ||
-    !props.gamePbpJson ||
-    !props.gamePlayersJson
+    futureGames.isLoading ||
+    playerRankings.isLoading ||
+    !gameInfoJson ||
+    !gamePbpJson ||
+    !gamePlayersJson
   ) {
     return (
       <>
@@ -129,17 +137,5 @@ const Routes = (props) => {
     );
   }
 };
-const mapStateToProps = (state) => {
-  console.log(state);
-  return {
-    futureGames: state.gamesReducer.futureGames,
-    playerRankings: state.playersReducer.playerRankings,
-    gameInfo: state.firestoreReducer.ordered.gameInfoJson,
-    gamePbpJson: state.firestoreReducer.ordered.gamePbpJson,
-    gamePlayersJson: state.firestoreReducer.ordered.gamePlayersJson,
-  };
-};
-export default compose(
-  withRouter,
-  connect(mapStateToProps, { getFutureGamesInfo, getPlayerRankings })
-)(Routes);
+
+export default Routes;

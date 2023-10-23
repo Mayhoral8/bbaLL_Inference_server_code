@@ -6,6 +6,7 @@ import { reduxFirestore, getFireStore } from "redux-firestore";
 import fbConfig from "./App/config";
 const initialState = {};
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 //react-redux-firestore config
 export const rrfConfig = {
   userProfile: "users",

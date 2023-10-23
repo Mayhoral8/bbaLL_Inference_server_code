@@ -1,7 +1,5 @@
 import React, { useState, lazy, Suspense, useEffect } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import { FullWidthMain } from "../globalStyles";
 import { fbFirestore } from "../App/config";
 import EventList from "./eventlist";
@@ -21,8 +19,8 @@ import {
   TeamRankingsContainer,
   PlayerRankingsMatchFacts,
   MainPageContainer,
-  BettingButton,
 } from "./mainpage-style";
+
 
 const PlayerRankingsCard = lazy(() => import("./playerRankingsCard"));
 const MemeCard = lazy(() => import("./memeCard"));
@@ -31,12 +29,22 @@ const FutureGameList = lazy(() => import("./futuregamelist"));
 const MatchFact = lazy(() => import("./matchFact"));
 const RandomComparison = lazy(() => import("./RandomComparison"));
 
-const GamePageContainer = (props) => {
+const GamePageContainer = () => {
+  const rawData = useSelector((store)=> store)
+  const {firestoreReducer, gamesReducer, playersReducer} = rawData
+  const  orderedGameInfo = firestoreReducer.ordered.gameInfoJson
+  const  gamePbp = firestoreReducer.ordered.gamePbpJson
+  const  gamePlayers = firestoreReducer.ordered.gamePlayersJson
+  const futureGames = gamesReducer.futureGames.games
+  const playerRankingsRaw = playersReducer.playerRankings.rankings
+
+
   const [memeUrls, setMemeUrls] = useState([]);
   const [rankingTypes, setRankingTypes] = useState([]);
   const [games, setGames] = useState([]);
   const [data, setData] = useState([]);
   const [randomSet, setRandomSet] = useState([]);
+
 
   function loadRandomPlayers() {
     let selectedForComparison = new Array();
@@ -71,19 +79,19 @@ const GamePageContainer = (props) => {
     let playerRankings = [];
     initialTypes.forEach((type) => {
       if (
-        type in props.playerRankings[0] &&
-        Object.keys(props.playerRankings[0][type]).length !== 0
+        type in playerRankingsRaw[0] &&
+        Object.keys(playerRankingsRaw[0][type]).length !== 0
       ) {
-        playerRankings.push({ ...props.playerRankings[0][type] });
+        playerRankings.push({ ...playerRankingsRaw[0][type] });
         rankingTypesArray.push(type);
       }
     });
-    playerRankings.push({ ...props.playerRankings[1] });
+    playerRankings.push({ ...playerRankingsRaw[1] });
 
     setRankingTypes(rankingTypesArray);
     setData(playerRankings);
 
-    let sortedGames = props.futureGames;
+    let sortedGames = futureGames;
     sortedGames.sort((game1, game2) => {
       return (
         new Date(game1["Game Info"]["Game Time"]) -
@@ -115,9 +123,9 @@ const GamePageContainer = (props) => {
       />
       <FullWidthMain>
         <EventList
-          gameInfo={props.orderedGameInfo}
-          gamePbp={props.gamePbp}
-          gamePlayers={props.gamePlayers}
+          gameInfo={orderedGameInfo}
+          gamePbp={gamePbp}
+          gamePlayers={gamePlayers}
         />
 
         <MainPageContainer>
@@ -173,11 +181,6 @@ const GamePageContainer = (props) => {
             <Suspense fallback={<Spinner width="100%" height="283.506px" />}>
               <div className = "futureGameListContainer">
                 <FutureGameTitle>Upcoming Games</FutureGameTitle>
-                {/* <BettingButton>
-                  <Link to="/betting" className="styledButton">
-                    Virtual Bet Now!
-                  </Link>
-                </BettingButton> */}
                 <FutureGameListBox>
                   <FutureGameListRow>
                     <FutureGameList games={games} />
@@ -191,18 +194,5 @@ const GamePageContainer = (props) => {
     </>
   );
 };
-const mapStateToProps = ({
-  firestoreReducer,
-  gamesReducer,
-  playersReducer,
-}) => {
-  return {
-    orderedGameInfo: firestoreReducer.ordered.gameInfoJson,
-    gamePbp: firestoreReducer.ordered.gamePbpJson,
-    gamePlayers: firestoreReducer.ordered.gamePlayersJson,
-    futureGames: gamesReducer.futureGames.games,
-    playerRankings: playersReducer.playerRankings.rankings,
-  };
-};
 
-export default connect(mapStateToProps, {})(GamePageContainer);
+export default GamePageContainer;

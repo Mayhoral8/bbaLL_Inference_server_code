@@ -222,9 +222,8 @@ const PlayerRankingsCard = ({
                   }
                 }}
               >
-                <img
-                  style={{ width: "20px", height: "20px" }}
-                  src="https://image.flaticon.com/icons/png/512/60/60758.png"
+                  <i
+                  className="fa-solid fa-caret-right"
                 />
               </button>
             </div>
@@ -340,9 +339,8 @@ const PlayerRankingsCard = ({
                   }
                 }}
               >
-                <img
-                  style={{ width: "20px", height: "20px" }}
-                  src="https://image.flaticon.com/icons/png/512/60/60758.png"
+                <i
+                  className="fa-solid fa-caret-right"
                 />
               </button>
             </div>

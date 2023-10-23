@@ -3,9 +3,7 @@ import { Provider } from "react-redux";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { Router } from "react-router-dom";
 import { createFirestoreInstance } from "redux-firestore";
-import { ThemeProvider } from "styled-components";
 import { createBrowserHistory } from "history";
-import { theme } from "../Shared/theme";
 import ReactGA from "react-ga";
 import store from "../store";
 import rrfConfig from "../store";
@@ -27,6 +25,7 @@ const rrfProps = {
 };
 
 
+console.log(store.getState());
 const App = () => {
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -35,11 +34,11 @@ const App = () => {
   return (
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        {/* <ThemeProvider theme={theme}> */}
+      
           <Router history={browserHistory}>
             <Routes/>
           </Router>
-        {/* </ThemeProvider> */}
+     
       </ReactReduxFirebaseProvider>
     </Provider>
   );

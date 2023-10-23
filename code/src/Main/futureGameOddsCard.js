@@ -5,7 +5,7 @@ import { avoidColourSets } from "../Shared/Functions/gameStatsFunctions";
 //import firebasestorage from "firebase";
 import { Card, LogoBox } from "./futuregameoddscard-style";
 const FutureGameOddsCard = ({ data, reference }) => {
-  const [JSON, setJSON] = useState(data);
+const [JSON, setJSON] = useState(data);
 
   // urls for team logo images
   const [homeImg, setHomeImg] = useState("");

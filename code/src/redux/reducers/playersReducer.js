@@ -4,6 +4,7 @@ const initialState = {
   },
 };
 
+
 export const playersReducer = (state = initialState, action) => {
   switch (action.type) {
     case "PlayerRankings":
@@ -12,5 +13,6 @@ export const playersReducer = (state = initialState, action) => {
       return state;
   }
 };
+
 
 export default playersReducer;
